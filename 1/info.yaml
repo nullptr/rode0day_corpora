@@ -1,0 +1,20 @@
+rode0day_id: 1
+challenges:
+    buffalo:
+        challenge_id: 1
+        architecture: "x86_64"
+        install_dir: "buffalo"
+        binary_path: "bin/buffalo"
+        binary_arguments: "{input_file}"
+        library_dir: ""
+        sample_inputs: ["inputs/A"]
+        libraries_modified: []
+    bill:
+        challenge_id: 2
+        architecture: "x86_64"
+        install_dir: "bill"
+        binary_path: "bin/bill"
+        binary_arguments: "5 123456789 12 /tmp/scratch < {input_file}"
+        library_dir: ""
+        sample_inputs: ["inputs/blank"]
+        libraries_modified: []

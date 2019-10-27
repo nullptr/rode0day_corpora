@@ -1,0 +1,53 @@
+rode0day_id: 11
+
+challenges:
+    tinyexprB2:
+        challenge_id: 45
+        architecture: "x86_64"
+        install_dir: "tinyexprB2"
+        binary_path: "bin/math"
+        binary_arguments: "< {input_file}"
+        sample_inputs: ["inputs/sum"]
+        source_provided: false
+
+    fileB5:
+        challenge_id: 46
+        architecture: "x86"
+        install_dir: "fileB5"
+        binary_path: "bin/file"
+        binary_arguments: "-m {install_dir}/share/misc/magic.mgc {input_file}"
+        sample_inputs: ["inputs/hello.txt"]
+        source_provided: false
+
+    sqliteB2:
+        challenge_id: 47
+        architecture: "x86_64"
+        install_dir: "sqliteB2"
+        binary_path: "bin/sqlite"
+        binary_arguments: "< {input_file} "
+        sample_inputs: ["inputs/help.sql", "inputs/rnd.sql"]
+        source_provided: false
+
+    jpegS3:
+        challenge_id: 48
+        architecture: "x86_64"
+        install_dir: "jpegS3"
+        binary_path: "built/bin/jpeg"
+        binary_arguments: "{input_file}"
+        sample_inputs: ["inputs/logo.jpg", "inputs/rodeo.jpg"]
+        source_provided: true
+        source_path: "src"
+
+    jqS3:
+        challenge_id: 49
+        architecture: "x86"
+        install_dir: "jqS3"
+        binary_path: "built/bin/jq"
+
+        binary_args_COMMENT: "The binary_arguments string has python format strings so the {{ hello : . }} is escaped and should be treated as { hello : . }"
+        binary_arguments: "--slurp '[. | . | {{ hello: . }}]' {input_file} {install_dir}/built/share/fixed.json"
+
+        sample_inputs: ["inputs/fixed.json"]
+        source_provided: true
+        source_path: "src"
+

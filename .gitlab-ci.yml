@@ -1,0 +1,6 @@
+---
+
+build_all:
+  image: registry.gitlab.com/wideglide/fuzzing-targets/i386:16.04
+  script:
+    - ./scripts/build.sh

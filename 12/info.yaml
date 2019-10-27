@@ -1,0 +1,43 @@
+rode0day_id: 12
+
+challenges:
+    pcreB3:
+        challenge_id: 50
+        architecture: "x86"
+        install_dir: "pcreB3"
+        binary_path: "bin/pcre2grep"
+        binary_arguments: "-f {input_file} {install_dir}/share/haystack"
+        sample_inputs: ["inputs/patterns1", "inputs/patterns2"]
+        source_provided: false
+
+    grepB2:
+        challenge_id: 51
+        architecture: "x86"
+        install_dir: "grepB2"
+        binary_path: "bin/grep"
+        binary_arguments: "'\\(.\\).\\(.\\)' {input_file}"
+        sample_inputs: ["inputs/hi.txt"]
+        source_provided: false
+
+    fileS3:
+        challenge_id: 52
+        architecture: "x86"
+        install_dir: "fileS3"
+        binary_path: "built/bin/file"
+        binary_arguments: "-m {install_dir}/built/share/misc/magic.mgc {input_file}"
+        sample_inputs: ["inputs/hello.txt"]
+        source_provided: false
+
+    jqS4:
+        challenge_id: 53
+        architecture: "x86"
+        install_dir: "jqS4"
+        binary_path: "built/bin/jq"
+
+        binary_args_COMMENT: "The binary_arguments string has python format strings so the {{ hello : . }} is escaped and should be treated as { hello : . }"
+        binary_arguments: "--slurp '[. | . | {{ hello: . }}]' {input_file}"
+
+        sample_inputs: ["inputs/inp.json"]
+        source_provided: true
+        source_path: "src"
+

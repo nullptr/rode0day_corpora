@@ -1,0 +1,53 @@
+rode0day_id: 6
+
+challenges:
+    jqS:
+        challenge_id: 22
+        architecture: "x86"
+        install_dir: "jqS"
+        binary_path: "built/bin/jq"
+        binary_args_COMMENT: "The binary_arguments string has python format strings so the {{ hello : . }} is escaped and should be treated as { hello : . }"
+        binary_arguments: "--slurp '[. | . | {{ hello: . }}]' {input_file} {install_dir}/built/share/fixed.json"
+           
+        sample_inputs: ["inputs/fixed.json"]
+        source_provided: true
+        source_path: "src"
+
+    jqB:
+        challenge_id: 23
+        architecture: "x86"
+        install_dir: "jqB"
+        binary_path: "bin/jq"
+        binary_args_COMMENT: "The binary_arguments string has python format strings so the {{ hello : . }} is escaped and should be treated as { hello : . }"
+        binary_arguments: "--slurp '[. | . | {{ hello: . }}]' {input_file} {install_dir}/share/fixed.json"
+           
+        sample_inputs: ["inputs/fixed.json"]
+        source_provided: false
+
+    pcre2B:
+        challenge_id: 24
+        architecture: "x86"
+        install_dir: "pcre2B"
+        binary_path: "bin/pcre2grep"
+        binary_arguments: "-f {input_file} share/passwd"
+        sample_inputs: ["inputs/patterns1", "inputs/patterns2"]
+        source_provided: false
+
+    filemagicB:
+        challenge_id: 25
+        architecture: "x86"
+        install_dir: "filemagicB"
+        binary_path: "bin/file"
+        binary_arguments: "-m {input_file} {input_file}"
+        sample_inputs: ["inputs/short.mgc"]
+        source_provided: false
+
+    filemagicS:
+        challenge_id: 26
+        architecture: "x86"
+        install_dir: "filemagicS"
+        binary_path: "built/bin/file"
+        binary_arguments: "-m {input_file} {input_file}"
+        sample_inputs: ["inputs/short.mgc"]
+        source_provided: true
+        source_path: "src"

@@ -1,0 +1,52 @@
+rode0day_id: 7
+
+challenges:
+    jqS2:
+        challenge_id: 27
+        architecture: "x86"
+        install_dir: "jqS2"
+        binary_path: "built/bin/jq"
+        binary_arguments: "-eSCr . {input_file}"
+
+        sample_inputs: ["inputs/fixed.json"]
+        source_provided: true
+        source_path: "src"
+
+    fileB3:
+        challenge_id: 28
+        architecture: "x86"
+        install_dir: "fileB3"
+        binary_path: "bin/file"
+        binary_arguments: "-m {install_dir}/share/misc/magic.mgc {input_file}"
+        sample_inputs: ["inputs/hello.txt"]
+        source_provided: false
+
+    yamlS3:
+        challenge_id: 29
+        architecture: "x86"
+        install_dir: "yamlS3"
+        binary_path: "built/bin/libyaml"
+        binary_arguments: "-c -u {input_file}"
+           
+        sample_inputs: ["inputs/sample.yaml", "inputs/movies.yaml", "inputs/john.yaml"]
+        source_provided: true 
+        source_path: "src"
+
+    yamlB3:
+        challenge_id: 30
+        architecture: "x86"
+        install_dir: "yamlB3"
+        binary_path: "bin/libyaml"
+        binary_arguments: "-c -u {input_file}"
+        sample_inputs: ["inputs/sample.yaml", "inputs/movies.yaml", "inputs/john.yaml"]
+        source_provided: false
+
+    bzipB:
+        challenge_id: 31
+        architecture: "x86"
+        install_dir: "bzipB"
+        binary_path: "bin/bzip2"
+        binary_arguments: "-dsc {input_file} > /tmp/output"
+        sample_inputs: ["inputs/sample.txt.bz2"]
+        source_provided: false
+

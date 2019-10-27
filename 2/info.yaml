@@ -1,0 +1,96 @@
+rode0day_id: 2
+
+challenges:
+    fileB1:
+        challenge_id: 3
+        architecture: "x86"
+        install_dir: "fileB1"
+        binary_path: "bin/file"
+        binary_arguments: "-m {install_dir}/share/misc/magic.mgc {input_file}"
+        sample_inputs: ["inputs/hi"]
+        library_dir: "lib"
+        libraries_modified: ["libmagic.so.1.0.0"]
+        source_provided: false
+
+    fileB2:
+        challenge_id: 4
+        architecture: "x86"
+        install_dir: "fileB2"
+        binary_path: "bin/file"
+        binary_arguments: "-m {install_dir}/share/misc/magic.mgc {input_file}"
+        sample_inputs: ["inputs/hi"]
+        library_dir: "lib"
+        libraries_modified: ["libmagic.so.1.0.0"]
+        source_provided: false
+
+
+    fileS1:
+        challenge_id: 5
+        architecture: "x86"
+        install_dir: "fileS1"
+        binary_path: "built/bin/file"
+        binary_arguments: "-m {install_dir}/built/share/misc/magic.mgc {input_file}"
+        library_dir: "built/lib"
+        sample_inputs: ["inputs/hi"]
+        libraries_modified: ["libmagic.so.1.0.0"]
+        source_provided: true
+        source_path: "src"
+
+    fileS2:
+        challenge_id: 6
+        architecture: "x86"
+        install_dir: "fileS2"
+        binary_path: "built/bin/file"
+        binary_arguments: "-m {install_dir}/built/share/misc/magic.mgc {input_file}"
+        sample_inputs: ["inputs/hi"]
+        library_dir: "built/lib"
+        libraries_modified: ["libmagic.so.1.0.0"]
+        source_provided: true
+        source_path: "src"
+
+    yamlB1:
+        challenge_id: 7
+        architecture: "x86"
+        install_dir: "yamlB1"
+        binary_path: "bin/deconstruct"
+        binary_arguments: "{input_file}"
+        sample_inputs: ["inputs/john.yaml", "inputs/movies.yaml"]
+        library_dir: "lib"
+        libraries_modified: ["libyaml-0.so.2.0.5"]
+        source_provided: false
+
+
+    yamlB2:
+        challenge_id: 8
+        architecture: "x86"
+        install_dir: "yamlB2"
+        binary_path: "bin/deconstruct"
+        binary_arguments: "{input_file}"
+        sample_inputs: ["inputs/john.yaml", "inputs/movies.yaml"]
+        library_dir: "lib"
+        libraries_modified: ["libyaml-0.so.2.0.5"]
+        source_provided: false
+
+    yamlS1:
+        challenge_id: 9
+        architecture: "x86"
+        install_dir: "yamlS1"
+        binary_path: "built/bin/deconstruct"
+        binary_arguments: "{input_file}"
+        sample_inputs: ["inputs/john.yaml", "inputs/movies.yaml"]
+        library_dir: "built/lib"
+        libraries_modified: ["libyaml-0.so.2.0.5"]
+        source_provided: true
+        source_path: "src"
+
+    yamlS2:
+        challenge_id: 10 
+        architecture: "x86"
+        install_dir: "yamlS2"
+        binary_path: "built/bin/deconstruct"
+        binary_arguments: "{input_file}"
+        sample_inputs: ["inputs/john.yaml", "inputs/movies.yaml"]
+        library_dir: "built/lib"
+        libraries_modified: ["libyaml-0.so.2.0.5"]
+        source_provided: true
+        source_path: "src"

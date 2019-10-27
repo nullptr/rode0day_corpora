@@ -1,0 +1,23 @@
+Your input will be graded with a different file than this one.
+Feel free to modify this file if it will help you identify more bugs
+
+Here is some jibberish to ensure you'll get some coverage even without modification
+
+The API documentation at rode0day.mit.edu/api doesn't currently let us specify multiple input files
+We may have to change this in the future!
+
+AAAAAAAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCCCCCCCCCC123456778
+!!!!!!!!!!!!!:::::::@@@@@@@@@@@:::::#####
+#$%^&*())__
+``~~()
+/bin/echo "hello world"
+ssh user@hostname
+c,s,v;data,data,data
+aa:bb:cc:dd
+ee|ff|gg|hh
+\n \\n
+' or '1' = '1
+$(which sl)
+
+
+That's all for now!
