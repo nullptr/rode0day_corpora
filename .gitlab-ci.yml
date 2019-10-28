@@ -1,7 +1,9 @@
 ---
 
 build_all:
-  image: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04
+    entrypoint: [""]
   script:
     - ( cd 10 && ./fix_tcpdump_for_i386.sh )
     - ./scripts/build.sh
