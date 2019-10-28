@@ -1,6 +1,30 @@
 ---
 
 build_all:
-  image: registry.gitlab.com/wideglide/fuzzing-targets/i386:16.04
+  image: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04
   script:
+    - ( cd 10 && ./fix_tcpdump_for_i386.sh )
     - ./scripts/build.sh
+  artifacts:
+    paths:
+      - 3/greps/lava
+      - 3/jpegs/lava
+      - 4/pcreS/lava
+      - 5/fileS2/lava
+      - 6/filemagicS/lava
+      - 6/jqS/lava
+      - 7/jqS2/lava
+      - 7/yamlS3/lava
+      - 8/bzipS/lava
+      - 8/filemagicS2/lava
+      - 8/pcreS2/lava
+      - 9/jpegS2/lava
+      - 10/audiofileS/lava
+      - 10/tcpdumpS/lava
+      - 11/jpegS3/lava
+      - 11/jqS3/lava
+      - 12/fileS3/lava
+      - 12/jqS4/lava
+      - 13/fileS4/lava
+      - 13/jpegS4/lava
+    expire_in: 1 week
