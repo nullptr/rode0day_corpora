@@ -1,13 +1,16 @@
 *.o
 *.a
+magic.h
 gcov
-lava
+
+lava-gcc
 lava-afl-gcc
 lava-afl-clang
 lava-install
 
 3/greps/src/src/grep
 3/jpegs/src/src/memdjpeg
+4/newgrepS/src/src/grep
 4/pcreS/src/src/pcre2grep
 5/fileS2/src/src/file
 6/filemagicS/src/src/file

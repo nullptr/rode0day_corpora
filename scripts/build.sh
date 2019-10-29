@@ -1,5 +1,10 @@
 #!/bin/bash
 
+BUILD=${BUILD:-all}
+TARGET=""
+FUNC=make_lava
+CC=${CC:-gcc}
+CFLAGS=${CFLAGS:--m32 -DLAVA_LOGGING -w}
 
 download_challenges() {
     wget -qO- https://rode0day.mit.edu/static/corpora/18.09_uioiary7291jsqeYOe6GLtdCIdtG9rFk.tar.gz | tar -C 3 -xzf -
@@ -16,97 +21,193 @@ download_challenges() {
 }
 
 make_clean() {
-    make -C ${1}/${2}/src clean || exit
+    make -C ${1}/src clean || exit
 }
 
 make_lava() {
-    CC=gcc CFLAGS="-m32 -DLAVA_LOGGING" make -C ${1}/${2}/src || exit
-    make -C ${1}/${2}/src install
-    cp -r ${1}/${2}/src/lava-install ${1}/${2}/lava
-}
-
-make_lava_afl_gcc() {
-    make -C ${1}/${2}/src clean
-    CC=afl-gcc CFLAGS="-m32 -DLAVA_LOGGING" make -C ${1}/${2}/src || exit
-    make -C ${1}/${2}/src install
-    cp -r ${1}/${2}/src/lava-install ${1}/${2}/lava-afl-gcc
-    sed 's/lava-install/lava-gcc/' ${1}/${2}/job.json > ${1}/${2}/job_afl-gcc.json
+    make -C ${1}/src clean
+    make -C ${1}/src || exit
+    make -C ${1}/src install
+    cp -r ${1}/src/lava-install ${1}/lava-${CC}
 }
 
 make_lava_afl_clang() {
-    make -C ${1}/${2}/src clean
-    CC=afl-clang-fast CFLAGS="-m32 -DLAVA_LOGGING" make -C ${1}/${2}/src || exit
-    make -C ${1}/${2}/src install
-    cp -r ${1}/${2}/src/lava-install ${1}/${2}/lava-afl-clang
-    sed 's/lava-install/lava-clang/' ${1}/${2}/job.json > ${1}/${2}/job_afl-clang.json
+    make -C ${1}/src clean
+    CC=afl-clang-fast make -C ${1}/src || exit
+    make -C ${1}/src install
+    cp -r ${1}/src/lava-install ${1}/lava-afl-clang
+    sed 's/lava-install/lava-clang/' ${1}/job.json > ${1}/job_afl-clang.json
 }
 
 make_gcov() {
-    make -C ${1}/${2}/src clean
-    rm -rf ${1}/${2}/gcov
-    cp -r ${1}/${2}/src ${1}/${2}/gcov
-    CC=gcc CFLAGS="-m32 -fprofile-arcs -ftest-coverage -fPIC -O0" make -C ${1}/${2}/gcov || exit
+    make -C ${1}/src clean
+    rm -rf ${1}/gcov
+    cp -r ${1}/src ${1}/gcov
+    CC=gcc CFLAGS="-m32 -fprofile-arcs -ftest-coverage -fPIC -O0 -w" make -C ${1}/gcov || exit
 }
 
-# 19.02
+make_ccov() {
+    make -C ${1}/src clean
+    rm -rf ${1}/ccov
+    cp -r ${1}/src ${1}/ccov
+    CFLAGS="-m32 -fprofile-instr-generate -fcoverage-mapping -fPIC -O0 -w" make -C ${1}/ccov || exit
+}
+
+make_scov() {
+    make -C ${1}/src clean
+    rm -rf ${1}/scov
+    cp -r ${1}/src ${1}/scov
+    CFLAGS="-m32 -fsanitize-coverage=trace-pc-guard -fPIC -O0 -w" make -C ${1}/scov || exit
+}
+
+build_1906() {
+    build_comp 10
+}
+
+build_1905() {
+    build_comp 9
+}
+
+build_1903() {
+    build_comp 8
+}
+
 build_1902() {
-    for tgt in bzipB fileB3 jqS2 yamlB3 yamlS3
-    do
-        make_lava_afl_gcc 19.02 $tgt
-    done
+#   for tgt in bzipB fileB3 jqS2 yamlB3 yamlS3; do $FUNC 7 $tgt; done
+    build_comp 7
 }
 
-#19.01
 build_1901() {
-    for tgt in filemagicB filemagicS jqB jqS pcre2B
-    do
-        make_lava_afl_gcc 19.01 $tgt
-    done
+#   for tgt in filemagicB filemagicS jqB jqS pcre2B; do $FUNC 6 $tgt; done
+    build_comp 6
 }
 
-# 18.11
 build_1811() {
-    for tgt in duktape fileB2 fileS2 tinyexpr; do
-        make_lava_afl_gcc 18.11 $tgt
-    done
+#   for tgt in duktape fileB2 fileS2 tinyexpr; do $FUNC 5 $tgt; done
+    build_comp 5
 }
 
-# 18.10
 build_1810() {
-    for tgt in newgrepS pcreB pcreS; do
-        make_lava_afl_gcc 18.10 $tgt
-    done
+#   for tgt in newgrepS pcreB pcreS; do $FUNC 4 $tgt; done
+    build_comp 4
 }
 
-# 18.09
 build_1809() {
-    for tgt in grepb greps jpegb jpegs; do
-        make_lava 18.09 $tgt
-        make_lava_afl_gcc 18.09 $tgt
-        make_gcov 18.09 $tgt
+#   for tgt in grepb greps jpegb jpegs; do $FUNC 3 $tgt; done
+    build_comp 3
+}
+
+build_one(){
+    tgt=$(find  -mindepth 2 -maxdepth 2 -type d -name "$1" -printf "%P")
+    echo "[*] building $tgt"
+    if  [ -e ${tgt}/src/Makefile ]; then
+        $FUNC $tgt
+    else
+        echo "[-] source for target ($1) not found, aborting."
+        exit 1
+    fi
+}
+
+build_comp() {
+    comp=${1:-3}
+    TGTS=$(find $comp/ -mindepth 1 -maxdepth 1 -type d -printf "%f ")
+    for tgt in $TGTS; do
+        [ -e ${comp}/${tgt}/src/Makefile ] || continue
+        $FUNC "${comp}/${tgt}"
     done
 }
 
 build_all() {
   for comp in 3 4 5 6 7 8 9 10 11 12 13; do
-      TGTS=$(find $comp/ -mindepth 1 -maxdepth 1 -type d -printf "%f ")
-      for tgt in $TGTS; do
-          [ -e ${comp}/${tgt}/src/Makefile ] || continue
-          make_clean $comp $tgt
-          make_lava $comp $tgt
-          # make_lava_afl_gcc $comp $tgt
-          # make_lava_afl_clang $comp $tgt
-          # make_gcov $comp $tgt
-      done
+      build_comp $comp
   done
-
 }
 
-# build_1809
-# build_1810
-# build_1811
-# build_1901
-# build_1902
-# build_1903
-build_all
-# download_challenges
+find_clang() {
+    if which clang-10 >/dev/null; then CC=clang-10; return; fi
+    if which clang-9 >/dev/null; then CC=clang-9; return; fi
+    if which clang-8 >/dev/null; then CC=clang-8; return; fi
+    if which clang-7 >/dev/null; then CC=clang-7; return; fi
+    if which clang-6 >/dev/null; then CC=clang-6; return; fi
+    if which clang >/dev/null; then CC=clang; return; fi
+}
+
+usage() {
+    echo "Usage: $0 [ [-b|--build <all|MMYY>] | [-t|--target <target_name>] ]"
+    echo "                          [-L|--no-lavalogs] [-W|--show-warnings] [-X|--no-i386] [--cc <compiler>] "
+    echo "                          [--gcov] [--ccov] [--clean] [--download]"
+    exit 0
+}
+
+while (( "$#" ))
+do
+    case "$1" in
+        -b|--build)
+            BUILD="$2"
+            shift 2
+            ;;
+        -t|--target)
+            BUILD=one
+            TARGET="$2"
+            shift 2
+            ;;
+        -L|--no-lavalogs)
+            CFLAGS=${CFLAGS//-DLAVA_LOGGING/}
+            shift
+            ;;
+        -W|--show-warnings)
+            CFLAGS=${CFLAGS//-w/}
+            shift
+            ;;
+        -X|--no-i386)
+            CFLAGS=${CFLAGS//-m32/}
+            shift
+            ;;
+        --cc)
+            CC=$2
+            shift 2
+            ;;
+        --gcov)
+            FUNC=make_gcov
+            CC=gcc
+            shift
+            ;;
+        --ccov)
+            FUNC=make_ccov
+            find_clang
+            shift
+            ;;
+        --clean)
+            FUNC=make_clean
+            shift
+            ;;
+        --download)
+            download_challenges
+            echo "[*] all challenges downloaded!"
+            exit 0
+            ;;
+        -h|--help)
+            usage
+            ;;
+        --) # end argument parsing
+            shift
+            break
+            ;;
+        *)
+            echo "[-] unknown parameter: $1"
+            usage
+            ;;
+    esac
+done
+
+if [ declare -f build_${BUILD} 2>/dev/null ]; then
+    echo "[-] build function build_${BUILD} does not exist."
+    exit 1
+fi
+
+if  which $CC >/dev/null; then
+    build_${BUILD} $TARGET
+else
+    echo "[-] compiler ($CC) not found."
+fi
+
