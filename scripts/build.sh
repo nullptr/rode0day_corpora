@@ -6,6 +6,12 @@ FUNC=make_lava
 CC=${CC:-gcc}
 CFLAGS=${CFLAGS:--m32 -DLAVA_LOGGING -w}
 
+declare -A CC_ABV
+
+CC_ABV[afl-clang-fast]="afl-cf"
+CC_ABV[hfuzz-clang]="hf"
+
+
 download_challenges() {
     wget -qO- https://rode0day.mit.edu/static/corpora/18.09_uioiary7291jsqeYOe6GLtdCIdtG9rFk.tar.gz | tar -C 3 -xzf -
     wget -qO- https://rode0day.mit.edu/static/corpora/18.10_dRgl8DaTW6CVbmzCRBeS8cWCWzEKKpd5.tar.gz | tar -C 4 -xzf -
@@ -28,7 +34,7 @@ make_lava() {
     make -C ${1}/src clean
     make -C ${1}/src || exit
     make -C ${1}/src install
-    cp -r ${1}/src/lava-install ${1}/lava-${CC}
+    cp -r ${1}/src/lava-install ${1}/lava-${CC_ABV[$CC]:-$CC}
 }
 
 make_lava_afl_clang() {

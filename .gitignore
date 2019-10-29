@@ -5,7 +5,8 @@ gcov
 
 lava-gcc
 lava-afl-gcc
-lava-afl-clang
+lava-afl-cf
+lava-hf
 lava-install
 
 3/greps/src/src/grep

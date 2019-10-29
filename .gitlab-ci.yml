@@ -9,24 +9,55 @@ build_all:
     - ./scripts/build.sh
   artifacts:
     paths:
-      - 3/greps/lava
-      - 3/jpegs/lava
-      - 4/pcreS/lava
-      - 5/fileS2/lava
-      - 6/filemagicS/lava
-      - 6/jqS/lava
-      - 7/jqS2/lava
-      - 7/yamlS3/lava
-      - 8/bzipS/lava
-      - 8/filemagicS2/lava
-      - 8/pcreS2/lava
-      - 9/jpegS2/lava
-      - 10/audiofileS/lava
-      - 10/tcpdumpS/lava
-      - 11/jpegS3/lava
-      - 11/jqS3/lava
-      - 12/fileS3/lava
-      - 12/jqS4/lava
-      - 13/fileS4/lava
-      - 13/jpegS4/lava
+      - 3/greps/lava-afl-cf
+      - 3/jpegs/lava-afl-cf
+      - 4/pcreS/lava-afl-cf
+      - 5/fileS2/lava-afl-cf
+      - 6/filemagicS/lava-afl-cf
+      - 6/jqS/lava-afl-cf
+      - 7/jqS2/lava-afl-cf
+      - 7/yamlS3/lava-afl-cf
+      - 8/bzipS/lava-afl-cf
+      - 8/filemagicS2/lava-afl-cf
+      - 8/pcreS2/lava-afl-cf
+      - 9/jpegS2/lava-afl-cf
+      - 10/audiofileS/lava-afl-cf
+      - 10/tcpdumpS/lava-afl-cf
+      - 11/jpegS3/lava-afl-cf
+      - 11/jqS3/lava-afl-cf
+      - 12/fileS3/lava-afl-cf
+      - 12/jqS4/lava-afl-cf
+      - 13/fileS4/lava-afl-cf
+      - 13/jpegS4/lava-afl-cf
+    expire_in: 1 week
+
+build_hfuzz:
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/honggfuzz_runner:16.04
+    entrypoint: [""]
+  script:
+    - ( cd 10 && ./fix_tcpdump_for_i386.sh )
+    - ./scripts/build.sh
+  artifacts:
+    paths:
+      - 3/greps/lava-hf
+      - 3/jpegs/lava-hf
+      - 4/pcreS/lava-hf
+      - 5/fileS2/lava-hf
+      - 6/filemagicS/lava-hf
+      - 6/jqS/lava-hf
+      - 7/jqS2/lava-hf
+      - 7/yamlS3/lava-hf
+      - 8/bzipS/lava-hf
+      - 8/filemagicS2/lava-hf
+      - 8/pcreS2/lava-hf
+      - 9/jpegS2/lava-hf
+      - 10/audiofileS/lava-hf
+      - 10/tcpdumpS/lava-hf
+      - 11/jpegS3/lava-hf
+      - 11/jqS3/lava-hf
+      - 12/fileS3/lava-hf
+      - 12/jqS4/lava-hf
+      - 13/fileS4/lava-hf
+      - 13/jpegS4/lava-hf
     expire_in: 1 week
