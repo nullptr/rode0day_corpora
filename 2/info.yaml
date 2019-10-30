@@ -1,10 +1,10 @@
 rode0day_id: 2
 
 challenges:
-    fileB1:
+    file_B1:
         challenge_id: 3
         architecture: "x86"
-        install_dir: "fileB1"
+        install_dir: "file_B1"
         binary_path: "bin/file"
         binary_arguments: "-m {install_dir}/share/misc/magic.mgc {input_file}"
         sample_inputs: ["inputs/hi"]
@@ -12,10 +12,10 @@ challenges:
         libraries_modified: ["libmagic.so.1.0.0"]
         source_provided: false
 
-    fileB2:
+    file_B2:
         challenge_id: 4
         architecture: "x86"
-        install_dir: "fileB2"
+        install_dir: "file_B2"
         binary_path: "bin/file"
         binary_arguments: "-m {install_dir}/share/misc/magic.mgc {input_file}"
         sample_inputs: ["inputs/hi"]
@@ -24,10 +24,10 @@ challenges:
         source_provided: false
 
 
-    fileS1:
+    file_S1:
         challenge_id: 5
         architecture: "x86"
-        install_dir: "fileS1"
+        install_dir: "file_S1"
         binary_path: "built/bin/file"
         binary_arguments: "-m {install_dir}/built/share/misc/magic.mgc {input_file}"
         library_dir: "built/lib"
@@ -36,10 +36,10 @@ challenges:
         source_provided: true
         source_path: "src"
 
-    fileS2:
+    file_S2:
         challenge_id: 6
         architecture: "x86"
-        install_dir: "fileS2"
+        install_dir: "file_S2"
         binary_path: "built/bin/file"
         binary_arguments: "-m {install_dir}/built/share/misc/magic.mgc {input_file}"
         sample_inputs: ["inputs/hi"]
