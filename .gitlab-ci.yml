@@ -6,6 +6,8 @@ build_all:
     entrypoint: [""]
   script:
     - ( cd 10 && ./fix_tcpdump_for_i386.sh )
+    - sudo rm -f /usr/bin/clang
+    - sudo ln -s /usr/lib/llvm-9/bin/clang /usr/bin/clang
     - ./scripts/build.sh
   artifacts:
     paths:
