@@ -1,0 +1,45 @@
+{
+    "session":"jqS2",
+    "fuzzer": "/usr/local/i386/afl-fuzz",
+    "input":"inputs",
+    "output":"outputs",
+    "target":"./built/bin/jq",
+    "cmdline": "-eSCr . @@",
+    "qemu": true,
+    "mem_limit":"4096",
+    "_time_limit": "24h",
+    "interactive": true,
+    "timeout": "10000",
+    "_afl_margs": "",
+    "_file": "",
+    "_docker": "registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp:16.04",
+    "_dict": "dict/consts.txt",
+    "dirty": false,
+    "dumb": false,
+    "master_instances": 1,
+    "environment": "",
+    "fuzz_dirs": [ "outputs" ],
+    "name": "jqS2",
+    "description": "jqS2 XXXX M=1 N=4 YYYY rode0day 19.02",
+    "duration": 24,
+    "mutation_engine": "internal",
+    "target_info": {
+        "name": "jqS2",
+        "source": "rode0day 2019.02",
+        "known_bugs": 86,
+        "challenge_id": 27,
+        "architecture": "x86",
+        "src_archive": "jqS2.tgz"
+        },
+    "fuzzer_info": {
+        "id": 1,
+        "name": "afl",
+        "description": "NU_AFL",
+        "version": "v2.52b"
+        },
+    "verifier": {
+        "id": 1,
+        "name": "",
+        "description": ""
+        }
+}

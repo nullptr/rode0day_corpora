@@ -1,0 +1,45 @@
+{
+    "session":"bzipB",
+    "fuzzer": "/usr/local/i386/afl-fuzz",
+    "input":"inputs",
+    "output":"outputs",
+    "target":"./bin/bzip2",
+    "cmdline": "-dsc @@ > /dev/null",
+    "qemu": true,
+    "mem_limit":"4096",
+    "_time_limit": "24h",
+    "interactive": true,
+    "_timeout": 20,
+    "_afl_margs": "",
+    "file": "input.bz2",
+    "_docker": "registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp:16.04",
+    "_dict": "dict/consts.txt",
+    "dirty": false,
+    "dumb": false,
+    "master_instances": 1,
+    "environment": "",
+    "fuzz_dirs": [ "outputs" ],
+    "name": "bzipB",
+    "description": "bzipB XXXX M=1 N=4 YYYY rode0day 19.02",
+    "duration": 24,
+    "mutation_engine": "internal",
+    "target_info": {
+        "name": "bzipB",
+        "source": "rode0day 2019.02",
+        "known_bugs": 21,
+        "challenge_id": 31,
+        "architecture": "x86",
+        "src_archive": ""
+        },
+    "fuzzer_info": {
+        "id": 1,
+        "name": "afl",
+        "description": "NU_AFL",
+        "version": "v2.52b"
+        },
+    "verifier": {
+        "id": 1,
+        "name": "",
+        "description": ""
+        }
+}

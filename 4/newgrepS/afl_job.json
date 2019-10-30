@@ -1,0 +1,45 @@
+{
+    "session":"newgrepS",
+    "fuzzer": "/usr/local/i386/afl-fuzz",
+    "input":"inputs",
+    "output":"outputs",
+    "target":"./lava-afl-cf/bin/grep",
+    "cmdline": "@@",
+    "qemu": false,
+    "mem_limit":"4096",
+    "_time_limit": "24h",
+    "interactive": true,
+    "_timeout": "20",
+    "_afl_margs": "",
+    "_file": "",
+    "_docker": "registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp:16.04",
+    "_dict": "dict/consts.txt",
+    "dirty": false,
+    "dumb": false,
+    "master_instances": 1,
+    "environment": "",
+    "fuzz_dirs": [ "outputs" ],
+    "name": "newgrepS XXXX",
+    "description": "XXXX newgrepS M=1 N=4 YYYY 2018.10",
+    "duration": 24,
+    "mutation_engine": "internal",
+    "target_info": {
+        "name": "newgrepS",
+        "source": "rode0day 2018.10",
+        "known_bugs": 4,
+        "challenge_id": 15,
+        "architecture": "x86",
+        "src_archive": ""
+        },
+    "fuzzer_info": {
+        "id": 1,
+        "name": "afl",
+        "description": "NU_AFL",
+        "version": "v2.52b"
+        },
+    "verifier": {
+        "id": 1,
+        "name": "",
+        "description": ""
+        }
+}

@@ -1,0 +1,45 @@
+{
+    "session":"audiofileB",
+    "fuzzer": "/usr/local/i386/afl-fuzz",
+    "input":"inputs",
+    "output":"outputs",
+    "target":"./bin/audiofile",
+    "cmdline": "@@ .out.mp3  format aiff",
+    "qemu": true,
+    "mem_limit":"none",
+    "_time_limit": "24h",
+    "interactive": true,
+    "_timeout": "20",
+    "_afl_margs": "",
+    "_file": "",
+    "_docker": "registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp:16.04",
+    "_dict": "dict/consts.txt",
+    "dirty": false,
+    "dumb": false,
+    "master_instances": 1,
+    "environment": [ "AFL_NO_FORKSRV=1" ],
+    "fuzz_dirs": [ "outputs" ],
+    "name": "audiofileB XXXX",
+    "description": "XXXX audiofileB M=1 N=4 YYYY 2019.06",
+    "duration": 24,
+    "mutation_engine": "internal",
+    "target_info": {
+        "name": "audiofileB",
+        "source": "rode0day 2019.06",
+        "known_bugs": 50,
+        "challenge_id": 42,
+        "architecture": "x86_64",
+        "src_archive": ""
+        },
+    "fuzzer_info": {
+        "id": 1,
+        "name": "afl",
+        "description": "NU_AFL",
+        "version": "v2.52b"
+        },
+    "verifier": {
+        "id": 1,
+        "name": "",
+        "description": ""
+        }
+}
