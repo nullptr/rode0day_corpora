@@ -4,7 +4,7 @@ all: tcpdump
 
 
 # gcc -ffloat-store -DHAVE_CONFIG_H   -D_U_="__attribute__((unused))" -I. -I../libpcap  -g -O2 -c ./print-stp.c
-CFLAGS += -O0 -g -ffloat-store -DHAVE_CONFIG_H -I. -I../libpcap -gdwarf-2 -w
+CFLAGS += -O0 -g -ffloat-store -DHAVE_CONFIG_H -I. -I../libpcap -gdwarf-2
 
 OBJ = \
 	setsignal-pre.o tcpdump-pre.o version-pre.o addrtoname-pre.o \

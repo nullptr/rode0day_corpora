@@ -5,7 +5,7 @@ all : jpeg
 
 # Bugs are typically injected into preprocessed code and thus these are the files we release
 
-CFLAGS += -O0 -m32 -DHAVE_CONFIG_H -I. -g -gdwarf-2
+CFLAGS += -O0 -DHAVE_CONFIG_H -I. -g -gdwarf-2
 
 LIBOBJ = \
 	jaricom-pre.o jcapimin-pre.o jcapistd-pre.o jcarith-pre.o jccoefct-pre.o \

@@ -1,6 +1,6 @@
 all: grep
 
-CFLAGS += -O0 -m32 -DHAVE_CONFIG_H -I. -I.. -g -gdwarf-2
+CFLAGS += -O0 -DHAVE_CONFIG_H -I. -I.. -g -gdwarf-2
 
 LIBOBJ = \
 	argmatch.o \

@@ -2,7 +2,7 @@ all: file
 top_srcdir = ..
 HDR = $(top_srcdir)/src/magic.h.in
 
-CFLAGS += -m32 -g -DHAVE_CONFIG_H -I. -I.. -gdwarf-2
+CFLAGS += -g -DHAVE_CONFIG_H -I. -I.. -gdwarf-2
 
 LIBOBJ = \
     apprentice-pre.o \

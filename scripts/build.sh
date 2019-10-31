@@ -2,7 +2,7 @@
 
 BUILD=${BUILD:-all}
 TARGET=""
-FUNC=make_lava
+FUNC=${FUNC:-make_lava}
 CC=${CC:-gcc}
 CFLAGS=${CFLAGS:--m32 -DLAVA_LOGGING -w}
 
@@ -10,6 +10,7 @@ declare -A CC_ABV
 
 CC_ABV[afl-clang-fast]="afl-cf"
 CC_ABV[hfuzz-clang]="hf"
+CC_ABV[angora-clang]="ang"
 
 
 download_challenges() {
@@ -32,17 +33,29 @@ make_clean() {
 
 make_lava() {
     make -C ${1}/src clean
-    make -C ${1}/src || exit
+    CFLAGS="$CFLAGS" make -C ${1}/src || exit
     make -C ${1}/src install
-    cp -r ${1}/src/lava-install ${1}/lava-${CC_ABV[$CC]:-$CC}
+    BN=${CC##*/}
+    cp -r ${1}/src/lava-install ${1}/lava-${CC_ABV[$BN]:-$BN}
 }
 
 make_lava_afl_clang() {
     make -C ${1}/src clean
     CC=afl-clang-fast make -C ${1}/src || exit
     make -C ${1}/src install
-    cp -r ${1}/src/lava-install ${1}/lava-afl-clang
+    cp -r ${1}/src/lava-install ${1}/lava-afl-cf
     sed 's/lava-install/lava-clang/' ${1}/job.json > ${1}/job_afl-clang.json
+}
+
+make_lava_angora() {
+    make -C ${1}/src clean
+    CC=/angora/bin/angora-clang CFLAGS="$CFLAGS" make -C ${1}/src || exit
+    make -C ${1}/src install
+    cp -r ${1}/src/lava-install ${1}/lava-ang
+    make -C ${1}/src clean
+    USE_TRACK=1 CC=/angora/bin/angora-clang CFLAGS="$CFLAGS" make -C ${1}/src || exit
+    make -C ${1}/src install
+    cp ${1}/src/lava-install/bin/* ${1}/lava-ang/bin/tt
 }
 
 make_gcov() {
@@ -172,6 +185,11 @@ do
         --cc)
             CC=$2
             shift 2
+            ;;
+        --angora)
+            FUNC=make_lava_angora
+            CC=/angora/bin/angora-clang
+            shift
             ;;
         --gcov)
             FUNC=make_gcov

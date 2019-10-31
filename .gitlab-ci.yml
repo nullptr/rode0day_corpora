@@ -63,3 +63,34 @@ build_hfuzz:
       - 13/fileS4/lava-hf
       - 13/jpegS4/lava-hf
     expire_in: 1 week
+
+build_angora:
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04 
+    entrypoint: [""]
+  script:
+    - sed -i 's/ 10 /' scripts/build.sh 
+    - ./scripts/build.sh --angora -X
+  artifacts:
+    paths:
+      - 3/greps/lava-ang
+      - 3/jpegs/lava-ang
+      - 4/pcreS/lava-ang
+      - 5/fileS2/lava-ang
+      - 6/filemagicS/lava-ang
+      - 6/jqS/lava-ang
+      - 7/jqS2/lava-ang
+      - 7/yamlS3/lava-ang
+      - 8/bzipS/lava-ang
+      - 8/filemagicS2/lava-ang
+      - 8/pcreS2/lava-ang
+      - 9/jpegS2/lava-ang
+      - 10/audiofileS/lava-ang
+      - 10/tcpdumpS/lava-ang
+      - 11/jpegS3/lava-ang
+      - 11/jqS3/lava-ang
+      - 12/fileS3/lava-ang
+      - 12/jqS4/lava-ang
+      - 13/fileS4/lava-ang
+      - 13/jpegS4/lava-ang
+    expire_in: 1 week

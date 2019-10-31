@@ -4,7 +4,7 @@ CFLAGS += -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLI
 
 # PANDA analysis VM has outdated glibc
 CFLAGS += -static
-CFLAGS += -I. -I.. -g -O0 -m32 -gdwarf-2
+CFLAGS += -I. -I.. -g -O0 -gdwarf-2
 
 LIBOBJ = \
     builtin-pre.o \

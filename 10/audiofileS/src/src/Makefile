@@ -1,6 +1,6 @@
 all: audiofile
 
-CFLAGS += -O0 -DHAVE_CONFIG_H -I. -Imodules -g -gdwarf-2 -w
+CFLAGS += -O0 -DHAVE_CONFIG_H -I. -Imodules -g -gdwarf-2
 
 LIBOBJ = \
 	aes-pre.o \
