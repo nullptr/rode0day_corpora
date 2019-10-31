@@ -69,7 +69,7 @@ build_angora:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04 
     entrypoint: [""]
   script:
-    - sed -i 's/ 10 /' scripts/build.sh 
+    - sed -i 's/ 10 //' scripts/build.sh 
     - ./scripts/build.sh --angora -X
   artifacts:
     paths:
