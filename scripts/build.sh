@@ -24,7 +24,7 @@ download_challenges() {
     wget -qO- https://rode0day.mit.edu/static/corpora/19.06_t5QACvuwa7SBJjvT1i5GCf14RtPDfgI3.tar.gz | tar -C 10 -xzf -
     wget -qO- https://rode0day.mit.edu/static/corpora/19.07_OyGMGe8kLozgWx9je2IbKiG2msIzixl6.tar.gz | tar -C 11 -xzf -
     wget -qO- https://rode0day.mit.edu/static/corpora/19.09_IIUBq9nEVBRwaPaZnOnZoE9qKmT20Smg.tar.gz | tar -C 12 -xzf -
-    wget -qO- https://rode0day.mit.edu/static/corpora/19.10_vGBLGzVUHlUFNd5Ji2UcvtGHFlleGsrR.tar.gz | tar -c 13 -xzf -
+    wget -qO- https://rode0day.mit.edu/static/corpora/19.10_vGBLGzVUHlUFNd5Ji2UcvtGHFlleGsrR.tar.gz | tar -C 13 -xzf -
 }
 
 make_clean() {

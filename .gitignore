@@ -1,13 +1,11 @@
 *.o
 *.a
+*.swp
+*.deps
 magic.h
 gcov
-
-lava-gcc
-lava-afl-gcc
-lava-afl-cf
-lava-hf
 lava-install
+
 
 3/greps/src/src/grep
 3/jpegs/src/src/memdjpeg
@@ -30,3 +28,6 @@ lava-install
 12/jqS4/src/src/jq
 13/fileS4/src/src/file
 13/jpegS4/src/src/jpeg
+
+3/greps/src/lib
+4/newgrepS/src/lib

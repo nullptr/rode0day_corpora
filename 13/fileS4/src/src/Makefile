@@ -18,7 +18,6 @@ LIBOBJ = \
     der-pre.o \
     dprintf-pre.o \
     encoding-pre.o \
-    file-pre.o \
     fmtcheck-pre.o \
     fsmagic-pre.o \
     funcs-pre.o \
@@ -53,8 +52,11 @@ LIBOBJ = \
 magic.h : ${HDR}
 	sed -e "s/X.YY/$$(echo 5.35 | tr -d .)/" < ${HDR} > $@
 
-file : magic.h $(LIBOBJ)
-	 $(CC) -g $(CFLAGS) -o $@ $(LIBOBJ) -lz
+file : magic.h $(LIBOBJ) file-pre.o
+	 $(CC) -g $(CFLAGS) -o $@ $(LIBOBJ) file-pre.o -lz
+
+hfuzz-file : magic.h $(LIBOBJ) hfuzz-file-pre.o
+	 $(CC) -g $(CFLAGS) -o $@ $(LIBOBJ) hfuzz-file-pre.o -lz
 
 preclean : 
 	rm -f *-pre.c
