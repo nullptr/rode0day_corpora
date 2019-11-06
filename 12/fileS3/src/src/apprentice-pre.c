@@ -8200,6 +8200,8 @@ apprentice_map(struct magic_set *ms, const char *fn)
   goto error;
  }
 
+ st.st_size = lseek(fd, 0, 2);
+ lseek(fd, 0, 0);
  map->len = (size_t)st.st_size;
 
  map->type = 2;

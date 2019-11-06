@@ -8010,7 +8010,8 @@ apprentice_map(int *data_flow, struct magic_set *ms, const char *fn)
       st.st_size < 8 ? "small" : "large");
   goto error;
  }
-
+ st.st_size = lseek(fd, 0, 2);
+ lseek(fd, 0, 0);
  map->len = (size_t)st.st_size;
 
  if ((map->p = mmap(0, (size_t)st.st_size, 

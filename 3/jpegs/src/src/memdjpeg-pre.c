@@ -4052,10 +4052,12 @@ int rc, i, j;
     exit(1);
   }
   jpg_size = file_info.st_size;
+  int fd = open(argv[1], 00);
+  jpg_size = lseek(fd, 0, 2);
+  lseek(fd, 0, 0);
   jpg_buffer = (unsigned char*) malloc(jpg_size + 100);
   jpg_buffer_copy = (unsigned char*) malloc(jpg_size + 200);
 
-  int fd = open(argv[1], 00);
   i = 0;
   while (i < jpg_size) {
     rc = read(fd, jpg_buffer + i, jpg_size - i);
