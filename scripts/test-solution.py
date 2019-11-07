@@ -39,10 +39,14 @@ def parse_info(yaml_file):
 
 def print_results(results):
     validated = len([1 for r in results if r['match']])
+    exited = len(1 for r in results if r['returncode'] == 0)
     total = len(results)
 
-    r = [validated, validated, total, float(validated / total * 100.0)]
-    logger.info("DONE: %d bugs validated.\n\tBug coverage: %d / %d (%0.1f%%) covered ", *r)
+    if validated > 0:
+        r = [validated, validated, total, float(validated / total * 100.0)]
+        logger.info("DONE: %d bugs validated.\n\tBug coverage: %d / %d (%0.1f%%) covered ", *r)
+    else:
+        logger.info("DONE: %d of %d inputs ran cleanly.", exited, total)
 
 
 def run_tests(info, challenge_name=None):
@@ -70,15 +74,15 @@ def run_test(info, challenge):
     results = list()
     base_dir = str(info['rode0day_id'])
     vw = VerifyWorker(challenge, base_dir, prefix=info['prefix'])
-    if vw.run_binary() is None:
-        return None
+    r = vw.run_binary()
+    if r is None:
+        return r
 
     solutions_dir = os.path.join(base_dir, 'solutions', str(challenge['challenge_id']))
     if not os.path.isdir(solutions_dir):
         solutions_dir = os.path.join(base_dir, 'solutions', str(challenge['install_dir']))
     if not os.path.isdir(solutions_dir):
-        logger.info("skipping: %s", solutions_dir)
-        return None
+        return [r]
     for solution in os.listdir(solutions_dir):
         sol_file = os.path.join(solutions_dir, solution)
         results.append(vw.run_binary(sol_file))
