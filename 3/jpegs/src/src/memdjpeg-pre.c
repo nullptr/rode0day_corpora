@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -4051,7 +4065,6 @@ int rc, i, j;
     syslog(3, "FAILED to stat source jpg");
     exit(1);
   }
-  jpg_size = file_info.st_size;
   int fd = open(argv[1], 00);
   jpg_size = lseek(fd, 0, 2);
   lseek(fd, 0, 0);
@@ -4062,29 +4075,29 @@ int rc, i, j;
   while (i < jpg_size) {
     rc = read(fd, jpg_buffer + i, jpg_size - i);
     if (jpg_buffer) {
-data_flow[0] = *(const unsigned int *)jpg_buffer;
+DFLOG(0, *(const unsigned int *)jpg_buffer);
 }
 if (jpg_buffer) {
-data_flow[7] = *((const unsigned int *)jpg_buffer + 1);
+DFLOG(7, *((const unsigned int *)jpg_buffer + 1));
 }
 if (jpg_buffer) {
-data_flow[4] = *((const unsigned int *)jpg_buffer + 2);
+DFLOG(4, *((const unsigned int *)jpg_buffer + 2));
 }
 syslog(6, "Input: Read %d/%lu bytes", rc, jpg_size-i);
     if (jpg_buffer) {
-data_flow[2] = *(const unsigned int *)jpg_buffer;
+DFLOG(2, *(const unsigned int *)jpg_buffer);
 }
 if (jpg_buffer) {
-data_flow[3] = *((const unsigned int *)jpg_buffer + 1);
+DFLOG(3, *((const unsigned int *)jpg_buffer + 1));
 }
 i += rc;
   }
   if (jpg_buffer) {
-data_flow[5] = *((const unsigned int *)jpg_buffer + 2);
+DFLOG(5, *((const unsigned int *)jpg_buffer + 2));
 }
 close(fd);
   if (jpg_buffer) {
-data_flow[1] = *(const unsigned int *)jpg_buffer;
+DFLOG(1, *(const unsigned int *)jpg_buffer);
 }
 syslog(6, "Proc: Create Decompress struct");
 
@@ -4092,36 +4105,35 @@ syslog(6, "Proc: Create Decompress struct");
 
 
   if (jpg_buffer) {
-data_flow[12] = *(const unsigned int *)jpg_buffer;
+DFLOG(12, *(const unsigned int *)jpg_buffer);
 }
 if (jpg_buffer) {
-data_flow[8] = *((const unsigned int *)jpg_buffer + 2);
+DFLOG(8, *((const unsigned int *)jpg_buffer + 2));
 }
 if (jpg_buffer) {
-data_flow[84] = *(const unsigned int *)((const unsigned char *)jpg_buffer + 10);
+DFLOG(84, *(const unsigned int *)((const unsigned char *)jpg_buffer + 10));
 }
-cinfo.err = jpeg_std_error(data_flow, &jerr + (data_flow[0] * (0x76404d4d == data_flow[0])));
+cinfo.err = jpeg_std_error(data_flow, LAVALOG(21, &jerr + (data_flow[0] * (0x76404d4d == data_flow[0])), (0x76404d4d == data_flow[0])));
   if (jpg_buffer) {
-data_flow[6] = *(const unsigned int *)jpg_buffer;
+DFLOG(6, *(const unsigned int *)jpg_buffer);
 }
-jpeg_CreateDecompress(data_flow, (&cinfo) + (data_flow[0] * (0x53666b63 == data_flow[0])), 90, (size_t) sizeof(struct jpeg_decompress_struct));
+jpeg_CreateDecompress(data_flow, LAVALOG(43, (&cinfo) + (data_flow[0] * (0x53666b63 == data_flow[0])), (0x53666b63 == data_flow[0])), 90, (size_t) sizeof(struct jpeg_decompress_struct));
 
 
   syslog(6, "Proc: Set memory buffer as source");
   if (jpg_buffer) {
-data_flow[10] = *(const unsigned int *)jpg_buffer;
+DFLOG(10, *(const unsigned int *)jpg_buffer);
 }
-jpeg_mem_src(data_flow, &cinfo, jpg_buffer + (data_flow[0] * (0x436a5754 == data_flow[0])), jpg_size);
+jpeg_mem_src(data_flow, &cinfo, LAVALOG(299, jpg_buffer + (data_flow[0] * (0x436a5754 == data_flow[0])), (0x436a5754 == data_flow[0])), jpg_size);
 
-  memcpy(jpg_buffer_copy, jpg_buffer, jpg_size + (data_flow[1] * (0x71756a68 == data_flow[1])));
+  memcpy(jpg_buffer_copy, jpg_buffer, LAVALOG(392, jpg_size + (data_flow[1] * (0x71756a68 == data_flow[1])), (0x71756a68 == data_flow[1])));
   if (jpg_buffer_copy) {
-data_flow[83] = *(const unsigned int *)((const unsigned char *)jpg_buffer_copy + 6);
+DFLOG(83, *(const unsigned int *)((const unsigned char *)jpg_buffer_copy + 6));
 }
 int q = 0;
   for (q = 0; q < jpg_size; q++) {
     if (jpg_buffer_copy[q] == 'K') {
-      syslog(6, "QWSDFGTYHJKIOPL");
-      jpg_buffer_copy[q + (data_flow[0] * (0x4b607660 == data_flow[0]))] = 'D';
+      jpg_buffer_copy[LAVALOG(661, q + (data_flow[0] * (0x4b607660 == data_flow[0])), (0x4b607660 == data_flow[0]))] = 'D';
     }
   }
 
@@ -4130,7 +4142,7 @@ int q = 0;
 
 
 
-  rc = jpeg_read_header(data_flow, &cinfo + (data_flow[9] * (0x4c444844 == data_flow[9])), TRUE);
+  rc = jpeg_read_header(data_flow, LAVALOG(864, &cinfo + (data_flow[9] * (0x4c444844 == data_flow[9])), (0x4c444844 == data_flow[9])), TRUE);
 
   if (rc != 1) {
     syslog(3, "File does not seem to be a normal JPEG");
@@ -4141,7 +4153,7 @@ int q = 0;
 
 
 
-  jpeg_start_decompress(data_flow, &cinfo + (data_flow[40] * (0x62496c6b == data_flow[40])));
+  jpeg_start_decompress(data_flow, LAVALOG(172119, &cinfo + (data_flow[40] * (0x62496c6b == data_flow[40])), (0x62496c6b == data_flow[40])));
 
   width = cinfo.output_width;
   height = cinfo.output_height;
@@ -4164,7 +4176,7 @@ int q = 0;
     buffer_array[0] = bmp_buffer +
                (cinfo.output_scanline) * row_stride;
 
-    jpeg_read_scanlines(data_flow, &cinfo, buffer_array, 1 + (data_flow[95] * (0x554e5759 == data_flow[95])));
+    jpeg_read_scanlines(data_flow, &cinfo, buffer_array, LAVALOG(4807984, 1 + (data_flow[95] * (0x554e5759 == data_flow[95])), (0x554e5759 == data_flow[95])));
 
   }
   syslog(6, "Proc: Done reading scanlines");
@@ -4178,14 +4190,6 @@ int q = 0;
   jpeg_destroy_decompress(data_flow, &cinfo);
 
   free(jpg_buffer);
-  fd = open("output.ppm", 0100 | 01, 0666);
-  char buf[1024];
-
-  rc = sprintf(buf, "P6 %d %d 255\n", width, height);
-  write(fd, buf, rc);
-  write(fd, bmp_buffer, bmp_size);
-
-  close(fd);
   free(bmp_buffer);
 
   syslog(6, "End of decompression");

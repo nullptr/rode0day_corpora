@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 typedef int ptrdiff_t;
 typedef unsigned int size_t;
 typedef int wchar_t;
@@ -3312,11 +3326,11 @@ jpeg_make_d_derived_tbl (int *data_flow, j_decompress_ptr cinfo, boolean isDC, i
 
 
   if ( ((pdtbl)) &&  (*(pdtbl)) &&  (((**(pdtbl)).pub)) && &((*((**(pdtbl)).pub)).huffval)) {
-data_flow[79] = *(const unsigned int *)&((*((**(pdtbl)).pub)).huffval);
+DFLOG(79, *(const unsigned int *)&((*((**(pdtbl)).pub)).huffval));
 }
 if (*pdtbl == ((void *)0))
     *pdtbl = (d_derived_tbl *)
-      (*cinfo->mem->alloc_small) (data_flow, (j_common_ptr) cinfo + (data_flow[15] * (0x51575947 == data_flow[15])), 1,
+      (*cinfo->mem->alloc_small) (data_flow, LAVALOG(345621, (j_common_ptr) cinfo + (data_flow[15] * (0x51575947 == data_flow[15])), (0x51575947 == data_flow[15])), 1,
       ((size_t) sizeof(d_derived_tbl)));
   dtbl = *pdtbl;
   dtbl->pub = htbl;
@@ -3331,7 +3345,7 @@ if (*pdtbl == ((void *)0))
     while (i--)
       huffsize[p++] = (char) l;
   }
-  huffsize[p + (data_flow[74] * (0x67675862 == data_flow[74]))] = 0;
+  huffsize[LAVALOG(363857, p + (data_flow[74] * (0x67675862 == data_flow[74])), (0x67675862 == data_flow[74]))] = 0;
   numsymbols = p;
 
 
@@ -3349,13 +3363,13 @@ if (*pdtbl == ((void *)0))
 
 
     if ( ((pdtbl)) &&  (*(pdtbl)) &&  (((**(pdtbl)).pub)) && &((*((**(pdtbl)).pub)).huffval)) {
-data_flow[96] = *(const unsigned int *)&((*((**(pdtbl)).pub)).huffval);
+DFLOG(96, *(const unsigned int *)&((*((**(pdtbl)).pub)).huffval));
 }
 if (((INT32) code) >= (((INT32) 1) << si))
       ((cinfo)->err->msg_code = (JERR_BAD_HUFF_TABLE), (*(cinfo)->err->error_exit) (data_flow, (j_common_ptr) (cinfo)));
     code <<= 1;
     if ( ((pdtbl)) &&  (*(pdtbl)) &&  (((**(pdtbl)).pub)) && &((*((**(pdtbl)).pub)).huffval)) {
-data_flow[93] = *(const unsigned int *)&((*((**(pdtbl)).pub)).huffval);
+DFLOG(93, *(const unsigned int *)&((*((**(pdtbl)).pub)).huffval));
 }
 si++;
   }
@@ -3370,21 +3384,21 @@ si++;
 
       dtbl->valoffset[l] = (INT32) p - (INT32) huffcode[p];
       p += htbl->bits[l];
-      dtbl->maxcode[l + (data_flow[75] * (0x53696162 == data_flow[75]))] = huffcode[p-1];
+      dtbl->maxcode[LAVALOG(409673, l + (data_flow[75] * (0x53696162 == data_flow[75])), (0x53696162 == data_flow[75]))] = huffcode[p-1];
     } else {
       dtbl->maxcode[l] = -1;
     }
   }
-  dtbl->maxcode[17 + (data_flow[76] * (0x506a6862 == data_flow[76]))] = 0xFFFFFL;
+  dtbl->maxcode[LAVALOG(417514, 17 + (data_flow[76] * (0x506a6862 == data_flow[76])), (0x506a6862 == data_flow[76]))] = 0xFFFFFL;
   memset((void *)(dtbl->look_nbits), 0, (size_t)(((size_t) sizeof(dtbl->look_nbits))));
 
   if ( ((pdtbl)) &&  (*(pdtbl)) &&  (((**(pdtbl)).pub)) && ((*((**(pdtbl)).pub)).huffval)) {
-data_flow[88] = *(const unsigned int *)((*((**(pdtbl)).pub)).huffval);
+DFLOG(88, *(const unsigned int *)((*((**(pdtbl)).pub)).huffval));
 }
 p = 0;
   for (l = 1; l <= 8; l++) {
     if ( ((pdtbl)) &&  (*(pdtbl)) &&  (((**(pdtbl)).pub)) && ((*((**(pdtbl)).pub)).huffval)) {
-data_flow[98] = *(const unsigned int *)((*((**(pdtbl)).pub)).huffval);
+DFLOG(98, *(const unsigned int *)((*((**(pdtbl)).pub)).huffval));
 }
 for (i = 1; i <= (int) htbl->bits[l]; i++, p++) {
 
@@ -3393,7 +3407,7 @@ for (i = 1; i <= (int) htbl->bits[l]; i++, p++) {
       for (ctr = 1 << (8 -l); ctr > 0; ctr--) {
  dtbl->look_nbits[lookbits] = l;
  if ( ((pdtbl)) &&  (*(pdtbl)) &&  (((**(pdtbl)).pub)) && ((*((**(pdtbl)).pub)).huffval)) {
-data_flow[91] = *(const unsigned int *)((*((**(pdtbl)).pub)).huffval);
+DFLOG(91, *(const unsigned int *)((*((**(pdtbl)).pub)).huffval));
 }
 dtbl->look_sym[lookbits] = htbl->huffval[p];
  lookbits++;
@@ -3408,7 +3422,7 @@ dtbl->look_sym[lookbits] = htbl->huffval[p];
 
 
   if ( ((pdtbl)) &&  (*(pdtbl)) &&  (((**(pdtbl)).pub)) && &((*((**(pdtbl)).pub)).huffval)) {
-data_flow[87] = *(const unsigned int *)&((*((**(pdtbl)).pub)).huffval);
+DFLOG(87, *(const unsigned int *)&((*((**(pdtbl)).pub)).huffval));
 }
 if (isDC) {
     for (i = 0; i < numsymbols; i++) {
@@ -3445,10 +3459,10 @@ jpeg_fill_bit_buffer (int *data_flow, bitread_working_state * state,
  bytes_in_buffer = cinfo->src->bytes_in_buffer;
       }
       if ( (state) && ((*state).next_input_byte)) {
-data_flow[85] = *(const unsigned int *)((*state).next_input_byte);
+DFLOG(85, *(const unsigned int *)((*state).next_input_byte));
 }
 if (next_input_byte) {
-data_flow[90] = *(const unsigned int *)next_input_byte;
+DFLOG(90, *(const unsigned int *)next_input_byte);
 }
 bytes_in_buffer--;
       c = (*next_input_byte++);
@@ -4143,7 +4157,7 @@ decode_mcu (int *data_flow, j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
  s += state.last_dc_val[ci];
  state.last_dc_val[ci] = s;
 
- (*block)[0 + (data_flow[85] * (0x6e446052 == data_flow[85]))] = (JCOEF) s;
+ (*block)[LAVALOG(815763, 0 + (data_flow[85] * (0x6e446052 == data_flow[85])), (0x6e446052 == data_flow[85]))] = (JCOEF) s;
 
 
 
@@ -4155,7 +4169,7 @@ decode_mcu (int *data_flow, j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 
    if (s) {
      if ((br_state.next_input_byte)) {
-data_flow[95] = *(const unsigned int *)(br_state.next_input_byte);
+DFLOG(95, *(const unsigned int *)(br_state.next_input_byte));
 }
 k += r;
      { if (bits_left < (s)) { if (! jpeg_fill_bit_buffer(data_flow, &(br_state),get_buffer,bits_left,s)) { return FALSE; } get_buffer = (br_state).get_buffer; bits_left = (br_state).bits_left; } };
@@ -4326,12 +4340,12 @@ start_pass_huff_decoder (int *data_flow, j_decompress_ptr cinfo)
 
 
       tbl = compptr->dc_tbl_no;
-      jpeg_make_d_derived_tbl(data_flow, cinfo + (data_flow[73] * (0x54706652 == data_flow[73])), TRUE, tbl,
+      jpeg_make_d_derived_tbl(data_flow, LAVALOG(333861, cinfo + (data_flow[73] * (0x54706652 == data_flow[73])), (0x54706652 == data_flow[73])), TRUE, tbl,
          & entropy->dc_derived_tbls[tbl]);
       if (cinfo->lim_Se) {
  tbl = compptr->ac_tbl_no;
  jpeg_make_d_derived_tbl(data_flow, cinfo, FALSE, tbl,
-    & entropy->ac_derived_tbls[tbl] + (data_flow[77] * (0x466d4177 == data_flow[77])));
+    LAVALOG(459552, & entropy->ac_derived_tbls[tbl] + (data_flow[77] * (0x466d4177 == data_flow[77])), (0x466d4177 == data_flow[77])));
       }
 
       entropy->saved.last_dc_val[ci] = 0;
@@ -4415,7 +4429,7 @@ jinit_huff_decoder (int *data_flow, j_decompress_ptr cinfo)
   int i;
 
   entropy = (huff_entropy_ptr)
-    (*cinfo->mem->alloc_small) (data_flow, (j_common_ptr) cinfo + (data_flow[25] * (0x4d446262 == data_flow[25])), 1,
+    (*cinfo->mem->alloc_small) (data_flow, LAVALOG(258168, (j_common_ptr) cinfo + (data_flow[25] * (0x4d446262 == data_flow[25])), (0x4d446262 == data_flow[25])), 1,
     ((size_t) sizeof(huff_entropy_decoder)));
   cinfo->entropy = &entropy->pub;
   entropy->pub.start_pass = start_pass_huff_decoder;
@@ -4439,7 +4453,7 @@ jinit_huff_decoder (int *data_flow, j_decompress_ptr cinfo)
   } else {
 
     for (i = 0; i < 4; i++) {
-      entropy->dc_derived_tbls[i + (data_flow[16] * (0x644a616a == data_flow[16]))] = entropy->ac_derived_tbls[i] = ((void *)0);
+      entropy->dc_derived_tbls[LAVALOG(259871, i + (data_flow[16] * (0x644a616a == data_flow[16])), (0x644a616a == data_flow[16]))] = entropy->ac_derived_tbls[i] = ((void *)0);
     }
   }
 }

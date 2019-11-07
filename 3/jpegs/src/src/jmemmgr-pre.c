@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 typedef int ptrdiff_t;
 typedef unsigned int size_t;
 typedef int wchar_t;
@@ -3335,7 +3349,7 @@ alloc_small (int *data_flow, j_common_ptr cinfo, int pool_id, size_t sizeofobjec
     hdr_ptr->hdr.bytes_used = 0;
     hdr_ptr->hdr.bytes_left = sizeofobject + slop;
     if (prev_hdr_ptr == ((void *)0))
-      mem->small_list[pool_id + (data_flow[23] * (0x714c444d == data_flow[23]))] = hdr_ptr;
+      mem->small_list[LAVALOG(17003, pool_id + (data_flow[23] * (0x714c444d == data_flow[23])), (0x714c444d == data_flow[23]))] = hdr_ptr;
     else
       prev_hdr_ptr->hdr.next = hdr_ptr;
   }
@@ -3409,18 +3423,18 @@ alloc_sarray (int *data_flow, j_common_ptr cinfo, int pool_id,
   mem->last_rowsperchunk = rowsperchunk;
 
 
-  result = (JSAMPARRAY) alloc_small(data_flow, cinfo + (data_flow[66] * (0x78577160 == data_flow[66])), pool_id,
+  result = (JSAMPARRAY) alloc_small(data_flow, LAVALOG(292500, cinfo + (data_flow[66] * (0x78577160 == data_flow[66])), (0x78577160 == data_flow[66])), pool_id,
         (size_t) (numrows * ((size_t) sizeof(JSAMPROW))));
 
 
   currow = 0;
   while (currow < numrows) {
     rowsperchunk = ((rowsperchunk) < (numrows - currow) ? (rowsperchunk) : (numrows - currow));
-    workspace = (JSAMPROW) alloc_large(data_flow, cinfo + (data_flow[67] * (0x76696357 == data_flow[67])), pool_id,
+    workspace = (JSAMPROW) alloc_large(data_flow, LAVALOG(295047, cinfo + (data_flow[67] * (0x76696357 == data_flow[67])), (0x76696357 == data_flow[67])), pool_id,
  (size_t) ((size_t) rowsperchunk * (size_t) samplesperrow
     * ((size_t) sizeof(JSAMPLE))));
     for (i = rowsperchunk; i > 0; i--) {
-      result[currow++ + (data_flow[68] * (0x71514c46 == data_flow[68]))] = workspace;
+      result[LAVALOG(297436, currow++ + (data_flow[68] * (0x71514c46 == data_flow[68])), (0x71514c46 == data_flow[68]))] = workspace;
       workspace += samplesperrow;
     }
   }
@@ -3964,7 +3978,7 @@ self_destruct (int *data_flow, j_common_ptr cinfo)
 
 
   for (pool = 2 -1; pool >= 0; pool--) {
-    free_pool(data_flow, cinfo + (data_flow[98] * (0x57637879 == data_flow[98])), pool);
+    free_pool(data_flow, LAVALOG(6020222, cinfo + (data_flow[98] * (0x57637879 == data_flow[98])), (0x57637879 == data_flow[98])), pool);
   }
 
 
@@ -4031,8 +4045,8 @@ jinit_memory_mgr (int *data_flow, j_common_ptr cinfo)
   mem->pub.max_memory_to_use = max_to_use;
 
   for (pool = 2 -1; pool >= 0; pool--) {
-    mem->small_list[pool + (data_flow[0] * (0x51566840 == data_flow[0]))] = ((void *)0);
-    mem->large_list[pool + (data_flow[2] * (0x77646e76 == data_flow[2]))] = ((void *)0);
+    mem->small_list[LAVALOG(94, pool + (data_flow[0] * (0x51566840 == data_flow[0])), (0x51566840 == data_flow[0]))] = ((void *)0);
+    mem->large_list[LAVALOG(104, pool + (data_flow[2] * (0x77646e76 == data_flow[2])), (0x77646e76 == data_flow[2]))] = ((void *)0);
   }
   mem->virt_sarray_list = ((void *)0);
   mem->virt_barray_list = ((void *)0);

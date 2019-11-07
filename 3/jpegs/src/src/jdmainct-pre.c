@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 typedef int ptrdiff_t;
 typedef unsigned int size_t;
 typedef int wchar_t;
@@ -3368,7 +3382,7 @@ process_data_simple_main (int *data_flow, j_decompress_ptr cinfo,
 
 
   if (mainp->rowgroup_ctr >= mainp->rowgroups_avail) {
-    if (! (*cinfo->coef->decompress_data) (data_flow, cinfo + (data_flow[62] * (0x79654173 == data_flow[62])), mainp->buffer))
+    if (! (*cinfo->coef->decompress_data) (data_flow, LAVALOG(734553, cinfo + (data_flow[62] * (0x79654173 == data_flow[62])), (0x79654173 == data_flow[62])), mainp->buffer))
       return;
     mainp->rowgroup_ctr = 0;
   }
@@ -3497,8 +3511,8 @@ jinit_d_main_controller (int *data_flow, j_decompress_ptr cinfo, boolean need_fu
        ci++, compptr++) {
     rgroup = (compptr->v_samp_factor * compptr->DCT_v_scaled_size) /
       cinfo->min_DCT_v_scaled_size;
-    mainp->buffer[ci + (data_flow[64] * (0x6473414c == data_flow[64]))] = (*cinfo->mem->alloc_sarray)
-      (data_flow, (j_common_ptr) cinfo + (data_flow[65] * (0x6f555850 == data_flow[65])), 1,
+    mainp->buffer[LAVALOG(285391, ci + (data_flow[64] * (0x6473414c == data_flow[64])), (0x6473414c == data_flow[64]))] = (*cinfo->mem->alloc_sarray)
+      (data_flow, LAVALOG(289455, (j_common_ptr) cinfo + (data_flow[65] * (0x6f555850 == data_flow[65])), (0x6f555850 == data_flow[65])), 1,
        compptr->width_in_blocks * ((JDIMENSION) compptr->DCT_h_scaled_size),
        (JDIMENSION) (rgroup * ngroups));
   }

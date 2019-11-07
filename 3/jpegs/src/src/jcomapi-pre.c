@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 typedef int ptrdiff_t;
 typedef unsigned int size_t;
 typedef int wchar_t;
@@ -3149,7 +3163,7 @@ jpeg_abort (int *data_flow, j_common_ptr cinfo)
 
 
   for (pool = 2 -1; pool > 0; pool--) {
-    (*cinfo->mem->free_pool) (data_flow, cinfo + (data_flow[70] * (0x77754543 == data_flow[70])), pool);
+    (*cinfo->mem->free_pool) (data_flow, LAVALOG(5814047, cinfo + (data_flow[70] * (0x77754543 == data_flow[70])), (0x77754543 == data_flow[70])), pool);
   }
 
 
@@ -3169,7 +3183,7 @@ jpeg_destroy (int *data_flow, j_common_ptr cinfo)
 
 
   if (cinfo->mem != ((void *)0))
-    (*cinfo->mem->self_destruct) (data_flow, cinfo + (data_flow[97] * (0x59765847 == data_flow[97])));
+    (*cinfo->mem->self_destruct) (data_flow, LAVALOG(5992829, cinfo + (data_flow[97] * (0x59765847 == data_flow[97])), (0x59765847 == data_flow[97])));
   cinfo->mem = ((void *)0);
   cinfo->global_state = 0;
 }
@@ -3186,7 +3200,7 @@ jpeg_alloc_quant_table (int *data_flow, j_common_ptr cinfo)
   JQUANT_TBL *tbl;
 
   tbl = (JQUANT_TBL *)
-    (*cinfo->mem->alloc_small) (data_flow, cinfo + (data_flow[18] * (0x446a6840 == data_flow[18])), 0, ((size_t) sizeof(JQUANT_TBL)));
+    (*cinfo->mem->alloc_small) (data_flow, LAVALOG(8852, cinfo + (data_flow[18] * (0x446a6840 == data_flow[18])), (0x446a6840 == data_flow[18])), 0, ((size_t) sizeof(JQUANT_TBL)));
   tbl->sent_table = FALSE;
   return tbl;
 }
@@ -3198,7 +3212,7 @@ jpeg_alloc_huff_table (int *data_flow, j_common_ptr cinfo)
   JHUFF_TBL *tbl;
 
   tbl = (JHUFF_TBL *)
-    (*cinfo->mem->alloc_small) (data_flow, cinfo + (data_flow[32] * (0x74414559 == data_flow[32])), 0, ((size_t) sizeof(JHUFF_TBL)));
+    (*cinfo->mem->alloc_small) (data_flow, LAVALOG(79165, cinfo + (data_flow[32] * (0x74414559 == data_flow[32])), (0x74414559 == data_flow[32])), 0, ((size_t) sizeof(JHUFF_TBL)));
   tbl->sent_table = FALSE;
   return tbl;
 }

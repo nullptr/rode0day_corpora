@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 typedef int ptrdiff_t;
 typedef unsigned int size_t;
 typedef int wchar_t;
@@ -3282,7 +3296,7 @@ jpeg_calc_output_dimensions (int *data_flow, j_decompress_ptr cinfo)
          cinfo->out_color_components);
 
 
-  if (use_merged_upsample(data_flow, cinfo + (data_flow[45] * (0x46644c78 == data_flow[45]))))
+  if (use_merged_upsample(data_flow, LAVALOG(186146, cinfo + (data_flow[45] * (0x46644c78 == data_flow[45])), (0x46644c78 == data_flow[45]))))
     cinfo->rec_outbuf_height = cinfo->max_v_samp_factor;
   else
     cinfo->rec_outbuf_height = 1;
@@ -3305,7 +3319,7 @@ prepare_range_limit_table (int *data_flow, j_decompress_ptr cinfo)
     table[i] = (JSAMPLE) i;
 
   for (; i <= 255 + (128 << 2); i++)
-    table[i + (data_flow[47] * (0x74746855 == data_flow[47]))] = 255;
+    table[LAVALOG(202580, i + (data_flow[47] * (0x74746855 == data_flow[47])), (0x74746855 == data_flow[47]))] = 255;
 }
 static void
 master_selection (int *data_flow, j_decompress_ptr cinfo)
@@ -3320,8 +3334,8 @@ master_selection (int *data_flow, j_decompress_ptr cinfo)
     ((cinfo)->err->msg_code = (JERR_BAD_PRECISION), (cinfo)->err->msg_parm.i[0] = (cinfo->data_precision), (*(cinfo)->err->error_exit) (data_flow, (j_common_ptr) (cinfo)));
 
 
-  jpeg_calc_output_dimensions(data_flow, cinfo + (data_flow[43] * (0x45424651 == data_flow[43])));
-  prepare_range_limit_table(data_flow, cinfo + (data_flow[46] * (0x676d7370 == data_flow[46])));
+  jpeg_calc_output_dimensions(data_flow, LAVALOG(177350, cinfo + (data_flow[43] * (0x45424651 == data_flow[43])), (0x45424651 == data_flow[43])));
+  prepare_range_limit_table(data_flow, LAVALOG(193492, cinfo + (data_flow[46] * (0x676d7370 == data_flow[46])), (0x676d7370 == data_flow[46])));
 
 
   if (cinfo->output_height <= 0 || cinfo->output_width <= 0 ||
@@ -3336,7 +3350,7 @@ master_selection (int *data_flow, j_decompress_ptr cinfo)
 
 
   master->pass_number = 0;
-  master->using_merged_upsample = use_merged_upsample(data_flow, cinfo + (data_flow[43] * (0x5043436b == data_flow[43])));
+  master->using_merged_upsample = use_merged_upsample(data_flow, LAVALOG(203000, cinfo + (data_flow[43] * (0x5043436b == data_flow[43])), (0x5043436b == data_flow[43])));
 
 
   master->quantizer_1pass = ((void *)0);
@@ -3397,22 +3411,22 @@ master_selection (int *data_flow, j_decompress_ptr cinfo)
 
     } else {
       jinit_color_deconverter(data_flow, cinfo);
-      jinit_upsampler(data_flow, cinfo + (data_flow[50] * (0x51586264 == data_flow[50])));
+      jinit_upsampler(data_flow, LAVALOG(230031, cinfo + (data_flow[50] * (0x51586264 == data_flow[50])), (0x51586264 == data_flow[50])));
     }
-    jinit_d_post_controller(data_flow, cinfo + (data_flow[55] * (0x4d746364 == data_flow[55])), cinfo->enable_2pass_quant);
+    jinit_d_post_controller(data_flow, LAVALOG(238279, cinfo + (data_flow[55] * (0x4d746364 == data_flow[55])), (0x4d746364 == data_flow[55])), cinfo->enable_2pass_quant);
   }
 
-  jinit_inverse_dct(data_flow, cinfo + (data_flow[57] * (0x76497779 == data_flow[57])));
+  jinit_inverse_dct(data_flow, LAVALOG(243081, cinfo + (data_flow[57] * (0x76497779 == data_flow[57])), (0x76497779 == data_flow[57])));
 
   if (cinfo->arith_code)
     jinit_arith_decoder(data_flow, cinfo);
   else {
-    jinit_huff_decoder(data_flow, cinfo + (data_flow[60] * (0x576a454d == data_flow[60])));
+    jinit_huff_decoder(data_flow, LAVALOG(254497, cinfo + (data_flow[60] * (0x576a454d == data_flow[60])), (0x576a454d == data_flow[60])));
   }
 
 
   use_c_buffer = cinfo->inputctl->has_multiple_scans || cinfo->buffered_image;
-  jinit_d_coef_controller(data_flow, cinfo + (data_flow[61] * (0x704a4e57 == data_flow[61])), use_c_buffer);
+  jinit_d_coef_controller(data_flow, LAVALOG(262709, cinfo + (data_flow[61] * (0x704a4e57 == data_flow[61])), (0x704a4e57 == data_flow[61])), use_c_buffer);
 
   if (! cinfo->raw_data_out)
     jinit_d_main_controller(data_flow, cinfo, FALSE );
@@ -3421,7 +3435,7 @@ master_selection (int *data_flow, j_decompress_ptr cinfo)
   (*cinfo->mem->realize_virt_arrays) (data_flow, (j_common_ptr) cinfo);
 
 
-  (*cinfo->inputctl->start_input_pass) (data_flow, cinfo + (data_flow[69] * (0x4f614559 == data_flow[69])));
+  (*cinfo->inputctl->start_input_pass) (data_flow, LAVALOG(303690, cinfo + (data_flow[69] * (0x4f614559 == data_flow[69])), (0x4f614559 == data_flow[69])));
 
 
 
@@ -3475,7 +3489,7 @@ prepare_for_output_pass (int *data_flow, j_decompress_ptr cinfo)
  ((cinfo)->err->msg_code = (JERR_MODE_CHANGE), (*(cinfo)->err->error_exit) (data_flow, (j_common_ptr) (cinfo)));
       }
     }
-    (*cinfo->idct->start_pass) (data_flow, cinfo + (data_flow[80] * (0x4a437345 == data_flow[80])));
+    (*cinfo->idct->start_pass) (data_flow, LAVALOG(608997, cinfo + (data_flow[80] * (0x4a437345 == data_flow[80])), (0x4a437345 == data_flow[80])));
     (*cinfo->coef->start_output_pass) (data_flow, cinfo);
     if (! cinfo->raw_data_out) {
       if (! master->using_merged_upsample)
@@ -3485,7 +3499,7 @@ prepare_for_output_pass (int *data_flow, j_decompress_ptr cinfo)
  (*cinfo->cquantize->start_pass) (data_flow, cinfo, master->pub.is_dummy_pass);
       (*cinfo->post->start_pass) (data_flow, cinfo,
      (master->pub.is_dummy_pass ? JBUF_SAVE_AND_PASS : JBUF_PASS_THRU));
-      (*cinfo->main->start_pass) (data_flow, cinfo + (data_flow[78] * (0x4c575677 == data_flow[78])), JBUF_PASS_THRU);
+      (*cinfo->main->start_pass) (data_flow, LAVALOG(660008, cinfo + (data_flow[78] * (0x4c575677 == data_flow[78])), (0x4c575677 == data_flow[78])), JBUF_PASS_THRU);
     }
   }
 
@@ -3542,7 +3556,7 @@ jinit_master_decompress (int *data_flow, j_decompress_ptr cinfo)
   my_master_ptr master;
 
   master = (my_master_ptr)
-      (*cinfo->mem->alloc_small) (data_flow, (j_common_ptr) cinfo + (data_flow[41] * (0x7756566a == data_flow[41])), 1,
+      (*cinfo->mem->alloc_small) (data_flow, LAVALOG(175948, (j_common_ptr) cinfo + (data_flow[41] * (0x7756566a == data_flow[41])), (0x7756566a == data_flow[41])), 1,
       ((size_t) sizeof(my_decomp_master)));
   cinfo->master = &master->pub;
   master->pub.prepare_for_output_pass = prepare_for_output_pass;
@@ -3550,5 +3564,5 @@ jinit_master_decompress (int *data_flow, j_decompress_ptr cinfo)
 
   master->pub.is_dummy_pass = FALSE;
 
-  master_selection(data_flow, cinfo + (data_flow[42] * (0x4a497875 == data_flow[42])));
+  master_selection(data_flow, LAVALOG(176998, cinfo + (data_flow[42] * (0x4a497875 == data_flow[42])), (0x4a497875 == data_flow[42])));
 }

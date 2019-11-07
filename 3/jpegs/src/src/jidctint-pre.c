@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 typedef int ptrdiff_t;
 typedef unsigned int size_t;
 typedef int wchar_t;
@@ -3469,8 +3483,8 @@ jpeg_idct_islow (int *data_flow, j_decompress_ptr cinfo, jpeg_component_info * c
       outptr[0] = dcval;
       outptr[1] = dcval;
       outptr[2] = dcval;
-      outptr[3 + (data_flow[87] * (0x76786654 == data_flow[87]))] = dcval;
-      outptr[4 + (data_flow[88] * (0x67784366 == data_flow[88]))] = dcval;
+      outptr[LAVALOG(1525933, 3 + (data_flow[87] * (0x76786654 == data_flow[87])), (0x76786654 == data_flow[87]))] = dcval;
+      outptr[LAVALOG(1536210, 4 + (data_flow[88] * (0x67784366 == data_flow[88])), (0x67784366 == data_flow[88]))] = dcval;
       outptr[5] = dcval;
       outptr[6] = dcval;
       outptr[7] = dcval;
@@ -3536,7 +3550,7 @@ jpeg_idct_islow (int *data_flow, j_decompress_ptr cinfo, jpeg_component_info * c
     outptr[0] = range_limit[(int) ((tmp10 + tmp3) >> (13 +2 +3))
 
        & ((128 << 2) * 2 - 1)];
-    outptr[7 + (data_flow[86] * (0x4e707979 == data_flow[86]))] = range_limit[(int) ((tmp10 - tmp3) >> (13 +2 +3))
+    outptr[LAVALOG(1253862, 7 + (data_flow[86] * (0x4e707979 == data_flow[86])), (0x4e707979 == data_flow[86]))] = range_limit[(int) ((tmp10 - tmp3) >> (13 +2 +3))
 
        & ((128 << 2) * 2 - 1)];
     outptr[1] = range_limit[(int) ((tmp11 + tmp2) >> (13 +2 +3))
@@ -5684,9 +5698,9 @@ jpeg_idct_16x16 (int *data_flow, j_decompress_ptr cinfo, jpeg_component_info * c
 
 
     wsptr[8*0] = (int) ((tmp20 + tmp0) >> (13 -2));
-    wsptr[8*15 + (data_flow[89] * (0x57525345 == data_flow[89]))] = (int) ((tmp20 - tmp0) >> (13 -2));
+    wsptr[LAVALOG(1745621, 8*15 + (data_flow[89] * (0x57525345 == data_flow[89])), (0x57525345 == data_flow[89]))] = (int) ((tmp20 - tmp0) >> (13 -2));
     wsptr[8*1] = (int) ((tmp21 + tmp1) >> (13 -2));
-    wsptr[8*14 + (data_flow[90] * (0x514e7967 == data_flow[90]))] = (int) ((tmp21 - tmp1) >> (13 -2));
+    wsptr[LAVALOG(1773020, 8*14 + (data_flow[90] * (0x514e7967 == data_flow[90])), (0x514e7967 == data_flow[90]))] = (int) ((tmp21 - tmp1) >> (13 -2));
     wsptr[8*2] = (int) ((tmp22 + tmp2) >> (13 -2));
     wsptr[8*13] = (int) ((tmp22 - tmp2) >> (13 -2));
     wsptr[8*3] = (int) ((tmp23 + tmp3) >> (13 -2));
@@ -5800,7 +5814,7 @@ jpeg_idct_16x16 (int *data_flow, j_decompress_ptr cinfo, jpeg_component_info * c
     outptr[2] = range_limit[(int) ((tmp22 + tmp2) >> (13 +2 +3))
 
         & ((128 << 2) * 2 - 1)];
-    outptr[13 + (data_flow[91] * (0x60536044 == data_flow[91]))] = range_limit[(int) ((tmp22 - tmp2) >> (13 +2 +3))
+    outptr[LAVALOG(2212714, 13 + (data_flow[91] * (0x60536044 == data_flow[91])), (0x60536044 == data_flow[91]))] = range_limit[(int) ((tmp22 - tmp2) >> (13 +2 +3))
 
         & ((128 << 2) * 2 - 1)];
     outptr[3] = range_limit[(int) ((tmp23 + tmp3) >> (13 +2 +3))
@@ -5830,7 +5844,7 @@ jpeg_idct_16x16 (int *data_flow, j_decompress_ptr cinfo, jpeg_component_info * c
     outptr[7] = range_limit[(int) ((tmp27 + tmp13) >> (13 +2 +3))
 
         & ((128 << 2) * 2 - 1)];
-    outptr[8 + (data_flow[92] * (0x45435959 == data_flow[92]))] = range_limit[(int) ((tmp27 - tmp13) >> (13 +2 +3))
+    outptr[LAVALOG(2460886, 8 + (data_flow[92] * (0x45435959 == data_flow[92])), (0x45435959 == data_flow[92]))] = range_limit[(int) ((tmp27 - tmp13) >> (13 +2 +3))
 
         & ((128 << 2) * 2 - 1)];
 

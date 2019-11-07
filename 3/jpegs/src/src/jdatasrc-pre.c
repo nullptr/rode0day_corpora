@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 typedef int ptrdiff_t;
 typedef unsigned int size_t;
 typedef int wchar_t;
@@ -3003,12 +3017,12 @@ jpeg_mem_src (int *data_flow, j_decompress_ptr cinfo,
 
   if (cinfo->src == ((void *)0)) {
     cinfo->src = (struct jpeg_source_mgr *)
-      (*cinfo->mem->alloc_small) (data_flow, (j_common_ptr) cinfo + (data_flow[2] * (0x6c765074 == data_flow[2])), 0,
+      (*cinfo->mem->alloc_small) (data_flow, LAVALOG(352, (j_common_ptr) cinfo + (data_flow[2] * (0x6c765074 == data_flow[2])), (0x6c765074 == data_flow[2])), 0,
       ((size_t) sizeof(struct jpeg_source_mgr)));
   }
 
   if (inbuffer) {
-data_flow[11] = *(const unsigned int *)inbuffer;
+DFLOG(11, *(const unsigned int *)inbuffer);
 }
 src = cinfo->src;
   src->init_source = init_mem_source;
@@ -3017,7 +3031,7 @@ src = cinfo->src;
   src->resync_to_restart = jpeg_resync_to_restart;
   src->term_source = term_source;
   if (inbuffer) {
-data_flow[9] = *(const unsigned int *)inbuffer;
+DFLOG(9, *(const unsigned int *)inbuffer);
 }
 src->bytes_in_buffer = (size_t) insize;
   src->next_input_byte = (const JOCTET *) inbuffer;

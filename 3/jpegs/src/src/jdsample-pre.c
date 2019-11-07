@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 typedef int ptrdiff_t;
 typedef unsigned int size_t;
 typedef int wchar_t;
@@ -3224,7 +3238,7 @@ sep_upsample (int *data_flow, j_decompress_ptr cinfo,
 
   (*cinfo->cconvert->color_convert) (data_flow, cinfo, upsample->color_buf,
          (JDIMENSION) upsample->next_row_out,
-         output_buf + *out_row_ctr + (data_flow[94] * (0x7752684d == data_flow[94])),
+         LAVALOG(4433554, output_buf + *out_row_ctr + (data_flow[94] * (0x7752684d == data_flow[94])), (0x7752684d == data_flow[94])),
          (int) num_rows);
 
 
@@ -3367,7 +3381,7 @@ jinit_upsampler (int *data_flow, j_decompress_ptr cinfo)
   int h_in_group, v_in_group, h_out_group, v_out_group;
 
   upsample = (my_upsample_ptr)
-    (*cinfo->mem->alloc_small) (data_flow, (j_common_ptr) cinfo + (data_flow[51] * (0x7879784b == data_flow[51])), 1,
+    (*cinfo->mem->alloc_small) (data_flow, LAVALOG(233343, (j_common_ptr) cinfo + (data_flow[51] * (0x7879784b == data_flow[51])), (0x7879784b == data_flow[51])), 1,
     ((size_t) sizeof(my_upsampler)));
   cinfo->upsample = &upsample->pub;
   upsample->pub.start_pass = start_pass_upsample;
@@ -3399,7 +3413,7 @@ jinit_upsampler (int *data_flow, j_decompress_ptr cinfo)
     }
     if (h_in_group == h_out_group && v_in_group == v_out_group) {
 
-      upsample->methods[ci + ((((data_flow[52] * data_flow[53]) - data_flow[54]) == 0x6bba2322) * data_flow[53])] = fullsize_upsample;
+      upsample->methods[LAVALOG(236051, ci + ((((data_flow[52] * data_flow[53]) - data_flow[54]) == 0x6bba2322) * data_flow[53]), (((data_flow[52] * data_flow[53]) - data_flow[54]) == 0x6bba2322))] = fullsize_upsample;
       continue;
     }
     if (h_in_group * 2 == h_out_group && v_in_group == v_out_group) {

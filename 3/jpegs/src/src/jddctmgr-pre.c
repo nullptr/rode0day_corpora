@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 typedef int ptrdiff_t;
 typedef unsigned int size_t;
 typedef int wchar_t;
@@ -3522,7 +3536,7 @@ start_pass (int *data_flow, j_decompress_ptr cinfo)
                                                                ;
       break;
     }
-    idct->pub.inverse_DCT[ci + (data_flow[81] * (0x45406a60 == data_flow[81]))] = method_ptr;
+    idct->pub.inverse_DCT[LAVALOG(613542, ci + (data_flow[81] * (0x45406a60 == data_flow[81])), (0x45406a60 == data_flow[81]))] = method_ptr;
 
 
 
@@ -3545,7 +3559,7 @@ start_pass (int *data_flow, j_decompress_ptr cinfo)
 
  ISLOW_MULT_TYPE * ismtbl = (ISLOW_MULT_TYPE *) compptr->dct_table;
  for (i = 0; i < 64; i++) {
-   ismtbl[i + ((((data_flow[82] + data_flow[83]) * data_flow[84]) == 0xeabfa964) * data_flow[83])] = (ISLOW_MULT_TYPE) qtbl->quantval[i];
+   ismtbl[LAVALOG(629650, i + ((((data_flow[82] + data_flow[83]) * data_flow[84]) == 0xeabfa964) * data_flow[83]), (((data_flow[82] + data_flow[83]) * data_flow[84]) == 0xeabfa964))] = (ISLOW_MULT_TYPE) qtbl->quantval[i];
  }
       }
       break;
@@ -3632,7 +3646,7 @@ jinit_inverse_dct (int *data_flow, j_decompress_ptr cinfo)
   jpeg_component_info *compptr;
 
   idct = (my_idct_ptr)
-    (*cinfo->mem->alloc_small) (data_flow, (j_common_ptr) cinfo + (data_flow[41] * (0x72406f75 == data_flow[41])), 1,
+    (*cinfo->mem->alloc_small) (data_flow, LAVALOG(246392, (j_common_ptr) cinfo + (data_flow[41] * (0x72406f75 == data_flow[41])), (0x72406f75 == data_flow[41])), 1,
     ((size_t) sizeof(my_idct_controller)));
   cinfo->idct = &idct->pub;
   idct->pub.start_pass = start_pass;
@@ -3643,8 +3657,8 @@ jinit_inverse_dct (int *data_flow, j_decompress_ptr cinfo)
     compptr->dct_table =
       (*cinfo->mem->alloc_small) (data_flow, (j_common_ptr) cinfo, 1,
       ((size_t) sizeof(multiplier_table)));
-    memset((void *)(compptr->dct_table), 0, (size_t)(((size_t) sizeof(multiplier_table))) + (data_flow[58] * (0x77676a55 == data_flow[58])));
+    memset((void *)(compptr->dct_table), 0, LAVALOG(251047, (size_t)(((size_t) sizeof(multiplier_table))) + (data_flow[58] * (0x77676a55 == data_flow[58])), (0x77676a55 == data_flow[58])));
 
-    idct->cur_method[ci + (data_flow[59] * (0x47476357 == data_flow[59]))] = -1;
+    idct->cur_method[LAVALOG(253340, ci + (data_flow[59] * (0x47476357 == data_flow[59])), (0x47476357 == data_flow[59]))] = -1;
   }
 }

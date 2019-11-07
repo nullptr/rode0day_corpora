@@ -54,7 +54,7 @@ def test_run(challenge, base_dir, prefix='lava-install', input_file=None):
     binary = os.path.join(local_dir, prefix, challenge["binary_path"].replace('built/', ''))
     if not os.path.isfile(binary):
         logger.info("Skipping: %s; did not find binary.", binary)
-        return r
+        return None
     if input_file is None:
         test_seeds = True
         input_file = os.path.join(local_dir, challenge["sample_inputs"][0])
@@ -94,15 +94,19 @@ def run_tests(info):
     base_dir = str(info['rode0day_id'])
     results = list()
     for challenge_name, challenge in info['challenges'].items():
-        test_run(challenge, base_dir, prefix=info['prefix'])
+        r = test_run(challenge, base_dir, prefix=info['prefix'])
+        if r is None:
+            continue
         # vw = VerifyWorker(challenge, base_dir)
         solutions_dir = os.path.join(base_dir, 'solutions', str(challenge['challenge_id']))
         if not os.path.isdir(solutions_dir):
             solutions_dir = os.path.join(base_dir, 'solutions', str(challenge['install_dir']))
         if not os.path.isdir(solutions_dir):
+            logger.info("skipping: %s", solutions_dir)
             continue
         for solution in os.listdir(solutions_dir):
             sol_file = os.path.join(solutions_dir, solution)
+            results.append(test_run(challenge, base_dir, prefix=info['prefix'], input_file=sol_file))
             # results.append(vw.run_binary(sol_file))
     validated = [1 for r in results if r['match']]
     logger.info("DONE: %d  of %d bugs validated.", len(validated), len(results))

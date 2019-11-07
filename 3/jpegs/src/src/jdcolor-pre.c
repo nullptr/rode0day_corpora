@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 typedef int ptrdiff_t;
 typedef unsigned int size_t;
 typedef int wchar_t;
@@ -3163,13 +3177,13 @@ build_ycc_rgb_table (int *data_flow, j_decompress_ptr cinfo)
     (*cinfo->mem->alloc_small) (data_flow, (j_common_ptr) cinfo, 1,
     (255 +1) * ((size_t) sizeof(int)));
   cconvert->Cb_b_tab = (int *)
-    (*cinfo->mem->alloc_small) (data_flow, (j_common_ptr) cinfo + (data_flow[36] * (0x42544248 == data_flow[36])), 1,
+    (*cinfo->mem->alloc_small) (data_flow, LAVALOG(215151, (j_common_ptr) cinfo + (data_flow[36] * (0x42544248 == data_flow[36])), (0x42544248 == data_flow[36])), 1,
     (255 +1) * ((size_t) sizeof(int)));
   cconvert->Cr_g_tab = (INT32 *)
-    (*cinfo->mem->alloc_small) (data_flow, (j_common_ptr) cinfo + (data_flow[48] * (0x4c567644 == data_flow[48])), 1,
+    (*cinfo->mem->alloc_small) (data_flow, LAVALOG(218789, (j_common_ptr) cinfo + (data_flow[48] * (0x4c567644 == data_flow[48])), (0x4c567644 == data_flow[48])), 1,
     (255 +1) * ((size_t) sizeof(INT32)));
   cconvert->Cb_g_tab = (INT32 *)
-    (*cinfo->mem->alloc_small) (data_flow, (j_common_ptr) cinfo + (data_flow[49] * (0x686b654b == data_flow[49])), 1,
+    (*cinfo->mem->alloc_small) (data_flow, LAVALOG(222260, (j_common_ptr) cinfo + (data_flow[49] * (0x686b654b == data_flow[49])), (0x686b654b == data_flow[49])), 1,
     (255 +1) * ((size_t) sizeof(INT32)));
 
   for (i = 0, x = -128; i <= 255; i++, x++) {
@@ -3182,7 +3196,7 @@ build_ycc_rgb_table (int *data_flow, j_decompress_ptr cinfo)
     cconvert->Cb_b_tab[i] = (int)
       ((((INT32) ((1.772) * (1L<<16) + 0.5)) * x + ((INT32) 1 << (16 -1))) >> (16));
 
-    cconvert->Cr_g_tab[i + (data_flow[34] * (0x6e796e47 == data_flow[34]))] = (- ((INT32) ((0.714136286) * (1L<<16) + 0.5))) * x;
+    cconvert->Cr_g_tab[LAVALOG(227519, i + (data_flow[34] * (0x6e796e47 == data_flow[34])), (0x6e796e47 == data_flow[34]))] = (- ((INT32) ((0.714136286) * (1L<<16) + 0.5))) * x;
 
 
     cconvert->Cb_g_tab[i] = (- ((INT32) ((0.344136286) * (1L<<16) + 0.5))) * x + ((INT32) 1 << (16 -1));
@@ -3637,7 +3651,7 @@ jinit_color_deconverter (int *data_flow, j_decompress_ptr cinfo)
       break;
     case JCS_YCbCr:
       cconvert->pub.color_convert = ycc_rgb_convert;
-      build_ycc_rgb_table(data_flow, cinfo + (data_flow[46] * (0x49717652 == data_flow[46])));
+      build_ycc_rgb_table(data_flow, LAVALOG(208274, cinfo + (data_flow[46] * (0x49717652 == data_flow[46])), (0x49717652 == data_flow[46])));
       break;
     case JCS_BG_YCC:
       cconvert->pub.color_convert = ycc_rgb_convert;

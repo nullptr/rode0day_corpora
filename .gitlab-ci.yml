@@ -50,6 +50,18 @@ test_seeds:afl:
   dependencies:
     - build:all
 
+test_solutions:afl:
+  stage: test_solutions
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04 
+    entrypoint: [""]
+  script:
+    - ./scripts/build.sh --copy-files
+    - tar -C 3 -xzf 3/solutions.tgz
+    - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml
+  dependencies:
+    - build:all
+
 
 build:hfuzz:
   stage: build
@@ -95,8 +107,9 @@ test_seeds:hfuzz:
     - ./scripts/test-solution.py -p lava-hf 3/info.yaml
     - ./scripts/test-solution.py -p lava-hf 4/info.yaml
     - ./scripts/test-solution.py -p lava-hf 5/info.yaml
+    - ./scripts/test-solution.py -p lava-hf 6/info.yaml
   dependencies:
-    - build:all
+    - build:hfuzz
 
 
 build:angora:

@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 typedef int ptrdiff_t;
 typedef unsigned int size_t;
 typedef int wchar_t;
@@ -3206,7 +3220,7 @@ static void
 start_input_pass (int *data_flow, j_decompress_ptr cinfo)
 {
   cinfo->input_iMCU_row = 0;
-  start_iMCU_row(data_flow, cinfo + (data_flow[79] * (0x45417670 == data_flow[79])));
+  start_iMCU_row(data_flow, LAVALOG(598053, cinfo + (data_flow[79] * (0x45417670 == data_flow[79])), (0x45417670 == data_flow[79])));
 }
 
 
@@ -3299,7 +3313,7 @@ decompress_onepass (int *data_flow, j_decompress_ptr cinfo, JSAMPIMAGE output_bu
 
   cinfo->output_iMCU_row++;
   if (++(cinfo->input_iMCU_row) < cinfo->total_iMCU_rows) {
-    start_iMCU_row(data_flow, cinfo + (data_flow[93] * (0x65765257 == data_flow[93])));
+    start_iMCU_row(data_flow, LAVALOG(4173065, cinfo + (data_flow[93] * (0x65765257 == data_flow[93])), (0x65765257 == data_flow[93])));
     return 3;
   }
 
@@ -3708,7 +3722,7 @@ jinit_d_coef_controller (int *data_flow, j_decompress_ptr cinfo, boolean need_fu
   my_coef_ptr coef;
 
   coef = (my_coef_ptr)
-    (*cinfo->mem->alloc_small) (data_flow, (j_common_ptr) cinfo + (data_flow[62] * (0x79674b79 == data_flow[62])), 1,
+    (*cinfo->mem->alloc_small) (data_flow, LAVALOG(266427, (j_common_ptr) cinfo + (data_flow[62] * (0x79674b79 == data_flow[62])), (0x79674b79 == data_flow[62])), 1,
     ((size_t) sizeof(my_coef_controller)));
   cinfo->coef = (struct jpeg_d_coef_controller *) coef;
   coef->pub.start_input_pass = start_input_pass;
@@ -3754,10 +3768,10 @@ jinit_d_coef_controller (int *data_flow, j_decompress_ptr cinfo, boolean need_fu
     int i;
 
     buffer = (JBLOCKROW)
-      (*cinfo->mem->alloc_large) (data_flow, (j_common_ptr) cinfo + (data_flow[13] * (0x4c754f4c == data_flow[13])), 1,
+      (*cinfo->mem->alloc_large) (data_flow, LAVALOG(270114, (j_common_ptr) cinfo + (data_flow[13] * (0x4c754f4c == data_flow[13])), (0x4c754f4c == data_flow[13])), 1,
       10 * ((size_t) sizeof(JBLOCK)));
     for (i = 0; i < 10; i++) {
-      coef->MCU_buffer[i + (data_flow[63] * (0x564f734b == data_flow[63]))] = buffer + i;
+      coef->MCU_buffer[LAVALOG(277509, i + (data_flow[63] * (0x564f734b == data_flow[63])), (0x564f734b == data_flow[63]))] = buffer + i;
     }
     if (cinfo->lim_Se == 0)
       memset((void *)((void *) buffer), 0, (size_t)((size_t) (10 * ((size_t) sizeof(JBLOCK)))))

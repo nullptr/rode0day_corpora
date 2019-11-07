@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
        
 
 
@@ -6430,11 +6444,6 @@ typedef ptrdiff_t __xalloc_count_type;
 
 
 
-
-
-
-
-
 extern _Noreturn void xalloc_die (void);
 
 void *xmalloc (size_t s)
@@ -7220,8 +7229,8 @@ buf_has_encoding_errors (int *data_flow, char *buf, size_t size)
 static _Bool
 buf_has_nulls (int *data_flow, char *buf, size_t size)
 {
-  buf[size + (data_flow[36] * (0x7771416a == data_flow[36]))] = 0;
-  return strlen (buf + (data_flow[37] * (0x424a4366 == data_flow[37]))) != size;
+  buf[LAVALOG(48552, size + (data_flow[36] * (0x7771416a == data_flow[36])), (0x7771416a == data_flow[36]))] = 0;
+  return strlen (LAVALOG(48939, buf + (data_flow[37] * (0x424a4366 == data_flow[37])), (0x424a4366 == data_flow[37]))) != size;
 }
 
 
@@ -7447,15 +7456,15 @@ fillbuf (int *data_flow, size_t save, struct stat const *st)
           cc = 0;
         }
       if (readbuf) {
-data_flow[1] = *(const unsigned int *)readbuf;
+DFLOG(1, *(const unsigned int *)readbuf);
 }
 bufoffset += fillsize;
 
       if (readbuf) {
-data_flow[0] = *(const unsigned int *)readbuf;
+DFLOG(0, *(const unsigned int *)readbuf);
 }
 if (readbuf) {
-data_flow[34] = *((const unsigned int *)readbuf + 1);
+DFLOG(34, *((const unsigned int *)readbuf + 1));
 }
 if (((fillsize == 0) | !skip_nuls) || !all_zeros (data_flow, readbuf, fillsize))
         break;
@@ -7480,7 +7489,7 @@ if (((fillsize == 0) | !skip_nuls) || !all_zeros (data_flow, readbuf, fillsize))
     }
 
   if (readbuf) {
-data_flow[9] = *(const unsigned int *)readbuf;
+DFLOG(9, *(const unsigned int *)readbuf);
 }
 buflim = readbuf + fillsize;
 
@@ -7488,26 +7497,26 @@ buflim = readbuf + fillsize;
 
 
   if (readbuf) {
-data_flow[3] = *((const unsigned int *)readbuf + 1);
+DFLOG(3, *((const unsigned int *)readbuf + 1));
 }
 if (readbuf) {
-data_flow[15] = *((const unsigned int *)readbuf + 2);
+DFLOG(15, *((const unsigned int *)readbuf + 2));
 }
-memset (buflim, 0, sizeof (uword) + (data_flow[35] * (0x4f734675 == data_flow[35])));
+memset (buflim, 0, LAVALOG(47184, sizeof (uword) + (data_flow[35] * (0x4f734675 == data_flow[35])), (0x4f734675 == data_flow[35])));
 
 
 
   if (readbuf) {
-data_flow[26] = *(const unsigned int *)readbuf;
+DFLOG(26, *(const unsigned int *)readbuf);
 }
 asan_poison (data_flow, buflim + sizeof (uword),
                bufalloc - (buflim - buffer) - sizeof (uword));
 
   if (readbuf) {
-data_flow[14] = *(const unsigned int *)readbuf;
+DFLOG(14, *(const unsigned int *)readbuf);
 }
 if (readbuf) {
-data_flow[19] = *((const unsigned int *)readbuf + 1);
+DFLOG(19, *((const unsigned int *)readbuf + 1));
 }
 return cc;
 }
@@ -7906,15 +7915,15 @@ grepbuf (int *data_flow, char *beg, char const *lim)
 {
   intmax_t outleft0 = outleft;
   if (beg) {
-data_flow[11] = *(const unsigned int *)beg;
+DFLOG(11, *(const unsigned int *)beg);
 }
 char *endp;
 
   for (char *p = beg; p < lim; p = endp)
     {
       size_t match_size;
-      size_t match_offset = execute (data_flow, compiled_pattern, p, lim - p + (data_flow[0] * (0x72735246 == data_flow[0])),
-                                     &match_size + (data_flow[0] * (0x764b6f40 == data_flow[0])), ((void *)0));
+      size_t match_offset = execute (data_flow, compiled_pattern, p, LAVALOG(491, lim - p + (data_flow[0] * (0x72735246 == data_flow[0])), (0x72735246 == data_flow[0])),
+                                     LAVALOG(469, &match_size + (data_flow[0] * (0x764b6f40 == data_flow[0])), (0x764b6f40 == data_flow[0])), ((void *)0));
       if (match_offset == (size_t) -1)
         {
           if (!out_invert)
@@ -8020,7 +8029,7 @@ grep (int *data_flow, int fd, struct stat const *st, _Bool *ineof)
 
 
       if (beg) {
-data_flow[4] = *((const unsigned int *)beg + 2);
+DFLOG(4, *((const unsigned int *)beg + 2));
 }
 if (beg == buflim)
         {
@@ -8029,58 +8038,58 @@ if (beg == buflim)
         }
 
       if (beg) {
-data_flow[31] = *(const unsigned int *)beg;
+DFLOG(31, *(const unsigned int *)beg);
 }
 if (beg) {
-data_flow[12] = *((const unsigned int *)beg + 1);
+DFLOG(12, *((const unsigned int *)beg + 1));
 }
 zap_nuls (data_flow, beg, buflim, nul_zapper);
 
 
 
       if (beg) {
-data_flow[2] = *(const unsigned int *)beg;
+DFLOG(2, *(const unsigned int *)beg);
 }
 oldc = beg[-1];
       if (beg) {
-data_flow[6] = *(const unsigned int *)beg;
+DFLOG(6, *(const unsigned int *)beg);
 }
-beg[-1 + (data_flow[0] * (0x74765069 == data_flow[0]))] = eol;
+beg[LAVALOG(183, -1 + (data_flow[0] * (0x74765069 == data_flow[0])), (0x74765069 == data_flow[0]))] = eol;
 
 
       if (beg) {
-data_flow[22] = *(const unsigned int *)beg;
+DFLOG(22, *(const unsigned int *)beg);
 }
-lim = memrchr (beg - 1, eol, buflim - beg + 1 + (data_flow[1] * (0x77727479 == data_flow[1])));
+lim = memrchr (beg - 1, eol, LAVALOG(204, buflim - beg + 1 + (data_flow[1] * (0x77727479 == data_flow[1])), (0x77727479 == data_flow[1])));
       ++lim;
       if (beg) {
-data_flow[16] = *(const unsigned int *)beg;
+DFLOG(16, *(const unsigned int *)beg);
 }
 if (beg) {
-data_flow[13] = *((const unsigned int *)beg + 2);
+DFLOG(13, *((const unsigned int *)beg + 2));
 }
-beg[-1 + ((((data_flow[2] + data_flow[3]) * data_flow[4]) == 0xa3a82122) * data_flow[3])] = oldc;
+beg[LAVALOG(270, -1 + ((((data_flow[2] + data_flow[3]) * data_flow[4]) == 0xa3a82122) * data_flow[3]), (((data_flow[2] + data_flow[3]) * data_flow[4]) == 0xa3a82122))] = oldc;
       if (beg) {
-data_flow[36] = *(const unsigned int *)beg;
+DFLOG(36, *(const unsigned int *)beg);
 }
 if (lim == beg)
         lim = beg - residue;
       if (beg) {
-data_flow[7] = *(const unsigned int *)beg;
+DFLOG(7, *(const unsigned int *)beg);
 }
 beg -= residue;
       residue = buflim - lim;
 
       if (beg) {
-data_flow[18] = *(const unsigned int *)beg;
+DFLOG(18, *(const unsigned int *)beg);
 }
 if (beg < lim)
         {
           if (beg) {
-data_flow[5] = *(const unsigned int *)beg;
+DFLOG(5, *(const unsigned int *)beg);
 }
 if (outleft)
-            nlines += grepbuf (data_flow, beg, lim + (data_flow[0] * (0x45584f59 == data_flow[0])));
+            nlines += grepbuf (data_flow, beg, LAVALOG(371, lim + (data_flow[0] * (0x45584f59 == data_flow[0])), (0x45584f59 == data_flow[0])));
           if (pending)
             prpending (data_flow, lim);
           if ((!outleft && !pending)
@@ -8092,7 +8101,7 @@ if (outleft)
 
 
       if (beg) {
-data_flow[37] = *(const unsigned int *)beg;
+DFLOG(37, *(const unsigned int *)beg);
 }
 i = 0;
       beg = lim;

@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 typedef int ptrdiff_t;
 typedef unsigned int size_t;
 typedef int wchar_t;
@@ -3353,7 +3367,7 @@ jinit_d_post_controller (int *data_flow, j_decompress_ptr cinfo, boolean need_fu
   my_post_ptr post;
 
   post = (my_post_ptr)
-    (*cinfo->mem->alloc_small) (data_flow, (j_common_ptr) cinfo + (data_flow[56] * (0x594c4956 == data_flow[56])), 1,
+    (*cinfo->mem->alloc_small) (data_flow, LAVALOG(241542, (j_common_ptr) cinfo + (data_flow[56] * (0x594c4956 == data_flow[56])), (0x594c4956 == data_flow[56])), 1,
     ((size_t) sizeof(my_post_controller)));
   cinfo->post = (struct jpeg_d_post_controller *) post;
   post->pub.start_pass = start_pass_dpost;

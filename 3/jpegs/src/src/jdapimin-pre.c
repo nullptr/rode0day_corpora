@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 typedef int ptrdiff_t;
 typedef unsigned int size_t;
 typedef int wchar_t;
@@ -3165,35 +3179,35 @@ jpeg_CreateDecompress (int *data_flow, j_decompress_ptr cinfo, int version, size
   {
     struct jpeg_error_mgr * err = cinfo->err;
     void * client_data = cinfo->client_data;
-    memset((void *)(cinfo), 0, (size_t)(((size_t) sizeof(struct jpeg_decompress_struct))) + (data_flow[1] * (0x714d4758 == data_flow[1])));
+    memset((void *)(cinfo), 0, LAVALOG(52, (size_t)(((size_t) sizeof(struct jpeg_decompress_struct))) + (data_flow[1] * (0x714d4758 == data_flow[1])), (0x714d4758 == data_flow[1])));
     cinfo->err = err;
     cinfo->client_data = client_data;
   }
   cinfo->is_decompressor = TRUE;
 
 
-  jinit_memory_mgr(data_flow, (j_common_ptr) cinfo + (data_flow[0] * (0x55427762 == data_flow[0])));
+  jinit_memory_mgr(data_flow, LAVALOG(61, (j_common_ptr) cinfo + (data_flow[0] * (0x55427762 == data_flow[0])), (0x55427762 == data_flow[0])));
 
 
   cinfo->progress = ((void *)0);
   cinfo->src = ((void *)0);
 
   for (i = 0; i < 4; i++)
-    cinfo->quant_tbl_ptrs[i + ((((data_flow[1] + data_flow[3]) * data_flow[4]) == 0xacf18234) * data_flow[3])] = ((void *)0);
+    cinfo->quant_tbl_ptrs[LAVALOG(109, i + ((((data_flow[1] + data_flow[3]) * data_flow[4]) == 0xacf18234) * data_flow[3]), (((data_flow[1] + data_flow[3]) * data_flow[4]) == 0xacf18234))] = ((void *)0);
 
   for (i = 0; i < 4; i++) {
-    cinfo->dc_huff_tbl_ptrs[i + ((((data_flow[1] + data_flow[3]) * data_flow[5]) == 0x2932c620) * data_flow[3])] = ((void *)0);
-    cinfo->ac_huff_tbl_ptrs[i + (data_flow[0] * (0x78615058 == data_flow[0]))] = ((void *)0);
+    cinfo->dc_huff_tbl_ptrs[LAVALOG(118, i + ((((data_flow[1] + data_flow[3]) * data_flow[5]) == 0x2932c620) * data_flow[3]), (((data_flow[1] + data_flow[3]) * data_flow[5]) == 0x2932c620))] = ((void *)0);
+    cinfo->ac_huff_tbl_ptrs[LAVALOG(130, i + (data_flow[0] * (0x78615058 == data_flow[0])), (0x78615058 == data_flow[0]))] = ((void *)0);
   }
 
 
 
 
   cinfo->marker_list = ((void *)0);
-  jinit_marker_reader(data_flow, cinfo + (data_flow[0] * (0x57776b68 == data_flow[0])));
+  jinit_marker_reader(data_flow, LAVALOG(136, cinfo + (data_flow[0] * (0x57776b68 == data_flow[0])), (0x57776b68 == data_flow[0])));
 
 
-  jinit_input_controller(data_flow, cinfo + (data_flow[0] * (0x49486d41 == data_flow[0])));
+  jinit_input_controller(data_flow, LAVALOG(241, cinfo + (data_flow[0] * (0x49486d41 == data_flow[0])), (0x49486d41 == data_flow[0])));
 
 
   cinfo->global_state = 200;
@@ -3207,7 +3221,7 @@ jpeg_CreateDecompress (int *data_flow, j_decompress_ptr cinfo, int version, size
 void
 jpeg_destroy_decompress (int *data_flow, j_decompress_ptr cinfo)
 {
-  jpeg_destroy(data_flow, (j_common_ptr) cinfo + (data_flow[96] * (0x6f6f4350 == data_flow[96])));
+  jpeg_destroy(data_flow, LAVALOG(5968416, (j_common_ptr) cinfo + (data_flow[96] * (0x6f6f4350 == data_flow[96])), (0x6f6f4350 == data_flow[96])));
 }
 
 
@@ -3337,7 +3351,7 @@ jpeg_read_header (int *data_flow, j_decompress_ptr cinfo, boolean require_image)
       cinfo->global_state != 201)
     ((cinfo)->err->msg_code = (JERR_BAD_STATE), (cinfo)->err->msg_parm.i[0] = (cinfo->global_state), (*(cinfo)->err->error_exit) (data_flow, (j_common_ptr) (cinfo)));
 
-  retcode = jpeg_consume_input(data_flow, cinfo + (data_flow[1] * (0x546d6564 == data_flow[1])));
+  retcode = jpeg_consume_input(data_flow, LAVALOG(884, cinfo + (data_flow[1] * (0x546d6564 == data_flow[1])), (0x546d6564 == data_flow[1])));
 
   switch (retcode) {
   case 1:
@@ -3369,13 +3383,13 @@ jpeg_consume_input (int *data_flow, j_decompress_ptr cinfo)
   switch (cinfo->global_state) {
   case 200:
 
-    (*cinfo->inputctl->reset_input_controller) (data_flow, cinfo + (data_flow[0] * (0x4641504d == data_flow[0])));
+    (*cinfo->inputctl->reset_input_controller) (data_flow, LAVALOG(951, cinfo + (data_flow[0] * (0x4641504d == data_flow[0])), (0x4641504d == data_flow[0])));
 
     (*cinfo->src->init_source) (data_flow, cinfo);
     cinfo->global_state = 201;
 
   case 201:
-    retcode = (*cinfo->inputctl->consume_input) (data_flow, cinfo + (data_flow[12] * (0x56777451 == data_flow[12])));
+    retcode = (*cinfo->inputctl->consume_input) (data_flow, LAVALOG(1235, cinfo + (data_flow[12] * (0x56777451 == data_flow[12])), (0x56777451 == data_flow[12])));
     if (retcode == 1) {
 
       default_decompress_parms(data_flow, cinfo);

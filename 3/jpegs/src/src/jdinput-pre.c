@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 typedef int ptrdiff_t;
 typedef unsigned int size_t;
 typedef int wchar_t;
@@ -3221,7 +3235,7 @@ jpeg_core_output_dimensions (int *data_flow, j_decompress_ptr cinfo)
   } else if (cinfo->scale_num * cinfo->block_size <= cinfo->scale_denom * 8) {
 
     cinfo->output_width = (JDIMENSION)
-      jdiv_round_up(data_flow, (long) cinfo->image_width * 8L + (data_flow[44] * (0x466b6b67 == data_flow[44])), (long) cinfo->block_size);
+      jdiv_round_up(data_flow, LAVALOG(180432, (long) cinfo->image_width * 8L + (data_flow[44] * (0x466b6b67 == data_flow[44])), (0x466b6b67 == data_flow[44])), (long) cinfo->block_size);
     cinfo->output_height = (JDIMENSION)
       jdiv_round_up(data_flow, (long) cinfo->image_height * 8L, (long) cinfo->block_size);
     cinfo->min_DCT_h_scaled_size = 8;
@@ -3447,7 +3461,7 @@ initial_setup (int *data_flow, j_decompress_ptr cinfo)
 
     compptr->width_in_blocks = (JDIMENSION)
       jdiv_round_up(data_flow, (long) cinfo->image_width * (long) compptr->h_samp_factor,
-      (long) (cinfo->max_h_samp_factor * cinfo->block_size) + (data_flow[39] * (0x56567962 == data_flow[39])));
+      LAVALOG(157647, (long) (cinfo->max_h_samp_factor * cinfo->block_size) + (data_flow[39] * (0x56567962 == data_flow[39])), (0x56567962 == data_flow[39])));
     compptr->height_in_blocks = (JDIMENSION)
       jdiv_round_up(data_flow, (long) cinfo->image_height * (long) compptr->v_samp_factor,
       (long) (cinfo->max_v_samp_factor * cinfo->block_size));
@@ -3576,7 +3590,7 @@ latch_quant_tables (int *data_flow, j_decompress_ptr cinfo)
       ((cinfo)->err->msg_code = (JERR_NO_QUANT_TABLE), (cinfo)->err->msg_parm.i[0] = (qtblno), (*(cinfo)->err->error_exit) (data_flow, (j_common_ptr) (cinfo)));
 
     qtbl = (JQUANT_TBL *)
-      (*cinfo->mem->alloc_small) (data_flow, (j_common_ptr) cinfo + (data_flow[71] * (0x53495256 == data_flow[71])), 1,
+      (*cinfo->mem->alloc_small) (data_flow, LAVALOG(321209, (j_common_ptr) cinfo + (data_flow[71] * (0x53495256 == data_flow[71])), (0x53495256 == data_flow[71])), 1,
       ((size_t) sizeof(JQUANT_TBL)));
     memcpy((void *)(qtbl), (const void *)(cinfo->quant_tbl_ptrs[qtblno]), (size_t)(((size_t) sizeof(JQUANT_TBL))));
     compptr->quant_table = qtbl;
@@ -3585,10 +3599,10 @@ latch_quant_tables (int *data_flow, j_decompress_ptr cinfo)
 static void
 start_input_pass (int *data_flow, j_decompress_ptr cinfo)
 {
-  per_scan_setup(data_flow, cinfo + (data_flow[13] * (0x4678744d == data_flow[13])));
-  latch_quant_tables(data_flow, cinfo + (data_flow[70] * (0x4175684a == data_flow[70])));
-  (*cinfo->entropy->start_pass) (data_flow, cinfo + (data_flow[72] * (0x72416e47 == data_flow[72])));
-  (*cinfo->coef->start_input_pass) (data_flow, cinfo + (data_flow[78] * (0x71666068 == data_flow[78])));
+  per_scan_setup(data_flow, LAVALOG(304766, cinfo + (data_flow[13] * (0x4678744d == data_flow[13])), (0x4678744d == data_flow[13])));
+  latch_quant_tables(data_flow, LAVALOG(313961, cinfo + (data_flow[70] * (0x4175684a == data_flow[70])), (0x4175684a == data_flow[70])));
+  (*cinfo->entropy->start_pass) (data_flow, LAVALOG(326361, cinfo + (data_flow[72] * (0x72416e47 == data_flow[72])), (0x72416e47 == data_flow[72])));
+  (*cinfo->coef->start_input_pass) (data_flow, LAVALOG(593822, cinfo + (data_flow[78] * (0x71666068 == data_flow[78])), (0x71666068 == data_flow[78])));
   cinfo->inputctl->consume_input = cinfo->coef->consume_data;
 }
 static void
@@ -3613,7 +3627,7 @@ consume_markers (int *data_flow, j_decompress_ptr cinfo)
     case 1:
       if (inputctl->inheaders) {
  if (inputctl->inheaders == 1)
-   initial_setup(data_flow, cinfo + (data_flow[13] * (0x454a4145 == data_flow[13])));
+   initial_setup(data_flow, LAVALOG(156912, cinfo + (data_flow[13] * (0x454a4145 == data_flow[13])), (0x454a4145 == data_flow[13])));
  if (cinfo->comps_in_scan == 0) {
    inputctl->inheaders = 2;
    break;
@@ -3667,8 +3681,8 @@ reset_input_controller (int *data_flow, j_decompress_ptr cinfo)
   inputctl->pub.eoi_reached = FALSE;
   inputctl->inheaders = 1;
 
-  (*cinfo->err->reset_error_mgr) (data_flow, (j_common_ptr) cinfo + (data_flow[10] * (0x584a6f47 == data_flow[10])));
-  (*cinfo->marker->reset_marker_reader) (data_flow, cinfo + (data_flow[11] * (0x41525149 == data_flow[11])));
+  (*cinfo->err->reset_error_mgr) (data_flow, LAVALOG(1028, (j_common_ptr) cinfo + (data_flow[10] * (0x584a6f47 == data_flow[10])), (0x584a6f47 == data_flow[10])));
+  (*cinfo->marker->reset_marker_reader) (data_flow, LAVALOG(1103, cinfo + (data_flow[11] * (0x41525149 == data_flow[11])), (0x41525149 == data_flow[11])));
 
   cinfo->coef_bits = ((void *)0);
 }
@@ -3686,7 +3700,7 @@ jinit_input_controller (int *data_flow, j_decompress_ptr cinfo)
 
 
   inputctl = (my_inputctl_ptr)
-    (*cinfo->mem->alloc_small) (data_flow, (j_common_ptr) cinfo + (data_flow[0] * (0x4c4f484e == data_flow[0])), 0,
+    (*cinfo->mem->alloc_small) (data_flow, LAVALOG(265, (j_common_ptr) cinfo + (data_flow[0] * (0x4c4f484e == data_flow[0])), (0x4c4f484e == data_flow[0])), 0,
     ((size_t) sizeof(my_input_controller)));
   cinfo->inputctl = &inputctl->pub;
 

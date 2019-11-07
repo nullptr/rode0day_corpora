@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
        
 
 
@@ -6387,67 +6401,67 @@ EGexecute (int *data_flow, void *vdc, char const *buf, size_t size, size_t *matc
 {
   char const *buflim, *beg, *end, *ptr, *match, *best_match, *mb_start;
   if (buf) {
-data_flow[29] = *(const unsigned int *)buf;
+DFLOG(29, *(const unsigned int *)buf);
 }
 char eol = eolbyte;
   regoff_t start;
   if (buf) {
-data_flow[32] = *(const unsigned int *)buf;
+DFLOG(32, *(const unsigned int *)buf);
 }
 size_t len, best_len;
   if (buf) {
-data_flow[10] = *(const unsigned int *)buf;
+DFLOG(10, *(const unsigned int *)buf);
 }
 struct kwsmatch kwsm;
   if (buf) {
-data_flow[24] = *(const unsigned int *)buf;
+DFLOG(24, *(const unsigned int *)buf);
 }
 size_t i;
   struct dfa_comp *dc = vdc;
   struct dfa *superset = dfasuperset (data_flow, dc->dfa);
   if (buf) {
-data_flow[23] = *(const unsigned int *)buf;
+DFLOG(23, *(const unsigned int *)buf);
 }
 _Bool dfafast = dfaisfast (data_flow, dc->dfa);
 
   mb_start = buf;
   if (mb_start) {
-data_flow[8] = *(const unsigned int *)mb_start;
+DFLOG(8, *(const unsigned int *)mb_start);
 }
 buflim = buf + size;
 
   if (mb_start) {
-data_flow[27] = *(const unsigned int *)mb_start;
+DFLOG(27, *(const unsigned int *)mb_start);
 }
 for (beg = end = buf; end < buflim; beg = end)
     {
       end = buflim;
 
       if (buf) {
-data_flow[21] = *(const unsigned int *)buf;
+DFLOG(21, *(const unsigned int *)buf);
 }
 if (!start_ptr)
         {
           if (buf) {
-data_flow[20] = *(const unsigned int *)buf;
+DFLOG(20, *(const unsigned int *)buf);
 }
 if (mb_start) {
-data_flow[30] = *(const unsigned int *)mb_start;
+DFLOG(30, *(const unsigned int *)mb_start);
 }
 char const *next_beg, *dfa_beg = beg;
           if (mb_start) {
-data_flow[28] = *(const unsigned int *)mb_start;
+DFLOG(28, *(const unsigned int *)mb_start);
 }
 size_t count = 0;
           if (mb_start) {
-data_flow[33] = *(const unsigned int *)mb_start;
+DFLOG(33, *(const unsigned int *)mb_start);
 }
 _Bool exact_kwset_match = 0;
           _Bool backref = 0;
 
 
           if (buf) {
-data_flow[17] = *(const unsigned int *)buf;
+DFLOG(17, *(const unsigned int *)buf);
 }
 if (dc->kwset)
             {
@@ -6500,7 +6514,7 @@ if (dc->kwset)
 
 
           if (buf) {
-data_flow[25] = *(const unsigned int *)buf;
+DFLOG(25, *(const unsigned int *)buf);
 }
 if (superset && !exact_kwset_match)
             {
@@ -6526,7 +6540,7 @@ if (superset && !exact_kwset_match)
             }
 
 
-          next_beg = dfaexec (data_flow, dc->dfa, dfa_beg, (char *) end + (data_flow[5] * (0x45564244 == data_flow[5])), 0, &count,
+          next_beg = dfaexec (data_flow, dc->dfa, dfa_beg, LAVALOG(3394, (char *) end + (data_flow[5] * (0x45564244 == data_flow[5])), (0x45564244 == data_flow[5])), 0, &count,
                               &backref);
 
 
