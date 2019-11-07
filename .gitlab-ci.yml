@@ -13,31 +13,14 @@ build:all:
   script:
     - ( cd 10 && ./fix_tcpdump_for_i386.sh )
     - ./scripts/build.sh
+    - ./scripts/build.sh --cc afl-gcc
   artifacts:
     paths:
-      - 3/greps/lava-afl-cf
-      - 3/jpegs/lava-afl-cf
-      - 4/pcreS/lava-afl-cf
-      - 5/fileS2/lava-afl-cf
-      - 6/filemagicS/lava-afl-cf
-      - 6/jqS/lava-afl-cf
-      - 7/jqS2/lava-afl-cf
-      - 7/yamlS3/lava-afl-cf
-      - 8/bzipS/lava-afl-cf
-      - 8/filemagicS2/lava-afl-cf
-      - 8/pcreS2/lava-afl-cf
-      - 9/jpegS2/lava-afl-cf
-      - 10/audiofileS/lava-afl-cf
-      - 10/tcpdumpS/lava-afl-cf
-      - 11/jpegS3/lava-afl-cf
-      - 11/jqS3/lava-afl-cf
-      - 12/fileS3/lava-afl-cf
-      - 12/jqS4/lava-afl-cf
-      - 13/fileS4/lava-afl-cf
-      - 13/jpegS4/lava-afl-cf
+      - */*/lava-afl-gcc
+      - */*/lava-afl-cf
     expire_in: 1 week
 
-test_seeds:afl:
+test_seeds:afl-clang:
   stage: test_seeds
   image: 
     name: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04 
@@ -50,7 +33,7 @@ test_seeds:afl:
   dependencies:
     - build:all
 
-test_solutions:afl:
+test_solutions:3:9:afl-gcc:
   stage: test_solutions
   image: 
     name: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04 
@@ -58,10 +41,21 @@ test_solutions:afl:
   script:
     - ./scripts/build.sh --copy-files
     - tar -C 3 -xzf 3/solutions.tgz
-    - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 3/info.yaml
   dependencies:
     - build:all
 
+test_solutions:4:9:afl-gcc:
+  stage: test_solutions
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04 
+    entrypoint: [""]
+  script:
+    - ./scripts/build.sh --copy-files
+    - tar -C 4 -xzf 4/solutions.tgz
+    - ./scripts/test-solution.py -p lava-afl-gcc 3/info.yaml
+  dependencies:
+    - build:all
 
 build:hfuzz:
   stage: build
@@ -75,26 +69,7 @@ build:hfuzz:
     - cp 13/fileS4/src/src/hfuzz-file 13/fileS4/lava-hf/
   artifacts:
     paths:
-      - 3/greps/lava-hf
-      - 3/jpegs/lava-hf
-      - 4/pcreS/lava-hf
-      - 5/fileS2/lava-hf
-      - 6/filemagicS/lava-hf
-      - 6/jqS/lava-hf
-      - 7/jqS2/lava-hf
-      - 7/yamlS3/lava-hf
-      - 8/bzipS/lava-hf
-      - 8/filemagicS2/lava-hf
-      - 8/pcreS2/lava-hf
-      - 9/jpegS2/lava-hf
-      - 10/audiofileS/lava-hf
-      - 10/tcpdumpS/lava-hf
-      - 11/jpegS3/lava-hf
-      - 11/jqS3/lava-hf
-      - 12/fileS3/lava-hf
-      - 12/jqS4/lava-hf
-      - 13/fileS4/lava-hf
-      - 13/jpegS4/lava-hf
+      - */*/lava-hf
     expire_in: 1 week
 
 test_seeds:hfuzz:
@@ -122,26 +97,7 @@ build:angora:
     - ./scripts/build.sh --angora -X
   artifacts:
     paths:
-      - 3/greps/lava-ang
-      - 3/jpegs/lava-ang
-      - 4/pcreS/lava-ang
-      - 5/fileS2/lava-ang
-      - 6/filemagicS/lava-ang
-      - 6/jqS/lava-ang
-      - 7/jqS2/lava-ang
-      - 7/yamlS3/lava-ang
-      - 8/bzipS/lava-ang
-      - 8/filemagicS2/lava-ang
-      - 8/pcreS2/lava-ang
-      - 9/jpegS2/lava-ang
-      - 10/audiofileS/lava-ang
-      - 10/tcpdumpS/lava-ang
-      - 11/jpegS3/lava-ang
-      - 11/jqS3/lava-ang
-      - 12/fileS3/lava-ang
-      - 12/jqS4/lava-ang
-      - 13/fileS4/lava-ang
-      - 13/jpegS4/lava-ang
+      - */*/lava-ang
     expire_in: 1 week
 
 test_seeds:angora:
