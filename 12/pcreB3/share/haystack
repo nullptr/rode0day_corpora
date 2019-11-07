@@ -1,0 +1,23 @@
+Your input will be graded with this file.
+
+This is quite an exciting input file"
+
+The API documentation at rode0day.mit.edu/api doesn't currently let us specify multiple input files as being attacker controlled
+so this one is fixed for now!
+We may have to change this in the future!
+
+AAAAAAAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCCCCCCCCCC123456778
+!!!!!!!!!!!!!:::::::@@@@@@@@@@@:::::#####
+#$%^&*())__
+``~~()
+/bin/echo "hello world"
+ssh user@hostname
+c,s,v;data,data,data
+aa:bb:cc:dd
+ee|ff|gg|hh
+\n \\n
+' or '1' = '1
+$(which sl)
+
+
+That's all for now!

@@ -27,6 +27,12 @@ download_challenges() {
     wget -qO- https://rode0day.mit.edu/static/corpora/19.10_vGBLGzVUHlUFNd5Ji2UcvtGHFlleGsrR.tar.gz | tar -C 13 -xzf -
 }
 
+copy_required_files() {
+    cp 5/fileS2/src/magic/magic.mgc 5/fileS2/built/share/misc/
+    cp 12/fileS3/src/magic/magic.mgc 12/fileS3/built/share/misc/
+    cp 13/fileS4/src/magic/magic.mgc 12/fileS4/built/share/misc/
+}
+
 make_clean() {
     make -C ${1}/src clean || exit
 }
@@ -36,14 +42,14 @@ make_lava() {
     CFLAGS="$CFLAGS" make -C ${1}/src || exit
     make -C ${1}/src install
     BN=${CC##*/}
-    cp -r ${1}/src/lava-install ${1}/lava-${CC_ABV[$BN]:-$BN}
+    cp -TR ${1}/src/lava-install ${1}/lava-${CC_ABV[$BN]:-$BN}
 }
 
 make_lava_afl_clang() {
     make -C ${1}/src clean
     CC=afl-clang-fast make -C ${1}/src || exit
     make -C ${1}/src install
-    cp -r ${1}/src/lava-install ${1}/lava-afl-cf
+    cp -TR ${1}/src/lava-install ${1}/lava-afl-cf
     sed 's/lava-install/lava-clang/' ${1}/job.json > ${1}/job_afl-clang.json
 }
 
@@ -51,11 +57,11 @@ make_lava_angora() {
     make -C ${1}/src clean
     CC=/angora/bin/angora-clang CFLAGS="$CFLAGS" make -C ${1}/src || exit
     make -C ${1}/src install
-    cp -r ${1}/src/lava-install ${1}/lava-ang
+    cp -TR ${1}/src/lava-install ${1}/lava-ang
     make -C ${1}/src clean
     USE_TRACK=1 CC=/angora/bin/angora-clang CFLAGS="$CFLAGS" make -C ${1}/src || exit
     make -C ${1}/src install
-    cp ${1}/src/lava-install/bin/* ${1}/lava-ang/bin/tt
+    for f in ${1}/src/lava-install/bin/*; do cp "$f" "${1}/lava-ang/bin/${f##*/}.tt"; done
 }
 
 make_gcov() {
@@ -208,6 +214,11 @@ do
         --download)
             download_challenges
             echo "[*] all challenges downloaded!"
+            exit 0
+            ;;
+        --copy-files)
+            copy_required_files
+            echo "[*] required files copied"
             exit 0
             ;;
         -h|--help)

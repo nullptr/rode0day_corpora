@@ -1,4 +1,4 @@
-all: grep
+all: newgrep
 
 CFLAGS += -O0 -DHAVE_CONFIG_H -I. -I.. -g -gdwarf-2
 
@@ -86,14 +86,14 @@ LIBOBJ = \
 %.o : %.c
 	$(CC) $(CFLAGS) -I.. -c -o $@ $<
 
-grep : $(LIBOBJ)
-	$(CC) $(CFLAGS) -o grep $^ -lpthread
+newgrep : $(LIBOBJ)
+	$(CC) $(CFLAGS) -o $@ $^ -lpthread
 
 clean : 
 	rm -f *.o \
 	rm -f ./*/*.o \
 	rm -f *.so \
-	rm -f grep \
+	rm -f newgrep \
 	rm -f *.Tpo \
 	rm -f *.a
 
