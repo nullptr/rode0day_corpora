@@ -50,11 +50,12 @@ test_seeds:afl:
   dependencies:
     - build:all
 
+
 build:hfuzz:
   stage: build
   image: 
     name: registry.gitlab.com/rode0day/fuzzer-testing/i386/honggfuzz_runner:16.04
-    entrypoint: [""]
+    entrypoint: [ "" ]
   script:
     - ( cd 10 && ./fix_tcpdump_for_i386.sh )
     - ./scripts/build.sh
@@ -83,6 +84,20 @@ build:hfuzz:
       - 13/fileS4/lava-hf
       - 13/jpegS4/lava-hf
     expire_in: 1 week
+
+test_seeds:hfuzz:
+  stage: test_seeds
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/honggfuzz_runner:16.04 
+    entrypoint: [ "" ]
+  script:
+    - ./scripts/build.sh --copy-files
+    - ./scripts/test-solution.py -p lava-hf 3/info.yaml
+    - ./scripts/test-solution.py -p lava-hf 4/info.yaml
+    - ./scripts/test-solution.py -p lava-hf 5/info.yaml
+  dependencies:
+    - build:all
+
 
 build:angora:
   stage: build
@@ -127,5 +142,9 @@ test_seeds:angora:
     - ./scripts/test-solution.py -p lava-ang 3/info.yaml
     - ./scripts/test-solution.py -p lava-ang 4/info.yaml
     - ./scripts/test-solution.py -p lava-ang 5/info.yaml
+    - ./scripts/test-solution.py -p lava-ang 6/info.yaml
+    - ./scripts/test-solution.py -p lava-ang 7/info.yaml
+    - ./scripts/test-solution.py -p lava-ang 8/info.yaml
+    - ./scripts/test-solution.py -p lava-ang 9/info.yaml
   dependencies:
     - build:angora

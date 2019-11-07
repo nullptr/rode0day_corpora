@@ -28,9 +28,12 @@ download_challenges() {
 }
 
 copy_required_files() {
+    mkdir -p  5/fileS2/built/share/misc
     cp 5/fileS2/src/magic/magic.mgc 5/fileS2/built/share/misc/
-    cp 12/fileS3/src/magic/magic.mgc 12/fileS3/built/share/misc/
-    cp 13/fileS4/src/magic/magic.mgc 12/fileS4/built/share/misc/
+    mkdir -p  12/fileS3/built/share/misc
+    cp 12/fileS3/src/magic.mgc 12/fileS3/built/share/misc/
+    mkdir -p  13/fileS4/built/share/misc
+    cp 13/fileS4/src/magic.mgc 13/fileS4/built/share/misc/
 }
 
 make_clean() {

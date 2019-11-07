@@ -47,13 +47,13 @@ def test_run(challenge, base_dir, prefix='lava-install', input_file=None):
 
     test_seeds = False
     local_dir = os.path.join(base_dir, challenge["install_dir"])
-    r = {'returncode': 0, 'bug_id': None, 'src_line': "", 'match': False}
+    r = {'returncode': -1, 'bug_id': None, 'src_line': "", 'match': False}
     library_dir = None
     if "library_dir" in challenge.keys():
         library_dir = os.path.join(local_dir, challenge["library_dir"])
-    binary = os.path.join(local_dir, prefix, challenge["binary_path"].replace('built/',''))
+    binary = os.path.join(local_dir, prefix, challenge["binary_path"].replace('built/', ''))
     if not os.path.isfile(binary):
-        logger.error("did not find %s", binary)
+        logger.info("Skipping: %s; did not find binary.", binary)
         return r
     if input_file is None:
         test_seeds = True
@@ -71,10 +71,10 @@ def test_run(challenge, base_dir, prefix='lava-install', input_file=None):
     except TimeoutExpired:
         logger.error("timeout expired for: %s", input_file)
         return r
+    r['returncode'] = p.returncode
     lava = serr.find(b'LAVALOG:')
     if lava > 0:
         msg = serr[lava:].split(maxsplit=3)
-        r['returncode'] = p.returncode
         r['bug_id'] = msg[1].strip()[:-1].decode('utf-8')
         r['src_line'] = msg[2].split(b'\n')[0].strip().decode('utf-8')
         r['match'] = (r['bug_id'] == os.path.basename(input_file).split('.')[0])
@@ -103,7 +103,7 @@ def run_tests(info):
             continue
         for solution in os.listdir(solutions_dir):
             sol_file = os.path.join(solutions_dir, solution)
-            results.append(vw.run_binary(sol_file))
+            # results.append(vw.run_binary(sol_file))
     validated = [1 for r in results if r['match']]
     logger.info("DONE: %d  of %d bugs validated.", len(validated), len(results))
 
@@ -122,7 +122,7 @@ def run_test(info, challenge_name):
         return
     for solution in os.listdir(solutions_dir):
         sol_file = os.path.join(solutions_dir, solution)
-        results.append(vw.run_binary(sol_file))
+        # results.append(vw.run_binary(sol_file))
     validated = [1 for r in results if r['match']]
     logger.info("DONE: %d  of %d bugs validated.", len(validated), len(results))
 
