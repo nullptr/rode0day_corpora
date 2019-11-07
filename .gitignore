@@ -3,8 +3,9 @@
 *.swp
 *.deps
 magic.h
-gcov
-lava-install
+bin
+built
+__pycache__
 
 
 3/greps/src/src/grep
@@ -29,5 +30,3 @@ lava-install
 13/fileS4/src/src/file
 13/jpegS4/src/src/jpeg
 
-3/greps/src/lib
-4/newgrepS/src/lib

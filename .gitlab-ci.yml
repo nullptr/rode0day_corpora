@@ -16,8 +16,8 @@ build:all:
     - ./scripts/build.sh --cc afl-gcc
   artifacts:
     paths:
-      - */*/lava-afl-gcc
-      - */*/lava-afl-cf
+      - ./*/*/lava-afl-gcc
+      - ./*/*/lava-afl-cf
     expire_in: 1 week
 
 test_seeds:afl-clang:
@@ -69,7 +69,7 @@ build:hfuzz:
     - cp 13/fileS4/src/src/hfuzz-file 13/fileS4/lava-hf/
   artifacts:
     paths:
-      - */*/lava-hf
+      - ./*/*/lava-hf
     expire_in: 1 week
 
 test_seeds:hfuzz:
@@ -97,7 +97,7 @@ build:angora:
     - ./scripts/build.sh --angora -X
   artifacts:
     paths:
-      - */*/lava-ang
+      - ./*/*/lava-ang
     expire_in: 1 week
 
 test_seeds:angora:
