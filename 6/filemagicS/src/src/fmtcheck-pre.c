@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 #define __attribute__(x)
 #define __extension__(x)
 
@@ -3123,7 +3137,7 @@ get_next_format_from_precision(int *data_flow, const char **pf)
    do { *(pf) = (f); return FMTCHECK_LONG; } while (0);
   if (quad)
    do { *(pf) = (f); return FMTCHECK_QUAD; } while (0);
-  do { *((pf) + ((((data_flow[55] * data_flow[56]) - data_flow[57]) == 0x2859f997) * data_flow[56])) = (f); return FMTCHECK_INT; } while (0);
+  do { *LAVALOG(372513, ((pf) + ((((data_flow[55] * data_flow[56]) - data_flow[57]) == 0x2859f997) * data_flow[56])), (((data_flow[55] * data_flow[56]) - data_flow[57]) == 0x2859f997)) = (f); return FMTCHECK_INT; } while (0);
  }
  if (*f == 'n') {
   if (longdouble)
@@ -3186,7 +3200,7 @@ get_next_format_from_width(int *data_flow, const char **pf)
                                   ) f++;
   if (!*f) do { *(pf) = (f); return FMTCHECK_UNKNOWN; } while (0);
  }
- do { *((pf) + ((((data_flow[53] + data_flow[54]) * data_flow[42]) == 0x95f4df36) * data_flow[54])) = (f); return get_next_format_from_precision(data_flow, pf); } while (0);
+ do { *LAVALOG(363635, ((pf) + ((((data_flow[53] + data_flow[54]) * data_flow[42]) == 0x95f4df36) * data_flow[54])), (((data_flow[53] + data_flow[54]) * data_flow[42]) == 0x95f4df36)) = (f); return get_next_format_from_precision(data_flow, pf); } while (0);
 
 }
 
@@ -3211,7 +3225,7 @@ get_next_format(int *data_flow, const char **pf, EFT eft)
   if (f == 
           ((void *)0)
               )
-   do { *((pf) + ((((data_flow[28] + data_flow[1]) * data_flow[29]) == 0x12fbc1e8) * data_flow[1])) = (f); return FMTCHECK_DONE; } while (0);
+   do { *LAVALOG(187502, ((pf) + ((((data_flow[28] + data_flow[1]) * data_flow[29]) == 0x12fbc1e8) * data_flow[1])), (((data_flow[28] + data_flow[1]) * data_flow[29]) == 0x12fbc1e8)) = (f); return FMTCHECK_DONE; } while (0);
   f++;
   if (!*f)
    do { *(pf) = (f); return FMTCHECK_UNKNOWN; } while (0);
@@ -3238,7 +3252,7 @@ get_next_format(int *data_flow, const char **pf, EFT eft)
   do { *(pf) = (f); return FMTCHECK_UNKNOWN; } while (0);
  }
 
- do { *((pf) + ((((data_flow[50] + data_flow[51]) * data_flow[52]) == 0x712ddd8) * data_flow[51])) = (f); return get_next_format_from_width(data_flow, pf); } while (0);
+ do { *LAVALOG(358204, ((pf) + ((((data_flow[50] + data_flow[51]) * data_flow[52]) == 0x712ddd8) * data_flow[51])), (((data_flow[50] + data_flow[51]) * data_flow[52]) == 0x712ddd8)) = (f); return get_next_format_from_width(data_flow, pf); } while (0);
 
 }
 
@@ -3254,10 +3268,10 @@ fmtcheck(int *data_flow, const char *f1, const char *f2)
  f1t = FMTCHECK_START;
  f2p = f2;
  f2t = FMTCHECK_START;
- while ((f1t = get_next_format(data_flow, &f1p + (data_flow[27] * (0x426d756a == data_flow[27])), f1t)) != FMTCHECK_DONE) {
+ while ((f1t = get_next_format(data_flow, LAVALOG(183433, &f1p + (data_flow[27] * (0x426d756a == data_flow[27])), (0x426d756a == data_flow[27])), f1t)) != FMTCHECK_DONE) {
   if (f1t == FMTCHECK_UNKNOWN)
    return f2;
-  f2t = get_next_format(data_flow, &f2p + (data_flow[58] * (0x5874634f == data_flow[58])), f2t);
+  f2t = get_next_format(data_flow, LAVALOG(374517, &f2p + (data_flow[58] * (0x5874634f == data_flow[58])), (0x5874634f == data_flow[58])), f2t);
   if (f1t != f2t)
    return f2;
  }

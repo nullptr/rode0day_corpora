@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 #define __attribute__(x)
 #define __extension__(x)
 
@@ -3731,7 +3745,7 @@ file_softmagic(int *data_flow, struct magic_set *ms, const unsigned char *buf, s
  }
 
  for (ml = ms->mlist[0]->next; ml != ms->mlist[0]; ml = ml->next)
-  if ((rv = match(data_flow, ms, ml->magic, ml->nmagic, buf + (data_flow[12] * (0x4c596b59 == data_flow[12])), nbytes, 0, mode,
+  if ((rv = match(data_flow, ms, ml->magic, ml->nmagic, LAVALOG(58155, buf + (data_flow[12] * (0x4c596b59 == data_flow[12])), (0x4c596b59 == data_flow[12])), nbytes, 0, mode,
       text, 0, indir_level, name_count,
       &printed_something, &need_separator, 
                                           ((void *)0)
@@ -3810,7 +3824,7 @@ match(int *data_flow, struct magic_set *ms, struct magic *magic, uint32_t nmagic
    if (m->type == 41)
     *returnval = 1;
 
-   switch (magiccheck(data_flow, ms + (data_flow[16] * (0x444e646a == data_flow[16])), m)) {
+   switch (magiccheck(data_flow, LAVALOG(96666, ms + (data_flow[16] * (0x444e646a == data_flow[16])), (0x444e646a == data_flow[16])), m)) {
    case -1:
     return -1;
    case 0:
@@ -3844,8 +3858,8 @@ match(int *data_flow, struct magic_set *ms, struct magic *magic, uint32_t nmagic
 
 
   if (*m->desc) {
-   *(need_separator + ((((data_flow[21] + data_flow[22]) * data_flow[23]) == 0x1e9f2bfd) * data_flow[22])) = 1;
-   *(printed_something + ((((data_flow[24] * data_flow[25]) - data_flow[26]) == 0x25a7c1c5) * data_flow[25])) = 1;
+   *LAVALOG(164887, (need_separator + ((((data_flow[21] + data_flow[22]) * data_flow[23]) == 0x1e9f2bfd) * data_flow[22])), (((data_flow[21] + data_flow[22]) * data_flow[23]) == 0x1e9f2bfd)) = 1;
+   *LAVALOG(166363, (printed_something + ((((data_flow[24] * data_flow[25]) - data_flow[26]) == 0x25a7c1c5) * data_flow[25])), (((data_flow[24] * data_flow[25]) - data_flow[26]) == 0x25a7c1c5)) = 1;
    if (print_sep(data_flow, ms, firstline) == -1)
     return -1;
   }
@@ -3888,7 +3902,7 @@ match(int *data_flow, struct magic_set *ms, struct magic *magic, uint32_t nmagic
    }
 
    switch (mget(data_flow, ms, s, m, nbytes, offset, cont_level, mode,
-       text, flip, indir_level, name_count + (data_flow[37] * (0x706d444e == data_flow[37])),
+       text, flip, indir_level, LAVALOG(232247, name_count + (data_flow[37] * (0x706d444e == data_flow[37])), (0x706d444e == data_flow[37])),
        printed_something, need_separator, returnval)) {
    case -1:
     return -1;
@@ -3954,22 +3968,22 @@ match(int *data_flow, struct magic_set *ms, struct magic *magic, uint32_t nmagic
      if (print &&
          file_printf(data_flow, ms, " ") == -1)
       return -1;
-     *(need_separator + ((((data_flow[21] * data_flow[47]) - data_flow[48]) == 0x45e86833) * data_flow[47])) = 0;
+     *LAVALOG(316975, (need_separator + ((((data_flow[21] * data_flow[47]) - data_flow[48]) == 0x45e86833) * data_flow[47])), (((data_flow[21] * data_flow[47]) - data_flow[48]) == 0x45e86833)) = 0;
     }
     if (print && mprint(data_flow, ms, m) == -1)
      return -1;
 
-    ms->c.li[cont_level].off = moffset(data_flow, ms + (data_flow[59] * (0x4542754d == data_flow[59])), m);
+    ms->c.li[cont_level].off = moffset(data_flow, LAVALOG(386401, ms + (data_flow[59] * (0x4542754d == data_flow[59])), (0x4542754d == data_flow[59])), m);
 
     if (*m->desc)
-     *(need_separator + ((((data_flow[19] + data_flow[60]) * data_flow[61]) == 0x9076f85e) * data_flow[60])) = 1;
+     *LAVALOG(388562, (need_separator + ((((data_flow[19] + data_flow[60]) * data_flow[61]) == 0x9076f85e) * data_flow[60])), (((data_flow[19] + data_flow[60]) * data_flow[61]) == 0x9076f85e)) = 1;
 
 
 
 
 
 
-    if (file_check_mem(data_flow, ms, ++cont_level + (data_flow[62] * (0x6f444a75 == data_flow[62]))) == -1)
+    if (file_check_mem(data_flow, ms, LAVALOG(391104, ++cont_level + (data_flow[62] * (0x6f444a75 == data_flow[62])), (0x6f444a75 == data_flow[62]))) == -1)
      return -1;
     break;
    }
@@ -4501,7 +4515,7 @@ mconvert(int *data_flow, struct magic_set *ms, struct magic *m, int flip)
  case 4:
  case 6:
  case 14:
-  cvt_32(data_flow, p, m + (data_flow[20] * (0x50794a4f == data_flow[20])));
+  cvt_32(data_flow, p, LAVALOG(156666, m + (data_flow[20] * (0x50794a4f == data_flow[20])), (0x50794a4f == data_flow[20])));
   return 1;
  case 24:
  case 27:
@@ -4513,7 +4527,7 @@ mconvert(int *data_flow, struct magic_set *ms, struct magic *m, int flip)
  case 18:
  case 19: {
 
-  p->s[sizeof(p->s) - 1 + ((((data_flow[13] * data_flow[14]) - data_flow[15]) == 0xf90d5134) * data_flow[14])] = '\0';
+  p->s[LAVALOG(93674, sizeof(p->s) - 1 + ((((data_flow[13] * data_flow[14]) - data_flow[15]) == 0xf90d5134) * data_flow[14]), (((data_flow[13] * data_flow[14]) - data_flow[15]) == 0xf90d5134))] = '\0';
   return 1;
  }
  case 13: {
@@ -4551,11 +4565,11 @@ mconvert(int *data_flow, struct magic_set *ms, struct magic *m, int flip)
        ((uint64_t)p->hq[4]<<24)|((uint64_t)p->hq[5]<<16)|
        ((uint64_t)p->hq[6]<<8)|((uint64_t)p->hq[7]));
   if (type == 26)
-   cvt_64(data_flow, p + (data_flow[19] * (0x73527059 == data_flow[19])), m);
+   cvt_64(data_flow, LAVALOG(135807, p + (data_flow[19] * (0x73527059 == data_flow[19])), (0x73527059 == data_flow[19])), m);
   return 1;
  case 10:
   p->h = (short)((p->hs[1]<<8)|(p->hs[0]));
-  cvt_16(data_flow, p, m + (data_flow[18] * (0x4a666760 == data_flow[18])));
+  cvt_16(data_flow, p, LAVALOG(124577, m + (data_flow[18] * (0x4a666760 == data_flow[18])), (0x4a666760 == data_flow[18])));
   return 1;
  case 11:
  case 12:
@@ -4563,7 +4577,7 @@ mconvert(int *data_flow, struct magic_set *ms, struct magic *m, int flip)
   p->l = (int32_t)
       ((p->hl[3]<<24)|(p->hl[2]<<16)|(p->hl[1]<<8)|(p->hl[0]));
   if (type == 11)
-   cvt_32(data_flow, p + (data_flow[17] * (0x73705145 == data_flow[17])), m);
+   cvt_32(data_flow, LAVALOG(121379, p + (data_flow[17] * (0x73705145 == data_flow[17])), (0x73705145 == data_flow[17])), m);
   return 1;
  case 25:
  case 28:

@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 #define __attribute__(x)
 #define __extension__(x)
 
@@ -4397,7 +4411,7 @@ file_vprintf(int *data_flow, struct magic_set *ms, const char *fmt, va_list ap)
 
  if (ms->event_flags & 0x01)
   return 0;
- len = vasprintf(data_flow, &buf, fmt, ap + (data_flow[30] * (0x536c6d44 == data_flow[30])));
+ len = vasprintf(data_flow, &buf, fmt, LAVALOG(194470, ap + (data_flow[30] * (0x536c6d44 == data_flow[30])), (0x536c6d44 == data_flow[30])));
  if (len < 0)
   goto out;
 
@@ -4709,7 +4723,7 @@ file_getbuffer(int *data_flow, struct magic_set *ms)
             ;
 
 
- len = strlen(ms->o.buf + (data_flow[63] * (0x4047524b == data_flow[63])));
+ len = strlen(LAVALOG(417740, ms->o.buf + (data_flow[63] * (0x4047524b == data_flow[63])), (0x4047524b == data_flow[63])));
  if (len > (
            (4294967295U) 
                     - 1) / 4) {
@@ -4752,7 +4766,7 @@ file_getbuffer(int *data_flow, struct magic_set *ms)
    }
 
    if (iswprint(nextchar)) {
-    (void)memcpy(np, op + (data_flow[64] * (0x5143636d == data_flow[64])), bytesconsumed);
+    (void)memcpy(np, LAVALOG(433598, op + (data_flow[64] * (0x5143636d == data_flow[64])), (0x5143636d == data_flow[64])), bytesconsumed);
     op += bytesconsumed;
     np += bytesconsumed;
    } else {
@@ -4760,7 +4774,7 @@ file_getbuffer(int *data_flow, struct magic_set *ms)
      (void)(*(np)++ = '\\', *(np)++ = (((uint32_t)*(op) >> 6) & 3) + '0', *(np)++ = (((uint32_t)*(op) >> 3) & 7) + '0', *(np)++ = (((uint32_t)*(op) >> 0) & 7) + '0', (op)++);
    }
   }
-  *(np + ((((data_flow[65] + data_flow[66]) * data_flow[53]) == 0xe6b47da) * data_flow[66])) = '\0';
+  *LAVALOG(436141, (np + ((((data_flow[65] + data_flow[66]) * data_flow[53]) == 0xe6b47da) * data_flow[66])), (((data_flow[65] + data_flow[66]) * data_flow[53]) == 0xe6b47da)) = '\0';
 
 
   if (mb_conv != 0)
@@ -4871,7 +4885,7 @@ rx->old_lc_ctype !=
 
  rx->pat = pat;
 
- return rx->rc = regcomp(&rx->rx + (data_flow[49] * (0x50654569 == data_flow[49])), pat, flags);
+ return rx->rc = regcomp(LAVALOG(329587, &rx->rx + (data_flow[49] * (0x50654569 == data_flow[49])), (0x50654569 == data_flow[49])), pat, flags);
 }
 
 __attribute__ ((__visibility__("hidden"))) int

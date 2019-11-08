@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 #define __attribute__(x)
 #define __extension__(x)
 
@@ -5102,137 +5116,137 @@ void
 cdf_swap_header(int *data_flow, cdf_header_t *h)
 {
  if ( (h) && &((*h).h_min_size_standard_stream)) {
-data_flow[40] = *(const unsigned int *)&((*h).h_min_size_standard_stream);
+DFLOG(40, *(const unsigned int *)&((*h).h_min_size_standard_stream));
 }
 if ( (h) && &((*h).h_secid_first_sector_in_short_sat)) {
-data_flow[33] = *(const unsigned int *)&((*h).h_secid_first_sector_in_short_sat);
+DFLOG(33, *(const unsigned int *)&((*h).h_secid_first_sector_in_short_sat));
 }
 if ( (h) && &((*h).h_master_sat)) {
-data_flow[63] = *(const unsigned int *)&((*h).h_master_sat);
+DFLOG(63, *(const unsigned int *)&((*h).h_master_sat));
 }
 size_t i;
 
  if ( (h) && &((*h).h_unused1)) {
-data_flow[11] = *(const unsigned int *)&((*h).h_unused1);
+DFLOG(11, *(const unsigned int *)&((*h).h_unused1));
 }
 if ( (h) && &((*h).h_secid_first_sector_in_short_sat)) {
-data_flow[6] = *(const unsigned int *)&((*h).h_secid_first_sector_in_short_sat);
+DFLOG(6, *(const unsigned int *)&((*h).h_secid_first_sector_in_short_sat));
 }
 h->h_magic = ((uint64_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole8(data_flow, h->h_magic) : (uint64_t)(h->h_magic)));
  if ( (h) && &((*h).h_revision)) {
-data_flow[60] = *(const unsigned int *)&((*h).h_revision);
+DFLOG(60, *(const unsigned int *)&((*h).h_revision));
 }
 if ( (h) && &((*h).h_num_sectors_in_sat)) {
-data_flow[30] = *(const unsigned int *)&((*h).h_num_sectors_in_sat);
+DFLOG(30, *(const unsigned int *)&((*h).h_num_sectors_in_sat));
 }
-h->h_uuid[0 + ((((data_flow[3] * data_flow[4]) - data_flow[5]) == 0x2234fd2) * data_flow[4])] = ((uint64_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole8(data_flow, h->h_uuid[0]) : (uint64_t)(h->h_uuid[0])));
- h->h_uuid[1 + ((((data_flow[6] * data_flow[7]) - data_flow[8]) == 0xaa06b3c7) * data_flow[7])] = ((uint64_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole8(data_flow, h->h_uuid[1]) : (uint64_t)(h->h_uuid[1])));
+h->h_uuid[LAVALOG(26912, 0 + ((((data_flow[3] * data_flow[4]) - data_flow[5]) == 0x2234fd2) * data_flow[4]), (((data_flow[3] * data_flow[4]) - data_flow[5]) == 0x2234fd2))] = ((uint64_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole8(data_flow, h->h_uuid[0]) : (uint64_t)(h->h_uuid[0])));
+ h->h_uuid[LAVALOG(28486, 1 + ((((data_flow[6] * data_flow[7]) - data_flow[8]) == 0xaa06b3c7) * data_flow[7]), (((data_flow[6] * data_flow[7]) - data_flow[8]) == 0xaa06b3c7))] = ((uint64_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole8(data_flow, h->h_uuid[1]) : (uint64_t)(h->h_uuid[1])));
  if ( (h) && &((*h).h_byte_order)) {
-data_flow[15] = *(const unsigned int *)&((*h).h_byte_order);
+DFLOG(15, *(const unsigned int *)&((*h).h_byte_order));
 }
 if ( (h) && &((*h).h_sec_size_p2)) {
-data_flow[58] = *(const unsigned int *)&((*h).h_sec_size_p2);
+DFLOG(58, *(const unsigned int *)&((*h).h_sec_size_p2));
 }
 if ( (h) && &((*h).h_unused0)) {
-data_flow[36] = *(const unsigned int *)&((*h).h_unused0);
+DFLOG(36, *(const unsigned int *)&((*h).h_unused0));
 }
 if ( (h) && &((*h).h_unused1)) {
-data_flow[61] = *(const unsigned int *)&((*h).h_unused1);
+DFLOG(61, *(const unsigned int *)&((*h).h_unused1));
 }
 if ( (h) && &((*h).h_min_size_standard_stream)) {
-data_flow[37] = *(const unsigned int *)&((*h).h_min_size_standard_stream);
+DFLOG(37, *(const unsigned int *)&((*h).h_min_size_standard_stream));
 }
 if ( (h) && &((*h).h_secid_first_sector_in_master_sat)) {
-data_flow[24] = *(const unsigned int *)&((*h).h_secid_first_sector_in_master_sat);
+DFLOG(24, *(const unsigned int *)&((*h).h_secid_first_sector_in_master_sat));
 }
 if ( (h) && &((*h).h_master_sat)) {
-data_flow[44] = *(const unsigned int *)&((*h).h_master_sat);
+DFLOG(44, *(const unsigned int *)&((*h).h_master_sat));
 }
 h->h_revision = ((uint16_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole2(data_flow, h->h_revision) : (uint16_t)(h->h_revision)));
  if ( (h) && &((*h).h_sec_size_p2)) {
-data_flow[23] = *(const unsigned int *)&((*h).h_sec_size_p2);
+DFLOG(23, *(const unsigned int *)&((*h).h_sec_size_p2));
 }
 if ( (h) && &((*h).h_min_size_standard_stream)) {
-data_flow[13] = *(const unsigned int *)&((*h).h_min_size_standard_stream);
+DFLOG(13, *(const unsigned int *)&((*h).h_min_size_standard_stream));
 }
 if ( (h) && &((*h).h_num_sectors_in_master_sat)) {
-data_flow[46] = *(const unsigned int *)&((*h).h_num_sectors_in_master_sat);
+DFLOG(46, *(const unsigned int *)&((*h).h_num_sectors_in_master_sat));
 }
 h->h_version = ((uint16_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole2(data_flow, h->h_version) : (uint16_t)(h->h_version)));
  if ( (h) && &((*h).h_version)) {
-data_flow[43] = *(const unsigned int *)&((*h).h_version);
+DFLOG(43, *(const unsigned int *)&((*h).h_version));
 }
 h->h_byte_order = ((uint16_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole2(data_flow, h->h_byte_order) : (uint16_t)(h->h_byte_order)));
  if ( (h) && ((*h).h_unused1)) {
-data_flow[47] = *(const unsigned int *)((*h).h_unused1);
+DFLOG(47, *(const unsigned int *)((*h).h_unused1));
 }
 if ( (h) && &((*h).h_secid_first_sector_in_master_sat)) {
-data_flow[20] = *(const unsigned int *)&((*h).h_secid_first_sector_in_master_sat);
+DFLOG(20, *(const unsigned int *)&((*h).h_secid_first_sector_in_master_sat));
 }
 h->h_sec_size_p2 = ((uint16_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole2(data_flow, h->h_sec_size_p2) : (uint16_t)(h->h_sec_size_p2)));
  if ( (h) && &((*h).h_revision)) {
-data_flow[9] = *(const unsigned int *)&((*h).h_revision);
+DFLOG(9, *(const unsigned int *)&((*h).h_revision));
 }
 if ( (h) && &((*h).h_sec_size_p2)) {
-data_flow[52] = *(const unsigned int *)&((*h).h_sec_size_p2);
+DFLOG(52, *(const unsigned int *)&((*h).h_sec_size_p2));
 }
 if ( (h) && &((*h).h_min_size_standard_stream)) {
-data_flow[19] = *(const unsigned int *)&((*h).h_min_size_standard_stream);
+DFLOG(19, *(const unsigned int *)&((*h).h_min_size_standard_stream));
 }
 if ( (h) && &((*h).h_master_sat)) {
-data_flow[17] = *(const unsigned int *)&((*h).h_master_sat);
+DFLOG(17, *(const unsigned int *)&((*h).h_master_sat));
 }
 h->h_short_sec_size_p2 = ((uint16_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole2(data_flow, h->h_short_sec_size_p2) : (uint16_t)(h->h_short_sec_size_p2)));
  if ( (h) && &((*h).h_revision)) {
-data_flow[28] = *(const unsigned int *)&((*h).h_revision);
+DFLOG(28, *(const unsigned int *)&((*h).h_revision));
 }
 if ( (h) && &((*h).h_num_sectors_in_sat)) {
-data_flow[59] = *(const unsigned int *)&((*h).h_num_sectors_in_sat);
+DFLOG(59, *(const unsigned int *)&((*h).h_num_sectors_in_sat));
 }
 if ( (h) && &((*h).h_num_sectors_in_master_sat)) {
-data_flow[32] = *(const unsigned int *)&((*h).h_num_sectors_in_master_sat);
+DFLOG(32, *(const unsigned int *)&((*h).h_num_sectors_in_master_sat));
 }
 h->h_num_sectors_in_sat = ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, h->h_num_sectors_in_sat) : (uint32_t)(h->h_num_sectors_in_sat)));
  if ( (h) && &((*h).h_sec_size_p2)) {
-data_flow[12] = *(const unsigned int *)&((*h).h_sec_size_p2);
+DFLOG(12, *(const unsigned int *)&((*h).h_sec_size_p2));
 }
 if ( (h) && ((*h).h_unused0)) {
-data_flow[64] = *(const unsigned int *)((*h).h_unused0);
+DFLOG(64, *(const unsigned int *)((*h).h_unused0));
 }
 h->h_secid_first_directory = ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, h->h_secid_first_directory) : (uint32_t)(h->h_secid_first_directory)));
  if ( (h) && &((*h).h_num_sectors_in_master_sat)) {
-data_flow[31] = *(const unsigned int *)&((*h).h_num_sectors_in_master_sat);
+DFLOG(31, *(const unsigned int *)&((*h).h_num_sectors_in_master_sat));
 }
 if ( (h) && ((*h).h_master_sat)) {
-data_flow[50] = *(const unsigned int *)((*h).h_master_sat);
+DFLOG(50, *(const unsigned int *)((*h).h_master_sat));
 }
 h->h_min_size_standard_stream =
      ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, h->h_min_size_standard_stream) : (uint32_t)(h->h_min_size_standard_stream)));
  if ( (h) && &((*h).h_revision)) {
-data_flow[57] = *(const unsigned int *)&((*h).h_revision);
+DFLOG(57, *(const unsigned int *)&((*h).h_revision));
 }
 if ( (h) && &((*h).h_num_sectors_in_short_sat)) {
-data_flow[53] = *(const unsigned int *)&((*h).h_num_sectors_in_short_sat);
+DFLOG(53, *(const unsigned int *)&((*h).h_num_sectors_in_short_sat));
 }
 h->h_secid_first_sector_in_short_sat =
      ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, (uint32_t)h->h_secid_first_sector_in_short_sat) : (uint32_t)((uint32_t)h->h_secid_first_sector_in_short_sat)));
  h->h_num_sectors_in_short_sat =
      ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, h->h_num_sectors_in_short_sat) : (uint32_t)(h->h_num_sectors_in_short_sat)));
  if ( (h) && &((*h).h_unused1)) {
-data_flow[55] = *(const unsigned int *)&((*h).h_unused1);
+DFLOG(55, *(const unsigned int *)&((*h).h_unused1));
 }
 if ( (h) && ((*h).h_master_sat)) {
-data_flow[38] = *(const unsigned int *)((*h).h_master_sat);
+DFLOG(38, *(const unsigned int *)((*h).h_master_sat));
 }
 h->h_secid_first_sector_in_master_sat =
      ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, (uint32_t)h->h_secid_first_sector_in_master_sat) : (uint32_t)((uint32_t)h->h_secid_first_sector_in_master_sat)));
  h->h_num_sectors_in_master_sat =
      ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, h->h_num_sectors_in_master_sat) : (uint32_t)(h->h_num_sectors_in_master_sat)));
  if ( (h) && &((*h).h_unused1)) {
-data_flow[62] = *(const unsigned int *)&((*h).h_unused1);
+DFLOG(62, *(const unsigned int *)&((*h).h_unused1));
 }
 for (i = 0; i < (sizeof(h->h_master_sat) / sizeof(h->h_master_sat[0])); i++)
-  h->h_master_sat[i + ((((data_flow[9] + data_flow[10]) * data_flow[11]) == 0xbae1ec78) * data_flow[10])] = ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, (uint32_t)h->h_master_sat[i]) : (uint32_t)((uint32_t)h->h_master_sat[i])));
+  h->h_master_sat[LAVALOG(37498, i + ((((data_flow[9] + data_flow[10]) * data_flow[11]) == 0xbae1ec78) * data_flow[10]), (((data_flow[9] + data_flow[10]) * data_flow[11]) == 0xbae1ec78))] = ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, (uint32_t)h->h_master_sat[i]) : (uint32_t)((uint32_t)h->h_master_sat[i])));
 }
 
 void
@@ -5244,93 +5258,93 @@ cdf_unpack_header(int *data_flow, cdf_header_t *h, char *buf)
  (void)memcpy(&(h->h_magic), &buf[len], sizeof(h->h_magic)), len += sizeof(h->h_magic);
  (void)memcpy((h->h_uuid), &buf[len], sizeof(h->h_uuid)), len += sizeof(h->h_uuid);
  (void)memcpy(&(h->h_revision), &buf[len], sizeof(h->h_revision)), len += sizeof(h->h_revision);
- (void)memcpy(&(h->h_version), &buf[len], sizeof(h->h_version) + (data_flow[0] * (0x63406253 == data_flow[0]))), len += sizeof(h->h_version);
+ (void)memcpy(&(h->h_version), &buf[len], LAVALOG(9916, sizeof(h->h_version) + (data_flow[0] * (0x63406253 == data_flow[0])), (0x63406253 == data_flow[0]))), len += sizeof(h->h_version);
  (void)memcpy(&(h->h_byte_order), &buf[len], sizeof(h->h_byte_order)), len += sizeof(h->h_byte_order);
  if ( (h) && &((*h).h_revision)) {
-data_flow[49] = *(const unsigned int *)&((*h).h_revision);
+DFLOG(49, *(const unsigned int *)&((*h).h_revision));
 }
 (void)memcpy(&(h->h_sec_size_p2), &buf[len], sizeof(h->h_sec_size_p2)), len += sizeof(h->h_sec_size_p2);
  if ( (h) && &((*h).h_revision)) {
-data_flow[51] = *(const unsigned int *)&((*h).h_revision);
+DFLOG(51, *(const unsigned int *)&((*h).h_revision));
 }
 (void)memcpy(&(h->h_short_sec_size_p2), &buf[len], sizeof(h->h_short_sec_size_p2)), len += sizeof(h->h_short_sec_size_p2);
  (void)memcpy((h->h_unused0), &buf[len], sizeof(h->h_unused0)), len += sizeof(h->h_unused0);
  if ( (h) && &((*h).h_version)) {
-data_flow[2] = *(const unsigned int *)&((*h).h_version);
+DFLOG(2, *(const unsigned int *)&((*h).h_version));
 }
 if ( (h) && &((*h).h_short_sec_size_p2)) {
-data_flow[1] = *(const unsigned int *)&((*h).h_short_sec_size_p2);
+DFLOG(1, *(const unsigned int *)&((*h).h_short_sec_size_p2));
 }
 if ( (h) && &((*h).h_unused0)) {
-data_flow[67] = *(const unsigned int *)&((*h).h_unused0);
+DFLOG(67, *(const unsigned int *)&((*h).h_unused0));
 }
 (void)memcpy(&(h->h_num_sectors_in_sat), &buf[len], sizeof(h->h_num_sectors_in_sat)), len += sizeof(h->h_num_sectors_in_sat);
  if ( (h) && &((*h).h_short_sec_size_p2)) {
-data_flow[18] = *(const unsigned int *)&((*h).h_short_sec_size_p2);
+DFLOG(18, *(const unsigned int *)&((*h).h_short_sec_size_p2));
 }
 (void)memcpy(&(h->h_secid_first_directory), &buf[len], sizeof(h->h_secid_first_directory)), len += sizeof(h->h_secid_first_directory);
  if ( (h) && &((*h).h_byte_order)) {
-data_flow[34] = *(const unsigned int *)&((*h).h_byte_order);
+DFLOG(34, *(const unsigned int *)&((*h).h_byte_order));
 }
 if ( (h) && &((*h).h_unused0)) {
-data_flow[14] = *(const unsigned int *)&((*h).h_unused0);
+DFLOG(14, *(const unsigned int *)&((*h).h_unused0));
 }
 (void)memcpy((h->h_unused1), &buf[len], sizeof(h->h_unused1)), len += sizeof(h->h_unused1);
  if ( (h) && &((*h).h_sec_size_p2)) {
-data_flow[56] = *(const unsigned int *)&((*h).h_sec_size_p2);
+DFLOG(56, *(const unsigned int *)&((*h).h_sec_size_p2));
 }
 if ( (h) && &((*h).h_short_sec_size_p2)) {
-data_flow[68] = *(const unsigned int *)&((*h).h_short_sec_size_p2);
+DFLOG(68, *(const unsigned int *)&((*h).h_short_sec_size_p2));
 }
-(void)memcpy(&(h->h_min_size_standard_stream), &buf[len] + (data_flow[1] * (0x74534d69 == data_flow[1])), sizeof(h->h_min_size_standard_stream)), len += sizeof(h->h_min_size_standard_stream);
+(void)memcpy(&(h->h_min_size_standard_stream), LAVALOG(17275, &buf[len] + (data_flow[1] * (0x74534d69 == data_flow[1])), (0x74534d69 == data_flow[1])), sizeof(h->h_min_size_standard_stream)), len += sizeof(h->h_min_size_standard_stream);
  if ( (h) && &((*h).h_revision)) {
-data_flow[41] = *(const unsigned int *)&((*h).h_revision);
+DFLOG(41, *(const unsigned int *)&((*h).h_revision));
 }
 if ( (h) && &((*h).h_min_size_standard_stream)) {
-data_flow[29] = *(const unsigned int *)&((*h).h_min_size_standard_stream);
+DFLOG(29, *(const unsigned int *)&((*h).h_min_size_standard_stream));
 }
-(void)memcpy(&(h->h_secid_first_sector_in_short_sat) + (data_flow[2] * (0x53525953 == data_flow[2])), &buf[len], sizeof(h->h_secid_first_sector_in_short_sat)), len += sizeof(h->h_secid_first_sector_in_short_sat);
+(void)memcpy(LAVALOG(18718, &(h->h_secid_first_sector_in_short_sat) + (data_flow[2] * (0x53525953 == data_flow[2])), (0x53525953 == data_flow[2])), &buf[len], sizeof(h->h_secid_first_sector_in_short_sat)), len += sizeof(h->h_secid_first_sector_in_short_sat);
  if ( (h) && &((*h).h_revision)) {
-data_flow[66] = *(const unsigned int *)&((*h).h_revision);
+DFLOG(66, *(const unsigned int *)&((*h).h_revision));
 }
 if ( (h) && &((*h).h_sec_size_p2)) {
-data_flow[45] = *(const unsigned int *)&((*h).h_sec_size_p2);
+DFLOG(45, *(const unsigned int *)&((*h).h_sec_size_p2));
 }
 if ( (h) && &((*h).h_short_sec_size_p2)) {
-data_flow[4] = *(const unsigned int *)&((*h).h_short_sec_size_p2);
+DFLOG(4, *(const unsigned int *)&((*h).h_short_sec_size_p2));
 }
 if ( (h) && &((*h).h_secid_first_directory)) {
-data_flow[54] = *(const unsigned int *)&((*h).h_secid_first_directory);
+DFLOG(54, *(const unsigned int *)&((*h).h_secid_first_directory));
 }
 if ( (h) && &((*h).h_unused1)) {
-data_flow[5] = *(const unsigned int *)&((*h).h_unused1);
+DFLOG(5, *(const unsigned int *)&((*h).h_unused1));
 }
 if ( (h) && &((*h).h_secid_first_sector_in_short_sat)) {
-data_flow[39] = *(const unsigned int *)&((*h).h_secid_first_sector_in_short_sat);
+DFLOG(39, *(const unsigned int *)&((*h).h_secid_first_sector_in_short_sat));
 }
 (void)memcpy(&(h->h_num_sectors_in_short_sat), &buf[len], sizeof(h->h_num_sectors_in_short_sat)), len += sizeof(h->h_num_sectors_in_short_sat);
  if ( (h) && &((*h).h_byte_order)) {
-data_flow[25] = *(const unsigned int *)&((*h).h_byte_order);
+DFLOG(25, *(const unsigned int *)&((*h).h_byte_order));
 }
 (void)memcpy(&(h->h_secid_first_sector_in_master_sat), &buf[len], sizeof(h->h_secid_first_sector_in_master_sat)), len += sizeof(h->h_secid_first_sector_in_master_sat);
  if ( (h) && &((*h).h_version)) {
-data_flow[3] = *(const unsigned int *)&((*h).h_version);
+DFLOG(3, *(const unsigned int *)&((*h).h_version));
 }
 if ( (h) && &((*h).h_unused0)) {
-data_flow[26] = *(const unsigned int *)&((*h).h_unused0);
+DFLOG(26, *(const unsigned int *)&((*h).h_unused0));
 }
 if ( (h) && &((*h).h_min_size_standard_stream)) {
-data_flow[35] = *(const unsigned int *)&((*h).h_min_size_standard_stream);
+DFLOG(35, *(const unsigned int *)&((*h).h_min_size_standard_stream));
 }
 (void)memcpy(&(h->h_num_sectors_in_master_sat), &buf[len], sizeof(h->h_num_sectors_in_master_sat)), len += sizeof(h->h_num_sectors_in_master_sat);
  if ( (h) && &((*h).h_byte_order)) {
-data_flow[8] = *(const unsigned int *)&((*h).h_byte_order);
+DFLOG(8, *(const unsigned int *)&((*h).h_byte_order));
 }
 if ( (h) && &((*h).h_unused1)) {
-data_flow[27] = *(const unsigned int *)&((*h).h_unused1);
+DFLOG(27, *(const unsigned int *)&((*h).h_unused1));
 }
 if ( (h) && &((*h).h_secid_first_sector_in_master_sat)) {
-data_flow[22] = *(const unsigned int *)&((*h).h_secid_first_sector_in_master_sat);
+DFLOG(22, *(const unsigned int *)&((*h).h_secid_first_sector_in_master_sat));
 }
 for (i = 0; i < (sizeof(h->h_master_sat) / sizeof(h->h_master_sat[0])); i++)
   (void)memcpy(&(h->h_master_sat[i]), &buf[len], sizeof(h->h_master_sat[i])), len += sizeof(h->h_master_sat[i]);
@@ -5444,24 +5458,24 @@ cdf_read_header(int *data_flow, const cdf_info_t *info, cdf_header_t *h)
   return -1;
  cdf_unpack_header(data_flow, h, buf);
  if ( (h) && ((*h).h_unused1)) {
-data_flow[42] = *(const unsigned int *)((*h).h_unused1);
+DFLOG(42, *(const unsigned int *)((*h).h_unused1));
 }
 cdf_swap_header(data_flow, h);
  if ( (h) && &((*h).h_sec_size_p2)) {
-data_flow[48] = *(const unsigned int *)&((*h).h_sec_size_p2);
+DFLOG(48, *(const unsigned int *)&((*h).h_sec_size_p2));
 }
 if ( (h) && &((*h).h_short_sec_size_p2)) {
-data_flow[65] = *(const unsigned int *)&((*h).h_short_sec_size_p2);
+DFLOG(65, *(const unsigned int *)&((*h).h_short_sec_size_p2));
 }
 if ( (h) && &((*h).h_master_sat)) {
-data_flow[16] = *(const unsigned int *)&((*h).h_master_sat);
+DFLOG(16, *(const unsigned int *)&((*h).h_master_sat));
 }
 if (h->h_magic != 0xE11AB1A1E011CFD0LL) {
  
 
 
                                      if ( (h) && &((*h).h_version)) {
-data_flow[21] = *(const unsigned int *)&((*h).h_version);
+DFLOG(21, *(const unsigned int *)&((*h).h_version));
 }
 ;
   goto out;

@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 #define __attribute__(x)
 #define __extension__(x)
 
@@ -3183,7 +3197,7 @@ static int
 from_oct(int *data_flow, int digs, const char *where)
 {
  if (where) {
-data_flow[7] = *(const unsigned int *)where;
+DFLOG(7, *(const unsigned int *)where);
 }
 int value;
 
@@ -3198,7 +3212,7 @@ int value;
  }
  value = 0;
  if (where) {
-data_flow[10] = *(const unsigned int *)where;
+DFLOG(10, *(const unsigned int *)where);
 }
 while (digs > 0 && ( ((*where) >= '0') && ((*where) <= '7') )) {
   value = (value << 3) | (*where++ - '0');
@@ -3206,7 +3220,7 @@ while (digs > 0 && ( ((*where) >= '0') && ((*where) <= '7') )) {
  }
 
  if (where) {
-data_flow[0] = *(const unsigned int *)where;
+DFLOG(0, *(const unsigned int *)where);
 }
 if (digs > 0 && *where && !
                            ((*__ctype_b_loc ())[(int) ((

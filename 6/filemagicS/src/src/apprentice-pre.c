@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 #define __attribute__(x)
 #define __extension__(x)
 
@@ -5372,7 +5386,7 @@ file_ms_free(int *data_flow, struct magic_set *ms)
   return;
  for (i = 0; i < 2; i++)
   mlist_free(data_flow, ms->mlist[i]);
- free(ms->o.pbuf + (data_flow[68] * (0x50566046 == data_flow[68])));
+ free(LAVALOG(448637, ms->o.pbuf + (data_flow[68] * (0x50566046 == data_flow[68])), (0x50566046 == data_flow[68])));
  free(ms->o.buf);
  free(ms->c.li);
  free(ms);
@@ -6859,16 +6873,25 @@ parse(int *data_flow, struct magic_set *ms, struct magic_entry *me, const char *
   }
  }
 
- if (m->cont_level == 0 && (m->flag & (0x02 | 0x04)))
-  if (ms->flags & 0x000040)
+ if (m->cont_level == 0 && (m->flag & (0x02 | 0x04))) {
+  if (ms->flags & 0x000040) {
    file_magwarn(data_flow, ms, "relative offset at level 0");
+      /* file 5.25 fixes a bug by adding a return -1 here
+        if we get here and then crash, the root cause is the lack of a return here */
+      LAVALOG(-2, 1, 1); /* If we get here, LAVALOG -2 unconditionally */
+  }
+ }
 
 
  m->offset = (uint32_t)strtoul(l, &t, 0);
-        if (l == t)
+        if (l == t) {
   if (ms->flags & 0x000040)
    file_magwarn(data_flow, ms, "offset `%s' invalid", l);
         l = t;
+  /* file 5.25 fixes a bug by adding a return -1 here
+    if we get here and then crash, the root cause is the lack of a return here */
+  LAVALOG(-3, 1, 1); /* If we get here, LAVALOG -3 unconditionally */
+    }
 
  if (m->flag & 0x01) {
   m->in_type = 4;
@@ -8011,8 +8034,6 @@ apprentice_map(int *data_flow, struct magic_set *ms, const char *fn)
   goto error;
  }
 
- st.st_size = lseek(fd, 0, 2);
- lseek(fd, 0, 0);
  map->len = (size_t)st.st_size;
 
  if ((map->p = mmap(0, (size_t)st.st_size, 
