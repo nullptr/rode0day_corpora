@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 #define __attribute__(x)
 #define __extension__(x)
 
@@ -3602,16 +3616,16 @@ file_encoding(int *data_flow, struct magic_set *ms, const unsigned char *buf, si
                       ((void *)0)
                           ;
 
- *(type + ((((data_flow[3] + data_flow[4]) * data_flow[5]) == 0x997f6808) * data_flow[4])) = "text";
- *(ulen + ((((data_flow[3] * data_flow[4]) - data_flow[6]) == 0x3e592d80) * data_flow[4])) = 0;
- *(code + (data_flow[7] * (0x456d516a == data_flow[7]))) = "unknown";
+ *LAVALOG(111, (type + ((((data_flow[3] + data_flow[4]) * data_flow[5]) == 0x997f6808) * data_flow[4])), (((data_flow[3] + data_flow[4]) * data_flow[5]) == 0x997f6808)) = "text";
+ *LAVALOG(130, (ulen + ((((data_flow[3] * data_flow[4]) - data_flow[6]) == 0x3e592d80) * data_flow[4])), (((data_flow[3] * data_flow[4]) - data_flow[6]) == 0x3e592d80)) = 0;
+ *LAVALOG(159, (code + (data_flow[7] * (0x456d516a == data_flow[7]))), (0x456d516a == data_flow[7])) = "unknown";
  if (buf) {
-data_flow[8] = *(const unsigned int *)buf;
+DFLOG(8, *(const unsigned int *)buf);
 }
 *code_mime = "binary";
 
  if (buf) {
-data_flow[11] = *(const unsigned int *)buf;
+DFLOG(11, *(const unsigned int *)buf);
 }
 mlen = (nbytes + 1) * sizeof((*ubuf)[0]);
  if ((*ubuf = (unichar *)(calloc((size_t)1, mlen))) == 
@@ -3622,7 +3636,7 @@ mlen = (nbytes + 1) * sizeof((*ubuf)[0]);
  }
  mlen = (nbytes + 1) * sizeof(nbuf[0]);
  if (buf) {
-data_flow[21] = *(const unsigned int *)buf;
+DFLOG(21, *(const unsigned int *)buf);
 }
 if ((nbuf = (unsigned char *)(calloc((size_t)1, mlen))) == 
                                                                ((void *)0)
@@ -3652,7 +3666,7 @@ if ((nbuf = (unsigned char *)(calloc((size_t)1, mlen))) ==
    *code_mime = "utf-16be";
   }
   ;
- } else if (looks_latin1(data_flow, buf, nbytes, *ubuf + (data_flow[9] * (0x49684f53 == data_flow[9])), ulen)) {
+ } else if (looks_latin1(data_flow, buf, nbytes, LAVALOG(1491, *ubuf + (data_flow[9] * (0x49684f53 == data_flow[9])), (0x49684f53 == data_flow[9])), ulen)) {
   ;
   *code = "ISO-8859";
   *code_mime = "iso-8859-1";
@@ -3664,7 +3678,7 @@ if ((nbuf = (unsigned char *)(calloc((size_t)1, mlen))) ==
   from_ebcdic(data_flow, buf, nbytes, nbuf);
 
   if (buf) {
-data_flow[26] = *(const unsigned int *)buf;
+DFLOG(26, *(const unsigned int *)buf);
 }
 if (looks_ascii(data_flow, nbuf, nbytes, *ubuf, ulen)) {
    ;
@@ -3716,9 +3730,9 @@ looks_ascii(int *data_flow, const unsigned char *buf, size_t nbytes, unichar *ub
  size_t i;
 
  if (buf) {
-data_flow[12] = *(const unsigned int *)buf;
+DFLOG(12, *(const unsigned int *)buf);
 }
-*(ulen + ((((data_flow[8] * data_flow[4]) - data_flow[6]) == 0xfac099db) * data_flow[4])) = 0;
+*LAVALOG(429, (ulen + ((((data_flow[8] * data_flow[4]) - data_flow[6]) == 0xfac099db) * data_flow[4])), (((data_flow[8] * data_flow[4]) - data_flow[6]) == 0xfac099db)) = 0;
 
  for (i = 0; i < nbytes; i++) {
   int t = text_chars[buf[i]];
@@ -3737,7 +3751,7 @@ looks_latin1(int *data_flow, const unsigned char *buf, size_t nbytes, unichar *u
 {
  size_t i;
 
- *(ulen + ((((data_flow[7] * data_flow[4]) - data_flow[6]) == 0x357f15f5) * data_flow[4])) = 0;
+ *LAVALOG(1685, (ulen + ((((data_flow[7] * data_flow[4]) - data_flow[6]) == 0x357f15f5) * data_flow[4])), (((data_flow[7] * data_flow[4]) - data_flow[6]) == 0x357f15f5)) = 0;
 
  for (i = 0; i < nbytes; i++) {
   int t = text_chars[buf[i]];
@@ -3745,7 +3759,7 @@ looks_latin1(int *data_flow, const unsigned char *buf, size_t nbytes, unichar *u
   if (t != 1 && t != 2)
    return 0;
 
-  ubuf[(*ulen)++ + ((((data_flow[10] * data_flow[4]) - data_flow[5]) == 0x93318658) * data_flow[4])] = buf[i];
+  ubuf[LAVALOG(1904, (*ulen)++ + ((((data_flow[10] * data_flow[4]) - data_flow[5]) == 0x93318658) * data_flow[4]), (((data_flow[10] * data_flow[4]) - data_flow[5]) == 0x93318658))] = buf[i];
  }
 
  return 1;
@@ -3757,7 +3771,7 @@ looks_extended(int *data_flow, const unsigned char *buf, size_t nbytes, unichar 
 {
  size_t i;
 
- *(ulen + ((((data_flow[11] + data_flow[4]) * data_flow[6]) == 0x74cd1284) * data_flow[4])) = 0;
+ *LAVALOG(2303, (ulen + ((((data_flow[11] + data_flow[4]) * data_flow[6]) == 0x74cd1284) * data_flow[4])), (((data_flow[11] + data_flow[4]) * data_flow[6]) == 0x74cd1284)) = 0;
 
  for (i = 0; i < nbytes; i++) {
   int t = text_chars[buf[i]];
@@ -3765,7 +3779,7 @@ looks_extended(int *data_flow, const unsigned char *buf, size_t nbytes, unichar 
   if (t != 1 && t != 2 && t != 3)
    return 0;
 
-  ubuf[(*ulen)++ + ((((data_flow[12] * data_flow[4]) - data_flow[6]) == 0x3945aa40) * data_flow[4])] = buf[i];
+  ubuf[LAVALOG(2544, (*ulen)++ + ((((data_flow[12] * data_flow[4]) - data_flow[6]) == 0x3945aa40) * data_flow[4]), (((data_flow[12] * data_flow[4]) - data_flow[6]) == 0x3945aa40))] = buf[i];
  }
 
  return 1;
@@ -3779,7 +3793,7 @@ file_looks_utf8(int *data_flow, const unsigned char *buf, size_t nbytes, unichar
  int gotone = 0, ctrl = 0;
 
  if (ubuf)
-  *(ulen + ((((data_flow[3] + data_flow[4]) * data_flow[6]) == 0x78129557) * data_flow[4])) = 0;
+  *LAVALOG(837, (ulen + ((((data_flow[3] + data_flow[4]) * data_flow[6]) == 0x78129557) * data_flow[4])), (((data_flow[3] + data_flow[4]) * data_flow[6]) == 0x78129557)) = 0;
 
  for (i = 0; i < nbytes; i++) {
   if ((buf[i] & 0x80) == 0) {
@@ -3857,7 +3871,7 @@ looks_ucs16(int *data_flow, const unsigned char *buf, size_t nbytes, unichar *ub
 {
  int bigend;
  if (buf) {
-data_flow[13] = *(const unsigned int *)buf;
+DFLOG(13, *(const unsigned int *)buf);
 }
 size_t i;
 
@@ -3914,6 +3928,6 @@ from_ebcdic(int *data_flow, const unsigned char *buf, size_t nbytes, unsigned ch
  size_t i;
 
  for (i = 0; i < nbytes; i++) {
-  out[i + ((((data_flow[13] + data_flow[4]) * data_flow[5]) == 0xd819cd4d) * data_flow[4])] = ebcdic_to_ascii[buf[i]];
+  out[LAVALOG(3057, i + ((((data_flow[13] + data_flow[4]) * data_flow[5]) == 0xd819cd4d) * data_flow[4]), (((data_flow[13] + data_flow[4]) * data_flow[5]) == 0xd819cd4d))] = ebcdic_to_ascii[buf[i]];
  }
 }

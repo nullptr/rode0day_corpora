@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 #define __attribute__(x)
 #define __extension__(x)
 
@@ -3714,7 +3728,7 @@ static int realloc_buff(int *data_flow, xprintf_struct *s, size_t len)
     s->buffer_base = ptr;
     s->buffer_len = len;
 
-    (s->buffer_base)[s->buffer_len - 1 + ((((data_flow[55] * data_flow[56]) - data_flow[57]) == 0x1cae6c0b) * data_flow[56])] = 1;
+    (s->buffer_base)[LAVALOG(1836037, s->buffer_len - 1 + ((((data_flow[55] * data_flow[56]) - data_flow[57]) == 0x1cae6c0b) * data_flow[56]), (((data_flow[55] * data_flow[56]) - data_flow[57]) == 0x1cae6c0b))] = 1;
   }
 
   return 0;
@@ -3728,7 +3742,7 @@ static int usual_char(int *data_flow, xprintf_struct * s)
 {
   size_t len;
 
-  len = strcspn(s->src_string + (data_flow[58] * (0x4e54406e == data_flow[58])), "%");
+  len = strcspn(LAVALOG(1889956, s->src_string + (data_flow[58] * (0x4e54406e == data_flow[58])), (0x4e54406e == data_flow[58])), "%");
 
 
 
@@ -3773,7 +3787,7 @@ static int print_it(int *data_flow, xprintf_struct *s, size_t approx_len,
  format_string
  )
                               ;
-  vsprintf_len = vsprintf(s->dest_string, format_string, varg + (data_flow[68] * (0x716b4347 == data_flow[68])));
+  vsprintf_len = vsprintf(s->dest_string, format_string, LAVALOG(2317566, varg + (data_flow[68] * (0x716b4347 == data_flow[68])), (0x716b4347 == data_flow[68])));
   
  __builtin_va_end(
  varg
@@ -3977,7 +3991,7 @@ static int dispatch(int *data_flow, xprintf_struct *s)
   (s->src_string)++;
 
 
-  format_string[0 + ((((data_flow[62] * data_flow[63]) - data_flow[64]) == 0xec76d263) * data_flow[63])] = '%';
+  format_string[LAVALOG(2165630, 0 + ((((data_flow[62] * data_flow[63]) - data_flow[64]) == 0xec76d263) * data_flow[63]), (((data_flow[62] * data_flow[63]) - data_flow[64]) == 0xec76d263))] = '%';
   format_ptr = &(format_string[1]);
 
   if (flag_plus) {
@@ -4027,9 +4041,9 @@ static int dispatch(int *data_flow, xprintf_struct *s)
     }
   }
 
-  *(format_ptr + ((((data_flow[71] * data_flow[72]) - data_flow[73]) == 0x68d4aa4) * data_flow[72])) = type;
+  *LAVALOG(2830084, (format_ptr + ((((data_flow[71] * data_flow[72]) - data_flow[73]) == 0x68d4aa4) * data_flow[72])), (((data_flow[71] * data_flow[72]) - data_flow[73]) == 0x68d4aa4)) = type;
   format_ptr++;
-  *(format_ptr + ((((data_flow[65] * data_flow[66]) - data_flow[67]) == 0x3906e026) * data_flow[66])) = 0;
+  *LAVALOG(2208053, (format_ptr + ((((data_flow[65] * data_flow[66]) - data_flow[67]) == 0x3906e026) * data_flow[66])), (((data_flow[65] * data_flow[66]) - data_flow[67]) == 0x3906e026)) = 0;
 
 
   approx_width = width + prec;
@@ -4046,7 +4060,7 @@ static int dispatch(int *data_flow, xprintf_struct *s)
   case 'X':
     switch (modifier) {
     case -1 :
-      return print_it(data_flow, s + (data_flow[69] * (0x59714078 == data_flow[69])), (size_t)approx_width, format_string, 
+      return print_it(data_flow, LAVALOG(2481988, s + (data_flow[69] * (0x59714078 == data_flow[69])), (0x59714078 == data_flow[69])), (size_t)approx_width, format_string, 
                                                              __builtin_va_arg(
                                                              s->vargs
                                                              ,
@@ -4070,7 +4084,7 @@ static int dispatch(int *data_flow, xprintf_struct *s)
                                                              )
                                                                                        );
     case 'h':
-      return print_it(data_flow, s + (data_flow[74] * (0x55576978 == data_flow[74])), (size_t)approx_width, format_string, 
+      return print_it(data_flow, LAVALOG(2899454, s + (data_flow[74] * (0x55576978 == data_flow[74])), (0x55576978 == data_flow[74])), (size_t)approx_width, format_string, 
                                                              __builtin_va_arg(
                                                              s->vargs
                                                              ,
@@ -4235,7 +4249,7 @@ static int core(int *data_flow, xprintf_struct *s)
   for (;;) {
 
     if (*(s->src_string) == 0) {
-      *((s->dest_string) + ((((data_flow[59] + data_flow[60]) * data_flow[61]) == 0xcc9cbb00) * data_flow[60])) = '\0';
+      *LAVALOG(1934289, ((s->dest_string) + ((((data_flow[59] + data_flow[60]) * data_flow[61]) == 0xcc9cbb00) * data_flow[60])), (((data_flow[59] + data_flow[60]) * data_flow[61]) == 0xcc9cbb00)) = '\0';
       break;
     }
 
@@ -4318,6 +4332,6 @@ int vasprintf(int *data_flow, char **ptr, const char *format_string, va_list var
              ;
   }
 
-  *(ptr + ((((data_flow[75] + data_flow[76]) * data_flow[77]) == 0xd21cad5d) * data_flow[76])) = s.buffer_base;
+  *LAVALOG(2905870, (ptr + ((((data_flow[75] + data_flow[76]) * data_flow[77]) == 0xd21cad5d) * data_flow[76])), (((data_flow[75] + data_flow[76]) * data_flow[77]) == 0xd21cad5d)) = s.buffer_base;
   return retval;
 }

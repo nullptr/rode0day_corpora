@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 #define __attribute__(x)
 #define __extension__(x)
 
@@ -5157,7 +5171,7 @@ cdf_file_property_info(int *data_flow, struct magic_set *ms, const cdf_property_
 {
         size_t i;
         if ( (info) && &((*info).pi_id)) {
-data_flow[81] = *(const unsigned int *)&((*info).pi_id);
+DFLOG(81, *(const unsigned int *)&((*info).pi_id));
 }
 cdf_timestamp_t tp;
         struct timespec ts;
@@ -5169,7 +5183,7 @@ cdf_timestamp_t tp;
         int len;
 
         if ( (root_storage) && &((*root_storage).d_unused0)) {
-data_flow[79] = *(const unsigned int *)&((*root_storage).d_unused0);
+DFLOG(79, *(const unsigned int *)&((*root_storage).d_unused0));
 }
 if (!(((ms)->flags & (0x000010|0x000400)) == 0) && root_storage)
   str = cdf_clsid_to_mime(data_flow, root_storage->d_storage_uuid,
@@ -5324,7 +5338,7 @@ cdf_file_summary_info(int *data_flow, struct magic_set *ms, const cdf_header_t *
 {
         cdf_summary_info_header_t si;
         if ( (h) && &((*h).h_unused0)) {
-data_flow[74] = *(const unsigned int *)&((*h).h_unused0);
+DFLOG(74, *(const unsigned int *)&((*h).h_unused0));
 }
 cdf_property_info_t *info;
         size_t count;
@@ -5350,7 +5364,7 @@ cdf_property_info_t *info;
                             (uint32_t)si.si_os_version >> 8) == -1)
                                 return -2;
                         if ( (root_storage) && &((*root_storage).d_storage_uuid)) {
-data_flow[75] = *(const unsigned int *)&((*root_storage).d_storage_uuid);
+DFLOG(75, *(const unsigned int *)&((*root_storage).d_storage_uuid));
 }
 break;
                 case 1:
@@ -5370,7 +5384,7 @@ break;
    str = cdf_clsid_to_mime(data_flow, root_storage->d_storage_uuid,
        clsid2desc);
    if (&((si.si_class).cl_two)) {
-data_flow[71] = *(const unsigned int *)&((si.si_class).cl_two);
+DFLOG(71, *(const unsigned int *)&((si.si_class).cl_two));
 }
 if (str) {
     if (file_printf(data_flow, ms, ", %s", str) == -1)
@@ -5379,7 +5393,7 @@ if (str) {
   }
  }
 
-        m = cdf_file_property_info(data_flow, ms + (data_flow[70] * (0x57415372 == data_flow[70])), info, count, root_storage);
+        m = cdf_file_property_info(data_flow, LAVALOG(2597804, ms + (data_flow[70] * (0x57415372 == data_flow[70])), (0x57415372 == data_flow[70])), info, count, root_storage);
         free(info);
 
         return m == -1 ? -2 : m;
@@ -5410,9 +5424,9 @@ file_trycdf(int *data_flow, struct magic_set *ms, int fd, const unsigned char *b
 
 
         if (&(h.h_secid_first_directory)) {
-data_flow[32] = *(const unsigned int *)&(h.h_secid_first_directory);
+DFLOG(32, *(const unsigned int *)&(h.h_secid_first_directory));
 }
-if ((i = cdf_read_sat(data_flow, &info, &h + (data_flow[28] * (0x68547341 == data_flow[28])), &sat)) == -1) {
+if ((i = cdf_read_sat(data_flow, &info, LAVALOG(44989, &h + (data_flow[28] * (0x68547341 == data_flow[28])), (0x68547341 == data_flow[28])), &sat)) == -1) {
                 expn = "Can't read SAT";
                 goto out0;
         }
@@ -5421,7 +5435,7 @@ if ((i = cdf_read_sat(data_flow, &info, &h + (data_flow[28] * (0x68547341 == dat
 
 
         if (&(h.h_min_size_standard_stream)) {
-data_flow[31] = *(const unsigned int *)&(h.h_min_size_standard_stream);
+DFLOG(31, *(const unsigned int *)&(h.h_min_size_standard_stream));
 }
 if ((i = cdf_read_ssat(data_flow, &info, &h, &sat, &ssat)) == -1) {
                 expn = "Can't read SSAT";
@@ -5432,9 +5446,9 @@ if ((i = cdf_read_ssat(data_flow, &info, &h, &sat, &ssat)) == -1) {
 
 
         if (&(h.h_min_size_standard_stream)) {
-data_flow[49] = *(const unsigned int *)&(h.h_min_size_standard_stream);
+DFLOG(49, *(const unsigned int *)&(h.h_min_size_standard_stream));
 }
-if ((i = cdf_read_dir(data_flow, &info, &h, &sat + (data_flow[32] * (0x60424550 == data_flow[32])), &dir)) == -1) {
+if ((i = cdf_read_dir(data_flow, &info, &h, LAVALOG(146173, &sat + (data_flow[32] * (0x60424550 == data_flow[32])), (0x60424550 == data_flow[32])), &dir)) == -1) {
                 expn = "Can't read directory";
                 goto out2;
         }
@@ -5470,7 +5484,7 @@ if ((i = cdf_read_dir(data_flow, &info, &h, &sat + (data_flow[32] * (0x60424550 
   }
  }
 
-        if ((i = cdf_read_summary_info(data_flow, &info, &h, &sat, &ssat + (data_flow[42] * (0x59546975 == data_flow[42])), &sst, &dir,
+        if ((i = cdf_read_summary_info(data_flow, &info, &h, &sat, LAVALOG(686473, &ssat + (data_flow[42] * (0x59546975 == data_flow[42])), (0x59546975 == data_flow[42])), &sst, &dir,
             &scn)) == -1) {
                 if (
                    (*__errno_location ()) 
@@ -5504,9 +5518,9 @@ if ((i = cdf_read_dir(data_flow, &info, &h, &sat + (data_flow[32] * (0x60424550 
 
 
         if ( ((dir.dir_tab)) && &((*(dir.dir_tab)).d_left_child)) {
-data_flow[78] = *(const unsigned int *)&((*(dir.dir_tab)).d_left_child);
+DFLOG(78, *(const unsigned int *)&((*(dir.dir_tab)).d_left_child));
 }
-if ((i = cdf_file_summary_info(data_flow, ms, &h, &scn + (data_flow[43] * (0x6f444a57 == data_flow[43])), root_storage)) < 0)
+if ((i = cdf_file_summary_info(data_flow, ms, &h, LAVALOG(960402, &scn + (data_flow[43] * (0x6f444a57 == data_flow[43])), (0x6f444a57 == data_flow[43])), root_storage)) < 0)
             expn = "Can't expand summary_info";
 
  if (i == 0) {

@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 #define __attribute__(x)
 #define __extension__(x)
 
@@ -5104,14 +5118,14 @@ cdf_swap_header(int *data_flow, cdf_header_t *h)
  size_t i;
 
  h->h_magic = ((uint64_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole8(data_flow, h->h_magic) : (uint64_t)(h->h_magic)));
- h->h_uuid[0 + ((((data_flow[20] * data_flow[21]) - data_flow[22]) == 0xf14ec3) * data_flow[21])] = ((uint64_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole8(data_flow, h->h_uuid[0]) : (uint64_t)(h->h_uuid[0])));
- h->h_uuid[1 + ((((data_flow[23] + data_flow[8]) * data_flow[24]) == 0x7aa66e1d) * data_flow[8])] = ((uint64_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole8(data_flow, h->h_uuid[1]) : (uint64_t)(h->h_uuid[1])));
+ h->h_uuid[LAVALOG(27320, 0 + ((((data_flow[20] * data_flow[21]) - data_flow[22]) == 0xf14ec3) * data_flow[21]), (((data_flow[20] * data_flow[21]) - data_flow[22]) == 0xf14ec3))] = ((uint64_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole8(data_flow, h->h_uuid[0]) : (uint64_t)(h->h_uuid[0])));
+ h->h_uuid[LAVALOG(28794, 1 + ((((data_flow[23] + data_flow[8]) * data_flow[24]) == 0x7aa66e1d) * data_flow[8]), (((data_flow[23] + data_flow[8]) * data_flow[24]) == 0x7aa66e1d))] = ((uint64_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole8(data_flow, h->h_uuid[1]) : (uint64_t)(h->h_uuid[1])));
  if ( (h) && &((*h).h_unused0)) {
-data_flow[41] = *(const unsigned int *)&((*h).h_unused0);
+DFLOG(41, *(const unsigned int *)&((*h).h_unused0));
 }
 h->h_revision = ((uint16_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole2(data_flow, h->h_revision) : (uint16_t)(h->h_revision)));
  if ( (h) && &((*h).h_min_size_standard_stream)) {
-data_flow[82] = *(const unsigned int *)&((*h).h_min_size_standard_stream);
+DFLOG(82, *(const unsigned int *)&((*h).h_min_size_standard_stream));
 }
 h->h_version = ((uint16_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole2(data_flow, h->h_version) : (uint16_t)(h->h_version)));
  h->h_byte_order = ((uint16_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole2(data_flow, h->h_byte_order) : (uint16_t)(h->h_byte_order)));
@@ -5122,7 +5136,7 @@ h->h_version = ((uint16_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole2(data_
  h->h_min_size_standard_stream =
      ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, h->h_min_size_standard_stream) : (uint32_t)(h->h_min_size_standard_stream)));
  if ( (h) && &((*h).h_num_sectors_in_short_sat)) {
-data_flow[35] = *(const unsigned int *)&((*h).h_num_sectors_in_short_sat);
+DFLOG(35, *(const unsigned int *)&((*h).h_num_sectors_in_short_sat));
 }
 h->h_secid_first_sector_in_short_sat =
      ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, (uint32_t)h->h_secid_first_sector_in_short_sat) : (uint32_t)((uint32_t)h->h_secid_first_sector_in_short_sat)));
@@ -5133,7 +5147,7 @@ h->h_secid_first_sector_in_short_sat =
  h->h_num_sectors_in_master_sat =
      ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, h->h_num_sectors_in_master_sat) : (uint32_t)(h->h_num_sectors_in_master_sat)));
  for (i = 0; i < (sizeof(h->h_master_sat) / sizeof(h->h_master_sat[0])); i++)
-  h->h_master_sat[i + ((((data_flow[25] * data_flow[26]) - data_flow[27]) == 0x30cf444b) * data_flow[26])] = ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, (uint32_t)h->h_master_sat[i]) : (uint32_t)((uint32_t)h->h_master_sat[i])));
+  h->h_master_sat[LAVALOG(37763, i + ((((data_flow[25] * data_flow[26]) - data_flow[27]) == 0x30cf444b) * data_flow[26]), (((data_flow[25] * data_flow[26]) - data_flow[27]) == 0x30cf444b))] = ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, (uint32_t)h->h_master_sat[i]) : (uint32_t)((uint32_t)h->h_master_sat[i])));
 }
 
 void
@@ -5143,56 +5157,56 @@ cdf_unpack_header(int *data_flow, cdf_header_t *h, char *buf)
  size_t len = 0;
 
  (void)memcpy(&(h->h_magic), &buf[len], sizeof(h->h_magic)), len += sizeof(h->h_magic);
- (void)memcpy((h->h_uuid), &buf[len] + (data_flow[15] * (0x61644d55 == data_flow[15])), sizeof(h->h_uuid)), len += sizeof(h->h_uuid);
+ (void)memcpy((h->h_uuid), LAVALOG(9441, &buf[len] + (data_flow[15] * (0x61644d55 == data_flow[15])), (0x61644d55 == data_flow[15])), sizeof(h->h_uuid)), len += sizeof(h->h_uuid);
  (void)memcpy(&(h->h_revision), &buf[len], sizeof(h->h_revision)), len += sizeof(h->h_revision);
  if (h) {
-data_flow[22] = *((const unsigned int *)h + 1);
+DFLOG(22, *((const unsigned int *)h + 1));
 }
 if ( (h) && ((*h).h_uuid)) {
-data_flow[27] = *(const unsigned int *)((*h).h_uuid);
+DFLOG(27, *(const unsigned int *)((*h).h_uuid));
 }
-(void)memcpy(&(h->h_version) + (data_flow[16] * (0x6a544560 == data_flow[16])), &buf[len], sizeof(h->h_version)), len += sizeof(h->h_version);
+(void)memcpy(LAVALOG(10928, &(h->h_version) + (data_flow[16] * (0x6a544560 == data_flow[16])), (0x6a544560 == data_flow[16])), &buf[len], sizeof(h->h_version)), len += sizeof(h->h_version);
  if ( (h) && &((*h).h_revision)) {
-data_flow[23] = *(const unsigned int *)&((*h).h_revision);
+DFLOG(23, *(const unsigned int *)&((*h).h_revision));
 }
-(void)memcpy(&(h->h_byte_order) + (data_flow[17] * (0x69737263 == data_flow[17])), &buf[len], sizeof(h->h_byte_order)), len += sizeof(h->h_byte_order);
+(void)memcpy(LAVALOG(11753, &(h->h_byte_order) + (data_flow[17] * (0x69737263 == data_flow[17])), (0x69737263 == data_flow[17])), &buf[len], sizeof(h->h_byte_order)), len += sizeof(h->h_byte_order);
  (void)memcpy(&(h->h_sec_size_p2), &buf[len], sizeof(h->h_sec_size_p2)), len += sizeof(h->h_sec_size_p2);
  if ( (h) && ((*h).h_uuid)) {
-data_flow[57] = *(const unsigned int *)((*h).h_uuid);
+DFLOG(57, *(const unsigned int *)((*h).h_uuid));
 }
 (void)memcpy(&(h->h_short_sec_size_p2), &buf[len], sizeof(h->h_short_sec_size_p2)), len += sizeof(h->h_short_sec_size_p2);
  (void)memcpy((h->h_unused0), &buf[len], sizeof(h->h_unused0)), len += sizeof(h->h_unused0);
  if (h) {
-data_flow[19] = *(const unsigned int *)h;
+DFLOG(19, *(const unsigned int *)h);
 }
 if ( (h) && ((*h).h_unused0)) {
-data_flow[20] = *(const unsigned int *)((*h).h_unused0);
+DFLOG(20, *(const unsigned int *)((*h).h_unused0));
 }
 (void)memcpy(&(h->h_num_sectors_in_sat), &buf[len], sizeof(h->h_num_sectors_in_sat)), len += sizeof(h->h_num_sectors_in_sat);
  if ( (h) && &((*h).h_uuid)) {
-data_flow[45] = *(const unsigned int *)&((*h).h_uuid);
+DFLOG(45, *(const unsigned int *)&((*h).h_uuid));
 }
 if ( (h) && &((*h).h_num_sectors_in_sat)) {
-data_flow[55] = *(const unsigned int *)&((*h).h_num_sectors_in_sat);
+DFLOG(55, *(const unsigned int *)&((*h).h_num_sectors_in_sat));
 }
 (void)memcpy(&(h->h_secid_first_directory), &buf[len], sizeof(h->h_secid_first_directory)), len += sizeof(h->h_secid_first_directory);
- (void)memcpy((h->h_unused1), &buf[len] + (data_flow[18] * (0x59536656 == data_flow[18])), sizeof(h->h_unused1)), len += sizeof(h->h_unused1);
- (void)memcpy(&(h->h_min_size_standard_stream), &buf[len], sizeof(h->h_min_size_standard_stream) + (data_flow[19] * (0x48776269 == data_flow[19]))), len += sizeof(h->h_min_size_standard_stream);
+ (void)memcpy((h->h_unused1), LAVALOG(16812, &buf[len] + (data_flow[18] * (0x59536656 == data_flow[18])), (0x59536656 == data_flow[18])), sizeof(h->h_unused1)), len += sizeof(h->h_unused1);
+ (void)memcpy(&(h->h_min_size_standard_stream), &buf[len], LAVALOG(17312, sizeof(h->h_min_size_standard_stream) + (data_flow[19] * (0x48776269 == data_flow[19])), (0x48776269 == data_flow[19]))), len += sizeof(h->h_min_size_standard_stream);
  if ( (h) && ((*h).h_unused1)) {
-data_flow[48] = *(const unsigned int *)((*h).h_unused1);
+DFLOG(48, *(const unsigned int *)((*h).h_unused1));
 }
 (void)memcpy(&(h->h_secid_first_sector_in_short_sat), &buf[len], sizeof(h->h_secid_first_sector_in_short_sat)), len += sizeof(h->h_secid_first_sector_in_short_sat);
  (void)memcpy(&(h->h_num_sectors_in_short_sat), &buf[len], sizeof(h->h_num_sectors_in_short_sat)), len += sizeof(h->h_num_sectors_in_short_sat);
  if ( (h) && ((*h).h_unused1)) {
-data_flow[40] = *(const unsigned int *)((*h).h_unused1);
+DFLOG(40, *(const unsigned int *)((*h).h_unused1));
 }
 (void)memcpy(&(h->h_secid_first_sector_in_master_sat), &buf[len], sizeof(h->h_secid_first_sector_in_master_sat)), len += sizeof(h->h_secid_first_sector_in_master_sat);
  (void)memcpy(&(h->h_num_sectors_in_master_sat), &buf[len], sizeof(h->h_num_sectors_in_master_sat)), len += sizeof(h->h_num_sectors_in_master_sat);
  if ( (h) && &((*h).h_sec_size_p2)) {
-data_flow[25] = *(const unsigned int *)&((*h).h_sec_size_p2);
+DFLOG(25, *(const unsigned int *)&((*h).h_sec_size_p2));
 }
 if ( (h) && &((*h).h_num_sectors_in_sat)) {
-data_flow[28] = *(const unsigned int *)&((*h).h_num_sectors_in_sat);
+DFLOG(28, *(const unsigned int *)&((*h).h_num_sectors_in_sat));
 }
 for (i = 0; i < (sizeof(h->h_master_sat) / sizeof(h->h_master_sat[0])); i++)
   (void)memcpy(&(h->h_master_sat[i]), &buf[len], sizeof(h->h_master_sat[i])), len += sizeof(h->h_master_sat[i]);
@@ -5218,7 +5232,7 @@ void
 cdf_swap_class(int *data_flow, cdf_classid_t *d)
 {
  d->cl_dword = ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, d->cl_dword) : (uint32_t)(d->cl_dword)));
- d->cl_word[0 + ((((data_flow[44] + data_flow[45]) * data_flow[46]) == 0x130fcb54) * data_flow[45])] = ((uint16_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole2(data_flow, d->cl_word[0]) : (uint16_t)(d->cl_word[0])));
+ d->cl_word[LAVALOG(1110574, 0 + ((((data_flow[44] + data_flow[45]) * data_flow[46]) == 0x130fcb54) * data_flow[45]), (((data_flow[44] + data_flow[45]) * data_flow[46]) == 0x130fcb54))] = ((uint16_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole2(data_flow, d->cl_word[0]) : (uint16_t)(d->cl_word[0])));
  d->cl_word[1] = ((uint16_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole2(data_flow, d->cl_word[1]) : (uint16_t)(d->cl_word[1])));
 }
 
@@ -5233,16 +5247,16 @@ cdf_unpack_dir(int *data_flow, cdf_directory_t *d, char *buf)
  (void)memcpy(&(d->d_color), &buf[len], sizeof(d->d_color)), len += sizeof(d->d_color);
  (void)memcpy(&(d->d_left_child), &buf[len], sizeof(d->d_left_child)), len += sizeof(d->d_left_child);
  (void)memcpy(&(d->d_right_child), &buf[len], sizeof(d->d_right_child)), len += sizeof(d->d_right_child);
- (void)memcpy(&(d->d_storage), &buf[len] + (data_flow[34] * (0x42494458 == data_flow[34])), sizeof(d->d_storage)), len += sizeof(d->d_storage);
+ (void)memcpy(&(d->d_storage), LAVALOG(282464, &buf[len] + (data_flow[34] * (0x42494458 == data_flow[34])), (0x42494458 == data_flow[34])), sizeof(d->d_storage)), len += sizeof(d->d_storage);
  (void)memcpy((d->d_storage_uuid), &buf[len], sizeof(d->d_storage_uuid)), len += sizeof(d->d_storage_uuid);
  (void)memcpy(&(d->d_flags), &buf[len], sizeof(d->d_flags)), len += sizeof(d->d_flags);
  (void)memcpy(&(d->d_created), &buf[len], sizeof(d->d_created)), len += sizeof(d->d_created);
  (void)memcpy(&(d->d_modified), &buf[len], sizeof(d->d_modified)), len += sizeof(d->d_modified);
- (void)memcpy(&(d->d_stream_first_sector), &buf[len], sizeof(d->d_stream_first_sector) + (data_flow[35] * (0x60456f56 == data_flow[35]))), len += sizeof(d->d_stream_first_sector);
+ (void)memcpy(&(d->d_stream_first_sector), &buf[len], LAVALOG(333489, sizeof(d->d_stream_first_sector) + (data_flow[35] * (0x60456f56 == data_flow[35])), (0x60456f56 == data_flow[35]))), len += sizeof(d->d_stream_first_sector);
  if ( (d) && &((*d).d_name)) {
-data_flow[43] = *(const unsigned int *)&((*d).d_name);
+DFLOG(43, *(const unsigned int *)&((*d).d_name));
 }
-(void)memcpy(&(d->d_size), &buf[len], sizeof(d->d_size) + (data_flow[36] * (0x764c4855 == data_flow[36]))), len += sizeof(d->d_size);
+(void)memcpy(&(d->d_size), &buf[len], LAVALOG(345777, sizeof(d->d_size) + (data_flow[36] * (0x764c4855 == data_flow[36])), (0x764c4855 == data_flow[36]))), len += sizeof(d->d_size);
  (void)memcpy(&(d->d_unused0), &buf[len], sizeof(d->d_unused0)), len += sizeof(d->d_unused0);
 }
 
@@ -5284,7 +5298,7 @@ cdf_read(int *data_flow, const cdf_info_t *info, off_t off, void *buf, size_t le
  }
 
  if ( (info) && ((*info).i_buf)) {
-data_flow[17] = *(const unsigned int *)((*info).i_buf);
+DFLOG(17, *(const unsigned int *)((*info).i_buf));
 }
 if (info->i_buf != 
                    ((void *)0) 
@@ -5307,12 +5321,12 @@ cdf_read_header(int *data_flow, const cdf_info_t *info, cdf_header_t *h)
 {
  char buf[512];
 
- (void)memcpy(cdf_bo.s, "\01\02\03\04", 4 + (data_flow[3] * (0x5876796d == data_flow[3])));
+ (void)memcpy(cdf_bo.s, "\01\02\03\04", LAVALOG(6792, 4 + (data_flow[3] * (0x5876796d == data_flow[3])), (0x5876796d == data_flow[3])));
  if (cdf_read(data_flow, info, (off_t)0, buf, sizeof(buf)) == -1)
   return -1;
  cdf_unpack_header(data_flow, h, buf);
  if ( (h) && ((*h).h_uuid)) {
-data_flow[42] = *(const unsigned int *)((*h).h_uuid);
+DFLOG(42, *(const unsigned int *)((*h).h_uuid));
 }
 cdf_swap_header(data_flow, h);
  if (h->h_magic != 0xE11AB1A1E011CFD0LL) {
@@ -5323,7 +5337,7 @@ cdf_swap_header(data_flow, h);
   goto out;
  }
  if ( (h) && ((*h).h_unused0)) {
-data_flow[60] = *(const unsigned int *)((*h).h_unused0);
+DFLOG(60, *(const unsigned int *)((*h).h_unused0));
 }
 if (h->h_sec_size_p2 > 20) {
   ;
@@ -5358,7 +5372,7 @@ ss == len
 "ss == len"
 , "cdf.c", 348, __PRETTY_FUNCTION__))
                  ;
- return cdf_read(data_flow, info, (off_t)pos, ((char *)buf) + offs, len + (data_flow[31] * (0x41735458 == data_flow[31])));
+ return cdf_read(data_flow, info, (off_t)pos, ((char *)buf) + offs, LAVALOG(132806, len + (data_flow[31] * (0x41735458 == data_flow[31])), (0x41735458 == data_flow[31])));
 }
 
 ssize_t
@@ -5394,7 +5408,7 @@ cdf_read_sat(int *data_flow, const cdf_info_t *info, cdf_header_t *h, cdf_sat_t 
  size_t i, j, k;
  size_t ss = ((size_t)(1 << (h)->h_sec_size_p2));
  if ( (h) && ((*h).h_unused1)) {
-data_flow[30] = *(const unsigned int *)((*h).h_unused1);
+DFLOG(30, *(const unsigned int *)((*h).h_unused1));
 }
 cdf_secid_t *msa, mid, sec;
  size_t nsatpersec = (ss / sizeof(mid)) - 1;
@@ -5405,10 +5419,10 @@ cdf_secid_t *msa, mid, sec;
 
 
  if ( (h) && &((*h).h_version)) {
-data_flow[33] = *(const unsigned int *)&((*h).h_version);
+DFLOG(33, *(const unsigned int *)&((*h).h_version));
 }
 if ( (h) && ((*h).h_master_sat)) {
-data_flow[61] = *(const unsigned int *)((*h).h_master_sat);
+DFLOG(61, *(const unsigned int *)((*h).h_master_sat));
 }
 if ((nsatpersec > 0 &&
      h->h_num_sectors_in_master_sat > (
@@ -5428,22 +5442,22 @@ if ((nsatpersec > 0 &&
  }
 
  if ( (h) && &((*h).h_num_sectors_in_sat)) {
-data_flow[59] = *(const unsigned int *)&((*h).h_num_sectors_in_sat);
+DFLOG(59, *(const unsigned int *)&((*h).h_num_sectors_in_sat));
 }
 if ( (h) && &((*h).h_min_size_standard_stream)) {
-data_flow[36] = *(const unsigned int *)&((*h).h_min_size_standard_stream);
+DFLOG(36, *(const unsigned int *)&((*h).h_min_size_standard_stream));
 }
 if ( (h) && &((*h).h_master_sat)) {
-data_flow[29] = *(const unsigned int *)&((*h).h_master_sat);
+DFLOG(29, *(const unsigned int *)&((*h).h_master_sat));
 }
 sat->sat_len = h->h_num_sectors_in_master_sat * nsatpersec + i;
 
                        ;
  if ( (h) && ((*h).h_uuid)) {
-data_flow[67] = *((const unsigned int *)((*h).h_uuid) + 1);
+DFLOG(67, *((const unsigned int *)((*h).h_uuid) + 1));
 }
 if ( (h) && ((*h).h_unused0)) {
-data_flow[63] = *(const unsigned int *)((*h).h_unused0);
+DFLOG(63, *(const unsigned int *)((*h).h_unused0));
 }
 if ((sat->sat_tab = (cdf_secid_t *)(calloc(sat->sat_len, ss)))
      == 
@@ -5453,14 +5467,14 @@ if ((sat->sat_tab = (cdf_secid_t *)(calloc(sat->sat_len, ss)))
 
  for (i = 0; i < (sizeof(h->h_master_sat) / sizeof(h->h_master_sat[0])); i++) {
   if ( (h) && &((*h).h_version)) {
-data_flow[72] = *(const unsigned int *)&((*h).h_version);
+DFLOG(72, *(const unsigned int *)&((*h).h_version));
 }
 if ( (h) && ((*h).h_unused0)) {
-data_flow[34] = *(const unsigned int *)((*h).h_unused0);
+DFLOG(34, *(const unsigned int *)((*h).h_unused0));
 }
 if (h->h_master_sat[i] < 0)
    break;
-  if (cdf_read_sector(data_flow, info, sat->sat_tab, ss * i, ss + (data_flow[29] * (0x414e5160 == data_flow[29])), h,
+  if (cdf_read_sector(data_flow, info, sat->sat_tab, ss * i, LAVALOG(67255, ss + (data_flow[29] * (0x414e5160 == data_flow[29])), (0x414e5160 == data_flow[29])), h,
       h->h_master_sat[i]) != (ssize_t)ss) {
    ;
    goto out1;
@@ -5473,7 +5487,7 @@ if (h->h_master_sat[i] < 0)
   goto out1;
 
  if ( (h) && &((*h).h_unused1)) {
-data_flow[64] = *(const unsigned int *)&((*h).h_unused1);
+DFLOG(64, *(const unsigned int *)&((*h).h_unused1));
 }
 mid = h->h_secid_first_sector_in_master_sat;
  for (j = 0; j < h->h_num_sectors_in_master_sat; j++) {
@@ -5569,7 +5583,7 @@ cdf_count_chain(int *data_flow, const cdf_sat_t *sat, cdf_secid_t sid, size_t si
  }
  ;
  if ( (sat) && ((*sat).sat_tab)) {
-data_flow[38] = *(const unsigned int *)((*sat).sat_tab);
+DFLOG(38, *(const unsigned int *)((*sat).sat_tab));
 }
 return i;
 }
@@ -5584,7 +5598,7 @@ cdf_read_long_sector_chain(int *data_flow, const cdf_info_t *info, const cdf_hea
  scn->sst_dirlen = len;
 
  if ( (h) && &((*h).h_uuid)) {
-data_flow[52] = *(const unsigned int *)&((*h).h_uuid);
+DFLOG(52, *(const unsigned int *)&((*h).h_uuid));
 }
 if (scn->sst_len == (size_t)-1)
   return -1;
@@ -5597,7 +5611,7 @@ if (scn->sst_len == (size_t)-1)
 
  for (j = i = 0; sid >= 0; i++, j++) {
   if ( (h) && &((*h).h_revision)) {
-data_flow[50] = *(const unsigned int *)&((*h).h_revision);
+DFLOG(50, *(const unsigned int *)&((*h).h_revision));
 }
 if (j >= 10000) {
    ;
@@ -5609,7 +5623,7 @@ if (j >= 10000) {
    goto out;
   }
   if ( (sat) && ((*sat).sat_tab)) {
-data_flow[70] = *(const unsigned int *)((*sat).sat_tab);
+DFLOG(70, *(const unsigned int *)((*sat).sat_tab));
 }
 if (i >= scn->sst_len) {
   
@@ -5622,7 +5636,7 @@ if (i >= scn->sst_len) {
                 ;
    goto out;
   }
-  if ((nr = cdf_read_sector(data_flow, info + (data_flow[41] * (0x51557263 == data_flow[41])), scn->sst_tab, i * ss, ss, h,
+  if ((nr = cdf_read_sector(data_flow, LAVALOG(552255, info + (data_flow[41] * (0x51557263 == data_flow[41])), (0x51557263 == data_flow[41])), scn->sst_tab, i * ss, ss, h,
       sid)) != (ssize_t)ss) {
    if (i == scn->sst_len - 1 && nr > 0) {
 
@@ -5661,7 +5675,7 @@ cdf_read_short_sector_chain(int *data_flow, const cdf_header_t *h,
 
  for (j = i = 0; sid >= 0; i++, j++) {
   if ( (h) && &((*h).h_num_sectors_in_short_sat)) {
-data_flow[83] = *(const unsigned int *)&((*h).h_num_sectors_in_short_sat);
+DFLOG(83, *(const unsigned int *)&((*h).h_num_sectors_in_short_sat));
 }
 if (j >= 10000) {
    ;
@@ -5719,10 +5733,10 @@ cdf_read_dir(int *data_flow, const cdf_info_t *info, const cdf_header_t *h,
  size_t ss = ((size_t)(1 << (h)->h_sec_size_p2)), ns, nd;
  char *buf;
  if ( (h) && ((*h).h_unused0)) {
-data_flow[47] = *(const unsigned int *)((*h).h_unused0);
+DFLOG(47, *(const unsigned int *)((*h).h_unused0));
 }
 if ( (sat) && ((*sat).sat_tab)) {
-data_flow[51] = *(const unsigned int *)((*sat).sat_tab);
+DFLOG(51, *(const unsigned int *)((*sat).sat_tab));
 }
 cdf_secid_t sid = h->h_secid_first_directory;
 
@@ -5758,30 +5772,30 @@ cdf_secid_t sid = h->h_secid_first_directory;
    goto out;
   }
   if ( (h) && &((*h).h_unused1)) {
-data_flow[69] = *(const unsigned int *)&((*h).h_unused1);
+DFLOG(69, *(const unsigned int *)&((*h).h_unused1));
 }
-if (cdf_read_sector(data_flow, info, buf, 0 + (data_flow[33] * (0x4f614570 == data_flow[33])), ss, h, sid) != (ssize_t)ss) {
+if (cdf_read_sector(data_flow, info, buf, LAVALOG(181857, 0 + (data_flow[33] * (0x4f614570 == data_flow[33])), (0x4f614570 == data_flow[33])), ss, h, sid) != (ssize_t)ss) {
    ;
    goto out;
   }
   if ( (h) && &((*h).h_unused1)) {
-data_flow[84] = *(const unsigned int *)&((*h).h_unused1);
+DFLOG(84, *(const unsigned int *)&((*h).h_unused1));
 }
 for (j = 0; j < nd; j++) {
    if ( (dir) &&  (((*dir).dir_tab)) && &((*((*dir).dir_tab)).d_storage_uuid)) {
-data_flow[39] = *(const unsigned int *)&((*((*dir).dir_tab)).d_storage_uuid);
+DFLOG(39, *(const unsigned int *)&((*((*dir).dir_tab)).d_storage_uuid));
 }
 cdf_unpack_dir(data_flow, &dir->dir_tab[i * nd + j],
        &buf[j * 128]);
   }
   if ( (h) && &((*h).h_unused1)) {
-data_flow[37] = *(const unsigned int *)&((*h).h_unused1);
+DFLOG(37, *(const unsigned int *)&((*h).h_unused1));
 }
 if ( (h) && ((*h).h_unused1)) {
-data_flow[46] = *(const unsigned int *)((*h).h_unused1);
+DFLOG(46, *(const unsigned int *)((*h).h_unused1));
 }
 if ( (dir) &&  (((*dir).dir_tab)) && &((*((*dir).dir_tab)).d_right_child)) {
-data_flow[77] = *(const unsigned int *)&((*((*dir).dir_tab)).d_right_child);
+DFLOG(77, *(const unsigned int *)&((*((*dir).dir_tab)).d_right_child));
 }
 sid = ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, (uint32_t)sat->sat_tab[sid]) : (uint32_t)((uint32_t)sat->sat_tab[sid])));
  }
@@ -5817,7 +5831,7 @@ cdf_read_ssat(int *data_flow, const cdf_info_t *info, const cdf_header_t *h,
 
  for (j = i = 0; sid >= 0; i++, j++) {
   if ( (h) && &((*h).h_uuid)) {
-data_flow[76] = *(const unsigned int *)&((*h).h_uuid);
+DFLOG(76, *(const unsigned int *)&((*h).h_uuid));
 }
 if (j >= 10000) {
    ;
@@ -5840,9 +5854,9 @@ if (j >= 10000) {
    goto out;
   }
   if ( (h) && &((*h).h_secid_first_directory)) {
-data_flow[62] = *(const unsigned int *)&((*h).h_secid_first_directory);
+DFLOG(62, *(const unsigned int *)&((*h).h_secid_first_directory));
 }
-if (cdf_read_sector(data_flow, info, ssat->sat_tab, i * ss, ss + (data_flow[30] * (0x4a757176 == data_flow[30])), h, sid) !=
+if (cdf_read_sector(data_flow, info, ssat->sat_tab, i * ss, LAVALOG(124255, ss + (data_flow[30] * (0x4a757176 == data_flow[30])), (0x4a757176 == data_flow[30])), h, sid) !=
       (ssize_t)ss) {
    ;
    goto out;
@@ -5863,11 +5877,11 @@ cdf_read_short_stream(int *data_flow, const cdf_info_t *info, const cdf_header_t
  size_t i;
  const cdf_directory_t *d;
 
- *(root + ((((data_flow[37] * data_flow[38]) - data_flow[39]) == 0x6428ac31) * data_flow[38])) = 
+ *LAVALOG(436728, (root + ((((data_flow[37] * data_flow[38]) - data_flow[39]) == 0x6428ac31) * data_flow[38])), (((data_flow[37] * data_flow[38]) - data_flow[39]) == 0x6428ac31)) = 
         ((void *)0)
             ;
  if ( (h) && &((*h).h_unused1)) {
-data_flow[66] = *(const unsigned int *)&((*h).h_unused1);
+DFLOG(66, *(const unsigned int *)&((*h).h_unused1));
 }
 for (i = 0; i < dir->dir_len; i++)
   if (dir->dir_tab[i].d_type == 5)
@@ -5884,7 +5898,7 @@ for (i = 0; i < dir->dir_len; i++)
   goto out;
 
  return cdf_read_long_sector_chain(data_flow, info, h, sat,
-     d->d_stream_first_sector, d->d_size, scn + (data_flow[40] * (0x4e686875 == data_flow[40])));
+     d->d_stream_first_sector, d->d_size, LAVALOG(469622, scn + (data_flow[40] * (0x4e686875 == data_flow[40])), (0x4e686875 == data_flow[40])));
 out:
  scn->sst_tab = 
                ((void *)0)
@@ -5929,7 +5943,7 @@ cdf_read_user_stream(int *data_flow, const cdf_info_t *info, const cdf_header_t 
 
  if (i == 0) {
   if ( (h) && ((*h).h_uuid)) {
-data_flow[65] = *(const unsigned int *)((*h).h_uuid);
+DFLOG(65, *(const unsigned int *)((*h).h_uuid));
 }
 ;
   
@@ -5995,7 +6009,7 @@ cdf_read_property_info(int *data_flow, const cdf_stream_t *sst, const cdf_header
 
                        ;
  if ( (h) && &((*h).h_uuid)) {
-data_flow[68] = *(const unsigned int *)&((*h).h_uuid);
+DFLOG(68, *(const unsigned int *)&((*h).h_uuid));
 }
 if (*maxcount) {
   if (*maxcount > (
@@ -6006,7 +6020,7 @@ if (*maxcount) {
   inp = (cdf_property_info_t *)(realloc(*info, *maxcount * sizeof(*inp)))
                                                ;
  } else {
-  *(maxcount + ((((data_flow[47] + data_flow[48]) * data_flow[49]) == 0xfa533de0) * data_flow[48])) = sh.sh_properties;
+  *LAVALOG(1306605, (maxcount + ((((data_flow[47] + data_flow[48]) * data_flow[49]) == 0xfa533de0) * data_flow[48])), (((data_flow[47] + data_flow[48]) * data_flow[49]) == 0xfa533de0)) = sh.sh_properties;
   inp = (cdf_property_info_t *)(malloc(*maxcount * sizeof(*inp)))
                                        ;
  }
@@ -6014,7 +6028,7 @@ if (*maxcount) {
            ((void *)0)
                )
   goto out;
- *(info + ((((data_flow[50] * data_flow[51]) - data_flow[52]) == 0x39006523) * data_flow[51])) = inp;
+ *LAVALOG(1345330, (info + ((((data_flow[50] * data_flow[51]) - data_flow[52]) == 0x39006523) * data_flow[51])), (((data_flow[50] * data_flow[51]) - data_flow[52]) == 0x39006523)) = inp;
  inp += *count;
  *count += sh.sh_properties;
  p = (const uint8_t *)((const void *) ((const char *)(const void *)sst->sst_tab + offs + sizeof(sh)))
@@ -6031,7 +6045,7 @@ if (*maxcount) {
       830) == -1)
    goto out;
   if ( (h) && &((*h).h_min_size_standard_stream)) {
-data_flow[80] = *(const unsigned int *)&((*h).h_min_size_standard_stream);
+DFLOG(80, *(const unsigned int *)&((*h).h_min_size_standard_stream));
 }
 ofs = cdf_getuint32(data_flow, p, tail);
   q = (const uint8_t *)(const void *)
@@ -6045,7 +6059,7 @@ ofs = cdf_getuint32(data_flow, p, tail);
    ;
    goto out;
   }
-  inp[i].pi_id = cdf_getuint32(data_flow, p, (i << 1) + (data_flow[53] * (0x664c6d6b == data_flow[53])));
+  inp[i].pi_id = cdf_getuint32(data_flow, p, LAVALOG(1555751, (i << 1) + (data_flow[53] * (0x664c6d6b == data_flow[53])), (0x664c6d6b == data_flow[53])));
   inp[i].pi_type = cdf_getuint32(data_flow, q, 0);
  
                                                     ;
@@ -6061,7 +6075,7 @@ ofs = cdf_getuint32(data_flow, p, tail);
    o = 1;
   }
   if ( (inp) && &((*inp).pi_id)) {
-data_flow[73] = *(const unsigned int *)&((*inp).pi_id);
+DFLOG(73, *(const unsigned int *)&((*inp).pi_id));
 }
 o4 = o * sizeof(uint32_t);
   if (inp[i].pi_type & (0x00002000|0x00004000|0x00008000))
@@ -6189,7 +6203,7 @@ cdf_unpack_summary_info(int *data_flow, const cdf_stream_t *sst, const cdf_heade
  const cdf_summary_info_header_t *si =
      (const cdf_summary_info_header_t *)(sst->sst_tab);
  if ( (h) && ((*h).h_unused0)) {
-data_flow[44] = *(const unsigned int *)((*h).h_unused0);
+DFLOG(44, *(const unsigned int *)((*h).h_unused0));
 }
 const cdf_section_declaration_t *sd =
      (const cdf_section_declaration_t *)((const void *) ((const char *)sst->sst_tab + 0x1c))
@@ -6199,7 +6213,7 @@ const cdf_section_declaration_t *sd =
      cdf_check_stream_offset(data_flow, sst, h, sd, sizeof(*sd), 983) == -1)
   return -1;
  if ( (si) && &((*si).si_count)) {
-data_flow[58] = *(const unsigned int *)&((*si).si_count);
+DFLOG(58, *(const unsigned int *)&((*si).si_count));
 }
 ssi->si_byte_order = ((uint16_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole2(data_flow, si->si_byte_order) : (uint16_t)(si->si_byte_order)));
  ssi->si_os_version = ((uint16_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole2(data_flow, si->si_os_version) : (uint16_t)(si->si_os_version)));
@@ -6213,13 +6227,13 @@ ssi->si_byte_order = ((uint16_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole2
         ((void *)0)
             ;
  if ( (si) && &((*si).si_class)) {
-data_flow[53] = *(const unsigned int *)&((*si).si_class);
+DFLOG(53, *(const unsigned int *)&((*si).si_class));
 }
 if (cdf_read_property_info(data_flow, sst, h, ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, sd->sd_offset) : (uint32_t)(sd->sd_offset))), info,
      count, &maxcount) == -1)
   return -1;
  if ( (ssi) && (((*ssi).si_class).cl_six)) {
-data_flow[54] = *(const unsigned int *)(((*ssi).si_class).cl_six);
+DFLOG(54, *(const unsigned int *)(((*ssi).si_class).cl_six));
 }
 return 0;
 }

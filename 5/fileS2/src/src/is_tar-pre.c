@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 #define __attribute__(x)
 #define __extension__(x)
 
@@ -3144,7 +3158,7 @@ is_tar(int *data_flow, const unsigned char *buf, size_t nbytes)
 {
  const union record *header = (const union record *)(const void *)buf;
  if (buf) {
-data_flow[16] = *(const unsigned int *)buf;
+DFLOG(16, *(const unsigned int *)buf);
 }
 int i;
  int sum, recsum;
@@ -3188,7 +3202,7 @@ from_oct(int *data_flow, int digs, const char *where)
  int value;
 
  if (where) {
-data_flow[24] = *(const unsigned int *)where;
+DFLOG(24, *(const unsigned int *)where);
 }
 while (
        ((*__ctype_b_loc ())[(int) ((
@@ -3206,7 +3220,7 @@ while (
  }
 
  if (where) {
-data_flow[18] = *(const unsigned int *)where;
+DFLOG(18, *(const unsigned int *)where);
 }
 if (digs > 0 && *where && !
                            ((*__ctype_b_loc ())[(int) ((

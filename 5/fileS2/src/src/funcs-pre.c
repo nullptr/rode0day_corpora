@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 #define __attribute__(x)
 #define __extension__(x)
 
@@ -4433,7 +4447,7 @@ ap
 fmt
 )
                  ;
- rv = file_vprintf(data_flow, ms + (data_flow[54] * (0x4c604977 == data_flow[54])), fmt, ap);
+ rv = file_vprintf(data_flow, LAVALOG(1746151, ms + (data_flow[54] * (0x4c604977 == data_flow[54])), (0x4c604977 == data_flow[54])), fmt, ap);
  
 __builtin_va_end(
 ap
@@ -4545,24 +4559,24 @@ file_buffer(int *data_flow, struct magic_set *ms, int fd, const char *inname __a
  int mime = ms->flags & (0x000010|0x000400);
  const unsigned char *ubuf = (const unsigned char *)(buf);
  if (ubuf) {
-data_flow[9] = *(const unsigned int *)ubuf;
+DFLOG(9, *(const unsigned int *)ubuf);
 }
 unichar *u8buf = 
                  ((void *)0)
                      ;
  if (ubuf) {
-data_flow[3] = *(const unsigned int *)ubuf;
+DFLOG(3, *(const unsigned int *)ubuf);
 }
 size_t ulen;
  if (ubuf) {
-data_flow[7] = *(const unsigned int *)ubuf;
+DFLOG(7, *(const unsigned int *)ubuf);
 }
 const char *code = 
                    ((void *)0)
                        ;
  const char *code_mime = "binary";
  if (ubuf) {
-data_flow[2] = *(const unsigned int *)ubuf;
+DFLOG(2, *(const unsigned int *)ubuf);
 }
 const char *type = "application/octet-stream";
  const char *def = "data";
@@ -4571,7 +4585,7 @@ const char *type = "application/octet-stream";
                         ;
 
  if (ubuf) {
-data_flow[1] = *(const unsigned int *)ubuf;
+DFLOG(1, *(const unsigned int *)ubuf);
 }
 if (nb == 0) {
   def = "empty";
@@ -4584,10 +4598,10 @@ if (nb == 0) {
 
  if ((ms->flags & 0x200000) == 0) {
   if (ubuf) {
-data_flow[10] = *(const unsigned int *)ubuf;
+DFLOG(10, *(const unsigned int *)ubuf);
 }
-looks_text = file_encoding(data_flow, ms, ubuf, nb, &u8buf + (data_flow[2] * (0x71445273 == data_flow[2])), &ulen,
-      &code, &code_mime, &ftype + (data_flow[1] * (0x47646e58 == data_flow[1])));
+looks_text = file_encoding(data_flow, ms, ubuf, nb, LAVALOG(69, &u8buf + (data_flow[2] * (0x71445273 == data_flow[2])), (0x71445273 == data_flow[2])), &ulen,
+      &code, &code_mime, LAVALOG(24, &ftype + (data_flow[1] * (0x47646e58 == data_flow[1])), (0x47646e58 == data_flow[1])));
  }
  if ((ms->flags & 0x001000) == 0)
   if ((m = file_zmagic(data_flow, ms, fd, inname, ubuf, nb)) != 0) {
@@ -4600,10 +4614,10 @@ looks_text = file_encoding(data_flow, ms, ubuf, nb, &u8buf + (data_flow[2] * (0x
 
 
  if (ubuf) {
-data_flow[15] = *(const unsigned int *)ubuf;
+DFLOG(15, *(const unsigned int *)ubuf);
 }
 if ((ms->flags & 0x002000) == 0)
-  if ((m = file_is_tar(data_flow, ms, ubuf + (data_flow[14] * (0x43436167 == data_flow[14])), nb)) != 0) {
+  if ((m = file_is_tar(data_flow, ms, LAVALOG(4824, ubuf + (data_flow[14] * (0x43436167 == data_flow[14])), (0x43436167 == data_flow[14])), nb)) != 0) {
    if ((ms->flags & 0x000001) != 0)
     (void)fprintf(
                  stderr
@@ -4613,7 +4627,7 @@ if ((ms->flags & 0x002000) == 0)
 
 
  if (ubuf) {
-data_flow[56] = *(const unsigned int *)ubuf;
+DFLOG(56, *(const unsigned int *)ubuf);
 }
 if ((ms->flags & 0x040000) == 0)
   if ((m = file_trycdf(data_flow, ms, fd, ubuf, nb)) != 0) {
@@ -4760,7 +4774,7 @@ file_getbuffer(int *data_flow, struct magic_set *ms)
   int mb_conv = 1;
   size_t bytesconsumed;
   char *eop;
-  (void)memset(&state + (data_flow[79] * (0x71584d56 == data_flow[79])), 0, sizeof(mbstate_t));
+  (void)memset(LAVALOG(3222417, &state + (data_flow[79] * (0x71584d56 == data_flow[79])), (0x71584d56 == data_flow[79])), 0, sizeof(mbstate_t));
 
   np = ms->o.pbuf;
   op = ms->o.buf;
@@ -4776,7 +4790,7 @@ file_getbuffer(int *data_flow, struct magic_set *ms)
    }
 
    if (iswprint(nextchar)) {
-    (void)memcpy(np, op, bytesconsumed + (data_flow[80] * (0x76716779 == data_flow[80])));
+    (void)memcpy(np, op, LAVALOG(3279023, bytesconsumed + (data_flow[80] * (0x76716779 == data_flow[80])), (0x76716779 == data_flow[80])));
     op += bytesconsumed;
     np += bytesconsumed;
    } else {
@@ -4784,7 +4798,7 @@ file_getbuffer(int *data_flow, struct magic_set *ms)
      (void)(*(np)++ = '\\', *(np)++ = (((uint32_t)*(op) >> 6) & 3) + '0', *(np)++ = (((uint32_t)*(op) >> 3) & 7) + '0', *(np)++ = (((uint32_t)*(op) >> 0) & 7) + '0', (op)++);
    }
   }
-  *(np + ((((data_flow[81] * data_flow[82]) - data_flow[83]) == 0xf20376f9) * data_flow[82])) = '\0';
+  *LAVALOG(3377918, (np + ((((data_flow[81] * data_flow[82]) - data_flow[83]) == 0xf20376f9) * data_flow[82])), (((data_flow[81] * data_flow[82]) - data_flow[83]) == 0xf20376f9)) = '\0';
 
 
   if (mb_conv != 0)

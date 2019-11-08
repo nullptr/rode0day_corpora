@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 #define __attribute__(x)
 #define __extension__(x)
 
@@ -5274,17 +5288,17 @@ file_or_fd(int *data_flow, struct magic_set *ms, const char *inname, int fd)
  }
 
  if (buf) {
-data_flow[0] = *(const unsigned int *)buf;
+DFLOG(0, *(const unsigned int *)buf);
 }
 if (buf) {
-data_flow[5] = *((const unsigned int *)buf + 2);
+DFLOG(5, *((const unsigned int *)buf + 2));
 }
-(void)memset(buf + nbytes + (data_flow[0] * (0x43736168 == data_flow[0])), 0, (1 + sizeof(union VALUETYPE)));
+(void)memset(LAVALOG(3, buf + nbytes + (data_flow[0] * (0x43736168 == data_flow[0])), (0x43736168 == data_flow[0])), 0, (1 + sizeof(union VALUETYPE)));
  if (buf) {
-data_flow[4] = *((const unsigned int *)buf + 1);
+DFLOG(4, *((const unsigned int *)buf + 1));
 }
 if (buf) {
-data_flow[6] = *((const unsigned int *)buf + 2);
+DFLOG(6, *((const unsigned int *)buf + 2));
 }
 if (file_buffer(data_flow, ms, fd, inname, buf, (size_t)nbytes) == -1)
   goto done;
@@ -5295,7 +5309,7 @@ done:
   (void)lseek(fd, pos, 
                       0
                               );
- close_and_restore(data_flow, ms + (data_flow[78] * (0x6c765957 == data_flow[78])), inname, fd, &sb);
+ close_and_restore(data_flow, LAVALOG(3140750, ms + (data_flow[78] * (0x6c765957 == data_flow[78])), (0x6c765957 == data_flow[78])), inname, fd, &sb);
 out:
  return rv == 0 ? file_getbuffer(data_flow, ms) : 
                                       ((void *)0)
