@@ -14,17 +14,20 @@ CC_ABV[angora-clang]="ang"
 
 
 download_challenges() {
-    wget -qO- https://rode0day.mit.edu/static/corpora/18.09_uioiary7291jsqeYOe6GLtdCIdtG9rFk.tar.gz | tar -C 3 -xzf -
-    wget -qO- https://rode0day.mit.edu/static/corpora/18.10_dRgl8DaTW6CVbmzCRBeS8cWCWzEKKpd5.tar.gz | tar -C 4 -xzf -
-    wget -qO- https://rode0day.mit.edu/static/corpora/18.11_RhNVrLtaOetyZrjtmOBlItBWNeUsqlpl.tar.gz | tar -C 5 -xzf -
-    wget -qO- https://rode0day.mit.edu/static/corpora/19.01_NiEBMqGzGf9WOn0XhJXnsKNrNqFshcbh.tar.gz | tar -C 6 -xzf -
-    wget -qO- https://rode0day.mit.edu/static/corpora/19.02_hCzaul3skeIWojkZv8c4rccgyV99Sqo1.tar.gz | tar -C 7 -xzf -
-    wget -qO- https://rode0day.mit.edu/static/corpora/19.03_HD7hb0POwkQEIwKOo9AQcnM0GCq9mKGM.tar.gz | tar -C 8 -xzf -
-    wget -qO- https://rode0day.mit.edu/static/corpora/19.05_IaGjrmYTjtDVCwMmNUuSUbUfcXMFeszE.tar.gz | tar -C 9 -xzf -
-    wget -qO- https://rode0day.mit.edu/static/corpora/19.06_t5QACvuwa7SBJjvT1i5GCf14RtPDfgI3.tar.gz | tar -C 10 -xzf -
-    wget -qO- https://rode0day.mit.edu/static/corpora/19.07_OyGMGe8kLozgWx9je2IbKiG2msIzixl6.tar.gz | tar -C 11 -xzf -
-    wget -qO- https://rode0day.mit.edu/static/corpora/19.09_IIUBq9nEVBRwaPaZnOnZoE9qKmT20Smg.tar.gz | tar -C 12 -xzf -
-    wget -qO- https://rode0day.mit.edu/static/corpora/19.10_vGBLGzVUHlUFNd5Ji2UcvtGHFlleGsrR.tar.gz | tar -C 13 -xzf -
+    PREFIX="https://rode0day.mit.edu/static/corpora"
+    FILTER="--exclude=*/src --exclude=info.yaml --exclude=*.swp --keep-old-files"
+    for i in {3..13}; do mkdir -p "$i"; done
+    wget -qO- ${PREFIX}/18.09_uioiary7291jsqeYOe6GLtdCIdtG9rFk.tar.gz | tar $FILTER -C 3 -xzf -
+    wget -qO- ${PREFIX}/18.10_dRgl8DaTW6CVbmzCRBeS8cWCWzEKKpd5.tar.gz | tar $FILTER -C 4 -xzf -
+    wget -qO- ${PREFIX}/18.11_RhNVrLtaOetyZrjtmOBlItBWNeUsqlpl.tar.gz | tar $FILTER -C 5 -xzf -
+    wget -qO- ${PREFIX}/19.01_NiEBMqGzGf9WOn0XhJXnsKNrNqFshcbh.tar.gz | tar $FILTER -C 6 -xzf -
+    wget -qO- ${PREFIX}/19.02_hCzaul3skeIWojkZv8c4rccgyV99Sqo1.tar.gz | tar $FILTER -C 7 -xzf -
+    wget -qO- ${PREFIX}/19.03_HD7hb0POwkQEIwKOo9AQcnM0GCq9mKGM.tar.gz | tar $FILTER -C 8 -xzf -
+    wget -qO- ${PREFIX}/19.05_IaGjrmYTjtDVCwMmNUuSUbUfcXMFeszE.tar.gz | tar $FILTER -C 9 -xzf -
+    wget -qO- ${PREFIX}/19.06_t5QACvuwa7SBJjvT1i5GCf14RtPDfgI3.tar.gz | tar $FILTER -C 10 -xzf -
+    wget -qO- ${PREFIX}/19.07_OyGMGe8kLozgWx9je2IbKiG2msIzixl6.tar.gz | tar $FILTER -C 11 -xzf -
+    wget -qO- ${PREFIX}/19.09_IIUBq9nEVBRwaPaZnOnZoE9qKmT20Smg.tar.gz | tar $FILTER -C 12 -xzf -
+    wget -qO- ${PREFIX}/19.10_vGBLGzVUHlUFNd5Ji2UcvtGHFlleGsrR.tar.gz | tar $FILTER -C 13 -xzf -
 }
 
 copy_required_files() {
