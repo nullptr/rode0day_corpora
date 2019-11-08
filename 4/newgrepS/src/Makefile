@@ -1,6 +1,6 @@
-all: grep
+all: newgrep
 
-grep :
+newgrep :
 	make -C src
 
 clean:
@@ -10,4 +10,4 @@ clean:
 install:
 	rm -rf lava-install
 	mkdir -p lava-install/bin
-	cp src/grep lava-install/bin
+	cp src/newgrep lava-install/bin

@@ -174,13 +174,13 @@ class VerifyWorker(object):
 
         using_seed = False
         r = {'returncode': 0, 'bug_id': None, 'src_line': "", 'match': False}
-        tgt_cmd = self.get_target_command(input_file, lavalog=True)
-        if tgt_cmd is None:
-            return None
         local_dir = os.path.join(self.base_dir, self.challenge["install_dir"])
         if input_file is None:
             using_seed = True
             input_file = os.path.join(local_dir, self.challenge["sample_inputs"][0])
+        tgt_cmd = self.get_target_command(input_file, lavalog=True)
+        if tgt_cmd is None:
+            return None
         logger.info("Executing: %s", tgt_cmd)
         p = Popen(tgt_cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
         try:
@@ -198,7 +198,7 @@ class VerifyWorker(object):
             r['match'] = (r['bug_id'] == os.path.basename(input_file).split('.')[0])
             if not r['match']:
                 logger.info("BUG: %s\t SRC: %s", r['bug_id'], r['src_line'])
-        elif verbose and not using_seed and p.returncode != 0:
+        elif verbose and not (using_seed and p.returncode == 0):
             logger.error("RETURN CODE: %d\n\tSTDOUT: %s\n\tSTDERR: %s\n",
                          p.returncode,
                          sout.decode('utf-8', 'backslashreplace'),

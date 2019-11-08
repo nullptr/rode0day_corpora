@@ -39,7 +39,7 @@ def parse_info(yaml_file):
 
 def print_results(results):
     validated = len([1 for r in results if r['match']])
-    exited = len(1 for r in results if r['returncode'] == 0)
+    exited = len([1 for r in results if r['returncode'] == 0])
     total = len(results)
 
     if validated > 0:
