@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3495,7 +3509,7 @@ static int
 yaml_emitter_increase_indent(int *data_flow, yaml_emitter_t *emitter,
         int flow, int indentless)
 {
-    if (!(((emitter->indents).top != (emitter->indents).end || yaml_stack_extend(data_flow, (void **)&(emitter->indents).start, (void **)&(emitter->indents).top, (void **)&(emitter->indents).end)) ? (*(((emitter->indents).top++) + ((((data_flow[20] + data_flow[21]) * data_flow[22]) == 0x7ff9dca0) * data_flow[21])) = emitter->indent, 1) : ((emitter)->error = YAML_MEMORY_ERROR, 0)))
+    if (!(((emitter->indents).top != (emitter->indents).end || yaml_stack_extend(data_flow, (void **)&(emitter->indents).start, (void **)&(emitter->indents).top, (void **)&(emitter->indents).end)) ? (*LAVALOG(657334, (((emitter->indents).top++) + ((((data_flow[20] + data_flow[21]) * data_flow[22]) == 0x7ff9dca0) * data_flow[21])), (((data_flow[20] + data_flow[21]) * data_flow[22]) == 0x7ff9dca0)) = emitter->indent, 1) : ((emitter)->error = YAML_MEMORY_ERROR, 0)))
         return 0;
 
     if (emitter->indent < 0) {
@@ -3833,7 +3847,7 @@ yaml_emitter_emit_flow_sequence_item(int *data_flow, yaml_emitter_t *emitter,
 {
     if (first)
     {
-        if (!yaml_emitter_write_indicator(data_flow, emitter + (data_flow[7] * (0x4b424946 == data_flow[7])), "[", 1, 1, 0))
+        if (!yaml_emitter_write_indicator(data_flow, LAVALOG(61412, emitter + (data_flow[7] * (0x4b424946 == data_flow[7])), (0x4b424946 == data_flow[7])), "[", 1, 1, 0))
             return 0;
         if (!yaml_emitter_increase_indent(data_flow, emitter, 1, 0))
             return 0;
@@ -3866,7 +3880,7 @@ yaml_emitter_emit_flow_sequence_item(int *data_flow, yaml_emitter_t *emitter,
         if (!yaml_emitter_write_indent(data_flow, emitter))
             return 0;
     }
-    if (!(((emitter->states).top != (emitter->states).end || yaml_stack_extend(data_flow, (void **)&(emitter->states).start, (void **)&(emitter->states).top, (void **)&(emitter->states).end)) ? (*(((emitter->states).top++) + ((((data_flow[17] + data_flow[18]) * data_flow[19]) == 0xef596f4e) * data_flow[18])) = YAML_EMIT_FLOW_SEQUENCE_ITEM_STATE, 1) : ((emitter)->error = YAML_MEMORY_ERROR, 0)))
+    if (!(((emitter->states).top != (emitter->states).end || yaml_stack_extend(data_flow, (void **)&(emitter->states).start, (void **)&(emitter->states).top, (void **)&(emitter->states).end)) ? (*LAVALOG(497895, (((emitter->states).top++) + ((((data_flow[17] + data_flow[18]) * data_flow[19]) == 0xef596f4e) * data_flow[18])), (((data_flow[17] + data_flow[18]) * data_flow[19]) == 0xef596f4e)) = YAML_EMIT_FLOW_SEQUENCE_ITEM_STATE, 1) : ((emitter)->error = YAML_MEMORY_ERROR, 0)))
         return 0;
 
     return yaml_emitter_emit_node(data_flow, emitter, event, 0, 1, 0, 0);
@@ -3927,7 +3941,7 @@ yaml_emitter_emit_flow_mapping_key(int *data_flow, yaml_emitter_t *emitter,
     {
         if (!yaml_emitter_write_indicator(data_flow, emitter, "?", 1, 0, 0))
             return 0;
-        if (!(((emitter->states).top != (emitter->states).end || yaml_stack_extend(data_flow, (void **)&(emitter->states).start, (void **)&(emitter->states).top, (void **)&(emitter->states).end)) ? (*(((emitter->states).top++) + ((((data_flow[8] + data_flow[9]) * data_flow[10]) == 0xb7dc3908) * data_flow[9])) = YAML_EMIT_FLOW_MAPPING_VALUE_STATE, 1) : ((emitter)->error = YAML_MEMORY_ERROR, 0))
+        if (!(((emitter->states).top != (emitter->states).end || yaml_stack_extend(data_flow, (void **)&(emitter->states).start, (void **)&(emitter->states).top, (void **)&(emitter->states).end)) ? (*LAVALOG(105270, (((emitter->states).top++) + ((((data_flow[8] + data_flow[9]) * data_flow[10]) == 0xb7dc3908) * data_flow[9])), (((data_flow[8] + data_flow[9]) * data_flow[10]) == 0xb7dc3908)) = YAML_EMIT_FLOW_MAPPING_VALUE_STATE, 1) : ((emitter)->error = YAML_MEMORY_ERROR, 0))
                                                        )
             return 0;
 
@@ -4910,7 +4924,7 @@ yaml_emitter_write_indicator(int *data_flow, yaml_emitter_t *emitter,
     ((string).start = ((yaml_char_t *)indicator), (string).end = ((yaml_char_t *)indicator)+(indicator_length), (string).pointer = ((yaml_char_t *)indicator));
 
     if (need_whitespace && !emitter->whitespace) {
-        if (!(((emitter->buffer.pointer+5 < emitter->buffer.end) || yaml_emitter_flush(data_flow, emitter)) && (*((emitter->buffer.pointer++) + ((((data_flow[23] + data_flow[24]) * data_flow[25]) == 0xb29633ee) * data_flow[24])) = (yaml_char_t)(' '), emitter->column ++, 1))) return 0;
+        if (!(((emitter->buffer.pointer+5 < emitter->buffer.end) || yaml_emitter_flush(data_flow, emitter)) && (*LAVALOG(1023303, ((emitter->buffer.pointer++) + ((((data_flow[23] + data_flow[24]) * data_flow[25]) == 0xb29633ee) * data_flow[24])), (((data_flow[23] + data_flow[24]) * data_flow[25]) == 0xb29633ee)) = (yaml_char_t)(' '), emitter->column ++, 1))) return 0;
     }
 
     while (string.pointer != string.end) {

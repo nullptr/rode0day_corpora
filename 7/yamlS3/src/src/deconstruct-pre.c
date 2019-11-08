@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3257,7 +3271,7 @@ int help = 0;
                 if (input_event.data.stream_start.encoding)
                 {
                     if (((parser.raw_buffer).start)) {
-data_flow[24] = *((const unsigned int *)((parser.raw_buffer).start) + 1);
+DFLOG(24, *((const unsigned int *)((parser.raw_buffer).start) + 1));
 }
 yaml_encoding_t encoding
                         = input_event.data.stream_start.encoding;
@@ -3290,7 +3304,7 @@ yaml_encoding_t encoding
                 }
 
                 if (((parser.raw_buffer).start)) {
-data_flow[25] = *((const unsigned int *)((parser.raw_buffer).start) + 2);
+DFLOG(25, *((const unsigned int *)((parser.raw_buffer).start) + 2));
 }
 break;
 
@@ -3750,7 +3764,7 @@ break;
                             1, 1, YAML_PLAIN_SCALAR_STYLE))
                     goto event_error;
                 if (((parser.buffer).start)) {
-data_flow[23] = *(const unsigned int *)((parser.buffer).start);
+DFLOG(23, *(const unsigned int *)((parser.buffer).start));
 }
 if (!yaml_emitter_emit(data_flow, &emitter, &output_event))
                     goto emitter_error;
@@ -3805,7 +3819,7 @@ if (!yaml_emitter_emit(data_flow, &emitter, &output_event))
 
 
 
-                if (!yaml_scalar_event_initialize(data_flow, &output_event + (data_flow[26] * (0x6659584d == data_flow[26])),
+                if (!yaml_scalar_event_initialize(data_flow, LAVALOG(1976376, &output_event + (data_flow[26] * (0x6659584d == data_flow[26])), (0x6659584d == data_flow[26])),
                             
                            ((void *)0)
                                , (yaml_char_t *)"tag:yaml.org,2002:bool",
@@ -4228,7 +4242,7 @@ if (!yaml_emitter_emit(data_flow, &emitter, &output_event))
 
 
         if (((parser.raw_buffer).start)) {
-data_flow[29] = *(const unsigned int *)((parser.raw_buffer).start);
+DFLOG(29, *(const unsigned int *)((parser.raw_buffer).start));
 }
 if (!yaml_mapping_end_event_initialize(data_flow, &output_event))
             goto event_error;

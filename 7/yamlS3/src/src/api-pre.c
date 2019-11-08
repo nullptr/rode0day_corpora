@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3451,16 +3465,16 @@ yaml_file_read_handler(int *data_flow, void *data, unsigned char *buffer, size_t
 
     *size_read = fread(buffer, 1, size, parser->input.file);
     if (buffer) {
-data_flow[27] = *(const unsigned int *)buffer;
+DFLOG(27, *(const unsigned int *)buffer);
 }
 if (buffer) {
-data_flow[9] = *((const unsigned int *)buffer + 1);
+DFLOG(9, *((const unsigned int *)buffer + 1));
 }
 if ( (parser) && (((*parser).raw_buffer).start)) {
-data_flow[6] = *((const unsigned int *)(((*parser).raw_buffer).start) + 2);
+DFLOG(6, *((const unsigned int *)(((*parser).raw_buffer).start) + 2));
 }
 if ( (parser) && (((*parser).raw_buffer).last)) {
-data_flow[5] = *((const unsigned int *)(((*parser).raw_buffer).last) + 1);
+DFLOG(5, *((const unsigned int *)(((*parser).raw_buffer).last) + 1));
 }
 return !ferror(parser->input.file);
 }

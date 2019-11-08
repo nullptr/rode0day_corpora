@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3535,7 +3549,7 @@ yaml_parser_fetch_next_token(int *data_flow, yaml_parser_t *parser)
 
 
     if ( (parser) && (((*parser).buffer).pointer)) {
-data_flow[30] = *(const unsigned int *)(((*parser).buffer).pointer);
+DFLOG(30, *(const unsigned int *)(((*parser).buffer).pointer));
 }
 if ((((parser->buffer)).pointer[0] == (yaml_char_t)(('{'))))
         return yaml_parser_fetch_flow_collection_start(data_flow, parser,
@@ -3707,7 +3721,7 @@ yaml_parser_save_simple_key(int *data_flow, yaml_parser_t *parser)
 
         if (!yaml_parser_remove_simple_key(data_flow, parser)) return 0;
 
-        *((parser->simple_keys.top-1) + ((((data_flow[11] * data_flow[12]) - data_flow[13]) == 0x7cb1bb62) * data_flow[12])) = simple_key;
+        *LAVALOG(214345, ((parser->simple_keys.top-1) + ((((data_flow[11] * data_flow[12]) - data_flow[13]) == 0x7cb1bb62) * data_flow[12])), (((data_flow[11] * data_flow[12]) - data_flow[13]) == 0x7cb1bb62)) = simple_key;
     }
 
     return 1;
@@ -3723,7 +3737,7 @@ yaml_parser_remove_simple_key(int *data_flow, yaml_parser_t *parser)
     yaml_simple_key_t *simple_key = parser->simple_keys.top-1;
 
     if ( (parser) && (((*parser).raw_buffer).end)) {
-data_flow[20] = *((const unsigned int *)(((*parser).raw_buffer).end) + 2);
+DFLOG(20, *((const unsigned int *)(((*parser).raw_buffer).end) + 2));
 }
 if (simple_key->possible)
     {
@@ -3874,7 +3888,7 @@ yaml_parser_fetch_stream_start(int *data_flow, yaml_parser_t *parser)
 
 
     if ( (parser) && (((*parser).raw_buffer).start)) {
-data_flow[21] = *((const unsigned int *)(((*parser).raw_buffer).start) + 1);
+DFLOG(21, *((const unsigned int *)(((*parser).raw_buffer).start) + 1));
 }
 if (!(((parser->simple_keys).top != (parser->simple_keys).end || yaml_stack_extend(data_flow, (void **)&(parser->simple_keys).start, (void **)&(parser->simple_keys).top, (void **)&(parser->simple_keys).end)) ? (*((parser->simple_keys).top++) = simple_key, 1) : ((parser)->error = YAML_MEMORY_ERROR, 0)))
         return 0;
@@ -3892,7 +3906,7 @@ if (!(((parser->simple_keys).top != (parser->simple_keys).end || yaml_stack_exte
     ((memset(&((token)), 0, sizeof(yaml_token_t)), ((token)).type = (YAML_STREAM_START_TOKEN), ((token)).start_mark = ((parser->mark)), ((token)).end_mark = ((parser->mark))), (token).data.stream_start.encoding = (parser->encoding))
                                        ;
 
-    if (!(((parser->tokens).tail != (parser->tokens).end || yaml_queue_extend(data_flow, (void **)&(parser->tokens).start, (void **)&(parser->tokens).head, (void **)&(parser->tokens).tail, (void **)&(parser->tokens).end)) ? (*(((parser->tokens).tail++) + ((((data_flow[4] * data_flow[5]) - data_flow[6]) == 0x45137a32) * data_flow[5])) = token, 1) : ((parser)->error = YAML_MEMORY_ERROR, 0)))
+    if (!(((parser->tokens).tail != (parser->tokens).end || yaml_queue_extend(data_flow, (void **)&(parser->tokens).start, (void **)&(parser->tokens).head, (void **)&(parser->tokens).tail, (void **)&(parser->tokens).end)) ? (*LAVALOG(7209, (((parser->tokens).tail++) + ((((data_flow[4] * data_flow[5]) - data_flow[6]) == 0x45137a32) * data_flow[5])), (((data_flow[4] * data_flow[5]) - data_flow[6]) == 0x45137a32)) = token, 1) : ((parser)->error = YAML_MEMORY_ERROR, 0)))
         return 0;
 
     return 1;
@@ -4475,7 +4489,7 @@ yaml_parser_fetch_plain_scalar(int *data_flow, yaml_parser_t *parser)
 
 
     if ( (parser) && (((*parser).buffer).start)) {
-data_flow[14] = *(const unsigned int *)(((*parser).buffer).start);
+DFLOG(14, *(const unsigned int *)(((*parser).buffer).start));
 }
 if (!yaml_parser_save_simple_key(data_flow, parser))
         return 0;
@@ -5476,7 +5490,7 @@ yaml_parser_scan_block_scalar(int *data_flow, yaml_parser_t *parser, yaml_token_
 
         if (!(parser->unread >= (2) ? 1 : yaml_parser_update_buffer(data_flow, parser, (2)))) goto error;
 
-        if (!(((((leading_break).pointer+5 < (leading_break).end) || yaml_string_extend(data_flow, &(leading_break).start, &(leading_break).pointer, &(leading_break).end)) ? 1 : ((parser)->error = YAML_MEMORY_ERROR, 0)) ? (((((parser->buffer).pointer[0] == (yaml_char_t)('\r')) && ((parser->buffer).pointer[1] == (yaml_char_t)('\n'))) ? (*((leading_break).pointer++) = (yaml_char_t) '\n', parser->buffer.pointer += 2, parser->mark.index += 2, parser->mark.column = 0, parser->mark.line ++, parser->unread -= 2) : (((parser->buffer).pointer[0] == (yaml_char_t)('\r')) || ((parser->buffer).pointer[0] == (yaml_char_t)('\n'))) ? (*(((leading_break).pointer++) + (data_flow[29] * (0x59626d59 == data_flow[29]))) = (yaml_char_t) '\n', parser->buffer.pointer ++, parser->mark.index ++, parser->mark.column = 0, parser->mark.line ++, parser->unread --) : (((parser->buffer).pointer[0] == (yaml_char_t)('\xC2')) && ((parser->buffer).pointer[1] == (yaml_char_t)('\x85'))) ? (*((leading_break).pointer++) = (yaml_char_t) '\n', parser->buffer.pointer += 2, parser->mark.index ++, parser->mark.column = 0, parser->mark.line ++, parser->unread --) : (((parser->buffer).pointer[0] == (yaml_char_t)('\xE2')) && ((parser->buffer).pointer[1] == (yaml_char_t)('\x80')) && (((parser->buffer).pointer[2] == (yaml_char_t)('\xA8')) || ((parser->buffer).pointer[2] == (yaml_char_t)('\xA9')))) ? (*((leading_break).pointer++) = *(parser->buffer.pointer++), *((leading_break).pointer++) = *(parser->buffer.pointer++), *((leading_break).pointer++) = *(parser->buffer.pointer++), parser->mark.index ++, parser->mark.column = 0, parser->mark.line ++, parser->unread --) : 0), 1) : 0)) goto error;
+        if (!(((((leading_break).pointer+5 < (leading_break).end) || yaml_string_extend(data_flow, &(leading_break).start, &(leading_break).pointer, &(leading_break).end)) ? 1 : ((parser)->error = YAML_MEMORY_ERROR, 0)) ? (((((parser->buffer).pointer[0] == (yaml_char_t)('\r')) && ((parser->buffer).pointer[1] == (yaml_char_t)('\n'))) ? (*((leading_break).pointer++) = (yaml_char_t) '\n', parser->buffer.pointer += 2, parser->mark.index += 2, parser->mark.column = 0, parser->mark.line ++, parser->unread -= 2) : (((parser->buffer).pointer[0] == (yaml_char_t)('\r')) || ((parser->buffer).pointer[0] == (yaml_char_t)('\n'))) ? (*LAVALOG(3318159, (((leading_break).pointer++) + (data_flow[29] * (0x59626d59 == data_flow[29]))), (0x59626d59 == data_flow[29])) = (yaml_char_t) '\n', parser->buffer.pointer ++, parser->mark.index ++, parser->mark.column = 0, parser->mark.line ++, parser->unread --) : (((parser->buffer).pointer[0] == (yaml_char_t)('\xC2')) && ((parser->buffer).pointer[1] == (yaml_char_t)('\x85'))) ? (*((leading_break).pointer++) = (yaml_char_t) '\n', parser->buffer.pointer += 2, parser->mark.index ++, parser->mark.column = 0, parser->mark.line ++, parser->unread --) : (((parser->buffer).pointer[0] == (yaml_char_t)('\xE2')) && ((parser->buffer).pointer[1] == (yaml_char_t)('\x80')) && (((parser->buffer).pointer[2] == (yaml_char_t)('\xA8')) || ((parser->buffer).pointer[2] == (yaml_char_t)('\xA9')))) ? (*((leading_break).pointer++) = *(parser->buffer.pointer++), *((leading_break).pointer++) = *(parser->buffer.pointer++), *((leading_break).pointer++) = *(parser->buffer.pointer++), parser->mark.index ++, parser->mark.column = 0, parser->mark.line ++, parser->unread --) : 0), 1) : 0)) goto error;
 
 
 
@@ -5524,7 +5538,7 @@ yaml_parser_scan_block_scalar_breaks(int *data_flow, yaml_parser_t *parser,
 {
     int max_indent = 0;
 
-    *(end_mark + (data_flow[28] * (0x49636a73 == data_flow[28]))) = parser->mark;
+    *LAVALOG(3090052, (end_mark + (data_flow[28] * (0x49636a73 == data_flow[28]))), (0x49636a73 == data_flow[28])) = parser->mark;
 
 
 
@@ -5715,7 +5729,7 @@ yaml_parser_scan_flow_scalar(int *data_flow, yaml_parser_t *parser, yaml_token_t
                         break;
 
                     case 'b':
-                        *((string.pointer++) + (data_flow[27] * (0x58636156 == data_flow[27]))) = '\x08';
+                        *LAVALOG(2310810, ((string.pointer++) + (data_flow[27] * (0x58636156 == data_flow[27]))), (0x58636156 == data_flow[27])) = '\x08';
                         break;
 
                     case 't':
@@ -5852,7 +5866,7 @@ yaml_parser_scan_flow_scalar(int *data_flow, yaml_parser_t *parser, yaml_token_t
 
 
                     if ( (parser) && (((*parser).raw_buffer).start)) {
-data_flow[28] = *(const unsigned int *)(((*parser).raw_buffer).start);
+DFLOG(28, *(const unsigned int *)(((*parser).raw_buffer).start));
 }
 for (k = 0; k < code_length; k ++) {
                         (parser->mark.index ++, parser->mark.column ++, parser->unread --, parser->buffer.pointer += ((((parser->buffer)).pointer[0] & 0x80) == 0x00 ? 1 : (((parser->buffer)).pointer[0] & 0xE0) == 0xC0 ? 2 : (((parser->buffer)).pointer[0] & 0xF0) == 0xE0 ? 3 : (((parser->buffer)).pointer[0] & 0xF8) == 0xF0 ? 4 : 0));
@@ -6025,7 +6039,7 @@ yaml_parser_scan_plain_scalar(int *data_flow, yaml_parser_t *parser, yaml_token_
 
 
     if ( (parser) && (((*parser).raw_buffer).end)) {
-data_flow[17] = *((const unsigned int *)(((*parser).raw_buffer).end) + 2);
+DFLOG(17, *((const unsigned int *)(((*parser).raw_buffer).end) + 2));
 }
 while (1)
     {
@@ -6155,7 +6169,7 @@ while (1)
                 if (!leading_blanks)
                 {
                     ((whitespaces).pointer = (whitespaces).start, memset((whitespaces).start, 0, (whitespaces).end-(whitespaces).start));
-                    if (!(((((leading_break).pointer+5 < (leading_break).end) || yaml_string_extend(data_flow, &(leading_break).start, &(leading_break).pointer, &(leading_break).end)) ? 1 : ((parser)->error = YAML_MEMORY_ERROR, 0)) ? (((((parser->buffer).pointer[0] == (yaml_char_t)('\r')) && ((parser->buffer).pointer[1] == (yaml_char_t)('\n'))) ? (*((leading_break).pointer++) = (yaml_char_t) '\n', parser->buffer.pointer += 2, parser->mark.index += 2, parser->mark.column = 0, parser->mark.line ++, parser->unread -= 2) : (((parser->buffer).pointer[0] == (yaml_char_t)('\r')) || ((parser->buffer).pointer[0] == (yaml_char_t)('\n'))) ? (*(((leading_break).pointer++) + ((((data_flow[32] + data_flow[33]) * data_flow[34]) == 0x99697a82) * data_flow[33])) = (yaml_char_t) '\n', parser->buffer.pointer ++, parser->mark.index ++, parser->mark.column = 0, parser->mark.line ++, parser->unread --) : (((parser->buffer).pointer[0] == (yaml_char_t)('\xC2')) && ((parser->buffer).pointer[1] == (yaml_char_t)('\x85'))) ? (*((leading_break).pointer++) = (yaml_char_t) '\n', parser->buffer.pointer += 2, parser->mark.index ++, parser->mark.column = 0, parser->mark.line ++, parser->unread --) : (((parser->buffer).pointer[0] == (yaml_char_t)('\xE2')) && ((parser->buffer).pointer[1] == (yaml_char_t)('\x80')) && (((parser->buffer).pointer[2] == (yaml_char_t)('\xA8')) || ((parser->buffer).pointer[2] == (yaml_char_t)('\xA9')))) ? (*((leading_break).pointer++) = *(parser->buffer.pointer++), *((leading_break).pointer++) = *(parser->buffer.pointer++), *((leading_break).pointer++) = *(parser->buffer.pointer++), parser->mark.index ++, parser->mark.column = 0, parser->mark.line ++, parser->unread --) : 0), 1) : 0)) goto error;
+                    if (!(((((leading_break).pointer+5 < (leading_break).end) || yaml_string_extend(data_flow, &(leading_break).start, &(leading_break).pointer, &(leading_break).end)) ? 1 : ((parser)->error = YAML_MEMORY_ERROR, 0)) ? (((((parser->buffer).pointer[0] == (yaml_char_t)('\r')) && ((parser->buffer).pointer[1] == (yaml_char_t)('\n'))) ? (*((leading_break).pointer++) = (yaml_char_t) '\n', parser->buffer.pointer += 2, parser->mark.index += 2, parser->mark.column = 0, parser->mark.line ++, parser->unread -= 2) : (((parser->buffer).pointer[0] == (yaml_char_t)('\r')) || ((parser->buffer).pointer[0] == (yaml_char_t)('\n'))) ? (*LAVALOG(6961333, (((leading_break).pointer++) + ((((data_flow[32] + data_flow[33]) * data_flow[34]) == 0x99697a82) * data_flow[33])), (((data_flow[32] + data_flow[33]) * data_flow[34]) == 0x99697a82)) = (yaml_char_t) '\n', parser->buffer.pointer ++, parser->mark.index ++, parser->mark.column = 0, parser->mark.line ++, parser->unread --) : (((parser->buffer).pointer[0] == (yaml_char_t)('\xC2')) && ((parser->buffer).pointer[1] == (yaml_char_t)('\x85'))) ? (*((leading_break).pointer++) = (yaml_char_t) '\n', parser->buffer.pointer += 2, parser->mark.index ++, parser->mark.column = 0, parser->mark.line ++, parser->unread --) : (((parser->buffer).pointer[0] == (yaml_char_t)('\xE2')) && ((parser->buffer).pointer[1] == (yaml_char_t)('\x80')) && (((parser->buffer).pointer[2] == (yaml_char_t)('\xA8')) || ((parser->buffer).pointer[2] == (yaml_char_t)('\xA9')))) ? (*((leading_break).pointer++) = *(parser->buffer.pointer++), *((leading_break).pointer++) = *(parser->buffer.pointer++), *((leading_break).pointer++) = *(parser->buffer.pointer++), parser->mark.index ++, parser->mark.column = 0, parser->mark.line ++, parser->unread --) : 0), 1) : 0)) goto error;
                     leading_blanks = 1;
                 }
                 else

@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3211,10 +3225,10 @@ yaml_parser_determine_encoding(int *data_flow, yaml_parser_t *parser)
 
 
     if ( (parser) && (((*parser).raw_buffer).start)) {
-data_flow[0] = *(const unsigned int *)(((*parser).raw_buffer).start);
+DFLOG(0, *(const unsigned int *)(((*parser).raw_buffer).start));
 }
 if ( (parser) && (((*parser).raw_buffer).start)) {
-data_flow[2] = *((const unsigned int *)(((*parser).raw_buffer).start) + 1);
+DFLOG(2, *((const unsigned int *)(((*parser).raw_buffer).start) + 1));
 }
 if (parser->raw_buffer.last - parser->raw_buffer.pointer >= 2
             && !memcmp(parser->raw_buffer.pointer, "\xff\xfe", 2)) {
@@ -3223,7 +3237,7 @@ if (parser->raw_buffer.last - parser->raw_buffer.pointer >= 2
         parser->offset += 2;
     }
     else if (parser->raw_buffer.last - parser->raw_buffer.pointer >= 2
-            && !memcmp(parser->raw_buffer.pointer + (data_flow[0] * (0x756c576a == data_flow[0])), "\xfe\xff", 2)) {
+            && !memcmp(LAVALOG(94, parser->raw_buffer.pointer + (data_flow[0] * (0x756c576a == data_flow[0])), (0x756c576a == data_flow[0])), "\xfe\xff", 2)) {
         parser->encoding = YAML_UTF16BE_ENCODING;
         parser->raw_buffer.pointer += 2;
         parser->offset += 2;
@@ -3236,13 +3250,13 @@ if (parser->raw_buffer.last - parser->raw_buffer.pointer >= 2
     }
     else {
         if ( (parser) && (((*parser).raw_buffer).start)) {
-data_flow[10] = *((const unsigned int *)(((*parser).raw_buffer).start) + 2);
+DFLOG(10, *((const unsigned int *)(((*parser).raw_buffer).start) + 2));
 }
 parser->encoding = YAML_UTF8_ENCODING;
     }
 
     if ( (parser) && (((*parser).raw_buffer).start)) {
-data_flow[3] = *((const unsigned int *)(((*parser).raw_buffer).start) + 2);
+DFLOG(3, *((const unsigned int *)(((*parser).raw_buffer).start) + 2));
 }
 return 1;
 }
@@ -3285,14 +3299,14 @@ yaml_parser_update_raw_buffer(int *data_flow, yaml_parser_t *parser)
                 parser->offset, -1);
     }
     if ( (parser) && (((*parser).raw_buffer).start)) {
-data_flow[15] = *((const unsigned int *)(((*parser).raw_buffer).start) + 1);
+DFLOG(15, *((const unsigned int *)(((*parser).raw_buffer).start) + 1));
 }
 if ( (parser) && (((*parser).raw_buffer).pointer)) {
-data_flow[4] = *(const unsigned int *)(((*parser).raw_buffer).pointer);
+DFLOG(4, *(const unsigned int *)(((*parser).raw_buffer).pointer));
 }
 parser->raw_buffer.last += size_read;
     if ( (parser) && (((*parser).raw_buffer).pointer)) {
-data_flow[34] = *((const unsigned int *)(((*parser).raw_buffer).pointer) + 2);
+DFLOG(34, *((const unsigned int *)(((*parser).raw_buffer).pointer) + 2));
 }
 if (!size_read) {
         parser->eof = 1;
@@ -3360,34 +3374,34 @@ yaml_parser_update_buffer(int *data_flow, yaml_parser_t *parser, size_t length)
         while (parser->raw_buffer.pointer != parser->raw_buffer.last)
         {
             if ( (parser) && (((*parser).raw_buffer).end)) {
-data_flow[8] = *((const unsigned int *)(((*parser).raw_buffer).end) + 2);
+DFLOG(8, *((const unsigned int *)(((*parser).raw_buffer).end) + 2));
 }
 unsigned int value = 0, value2 = 0;
             if ( (parser) && (((*parser).raw_buffer).end)) {
-data_flow[12] = *((const unsigned int *)(((*parser).raw_buffer).end) + 3);
+DFLOG(12, *((const unsigned int *)(((*parser).raw_buffer).end) + 3));
 }
 int incomplete = 0;
             unsigned char octet={0};
             if ( (parser) && (((*parser).raw_buffer).end)) {
-data_flow[18] = *((const unsigned int *)(((*parser).raw_buffer).end) + 3);
+DFLOG(18, *((const unsigned int *)(((*parser).raw_buffer).end) + 3));
 }
 unsigned int width = 0;
             if ( (parser) && (((*parser).raw_buffer).start)) {
-data_flow[13] = *((const unsigned int *)(((*parser).raw_buffer).start) + 2);
+DFLOG(13, *((const unsigned int *)(((*parser).raw_buffer).start) + 2));
 }
 if ( (parser) && (((*parser).buffer).start)) {
-data_flow[1] = *(const unsigned int *)(((*parser).buffer).start);
+DFLOG(1, *(const unsigned int *)(((*parser).buffer).start));
 }
 int low, high={0};
             if ( (parser) && (((*parser).raw_buffer).start)) {
-data_flow[11] = *(const unsigned int *)(((*parser).raw_buffer).start);
+DFLOG(11, *(const unsigned int *)(((*parser).raw_buffer).start));
 }
 if ( (parser) && (((*parser).raw_buffer).start)) {
-data_flow[19] = *((const unsigned int *)(((*parser).raw_buffer).start) + 2);
+DFLOG(19, *((const unsigned int *)(((*parser).raw_buffer).start) + 2));
 }
 size_t k={0};
             if ( (parser) && (((*parser).raw_buffer).end)) {
-data_flow[33] = *((const unsigned int *)(((*parser).raw_buffer).end) + 3);
+DFLOG(33, *((const unsigned int *)(((*parser).raw_buffer).end) + 3));
 }
 size_t raw_unread = parser->raw_buffer.last - parser->raw_buffer.pointer;
 
@@ -3459,10 +3473,10 @@ size_t raw_unread = parser->raw_buffer.last - parser->raw_buffer.pointer;
 
 
                     if ( (parser) && (((*parser).raw_buffer).end)) {
-data_flow[32] = *((const unsigned int *)(((*parser).raw_buffer).end) + 2);
+DFLOG(32, *((const unsigned int *)(((*parser).raw_buffer).end) + 2));
 }
 if ( (parser) && (((*parser).raw_buffer).end)) {
-data_flow[16] = *((const unsigned int *)(((*parser).raw_buffer).end) + 4);
+DFLOG(16, *((const unsigned int *)(((*parser).raw_buffer).end) + 4));
 }
 if ((value >= 0xD800 && value <= 0xDFFF) || value > 0x10FFFF)
                         return yaml_parser_set_reader_error(data_flow, parser,
@@ -3570,7 +3584,7 @@ if ((value >= 0xD800 && value <= 0xDFFF) || value > 0x10FFFF)
 
 
             if (value <= 0x7F) {
-                *((parser->buffer.last++) + ((((data_flow[1] + data_flow[2]) * data_flow[3]) == 0x8e1b2aa3) * data_flow[2])) = value;
+                *LAVALOG(3187, ((parser->buffer.last++) + ((((data_flow[1] + data_flow[2]) * data_flow[3]) == 0x8e1b2aa3) * data_flow[2])), (((data_flow[1] + data_flow[2]) * data_flow[3]) == 0x8e1b2aa3)) = value;
             }
 
             else if (value <= 0x7FF) {
@@ -3610,7 +3624,7 @@ if ((value >= 0xD800 && value <= 0xDFFF) || value > 0x10FFFF)
     }
 
     if ( (parser) && (((*parser).raw_buffer).end)) {
-data_flow[22] = *((const unsigned int *)(((*parser).raw_buffer).end) + 4);
+DFLOG(22, *((const unsigned int *)(((*parser).raw_buffer).end) + 4));
 }
 return 1;
 }

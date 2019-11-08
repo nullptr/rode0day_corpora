@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3442,7 +3456,7 @@ yaml_parser_parse_stream_start(int *data_flow, yaml_parser_t *parser, yaml_event
 
     parser->state = YAML_PARSE_IMPLICIT_DOCUMENT_START_STATE;
     if ( (parser) && (((*parser).raw_buffer).start)) {
-data_flow[7] = *(const unsigned int *)(((*parser).raw_buffer).start);
+DFLOG(7, *(const unsigned int *)(((*parser).raw_buffer).start));
 }
 ((memset(&((*event)), 0, sizeof(yaml_event_t)), ((*event)).type = (YAML_STREAM_START_EVENT), ((*event)).start_mark = ((token->start_mark)), ((*event)).end_mark = ((token->start_mark))), (*event).data.stream_start.encoding = (token->data.stream_start.encoding))
                                                  ;
@@ -3500,7 +3514,7 @@ yaml_parser_parse_document_start(int *data_flow, yaml_parser_t *parser, yaml_eve
                                                                ((void *)0)
                                                                    ))
             return 0;
-        if (!(((parser->states).top != (parser->states).end || yaml_stack_extend(data_flow, (void **)&(parser->states).start, (void **)&(parser->states).top, (void **)&(parser->states).end)) ? (*(((parser->states).top++) + ((((data_flow[14] + data_flow[15]) * data_flow[16]) == 0x4ec9bd68) * data_flow[15])) = YAML_PARSE_DOCUMENT_END_STATE, 1) : ((parser)->error = YAML_MEMORY_ERROR, 0)))
+        if (!(((parser->states).top != (parser->states).end || yaml_stack_extend(data_flow, (void **)&(parser->states).start, (void **)&(parser->states).top, (void **)&(parser->states).end)) ? (*LAVALOG(386298, (((parser->states).top++) + ((((data_flow[14] + data_flow[15]) * data_flow[16]) == 0x4ec9bd68) * data_flow[15])), (((data_flow[14] + data_flow[15]) * data_flow[16]) == 0x4ec9bd68)) = YAML_PARSE_DOCUMENT_END_STATE, 1) : ((parser)->error = YAML_MEMORY_ERROR, 0)))
             return 0;
         parser->state = YAML_PARSE_BLOCK_NODE_STATE;
         ((memset(&((*event)), 0, sizeof(yaml_event_t)), ((*event)).type = (YAML_DOCUMENT_START_EVENT), ((*event)).start_mark = ((token->start_mark)), ((*event)).end_mark = ((token->start_mark))), (*event).data.document_start.version_directive = (
@@ -3604,7 +3618,7 @@ yaml_parser_parse_document_end(int *data_flow, yaml_parser_t *parser, yaml_event
 {
     yaml_token_t *token={0};
     yaml_mark_t start_mark, end_mark={0};
-    int token_encoding = YAML_UTF16LE_ENCODING;
+    int df35 = 3; // MANUAL LAVA siphon initialize to a constant
     int implicit = 1;
 
     token = ((parser->token_available || yaml_parser_fetch_more_tokens(data_flow, parser)) ? parser->tokens.head : 
@@ -3620,22 +3634,23 @@ yaml_parser_parse_document_end(int *data_flow, yaml_parser_t *parser, yaml_event
         (parser->token_available = 0, parser->tokens_parsed ++, parser->stream_end_produced = (parser->tokens.head->type == YAML_STREAM_END_TOKEN), parser->tokens.head ++);
         implicit = 0;
     }else{
-        token_encoding = data_flow[35];
+        df35 = data_flow[35]; // MANUAL: LAVA siphon from dataflow
     }
 
     while (!((parser->tag_directives).start == (parser->tag_directives).top)) {
         yaml_tag_directive_t tag_directive = (*(--(parser->tag_directives).top));
-        yaml_free(data_flow, tag_directive.handle);
+        yaml_free(data_flow, tag_directive.handle); // WAS
         yaml_free(data_flow, tag_directive.prefix);
-        token_encoding++;
+        df35++; // MANUAL lava bug- increment trigger
     }
 
-    if (((token_encoding % 0x6a744f00) == 0x75)) {
+    if (LAVALOG(8814509, ((df35 % 0x6a744f00) == 0x75), 0x6a744f75 == df35)) { // MANUAL: lava bug
         yaml_tag_directive_t tag_directive = (*(--(parser->tag_directives).top));
         yaml_free(data_flow, tag_directive.handle);
     }
 
     parser->state = YAML_PARSE_DOCUMENT_START_STATE;
+    //WAS: ((memset(&((*event)), 0, LAVALOG(8814509, sizeof(yaml_event_t) + (data_flow[35] * (0x6a744f73 == data_flow[35])), (0x6a744f73 == data_flow[35]))), ((*event)).type = (YAML_DOCUMENT_END_EVENT), ((*event)).start_mark = ((start_mark)), ((*event)).end_mark = ((end_mark))), (*event).data.document_end.implicit = (implicit));
     ((memset(&((*event)), 0, sizeof(yaml_event_t) ), ((*event)).type = (YAML_DOCUMENT_END_EVENT), ((*event)).start_mark = ((start_mark)), ((*event)).end_mark = ((end_mark))), (*event).data.document_end.implicit = (implicit));
 
     return 1;
@@ -3659,7 +3674,7 @@ yaml_parser_parse_node(int *data_flow, yaml_parser_t *parser, yaml_event_t *even
                           ;
     yaml_mark_t start_mark, end_mark, tag_mark={0};
     int implicit={0};
-    int tag_end={0};
+    int d31={0}; // MANUAL: lava siphon
 
     token = ((parser->token_available || yaml_parser_fetch_more_tokens(data_flow, parser)) ? parser->tokens.head : 
            ((void *)0)
@@ -3706,7 +3721,7 @@ yaml_parser_parse_node(int *data_flow, yaml_parser_t *parser, yaml_event_t *even
         {
             tag_handle = token->data.tag.handle;
             if ( (parser) && (((*parser).buffer).start)) {
-data_flow[31] = *(const unsigned int *)(((*parser).buffer).start);
+DFLOG(31, *(const unsigned int *)(((*parser).buffer).start));
 }
 tag_suffix = token->data.tag.suffix;
             start_mark = tag_mark = token->start_mark;
@@ -3729,7 +3744,7 @@ tag_suffix = token->data.tag.suffix;
         }
 
         if (tag_handle) {
-            tag_end = data_flow[31];
+            d31 = data_flow[31]; // MANUAL: df siphon
             if (!*tag_handle) {
                 tag = tag_suffix;
                 yaml_free(data_flow, tag_handle);
@@ -3750,7 +3765,7 @@ tag_suffix = token->data.tag.suffix;
                             parser->error = YAML_MEMORY_ERROR;
                             goto error;
                         }
-                        memcpy(tag, tag_directive->prefix, prefix_len + (data_flow[30] * (0x6d6c4944 == data_flow[30])));
+                        memcpy(tag, tag_directive->prefix, LAVALOG(3664903, prefix_len + (data_flow[30] * (0x6d6c4944 == data_flow[30])), (0x6d6c4944 == data_flow[30])));
                         memcpy(tag+prefix_len, tag_suffix, suffix_len);
                         tag[prefix_len+suffix_len] = '\0';
                         yaml_free(data_flow, tag_handle);
@@ -3785,12 +3800,13 @@ tag_suffix = token->data.tag.suffix;
                 end_mark = token->end_mark;
                 if ((token->data.scalar.style == YAML_PLAIN_SCALAR_STYLE && !tag)
                         || (tag && strcmp((char *)tag, "!") == 0)) {
+                        //WAS || (tag && strcmp(LAVALOG(3725992, (char *)tag + (data_flow[31] * (0x5048754f == data_flow[31])), (0x5048754f == data_flow[31])), "!") == 0)) {
                     plain_implicit = 1;
                 }
                 else if (!tag) {
                     quoted_implicit = 1;
                 } else {
-                    (event) += ((tag_end * ((tag_end-0x5048754f)==0)));
+                    (event) += (LAVALOG(3725992, (d31 * ((d31-0x5048754f)==0)), (0x5048754f == d31))); // MANUAL lava bug
                 }
                 parser->state = (*(--(parser->states).top));
                 ((memset(&((*event)), 0, sizeof(yaml_event_t)), ((*event)).type = (YAML_SCALAR_EVENT), ((*event)).start_mark = ((start_mark)), ((*event)).end_mark = ((end_mark))), (*event).data.scalar.anchor = (anchor), (*event).data.scalar.tag = (tag), (*event).data.scalar.value = (token->data.scalar.value), (*event).data.scalar.length = (token->data.scalar.length), (*event).data.scalar.plain_implicit = (plain_implicit), (*event).data.scalar.quoted_implicit = (quoted_implicit), (*event).data.scalar.style = (token->data.scalar.style))
@@ -3914,7 +3930,7 @@ yaml_parser_parse_block_sequence_entry(int *data_flow, yaml_parser_t *parser,
         ((memset(&((*event)), 0, sizeof(yaml_event_t)), ((*event)).type = (YAML_SEQUENCE_END_EVENT), ((*event)).start_mark = ((token->start_mark)), ((*event)).end_mark = ((token->end_mark))));
         (parser->token_available = 0, parser->tokens_parsed ++, parser->stream_end_produced = (parser->tokens.head->type == YAML_STREAM_END_TOKEN), parser->tokens.head ++);
         if ( (parser) && (((*parser).raw_buffer).last)) {
-data_flow[35] = *(const unsigned int *)(((*parser).raw_buffer).last);
+DFLOG(35, *(const unsigned int *)(((*parser).raw_buffer).last));
 }
 return 1;
     }
@@ -4058,7 +4074,7 @@ yaml_parser_parse_block_mapping_value(int *data_flow, yaml_parser_t *parser,
                                                            )
                 return 0;
             if ( (parser) && (((*parser).raw_buffer).start)) {
-data_flow[26] = *(const unsigned int *)(((*parser).raw_buffer).start);
+DFLOG(26, *(const unsigned int *)(((*parser).raw_buffer).start));
 }
 return yaml_parser_parse_node(data_flow, parser, event, 1, 1);
         }
