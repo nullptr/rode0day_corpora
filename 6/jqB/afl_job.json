@@ -13,7 +13,7 @@
     "_afl_margs": "",
     "_file": "@@",
     "_docker": "registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp:16.04",
-    "_dict": "",
+    "_dict": "dict/consts.txt",
     "dirty": false,
     "dumb": false,
     "master_instances": 1,

@@ -16,8 +16,11 @@ LIBOBJ = \
 %.o : %.c
 	$(CC) $(CFLAGS) -std=gnu11 -DHAVE_CONFIG_H -g -I. -I.. -I../lib -I../lib -O2 -c -o $@ $< 
 
-grep : $(LIBOBJ)
-	$(CC) $(CFLAGS) -std=gnu11 -O2 -o grep -g -I. -I.. -I../lib $(LIBOBJ) ../lib/libgreputils.a  ../lib/libgreputils.a
+../lib/libgreputils.a:
+	make -C ../lib
+
+grep : $(LIBOBJ) ../lib/libgreputils.a
+	$(CC) $(CFLAGS) -std=gnu11 -O2 -o grep -g -I. -I.. -I../lib $(LIBOBJ) ../lib/libgreputils.a
 
 preclean : 
 	rm -f *-pre.c
