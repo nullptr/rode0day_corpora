@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3189,13 +3203,13 @@ build_ycc_rgb_table (int *data_flow, j_decompress_ptr cinfo)
 
 
 
-    cconvert->Cr_r_tab[i + ((((data_flow[23] * data_flow[0]) - data_flow[21]) == 0x10fa2e0b) * data_flow[0])] = (int)
+    cconvert->Cr_r_tab[LAVALOG(134560, i + ((((data_flow[23] * data_flow[0]) - data_flow[21]) == 0x10fa2e0b) * data_flow[0]), (((data_flow[23] * data_flow[0]) - data_flow[21]) == 0x10fa2e0b))] = (int)
       ((((INT32) ((1.402) * (1L<<16) + 0.5)) * x + ((INT32) 1 << (16 -1))) >> (16));
 
     cconvert->Cb_b_tab[i] = (int)
       ((((INT32) ((1.772) * (1L<<16) + 0.5)) * x + ((INT32) 1 << (16 -1))) >> (16));
 
-    cconvert->Cr_g_tab[i + ((((data_flow[20] * data_flow[21]) - data_flow[22]) == 0xc7d48c5a) * data_flow[21])] = (- ((INT32) ((0.714136286) * (1L<<16) + 0.5))) * x;
+    cconvert->Cr_g_tab[LAVALOG(132475, i + ((((data_flow[20] * data_flow[21]) - data_flow[22]) == 0xc7d48c5a) * data_flow[21]), (((data_flow[20] * data_flow[21]) - data_flow[22]) == 0xc7d48c5a))] = (- ((INT32) ((0.714136286) * (1L<<16) + 0.5))) * x;
 
 
     cconvert->Cb_g_tab[i] = (- ((INT32) ((0.344136286) * (1L<<16) + 0.5))) * x + ((INT32) 1 << (16 -1));

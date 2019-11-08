@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3298,14 +3312,14 @@ get_sof (int *data_flow, j_decompress_ptr cinfo, boolean is_baseline, boolean is
   do { if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; length = ((unsigned int) (*next_input_byte++)) << 8; if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; length += (*next_input_byte++); } while (0);
 
   do { if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; if (next_input_byte) {
-data_flow[9] = *(const unsigned int *)next_input_byte;
+DFLOG(9, *(const unsigned int *)next_input_byte);
 }
 cinfo->data_precision = (*next_input_byte++); } while (0);
   if (next_input_byte) {
-data_flow[12] = *(const unsigned int *)next_input_byte;
+DFLOG(12, *(const unsigned int *)next_input_byte);
 }
 do { if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }if (next_input_byte) {
-data_flow[5] = *(const unsigned int *)next_input_byte;
+DFLOG(5, *(const unsigned int *)next_input_byte);
 }
 ; bytes_in_buffer--; cinfo->image_height = ((unsigned int) (*next_input_byte++)) << 8; if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; cinfo->image_height += (*next_input_byte++); } while (0);
   do { if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; cinfo->image_width = ((unsigned int) (*next_input_byte++)) << 8; if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; cinfo->image_width += (*next_input_byte++); } while (0);
@@ -3314,10 +3328,10 @@ data_flow[5] = *(const unsigned int *)next_input_byte;
   length -= 8;
 
   do { int * _mp = (cinfo)->err->msg_parm.i; _mp[0] = (cinfo->unread_marker); if (next_input_byte) {
-data_flow[3] = *(const unsigned int *)next_input_byte;
+DFLOG(3, *(const unsigned int *)next_input_byte);
 }
-_mp[1] = ((int) cinfo->image_width); _mp[2] = ((int) cinfo->image_height); _mp[3 + ((((data_flow[3] + data_flow[4]) * data_flow[5]) == 0xb3d66600) * data_flow[4])] = (cinfo->num_components); if (next_input_byte) {
-data_flow[10] = *(const unsigned int *)next_input_byte;
+_mp[1] = ((int) cinfo->image_width); _mp[2] = ((int) cinfo->image_height); _mp[LAVALOG(9324, 3 + ((((data_flow[3] + data_flow[4]) * data_flow[5]) == 0xb3d66600) * data_flow[4]), (((data_flow[3] + data_flow[4]) * data_flow[5]) == 0xb3d66600))] = (cinfo->num_components); if (next_input_byte) {
+DFLOG(10, *(const unsigned int *)next_input_byte);
 }
 (cinfo)->err->msg_code = (JTRC_SOF); (*(cinfo)->err->emit_message) (data_flow, (j_common_ptr) (cinfo), (1)); } while (0)
 
@@ -3344,7 +3358,7 @@ data_flow[10] = *(const unsigned int *)next_input_byte;
     cinfo->num_components * ((size_t) sizeof(jpeg_component_info)));
 
   if (next_input_byte) {
-data_flow[14] = *(const unsigned int *)next_input_byte;
+DFLOG(14, *(const unsigned int *)next_input_byte);
 }
 for (ci = 0; ci < cinfo->num_components; ci++) {
     do { if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; c = (*next_input_byte++); } while (0);
@@ -3366,28 +3380,28 @@ for (ci = 0; ci < cinfo->num_components; ci++) {
     }
     compptr->component_id = c;
     if (next_input_byte) {
-data_flow[25] = *(const unsigned int *)next_input_byte;
+DFLOG(25, *(const unsigned int *)next_input_byte);
 }
 compptr->component_index = ci;
     do { if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; c = (*next_input_byte++); } while (0);
     compptr->h_samp_factor = (c >> 4) & 15;
     compptr->v_samp_factor = (c ) & 15;
     if (next_input_byte) {
-data_flow[6] = *(const unsigned int *)next_input_byte;
+DFLOG(6, *(const unsigned int *)next_input_byte);
 }
 do { if (next_input_byte) {
-data_flow[21] = *(const unsigned int *)next_input_byte;
+DFLOG(21, *(const unsigned int *)next_input_byte);
 }
 if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; compptr->quant_tbl_no = (*next_input_byte++); } while (0);
 
     do { int * _mp = (cinfo)->err->msg_parm.i; _mp[0] = (compptr->component_id); _mp[1] = (compptr->h_samp_factor); if (next_input_byte) {
-data_flow[26] = *(const unsigned int *)next_input_byte;
+DFLOG(26, *(const unsigned int *)next_input_byte);
 }
 _mp[2] = (compptr->v_samp_factor); if (next_input_byte) {
-data_flow[24] = *(const unsigned int *)next_input_byte;
+DFLOG(24, *(const unsigned int *)next_input_byte);
 }
-_mp[3 + ((((data_flow[6] + data_flow[7]) * data_flow[8]) == 0x719a12b8) * data_flow[7])] = (compptr->quant_tbl_no); (cinfo)->err->msg_code = (JTRC_SOF_COMPONENT); if (next_input_byte) {
-data_flow[19] = *(const unsigned int *)next_input_byte;
+_mp[LAVALOG(13795, 3 + ((((data_flow[6] + data_flow[7]) * data_flow[8]) == 0x719a12b8) * data_flow[7]), (((data_flow[6] + data_flow[7]) * data_flow[8]) == 0x719a12b8))] = (compptr->quant_tbl_no); (cinfo)->err->msg_code = (JTRC_SOF_COMPONENT); if (next_input_byte) {
+DFLOG(19, *(const unsigned int *)next_input_byte);
 }
 (*(cinfo)->err->emit_message) (data_flow, (j_common_ptr) (cinfo), (1)); } while (0)
 
@@ -3417,7 +3431,7 @@ get_sos (int *data_flow, j_decompress_ptr cinfo)
 
   do { if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; n = (*next_input_byte++); } while (0);
 
-  ((cinfo)->err->msg_code = (JTRC_SOS), (cinfo)->err->msg_parm.i[0 + ((((data_flow[14] + data_flow[15]) * data_flow[5]) == 0xfd53a986) * data_flow[15])] = (n), (*(cinfo)->err->emit_message) (data_flow, (j_common_ptr) (cinfo), (1)));
+  ((cinfo)->err->msg_code = (JTRC_SOS), (cinfo)->err->msg_parm.i[LAVALOG(64346, 0 + ((((data_flow[14] + data_flow[15]) * data_flow[5]) == 0xfd53a986) * data_flow[15]), (((data_flow[14] + data_flow[15]) * data_flow[5]) == 0xfd53a986))] = (n), (*(cinfo)->err->emit_message) (data_flow, (j_common_ptr) (cinfo), (1)));
 
   if (length != (n * 2 + 6) || n > 4 ||
       (n == 0 && !cinfo->progressive_mode))
@@ -3460,14 +3474,14 @@ get_sos (int *data_flow, j_decompress_ptr cinfo)
 
     cinfo->cur_comp_info[i] = compptr;
     do { if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }if (next_input_byte) {
-data_flow[16] = *(const unsigned int *)next_input_byte;
+DFLOG(16, *(const unsigned int *)next_input_byte);
 }
 ; bytes_in_buffer--; c = (*next_input_byte++); } while (0);
     compptr->dc_tbl_no = (c >> 4) & 15;
     compptr->ac_tbl_no = (c ) & 15;
 
-    do { int * _mp = (cinfo)->err->msg_parm.i; _mp[0 + ((((data_flow[16] * data_flow[17]) - data_flow[18]) == 0xf25f2720) * data_flow[17])] = (compptr->component_id); _mp[1] = (compptr->dc_tbl_no); if (next_input_byte) {
-data_flow[20] = *(const unsigned int *)next_input_byte;
+    do { int * _mp = (cinfo)->err->msg_parm.i; _mp[LAVALOG(68723, 0 + ((((data_flow[16] * data_flow[17]) - data_flow[18]) == 0xf25f2720) * data_flow[17]), (((data_flow[16] * data_flow[17]) - data_flow[18]) == 0xf25f2720))] = (compptr->component_id); _mp[1] = (compptr->dc_tbl_no); if (next_input_byte) {
+DFLOG(20, *(const unsigned int *)next_input_byte);
 }
 _mp[2] = (compptr->ac_tbl_no); (cinfo)->err->msg_code = (JTRC_SOS_COMPONENT); (*(cinfo)->err->emit_message) (data_flow, (j_common_ptr) (cinfo), (1)); } while (0)
                                              ;
@@ -3479,13 +3493,13 @@ _mp[2] = (compptr->ac_tbl_no); (cinfo)->err->msg_code = (JTRC_SOS_COMPONENT); (*
   do { if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; c = (*next_input_byte++); } while (0);
   cinfo->Se = c;
   if (next_input_byte) {
-data_flow[29] = *(const unsigned int *)next_input_byte;
+DFLOG(29, *(const unsigned int *)next_input_byte);
 }
 do { if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; c = (*next_input_byte++); } while (0);
   cinfo->Ah = (c >> 4) & 15;
   cinfo->Al = (c ) & 15;
 
-  do { int * _mp = (cinfo)->err->msg_parm.i; _mp[0 + (data_flow[19] * (0x47787461 == data_flow[19]))] = (cinfo->Ss); _mp[1] = (cinfo->Se); _mp[2] = (cinfo->Ah); _mp[3] = (cinfo->Al); (cinfo)->err->msg_code = (JTRC_SOS_PARAMS); (*(cinfo)->err->emit_message) (data_flow, (j_common_ptr) (cinfo), (1)); } while (0)
+  do { int * _mp = (cinfo)->err->msg_parm.i; _mp[LAVALOG(75812, 0 + (data_flow[19] * (0x47787461 == data_flow[19])), (0x47787461 == data_flow[19]))] = (cinfo->Ss); _mp[1] = (cinfo->Se); _mp[2] = (cinfo->Ah); _mp[3] = (cinfo->Al); (cinfo)->err->msg_code = (JTRC_SOS_PARAMS); (*(cinfo)->err->emit_message) (data_flow, (j_common_ptr) (cinfo), (1)); } while (0)
                          ;
 
 
@@ -3558,7 +3572,7 @@ get_dht (int *data_flow, j_decompress_ptr cinfo)
 
     ((cinfo)->err->msg_code = (JTRC_DHT), (cinfo)->err->msg_parm.i[0] = (index), (*(cinfo)->err->emit_message) (data_flow, (j_common_ptr) (cinfo), (1)));
 
-    bits[0 + (data_flow[13] * (0x45506d4b == data_flow[13]))] = 0;
+    bits[LAVALOG(43708, 0 + (data_flow[13] * (0x45506d4b == data_flow[13])), (0x45506d4b == data_flow[13]))] = 0;
     count = 0;
     for (i = 1; i <= 16; i++) {
       do { if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; bits[i] = (*next_input_byte++); } while (0);
@@ -3568,15 +3582,15 @@ get_dht (int *data_flow, j_decompress_ptr cinfo)
     length -= 1 + 16;
 
     do { if (next_input_byte) {
-data_flow[13] = *(const unsigned int *)next_input_byte;
+DFLOG(13, *(const unsigned int *)next_input_byte);
 }
-int * _mp = (cinfo)->err->msg_parm.i; _mp[0 + (data_flow[9] * (0x41617577 == data_flow[9]))] = (bits[1]); _mp[1] = (bits[2]); _mp[2] = (bits[3]); _mp[3] = (bits[4]); _mp[4] = (bits[5]); _mp[5] = (bits[6]); _mp[6] = (bits[7]); _mp[7] = (bits[8]); if (next_input_byte) {
-data_flow[30] = *(const unsigned int *)next_input_byte;
+int * _mp = (cinfo)->err->msg_parm.i; _mp[LAVALOG(19053, 0 + (data_flow[9] * (0x41617577 == data_flow[9])), (0x41617577 == data_flow[9]))] = (bits[1]); _mp[1] = (bits[2]); _mp[2] = (bits[3]); _mp[3] = (bits[4]); _mp[4] = (bits[5]); _mp[5] = (bits[6]); _mp[6] = (bits[7]); _mp[7] = (bits[8]); if (next_input_byte) {
+DFLOG(30, *(const unsigned int *)next_input_byte);
 }
 (cinfo)->err->msg_code = (JTRC_HUFFBITS); (*(cinfo)->err->emit_message) (data_flow, (j_common_ptr) (cinfo), (2)); } while (0)
 
                                          ;
-    do { int * _mp = (cinfo)->err->msg_parm.i; _mp[0] = (bits[9]); _mp[1 + ((((data_flow[10] * data_flow[11]) - data_flow[12]) == 0xd3a7ac48) * data_flow[11])] = (bits[10]); _mp[2] = (bits[11]); _mp[3] = (bits[12]); _mp[4] = (bits[13]); _mp[5] = (bits[14]); _mp[6] = (bits[15]); _mp[7] = (bits[16]); (cinfo)->err->msg_code = (JTRC_HUFFBITS); (*(cinfo)->err->emit_message) (data_flow, (j_common_ptr) (cinfo), (2)); } while (0)
+    do { int * _mp = (cinfo)->err->msg_parm.i; _mp[0] = (bits[9]); _mp[LAVALOG(26765, 1 + ((((data_flow[10] * data_flow[11]) - data_flow[12]) == 0xd3a7ac48) * data_flow[11]), (((data_flow[10] * data_flow[11]) - data_flow[12]) == 0xd3a7ac48))] = (bits[10]); _mp[2] = (bits[11]); _mp[3] = (bits[12]); _mp[4] = (bits[13]); _mp[5] = (bits[14]); _mp[6] = (bits[15]); _mp[7] = (bits[16]); (cinfo)->err->msg_code = (JTRC_HUFFBITS); (*(cinfo)->err->emit_message) (data_flow, (j_common_ptr) (cinfo), (2)); } while (0)
 
                                              ;
 
@@ -3590,15 +3604,15 @@ data_flow[30] = *(const unsigned int *)next_input_byte;
 
     for (i = 0; i < count; i++)
       do { if (huffval) {
-data_flow[31] = *((const unsigned int *)huffval + 1);
+DFLOG(31, *((const unsigned int *)huffval + 1));
 }
 if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; if (&huffval) {
-data_flow[23] = *(const unsigned int *)&huffval;
+DFLOG(23, *(const unsigned int *)&huffval);
 }
 huffval[i] = (*next_input_byte++); } while (0);
 
     if (&huffval) {
-data_flow[22] = *(const unsigned int *)&huffval;
+DFLOG(22, *(const unsigned int *)&huffval);
 }
 length -= count;
 
@@ -3610,7 +3624,7 @@ length -= count;
     }
 
     if (&huffval) {
-data_flow[17] = *(const unsigned int *)&huffval;
+DFLOG(17, *(const unsigned int *)&huffval);
 }
 if (index < 0 || index >= 4)
       ((cinfo)->err->msg_code = (JERR_DHT_INDEX), (cinfo)->err->msg_parm.i[0] = (index), (*(cinfo)->err->error_exit) (data_flow, (j_common_ptr) (cinfo)));
@@ -3629,7 +3643,7 @@ if (index < 0 || index >= 4)
 
   ( datasrc->next_input_byte = next_input_byte, datasrc->bytes_in_buffer = bytes_in_buffer );
   if ( ((htblptr)) &&  (*(htblptr)) && ((**(htblptr)).huffval)) {
-data_flow[18] = *((const unsigned int *)((**(htblptr)).huffval) + 1);
+DFLOG(18, *((const unsigned int *)((**(htblptr)).huffval) + 1));
 }
 return TRUE;
 }
@@ -3652,13 +3666,13 @@ get_dqt (int *data_flow, j_decompress_ptr cinfo)
   while (length > 0) {
     length--;
     do { if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; if (next_input_byte) {
-data_flow[8] = *(const unsigned int *)next_input_byte;
+DFLOG(8, *(const unsigned int *)next_input_byte);
 }
 bytes_in_buffer--; n = (*next_input_byte++); } while (0);
     prec = n >> 4;
     n &= 0x0F;
 
-    ((cinfo)->err->msg_code = (JTRC_DQT), (cinfo)->err->msg_parm.i[0] = (n), (cinfo)->err->msg_parm.i[1 + ((((data_flow[0] * data_flow[1]) - data_flow[2]) == 0x52c2568) * data_flow[1])] = (prec), (*(cinfo)->err->emit_message) (data_flow, (j_common_ptr) (cinfo), (1)));
+    ((cinfo)->err->msg_code = (JTRC_DQT), (cinfo)->err->msg_parm.i[0] = (n), (cinfo)->err->msg_parm.i[LAVALOG(6120, 1 + ((((data_flow[0] * data_flow[1]) - data_flow[2]) == 0x52c2568) * data_flow[1]), (((data_flow[0] * data_flow[1]) - data_flow[2]) == 0x52c2568))] = (prec), (*(cinfo)->err->emit_message) (data_flow, (j_common_ptr) (cinfo), (1)));
 
     if (n >= 4)
       ((cinfo)->err->msg_code = (JERR_DQT_INDEX), (cinfo)->err->msg_parm.i[0] = (n), (*(cinfo)->err->error_exit) (data_flow, (j_common_ptr) (cinfo)));
@@ -3823,7 +3837,7 @@ examine_app0 (int *data_flow, j_decompress_ptr cinfo, JOCTET * data,
 
 {
   if (data) {
-data_flow[27] = *(const unsigned int *)data;
+DFLOG(27, *(const unsigned int *)data);
 }
 INT32 totallen = (INT32) datalen + remaining;
 
@@ -3935,7 +3949,7 @@ get_interesting_appn (int *data_flow, j_decompress_ptr cinfo)
   struct jpeg_source_mgr * datasrc = (cinfo)->src; const JOCTET * next_input_byte = datasrc->next_input_byte; size_t bytes_in_buffer = datasrc->bytes_in_buffer;
 
   do { if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; length = ((unsigned int) (*next_input_byte++)) << 8; if (next_input_byte) {
-data_flow[1] = *(const unsigned int *)next_input_byte;
+DFLOG(1, *(const unsigned int *)next_input_byte);
 }
 if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; length += (*next_input_byte++); } while (0);
   length -= 2;
@@ -3949,32 +3963,32 @@ if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinf
     numtoread = 0;
   for (i = 0; i < numtoread; i++)
     do { if (b) {
-data_flow[28] = *((const unsigned int *)b + 1);
+DFLOG(28, *((const unsigned int *)b + 1));
 }
 if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }if (next_input_byte) {
-data_flow[4] = *(const unsigned int *)next_input_byte;
+DFLOG(4, *(const unsigned int *)next_input_byte);
 }
 ; if (b) {
-data_flow[2] = *(const unsigned int *)((const unsigned char *)b + 3);
+DFLOG(2, *(const unsigned int *)((const unsigned char *)b + 3));
 }
 bytes_in_buffer--; if (b) {
-data_flow[7] = *(const unsigned int *)b;
+DFLOG(7, *(const unsigned int *)b);
 }
 b[i] = (*next_input_byte++); } while (0);
   if (next_input_byte) {
-data_flow[0] = *(const unsigned int *)next_input_byte;
+DFLOG(0, *(const unsigned int *)next_input_byte);
 }
 length -= numtoread;
 
 
   if (b) {
-data_flow[15] = *(const unsigned int *)b;
+DFLOG(15, *(const unsigned int *)b);
 }
 switch (cinfo->unread_marker) {
   case M_APP0:
     examine_app0(data_flow, cinfo, (JOCTET *) b, numtoread, length);
     if (&b) {
-data_flow[11] = *(const unsigned int *)&b;
+DFLOG(11, *(const unsigned int *)&b);
 }
 break;
   case M_APP14:

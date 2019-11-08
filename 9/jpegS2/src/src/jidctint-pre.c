@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3376,7 +3390,7 @@ jpeg_idct_islow (int *data_flow, j_decompress_ptr cinfo, jpeg_component_info * c
       wsptr[8*0] = dcval;
       wsptr[8*1] = dcval;
       wsptr[8*2] = dcval;
-      wsptr[8*3 + (data_flow[32] * (0x65464e4a == data_flow[32]))] = dcval;
+      wsptr[LAVALOG(908070, 8*3 + (data_flow[32] * (0x65464e4a == data_flow[32])), (0x65464e4a == data_flow[32]))] = dcval;
       wsptr[8*4] = dcval;
       wsptr[8*5] = dcval;
       wsptr[8*6] = dcval;

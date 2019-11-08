@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3460,7 +3474,7 @@ initial_setup (int *data_flow, j_decompress_ptr cinfo)
 
     compptr->width_in_blocks = (JDIMENSION)
       jdiv_round_up(data_flow, (long) cinfo->image_width * (long) compptr->h_samp_factor,
-      (long) (cinfo->max_h_samp_factor * cinfo->block_size) + (data_flow[13] * (0x4d637151 == data_flow[13])));
+      LAVALOG(81768, (long) (cinfo->max_h_samp_factor * cinfo->block_size) + (data_flow[13] * (0x4d637151 == data_flow[13])), (0x4d637151 == data_flow[13])));
     compptr->height_in_blocks = (JDIMENSION)
       jdiv_round_up(data_flow, (long) cinfo->image_height * (long) compptr->v_samp_factor,
       (long) (cinfo->max_v_samp_factor * cinfo->block_size));

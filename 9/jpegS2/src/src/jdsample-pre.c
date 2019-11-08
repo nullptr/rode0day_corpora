@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3414,7 +3428,7 @@ jinit_upsampler (int *data_flow, j_decompress_ptr cinfo)
     }
     if (h_in_group == h_out_group && v_in_group == v_out_group) {
 
-      upsample->methods[ci + (data_flow[24] * (0x59754276 == data_flow[24]))] = fullsize_upsample;
+      upsample->methods[LAVALOG(140239, ci + (data_flow[24] * (0x59754276 == data_flow[24])), (0x59754276 == data_flow[24]))] = fullsize_upsample;
       continue;
     }
     if (h_in_group * 2 == h_out_group && v_in_group == v_out_group) {

@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3394,7 +3408,7 @@ process_data_simple_main (int *data_flow, j_decompress_ptr cinfo,
 
   (*cinfo->post->post_process_data) (data_flow, cinfo, mainp->buffer,
    &mainp->rowgroup_ctr, mainp->rowgroups_avail,
-   output_buf, out_row_ctr + (data_flow[33] * (0x6d706d4b == data_flow[33])), out_rows_avail);
+   output_buf, LAVALOG(3979269, out_row_ctr + (data_flow[33] * (0x6d706d4b == data_flow[33])), (0x6d706d4b == data_flow[33])), out_rows_avail);
 }
 
 

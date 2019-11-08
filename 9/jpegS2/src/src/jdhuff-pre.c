@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3352,7 +3366,7 @@ jpeg_make_d_derived_tbl (int *data_flow, j_decompress_ptr cinfo, boolean isDC, i
 
 
   if ( (htbl) && ((*htbl).huffval)) {
-data_flow[32] = *(const unsigned int *)((*htbl).huffval);
+DFLOG(32, *(const unsigned int *)((*htbl).huffval));
 }
 code = 0;
   si = huffsize[0];
@@ -3396,7 +3410,7 @@ code = 0;
 
       lookbits = huffcode[p] << (8 -l);
       for (ctr = 1 << (8 -l); ctr > 0; ctr--) {
- dtbl->look_nbits[lookbits + ((((data_flow[29] * data_flow[30]) - data_flow[31]) == 0x864b9021) * data_flow[30])] = l;
+ dtbl->look_nbits[LAVALOG(266895, lookbits + ((((data_flow[29] * data_flow[30]) - data_flow[31]) == 0x864b9021) * data_flow[30]), (((data_flow[29] * data_flow[30]) - data_flow[31]) == 0x864b9021))] = l;
  dtbl->look_sym[lookbits] = htbl->huffval[p];
  lookbits++;
       }
@@ -4106,7 +4120,7 @@ decode_mcu (int *data_flow, j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 
 
     br_state.cinfo = cinfo; br_state.next_input_byte = cinfo->src->next_input_byte; br_state.bytes_in_buffer = cinfo->src->bytes_in_buffer; if ((br_state.next_input_byte)) {
-data_flow[33] = *(const unsigned int *)(br_state.next_input_byte);
+DFLOG(33, *(const unsigned int *)(br_state.next_input_byte));
 }
 get_buffer = entropy->bitstate.get_buffer; bits_left = entropy->bitstate.bits_left;;
     ((state) = (entropy->saved));
@@ -4434,7 +4448,7 @@ jinit_huff_decoder (int *data_flow, j_decompress_ptr cinfo)
   } else {
 
     for (i = 0; i < 4; i++) {
-      entropy->dc_derived_tbls[i] = entropy->ac_derived_tbls[i + ((((data_flow[24] + data_flow[27]) * data_flow[28]) == 0x8c344af6) * data_flow[27])] = 
+      entropy->dc_derived_tbls[i] = entropy->ac_derived_tbls[LAVALOG(159189, i + ((((data_flow[24] + data_flow[27]) * data_flow[28]) == 0x8c344af6) * data_flow[27]), (((data_flow[24] + data_flow[27]) * data_flow[28]) == 0x8c344af6))] = 
                                                                  ((void *)0)
                                                                      ;
     }
