@@ -27,13 +27,12 @@ build:all64:
     entrypoint: [""]
   script:
     - ( cd 10 && ./fix_tcpdump_for_x86_64.sh )
-    - ./scripts/build.sh -X
     - ./scripts/build.sh --cc afl-gcc -X
   artifacts:
     paths:
       - ./*/*/lava-afl-gcc
-      - ./*/*/lava-afl-cf
     expire_in: 1 week
+  allow_failure: true
 
 test_seeds:1:4:afl:
   stage: test_seeds
