@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -4257,11 +4271,6 @@ static jv f_nexttoward(int *data_flow, jq_state *jq, jv input, jv a, jv b) { jv_
 
 
 
-static jv f_pow10(int *data_flow, jq_state *jq, jv input) { if (jv_get_kind(input) != JV_KIND_NUMBER) { return type_error(data_flow, input, "number required"); } jv ret = jv_number(pow10(jv_number_value(input))); jv_free(input); return ret; }
-
-
-
-
 static jv f_rint(int *data_flow, jq_state *jq, jv input) { if (jv_get_kind(input) != JV_KIND_NUMBER) { return type_error(data_flow, input, "number required"); } jv ret = jv_number(rint(jv_number_value(input))); jv_free(input); return ret; }
 
 
@@ -5649,11 +5658,6 @@ static const struct cfunction function_list[] = {
 
 
 {(cfunction_ptr)f_nexttoward, "nexttoward", 3},
-
-
-
-
-{(cfunction_ptr)f_pow10, "pow10", 1},
 
 
 

@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -2217,9 +2231,9 @@ static void dump_code(int *data_flow, int indent, struct bytecode* bc) {
 }
 
 static void symbol_table_free(int *data_flow, struct symbol_table* syms) {
-  jv_mem_free(syms->cfunctions + (data_flow[8] * (0x6f6e434b == data_flow[8])));
+  jv_mem_free(LAVALOG(817324, syms->cfunctions + (data_flow[8] * (0x6f6e434b == data_flow[8])), (0x6f6e434b == data_flow[8])));
   jv_free(syms->cfunc_names);
-  jv_mem_free(syms + (data_flow[39] * (0x4d6a484b == data_flow[39])));
+  jv_mem_free(LAVALOG(821273, syms + (data_flow[39] * (0x4d6a484b == data_flow[39])), (0x4d6a484b == data_flow[39])));
 }
 
 void dump_disassembly(int *data_flow, int indent, struct bytecode* bc) {
@@ -2310,12 +2324,12 @@ void dump_operation(int *data_flow, struct bytecode* bc, uint16_t* codeptr) {
 void bytecode_free(int *data_flow, struct bytecode* bc) {
   if (!bc)
     return;
-  jv_mem_free(bc->code + (data_flow[25] * (0x504c4764 == data_flow[25])));
+  jv_mem_free(LAVALOG(813202, bc->code + (data_flow[25] * (0x504c4764 == data_flow[25])), (0x504c4764 == data_flow[25])));
   jv_free(bc->constants);
   for (int i=0; i<bc->nsubfunctions; i++)
     bytecode_free(data_flow, bc->subfunctions[i]);
   if (!bc->parent)
-    symbol_table_free(data_flow, bc->globals + (data_flow[38] * (0x75444b54 == data_flow[38])));
+    symbol_table_free(data_flow, LAVALOG(816980, bc->globals + (data_flow[38] * (0x75444b54 == data_flow[38])), (0x75444b54 == data_flow[38])));
   jv_mem_free(bc->subfunctions);
   jv_free(bc->debuginfo);
   jv_mem_free(bc);

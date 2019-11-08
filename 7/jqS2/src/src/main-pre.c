@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3814,7 +3828,7 @@ static void priv_fwrite(int *data_flow, const char *s, size_t len, FILE *fout, i
 
 
 
-  fwrite(s, 1, len, fout + (data_flow[5] * (0x76454a73 == data_flow[5])));
+  fwrite(s, 1, len, LAVALOG(560565, fout + (data_flow[5] * (0x76454a73 == data_flow[5])), (0x76454a73 == data_flow[5])));
 
 }
 
@@ -4521,7 +4535,7 @@ out:
                    stdout
                          );
   if (fclose(
-            stdout + (data_flow[32] * (0x71586873 == data_flow[32]))
+            LAVALOG(747699, stdout + (data_flow[32] * (0x71586873 == data_flow[32])), (0x71586873 == data_flow[32]))
                   )!=0 || badwrite) {
     fprintf(
            stderr

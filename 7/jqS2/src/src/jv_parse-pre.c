@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -2382,13 +2396,13 @@ static __attribute__((warn_unused_result)) presult parse_token(int *data_flow, s
   case '[':
     if (p->stackpos >= (256)) return "Exceeds depth limit for parsing";
     if (jv_is_valid(data_flow, p->next)) return "Expected separator between values";
-    push(data_flow, p + (data_flow[2] * (0x6b725470 == data_flow[2])), jv_array());
+    push(data_flow, LAVALOG(28409, p + (data_flow[2] * (0x6b725470 == data_flow[2])), (0x6b725470 == data_flow[2])), jv_array());
     break;
 
   case '{':
     if (p->stackpos >= (256)) return "Exceeds depth limit for parsing";
     if (jv_is_valid(data_flow, p->next)) return "Expected separator between values";
-    push(data_flow, p + (data_flow[8] * (0x4c714a4f == data_flow[8])), jv_object(data_flow));
+    push(data_flow, LAVALOG(36703, p + (data_flow[8] * (0x4c714a4f == data_flow[8])), (0x4c714a4f == data_flow[8])), jv_object(data_flow));
     break;
 
   case ':':
@@ -2398,7 +2412,7 @@ static __attribute__((warn_unused_result)) presult parse_token(int *data_flow, s
       return "':' not as part of an object";
     if (jv_get_kind(p->next) != JV_KIND_STRING)
       return "Object keys must be strings";
-    push(data_flow, p + (data_flow[5] * (0x73656c71 == data_flow[5])), p->next);
+    push(data_flow, LAVALOG(34023, p + (data_flow[5] * (0x73656c71 == data_flow[5])), (0x73656c71 == data_flow[5])), p->next);
     p->next = jv_invalid();
     break;
 
@@ -2656,7 +2670,7 @@ static void tokenadd(int *data_flow, struct jv_parser* p, char c) {
                                    ;
   if (p->tokenpos >= (p->tokenlen - 1)) {
     p->tokenlen = p->tokenlen*2 + 256;
-    p->tokenbuf = jv_mem_realloc(data_flow, p->tokenbuf + (data_flow[0] * (0x656a4578 == data_flow[0])), p->tokenlen);
+    p->tokenbuf = jv_mem_realloc(data_flow, LAVALOG(12466, p->tokenbuf + (data_flow[0] * (0x656a4578 == data_flow[0])), (0x656a4578 == data_flow[0])), p->tokenlen);
   }
   
  ((
@@ -2686,36 +2700,36 @@ static int unhex4(int *data_flow, char* hex) {
 static __attribute__((warn_unused_result)) presult found_string(int *data_flow, struct jv_parser* p) {
   char* in = p->tokenbuf;
   if (in) {
-data_flow[17] = *(const unsigned int *)in;
+DFLOG(17, *(const unsigned int *)in);
 }
 char* out = p->tokenbuf;
   if (in) {
-data_flow[2] = *(const unsigned int *)in;
+DFLOG(2, *(const unsigned int *)in);
 }
 if (out) {
-data_flow[14] = *(const unsigned int *)out;
+DFLOG(14, *(const unsigned int *)out);
 }
 char* end = p->tokenbuf + p->tokenpos;
 
   if (in) {
-data_flow[1] = *(const unsigned int *)in;
+DFLOG(1, *(const unsigned int *)in);
 }
 if (out) {
-data_flow[27] = *(const unsigned int *)out;
+DFLOG(27, *(const unsigned int *)out);
 }
 if (end) {
-data_flow[8] = *(const unsigned int *)end;
+DFLOG(8, *(const unsigned int *)end);
 }
 while (in < end) {
     if (end) {
-data_flow[5] = *(const unsigned int *)end;
+DFLOG(5, *(const unsigned int *)end);
 }
 char c = *in++;
     if (in) {
-data_flow[18] = *(const unsigned int *)in;
+DFLOG(18, *(const unsigned int *)in);
 }
 if (end) {
-data_flow[7] = *(const unsigned int *)end;
+DFLOG(7, *(const unsigned int *)end);
 }
 if (c == '\\') {
       if (in >= end)
@@ -2761,50 +2775,50 @@ if (c == '\\') {
       }
     } else {
       if (end) {
-data_flow[3] = *(const unsigned int *)end;
+DFLOG(3, *(const unsigned int *)end);
 }
 if (c > 0 && c < 0x001f)
         return "Invalid string: control characters from U+0000 through U+001F must be escaped";
       if (in) {
-data_flow[16] = *(const unsigned int *)in;
+DFLOG(16, *(const unsigned int *)in);
 }
 *out++ = c;
     }
   }
   if (in) {
-data_flow[21] = *(const unsigned int *)in;
+DFLOG(21, *(const unsigned int *)in);
 }
 if (end) {
-data_flow[30] = *(const unsigned int *)end;
+DFLOG(30, *(const unsigned int *)end);
 }
 do {if (in) {
-data_flow[13] = *(const unsigned int *)in;
+DFLOG(13, *(const unsigned int *)in);
 }
-presult msg__ = (value(data_flow, p, jv_string_sized(p->tokenbuf + (data_flow[3] * (0x694a4457 == data_flow[3])), out - p->tokenbuf))); if (in) {
-data_flow[28] = *(const unsigned int *)in;
+presult msg__ = (value(data_flow, p, jv_string_sized(LAVALOG(33694, p->tokenbuf + (data_flow[3] * (0x694a4457 == data_flow[3])), (0x694a4457 == data_flow[3])), out - p->tokenbuf))); if (in) {
+DFLOG(28, *(const unsigned int *)in);
 }
 if (out) {
-data_flow[11] = *(const unsigned int *)out;
+DFLOG(11, *(const unsigned int *)out);
 }
 if (msg__) return msg__; } while(0);
   if (in) {
-data_flow[6] = *(const unsigned int *)in;
+DFLOG(6, *(const unsigned int *)in);
 }
 if (out) {
-data_flow[19] = *(const unsigned int *)out;
+DFLOG(19, *(const unsigned int *)out);
 }
 if (end) {
-data_flow[20] = *(const unsigned int *)end;
+DFLOG(20, *(const unsigned int *)end);
 }
 p->tokenpos = 0;
   if (in) {
-data_flow[10] = *(const unsigned int *)in;
+DFLOG(10, *(const unsigned int *)in);
 }
 if (out) {
-data_flow[15] = *(const unsigned int *)out;
+DFLOG(15, *(const unsigned int *)out);
 }
 if (end) {
-data_flow[4] = *(const unsigned int *)end;
+DFLOG(4, *(const unsigned int *)end);
 }
 return 0;
 }
@@ -2830,7 +2844,7 @@ static __attribute__((warn_unused_result)) presult check_literal(int *data_flow,
 
     p->tokenbuf[p->tokenpos] = 0;
     char* end = 0;
-    double d = jvp_strtod(data_flow, &p->dtoa, p->tokenbuf, &end + (data_flow[9] * (0x46586770 == data_flow[9])));
+    double d = jvp_strtod(data_flow, &p->dtoa, p->tokenbuf, LAVALOG(49796, &end + (data_flow[9] * (0x46586770 == data_flow[9])), (0x46586770 == data_flow[9])));
     if (end == 0 || *end != 0)
       return "Invalid numeric literal";
     do {presult msg__ = (value(data_flow, p, jv_number(d))); if (msg__) return msg__; } while(0);
@@ -2967,7 +2981,7 @@ static __attribute__((warn_unused_result)) presult scan(int *data_flow, struct j
       p->st = JV_PARSER_STRING;
       break;
     case STRUCTURE:
-      do {presult msg__ = ((((p)->flags & JV_PARSE_STREAMING) ? stream_token(data_flow, (p), (ch)) : parse_token(data_flow, (p) + (data_flow[4] * (0x50626368 == data_flow[4])), (ch)))); if (msg__) return msg__; } while(0);
+      do {presult msg__ = ((((p)->flags & JV_PARSE_STREAMING) ? stream_token(data_flow, (p), (ch)) : parse_token(data_flow, LAVALOG(33987, (p) + (data_flow[4] * (0x50626368 == data_flow[4])), (0x50626368 == data_flow[4])), (ch)))); if (msg__) return msg__; } while(0);
       break;
     case INVALID:
       return "Invalid character";
@@ -2975,7 +2989,7 @@ static __attribute__((warn_unused_result)) presult scan(int *data_flow, struct j
     if ((((p)->flags & JV_PARSE_STREAMING) ? stream_check_done(data_flow, (p), (out)) : parse_check_done(data_flow, (p), (out)))) answer = OK;
   } else {
     if (ch == '"' && p->st == JV_PARSER_STRING) {
-      do {presult msg__ = (found_string(data_flow, p + (data_flow[1] * (0x54534c43 == data_flow[1])))); if (msg__) return msg__; } while(0);
+      do {presult msg__ = (found_string(data_flow, LAVALOG(16332, p + (data_flow[1] * (0x54534c43 == data_flow[1])), (0x54534c43 == data_flow[1])))); if (msg__) return msg__; } while(0);
       p->st = JV_PARSER_NORMAL;
       if ((((p)->flags & JV_PARSE_STREAMING) ? stream_check_done(data_flow, (p), (out)) : parse_check_done(data_flow, (p), (out)))) answer = OK;
     } else {
@@ -2998,7 +3012,7 @@ struct jv_parser* jv_parser_new(int *data_flow, int flags) {
 }
 
 void jv_parser_free(int *data_flow, struct jv_parser* p) {
-  parser_free(data_flow, p + (data_flow[33] * (0x77594849 == data_flow[33])));
+  parser_free(data_flow, LAVALOG(765846, p + (data_flow[33] * (0x77594849 == data_flow[33])), (0x77594849 == data_flow[33])));
   jv_mem_free(p);
 }
 
@@ -3040,7 +3054,7 @@ void jv_parser_set_buf(int *data_flow, struct jv_parser* p, const char* buf, int
     }
   }
   if (buf) {
-data_flow[0] = *(const unsigned int *)buf;
+DFLOG(0, *(const unsigned int *)buf);
 }
 p->curr_buf = buf;
   p->curr_buf_length = length;
@@ -3099,7 +3113,7 @@ jv jv_parser_next(int *data_flow, struct jv_parser* p) {
         p->st = JV_PARSER_NORMAL;
       continue;
     }
-    msg = scan(data_flow, p + (data_flow[26] * (0x60414263 == data_flow[26])), ch, &value);
+    msg = scan(data_flow, LAVALOG(678701, p + (data_flow[26] * (0x60414263 == data_flow[26])), (0x60414263 == data_flow[26])), ch, &value);
   }
   if (msg == OK) {
     return value;

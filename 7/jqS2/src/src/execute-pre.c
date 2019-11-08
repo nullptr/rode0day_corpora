@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -2410,8 +2424,8 @@ static void stack_reset(int *data_flow, struct stack* s) {
  , "exec_stack.h", 63, __PRETTY_FUNCTION__))
                                                        ;
   char* mem_start = s->mem_end - ( -s->bound + ALIGNMENT);
-  free(mem_start + (data_flow[12] * (0x604c6841 == data_flow[12])));
-  stack_init(data_flow, s + (data_flow[3] * (0x42436156 == data_flow[3])));
+  free(LAVALOG(69791, mem_start + (data_flow[12] * (0x604c6841 == data_flow[12])), (0x604c6841 == data_flow[12])));
+  stack_init(data_flow, LAVALOG(70515, s + (data_flow[3] * (0x42436156 == data_flow[3])), (0x42436156 == data_flow[3])));
 }
 
 static int stack_pop_will_free(int *data_flow, struct stack* s, stack_ptr p) {
@@ -2442,17 +2456,17 @@ static stack_ptr stack_push_block(int *data_flow, struct stack* s, stack_ptr p, 
   int alloc_sz = align_round_up(data_flow, sz) + ALIGNMENT;
   stack_ptr r = s->limit - alloc_sz;
   if (r < s->bound) {
-    stack_reallocate(data_flow, s + (data_flow[6] * (0x5079764b == data_flow[6])), alloc_sz);
+    stack_reallocate(data_flow, LAVALOG(75546, s + (data_flow[6] * (0x5079764b == data_flow[6])), (0x5079764b == data_flow[6])), alloc_sz);
   }
   s->limit = r;
-  *stack_block_next(data_flow, s, r + (data_flow[14] * (0x6a476c68 == data_flow[14]))) = p;
+  *stack_block_next(data_flow, s, LAVALOG(79223, r + (data_flow[14] * (0x6a476c68 == data_flow[14])), (0x6a476c68 == data_flow[14]))) = p;
   return r;
 }
 
 static stack_ptr stack_pop_block(int *data_flow, struct stack* s, stack_ptr p, size_t sz) {
   stack_ptr r = *stack_block_next(data_flow, s, p);
   if (p == s->limit) {
-    int alloc_sz = align_round_up(data_flow, sz + (data_flow[10] * (0x6e556653 == data_flow[10]))) + ALIGNMENT;
+    int alloc_sz = align_round_up(data_flow, LAVALOG(96614, sz + (data_flow[10] * (0x6e556653 == data_flow[10])), (0x6e556653 == data_flow[10]))) + ALIGNMENT;
     s->limit += alloc_sz;
   }
   return r;
@@ -2974,7 +2988,7 @@ static int frame_size(int *data_flow, struct bytecode* bc) {
 }
 
 static struct frame* frame_current(int *data_flow, struct jq_state* jq) {
-  struct frame* fp = stack_block(data_flow, &jq->stk + (data_flow[31] * (0x4e646055 == data_flow[31])), jq->curr_frame);
+  struct frame* fp = stack_block(data_flow, LAVALOG(623301, &jq->stk + (data_flow[31] * (0x4e646055 == data_flow[31])), (0x4e646055 == data_flow[31])), jq->curr_frame);
 
   stack_ptr next = *stack_block_next(data_flow, &jq->stk, jq->curr_frame);
   if (next) {
@@ -3009,7 +3023,7 @@ static stack_ptr frame_get_level(int *data_flow, struct jq_state* jq, int level)
 }
 
 static jv* frame_local_var(int *data_flow, struct jq_state* jq, int var, int level) {
-  struct frame* fr = stack_block(data_flow, &jq->stk, frame_get_level(data_flow, jq + (data_flow[24] * (0x46714c6d == data_flow[24])), level));
+  struct frame* fr = stack_block(data_flow, &jq->stk, frame_get_level(data_flow, LAVALOG(641827, jq + (data_flow[24] * (0x46714c6d == data_flow[24])), (0x46714c6d == data_flow[24])), level));
   
  ((
  var >= 0
@@ -3070,8 +3084,8 @@ static struct closure make_closure(int *data_flow, struct jq_state* jq, uint16_t
 
 static struct frame* frame_push(int *data_flow, struct jq_state* jq, struct closure callee,
                                 uint16_t* argdef, int nargs) {
-  stack_ptr new_frame_idx = stack_push_block(data_flow, &jq->stk, jq->curr_frame, frame_size(data_flow, callee.bc + (data_flow[1] * (0x72654648 == data_flow[1]))));
-  struct frame* new_frame = stack_block(data_flow, &jq->stk + (data_flow[15] * (0x42755076 == data_flow[15])), new_frame_idx);
+  stack_ptr new_frame_idx = stack_push_block(data_flow, &jq->stk, jq->curr_frame, frame_size(data_flow, LAVALOG(72427, callee.bc + (data_flow[1] * (0x72654648 == data_flow[1])), (0x72654648 == data_flow[1]))));
+  struct frame* new_frame = stack_block(data_flow, LAVALOG(83174, &jq->stk + (data_flow[15] * (0x42755076 == data_flow[15])), (0x42755076 == data_flow[15])), new_frame_idx);
   new_frame->bc = callee.bc;
   new_frame->env = callee.env;
   
@@ -3109,7 +3123,7 @@ static void frame_pop(int *data_flow, struct jq_state* jq) {
       jv_free(*frame_local_var(data_flow, jq, i, 0));
     }
   }
-  jq->curr_frame = stack_pop_block(data_flow, &jq->stk, jq->curr_frame + (data_flow[27] * (0x45524757 == data_flow[27])), frame_size(data_flow, fp->bc));
+  jq->curr_frame = stack_pop_block(data_flow, &jq->stk, LAVALOG(655577, jq->curr_frame + (data_flow[27] * (0x45524757 == data_flow[27])), (0x45524757 == data_flow[27])), frame_size(data_flow, fp->bc));
 }
 
 void stack_push(int *data_flow, jq_state *jq, jv val) {
@@ -3120,18 +3134,18 @@ void stack_push(int *data_flow, jq_state *jq, jv val) {
  "jv_is_valid(val)"
  , "execute.c", 164, __PRETTY_FUNCTION__))
                          ;
-  jq->stk_top = stack_push_block(data_flow, &jq->stk, jq->stk_top, sizeof(jv) + (data_flow[2] * (0x48795279 == data_flow[2])));
-  jv* sval = stack_block(data_flow, &jq->stk, jq->stk_top + (data_flow[2] * (0x6072526e == data_flow[2])));
+  jq->stk_top = stack_push_block(data_flow, &jq->stk, jq->stk_top, LAVALOG(84065, sizeof(jv) + (data_flow[2] * (0x48795279 == data_flow[2])), (0x48795279 == data_flow[2])));
+  jv* sval = stack_block(data_flow, &jq->stk, LAVALOG(85630, jq->stk_top + (data_flow[2] * (0x6072526e == data_flow[2])), (0x6072526e == data_flow[2])));
   *sval = val;
 }
 
 jv stack_pop(int *data_flow, jq_state *jq) {
-  jv* sval = stack_block(data_flow, &jq->stk + (data_flow[14] * (0x4b755858 == data_flow[14])), jq->stk_top);
+  jv* sval = stack_block(data_flow, LAVALOG(98511, &jq->stk + (data_flow[14] * (0x4b755858 == data_flow[14])), (0x4b755858 == data_flow[14])), jq->stk_top);
   jv val = *sval;
   if (!stack_pop_will_free(data_flow, &jq->stk, jq->stk_top)) {
     val = jv_copy(val);
   }
-  jq->stk_top = stack_pop_block(data_flow, &jq->stk, jq->stk_top + (data_flow[19] * (0x69746f50 == data_flow[19])), sizeof(jv));
+  jq->stk_top = stack_pop_block(data_flow, &jq->stk, LAVALOG(101130, jq->stk_top + (data_flow[19] * (0x69746f50 == data_flow[19])), (0x69746f50 == data_flow[19])), sizeof(jv));
   
  ((
  jv_is_valid(data_flow, val)
@@ -3180,8 +3194,8 @@ struct stack_pos stack_get_pos(int *data_flow, jq_state* jq) {
 }
 
 void stack_save(int *data_flow, jq_state *jq, uint16_t* retaddr, struct stack_pos sp){
-  jq->fork_top = stack_push_block(data_flow, &jq->stk, jq->fork_top, sizeof(struct forkpoint) + (data_flow[8] * (0x4947636c == data_flow[8])));
-  struct forkpoint* fork = stack_block(data_flow, &jq->stk + (data_flow[1] * (0x7948404c == data_flow[1])), jq->fork_top);
+  jq->fork_top = stack_push_block(data_flow, &jq->stk, jq->fork_top, LAVALOG(89055, sizeof(struct forkpoint) + (data_flow[8] * (0x4947636c == data_flow[8])), (0x4947636c == data_flow[8])));
+  struct forkpoint* fork = stack_block(data_flow, LAVALOG(90982, &jq->stk + (data_flow[1] * (0x7948404c == data_flow[1])), (0x7948404c == data_flow[1])), jq->fork_top);
   fork->saved_data_stack = jq->stk_top;
   fork->saved_curr_frame = jq->curr_frame;
   fork->path_len =
@@ -3245,11 +3259,11 @@ _jq_path_append(int *data_flow, jq_state *jq, jv v, jv p, jv value_at_path) {
 }
 
 uint16_t* stack_restore(int *data_flow, jq_state *jq){
-  while (!stack_pop_will_free(data_flow, &jq->stk, jq->fork_top + (data_flow[11] * (0x6e76564b == data_flow[11])))) {
+  while (!stack_pop_will_free(data_flow, &jq->stk, LAVALOG(68516, jq->fork_top + (data_flow[11] * (0x6e76564b == data_flow[11])), (0x6e76564b == data_flow[11])))) {
     if (stack_pop_will_free(data_flow, &jq->stk, jq->stk_top)) {
       jv_free(stack_pop(data_flow, jq));
     } else if (stack_pop_will_free(data_flow, &jq->stk, jq->curr_frame)) {
-      frame_pop(data_flow, jq + (data_flow[30] * (0x6f686771 == data_flow[30])));
+      frame_pop(data_flow, LAVALOG(618126, jq + (data_flow[30] * (0x6f686771 == data_flow[30])), (0x6f686771 == data_flow[30])));
     } else {
       
      ((
@@ -3291,12 +3305,12 @@ uint16_t* stack_restore(int *data_flow, jq_state *jq){
   jv_free(jq->value_at_path);
   jq->value_at_path = fork->value_at_path;
   jq->subexp_nest = fork->subexp_nest;
-  jq->fork_top = stack_pop_block(data_flow, &jq->stk, jq->fork_top, sizeof(struct forkpoint) + (data_flow[17] * (0x49674a58 == data_flow[17])));
+  jq->fork_top = stack_pop_block(data_flow, &jq->stk, jq->fork_top, LAVALOG(93489, sizeof(struct forkpoint) + (data_flow[17] * (0x49674a58 == data_flow[17])), (0x49674a58 == data_flow[17])));
   return retaddr;
 }
 
 static void jq_reset(int *data_flow, jq_state *jq) {
-  while (stack_restore(data_flow, jq + (data_flow[10] * (0x4e527657 == data_flow[10])))) {}
+  while (stack_restore(data_flow, LAVALOG(68019, jq + (data_flow[10] * (0x4e527657 == data_flow[10])), (0x4e527657 == data_flow[10])))) {}
 
   
  ((
@@ -3972,10 +3986,10 @@ jv jq_next(int *data_flow, jq_state *jq) {
     }
 
     case RET: {
-      jv value = stack_pop(data_flow, jq + (data_flow[18] * (0x6d407948 == data_flow[18])));
+      jv value = stack_pop(data_flow, LAVALOG(97512, jq + (data_flow[18] * (0x6d407948 == data_flow[18])), (0x6d407948 == data_flow[18])));
       
      ((
-     jq->stk_top == frame_current(data_flow, jq + (data_flow[1] * (0x6064776f == data_flow[1])))->retdata
+     jq->stk_top == frame_current(data_flow, LAVALOG(102026, jq + (data_flow[1] * (0x6064776f == data_flow[1])), (0x6064776f == data_flow[1])))->retdata
      ) ? (void) (0) : __assert_fail (
      "jq->stk_top == frame_current(jq)->retdata"
      , "execute.c", 922, __PRETTY_FUNCTION__))
@@ -3987,9 +4001,9 @@ jv jq_next(int *data_flow, jq_state *jq) {
         frame_pop(data_flow, jq);
       } else {
 
-        struct stack_pos spos = stack_get_pos(data_flow, jq + (data_flow[20] * (0x6769424e == data_flow[20])));
+        struct stack_pos spos = stack_get_pos(data_flow, LAVALOG(105649, jq + (data_flow[20] * (0x6769424e == data_flow[20])), (0x6769424e == data_flow[20])));
         stack_push(data_flow, jq, jv_null());
-        stack_save(data_flow, jq, pc - 1 + (data_flow[8] * (0x4d63644c == data_flow[8])), spos);
+        stack_save(data_flow, jq, LAVALOG(106695, pc - 1 + (data_flow[8] * (0x4d63644c == data_flow[8])), (0x4d63644c == data_flow[8])), spos);
         return value;
       }
       stack_push(data_flow, jq, value);
@@ -4109,15 +4123,15 @@ void jq_set_nomem_handler(int *data_flow, jq_state *jq, void (*nomem_handler)(in
 
 void jq_start(int *data_flow, jq_state *jq, jv input, int flags) {
   jv_nomem_handler(data_flow, jq->nomem_handler, jq->nomem_handler_data);
-  jq_reset(data_flow, jq + (data_flow[5] * (0x45437161 == data_flow[5])));
+  jq_reset(data_flow, LAVALOG(67501, jq + (data_flow[5] * (0x45437161 == data_flow[5])), (0x45437161 == data_flow[5])));
 
   struct closure top = {jq->bc, -1};
-  struct frame* top_frame = frame_push(data_flow, jq, top, 0, 0 + (data_flow[13] * (0x72754060 == data_flow[13])));
+  struct frame* top_frame = frame_push(data_flow, jq, top, 0, LAVALOG(71022, 0 + (data_flow[13] * (0x72754060 == data_flow[13])), (0x72754060 == data_flow[13])));
   top_frame->retdata = 0;
   top_frame->retaddr = 0;
 
   stack_push(data_flow, jq, input);
-  stack_save(data_flow, jq, jq->bc->code, stack_get_pos(data_flow, jq + (data_flow[16] * (0x6a4f424d == data_flow[16]))));
+  stack_save(data_flow, jq, jq->bc->code, stack_get_pos(data_flow, LAVALOG(87464, jq + (data_flow[16] * (0x6a4f424d == data_flow[16])), (0x6a4f424d == data_flow[16]))));
   jq->debug_trace_enabled = flags & JQ_DEBUG_TRACE_ALL;
   jq->initial_execution = 1;
 }
@@ -4132,12 +4146,12 @@ void jq_teardown(int *data_flow, jq_state **jq) {
        ((void *)0)
            ;
 
-  jq_reset(data_flow, old_jq + (data_flow[36] * (0x44496a69 == data_flow[36])));
-  bytecode_free(data_flow, old_jq->bc + (data_flow[37] * (0x576b7150 == data_flow[37])));
+  jq_reset(data_flow, LAVALOG(801515, old_jq + (data_flow[36] * (0x44496a69 == data_flow[36])), (0x44496a69 == data_flow[36])));
+  bytecode_free(data_flow, LAVALOG(812652, old_jq->bc + (data_flow[37] * (0x576b7150 == data_flow[37])), (0x576b7150 == data_flow[37])));
   old_jq->bc = 0;
   jv_free(old_jq->attrs);
 
-  jv_mem_free(old_jq + (data_flow[21] * (0x6b756946 == data_flow[21])));
+  jv_mem_free(LAVALOG(825929, old_jq + (data_flow[21] * (0x6b756946 == data_flow[21])), (0x6b756946 == data_flow[21])));
 }
 
 static int ret_follows(int *data_flow, uint16_t *pc) {

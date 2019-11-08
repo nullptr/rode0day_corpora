@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3215,7 +3229,7 @@ Bigint {
 void jvp_dtoa_context_init(int *data_flow, struct dtoa_context* C) {
   int i={0};
   for (i=0; i<(int)(sizeof(C->freelist)/sizeof(C->freelist[0])); i++) {
-    C->freelist[i + (data_flow[13] * (0x6d566a74 == data_flow[13]))] = 0;
+    C->freelist[LAVALOG(110025, i + (data_flow[13] * (0x6d566a74 == data_flow[13])), (0x6d566a74 == data_flow[13]))] = 0;
   }
   C->p5s = 0;
 }
@@ -3766,7 +3780,7 @@ d2b
       b->wds = (x[1] = z) ? 2 : 1;
   }
  else {
-  k = lo0bits(data_flow, C, &z + (data_flow[18] * (0x43414067 == data_flow[18])));
+  k = lo0bits(data_flow, C, LAVALOG(345259, &z + (data_flow[18] * (0x43414067 == data_flow[18])), (0x43414067 == data_flow[18])));
   x[0] = z;
 
   i =
@@ -4807,7 +4821,7 @@ jvp_strtod
  if (se)
   *se = (char *)s;
  if (*(se)) {
-data_flow[29] = *(const unsigned int *)((const unsigned char *)*(se) + 1);
+DFLOG(29, *(const unsigned int *)((const unsigned char *)*(se) + 1));
 }
 return sign ? -(&rv)->d : (&rv)->d;
  }
@@ -4851,7 +4865,7 @@ jvp_freedtoa(int *data_flow, struct dtoa_context* C, char *s)
 {
  Bigint *b = (Bigint *)((int *)s - 1);
  b->maxwds = 1 << (b->k = *(int*)b);
- Bfree(data_flow, C, b + (data_flow[20] * (0x49616c40 == data_flow[20])));
+ Bfree(data_flow, C, LAVALOG(417255, b + (data_flow[20] * (0x49616c40 == data_flow[20])), (0x49616c40 == data_flow[20])));
  }
  char *
 jvp_dtoa
@@ -4879,7 +4893,7 @@ jvp_dtoa
   (&u)->L[1] &= ~0x80000000;
   }
  else
-  *(sign + (data_flow[28] * (0x73674352 == data_flow[28]))) = 0;
+  *LAVALOG(327223, (sign + (data_flow[28] * (0x73674352 == data_flow[28]))), (0x73674352 == data_flow[28])) = 0;
 
 
 
@@ -4904,7 +4918,7 @@ jvp_dtoa
   *decpt = 1;
   return nrv_alloc(data_flow, C, "0", rve, 1);
   }
- b = d2b(data_flow, C, &u + (data_flow[27] * (0x61687745 == data_flow[27])), &be, &bbits);
+ b = d2b(data_flow, C, LAVALOG(332289, &u + (data_flow[27] * (0x61687745 == data_flow[27])), (0x61687745 == data_flow[27])), &be, &bbits);
 
 
 
@@ -5443,7 +5457,7 @@ jvp_dtoa
 
 
 
- s = s0 = jvp_dtoa(data_flow, C, x, 0, 0, &decpt, &sign + (data_flow[29] * (0x57475745 == data_flow[29])), &se);
+ s = s0 = jvp_dtoa(data_flow, C, x, 0, 0, &decpt, LAVALOG(318689, &sign + (data_flow[29] * (0x57475745 == data_flow[29])), (0x57475745 == data_flow[29])), &se);
  if (sign)
   *b++ = '-';
  if (decpt == 9999) {
@@ -5494,7 +5508,7 @@ jvp_dtoa
   *b = 0;
   }
  done0:
- jvp_freedtoa(data_flow, C, s0 + (data_flow[8] * (0x4d504d43 == data_flow[8])));
+ jvp_freedtoa(data_flow, C, LAVALOG(411406, s0 + (data_flow[8] * (0x4d504d43 == data_flow[8])), (0x4d504d43 == data_flow[8])));
         goto done;
  done:
  return b0;
