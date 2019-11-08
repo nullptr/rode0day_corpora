@@ -8,7 +8,7 @@ stages:
 build:all:
   stage: build
   image: 
-    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/afl_runner:16.04
     entrypoint: [""]
   script:
     - ( cd 10 && ./fix_tcpdump_for_i386.sh )
@@ -20,18 +20,104 @@ build:all:
       - ./*/*/lava-afl-cf
     expire_in: 1 week
 
-test_seeds:afl-clang:
+build:all64:
+  stage: build
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/afl_runner:16.04
+    entrypoint: [""]
+  script:
+    - ( cd 10 && ./fix_tcpdump_for_x86_64.sh )
+    - ./scripts/build.sh -X
+    - ./scripts/build.sh --cc afl-gcc -X
+  artifacts:
+    paths:
+      - ./*/*/lava-afl-gcc
+      - ./*/*/lava-afl-cf
+    expire_in: 1 week
+
+test_seeds:1:4:afl:
   stage: test_seeds
   image: 
-    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/afl_runner:16.04 
+    entrypoint: [""]
+  script:
+    - ./scripts/build.sh --copy-files
+    - ./scripts/test-solution.py -p lava-afl-gcc 3/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 4/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 5/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 6/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 7/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 8/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 9/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 10/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 11/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 12/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 13/info.yaml
+  dependencies:
+    - build:all
+
+test_seeds:2:4:afl:
+  stage: test_seeds
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/afl_runner:16.04 
     entrypoint: [""]
   script:
     - ./scripts/build.sh --copy-files
     - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml
     - ./scripts/test-solution.py -p lava-afl-cf 4/info.yaml
     - ./scripts/test-solution.py -p lava-afl-cf 5/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 6/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 7/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 8/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 9/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 10/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 11/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 12/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 13/info.yaml
   dependencies:
     - build:all
+
+test_seeds:3:4:afl:
+  stage: test_seeds
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/afl_runner:16.04 
+    entrypoint: [""]
+  script:
+    - ./scripts/build.sh --copy-files
+    - ./scripts/test-solution.py -p lava-afl-gcc 3/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 4/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 5/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 6/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 7/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 8/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 9/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 10/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 11/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 12/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 13/info.yaml
+  dependencies:
+    - build:all64
+
+test_seeds:4:4:afl:
+  stage: test_seeds
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/afl_runner:16.04 
+    entrypoint: [""]
+  script:
+    - ./scripts/build.sh --copy-files
+    - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 4/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 5/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 6/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 7/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 8/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 9/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 10/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 11/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 12/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 13/info.yaml
+  dependencies:
+    - build:all64
 
 test_solutions:3:9:afl-gcc:
   stage: test_solutions
@@ -53,7 +139,7 @@ test_solutions:4:9:afl-gcc:
   script:
     - ./scripts/build.sh --copy-files
     - tar -C 4 -xzf 4/solutions.tgz
-    - ./scripts/test-solution.py -p lava-afl-gcc 3/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 4/info.yaml
   dependencies:
     - build:all
 
@@ -83,6 +169,9 @@ test_seeds:hfuzz:
     - ./scripts/test-solution.py -p lava-hf 4/info.yaml
     - ./scripts/test-solution.py -p lava-hf 5/info.yaml
     - ./scripts/test-solution.py -p lava-hf 6/info.yaml
+    - ./scripts/test-solution.py -p lava-hf 7/info.yaml
+    - ./scripts/test-solution.py -p lava-hf 8/info.yaml
+    - ./scripts/test-solution.py -p lava-hf 9/info.yaml
   dependencies:
     - build:hfuzz
 
@@ -117,3 +206,53 @@ test_seeds:angora:
     - ./scripts/test-solution.py -p lava-ang 9/info.yaml
   dependencies:
     - build:angora
+
+test_solutions:3:9:angora:
+  stage: test_solutions
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04 
+    entrypoint: [""]
+  script:
+    - ./scripts/build.sh --copy-files
+    - tar -C 3 -xzf 3/solutions.tgz
+    - ./scripts/test-solution.py -p lava-ang 3/info.yaml
+  dependencies:
+    - build:angora
+
+test_solutions:4:9:angora:
+  stage: test_solutions
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04 
+    entrypoint: [""]
+  script:
+    - ./scripts/build.sh --copy-files
+    - tar -C 4 -xzf 4/solutions.tgz
+    - ./scripts/test-solution.py -p lava-ang 4/info.yaml
+  dependencies:
+    - build:angora
+
+test_solutions:5:9:angora:
+  stage: test_solutions
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04 
+    entrypoint: [""]
+  script:
+    - ./scripts/build.sh --copy-files
+    - tar -C 5 -xzf 5/solutions.tgz
+    - ./scripts/test-solution.py -p lava-ang 5/info.yaml
+  dependencies:
+    - build:angora
+
+test_solutions:6:9:angora:
+  stage: test_solutions
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04 
+    entrypoint: [""]
+  script:
+    - ./scripts/build.sh --copy-files
+    - tar -C 6 -xzf 6/solutions.tgz
+    - (cd 6 && ./patch_solutions.sh )
+    - ./scripts/test-solution.py -p lava-ang 6/info.yaml
+  dependencies:
+    - build:angora
+
