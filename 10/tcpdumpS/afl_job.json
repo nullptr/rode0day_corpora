@@ -1,12 +1,12 @@
 {
-    "session":"tcpdumpS",
+    "session": "tcpdumpS",
     "fuzzer": "/usr/local/i386/afl-fuzz",
-    "input":"inputs",
-    "output":"outputs",
-    "target":"./built/bin/tcpdump",
+    "input": "inputs",
+    "output": "outputs",
+    "target": "./lava-afl-cf/bin/tcpdump",
     "cmdline": "-nr @@",
-    "qemu": true,
-    "mem_limit":"none",
+    "qemu": false,
+    "mem_limit": "4096",
     "_time_limit": "24h",
     "interactive": true,
     "_timeout": "20",
@@ -20,26 +20,26 @@
     "environment": "",
     "fuzz_dirs": [ "outputs" ],
     "name": "tcpdumpS XXXX",
-    "description": "XXXX tcpdumpS M=1 N=4 YYYY 2019.06",
+    "description": "XXXX tcpdumpS M=1 N=4 YYYY 2019.06 ZZZZ",
     "duration": 24,
     "mutation_engine": "internal",
     "target_info": {
         "name": "tcpdumpS",
         "source": "rode0day 2019.06",
-        "known_bugs": 72,
+        "known_bugs": 49,
         "challenge_id": 43,
         "architecture": "x86_64",
         "src_archive": ""
-        },
+    },
     "fuzzer_info": {
         "id": 1,
         "name": "afl",
         "description": "NU_AFL",
         "version": "v2.52b"
-        },
+    },
     "verifier": {
         "id": 1,
         "name": "",
         "description": ""
-        }
+    }
 }

@@ -1,12 +1,12 @@
 {
-    "session":"greps",
+    "session": "tinyexprB2",
     "fuzzer": "/usr/local/i386/afl-fuzz",
-    "input":"inputs",
-    "output":"outputs",
-    "target":"./built/bin/grep",
-    "cmdline": "'\\(.\\).\\(.\\)' @@",
+    "input": "inputs",
+    "output": "outputs",
+    "target": "./bin/math",
+    "cmdline": "",
     "qemu": true,
-    "mem_limit":"4096",
+    "mem_limit": "4096",
     "_time_limit": "24h",
     "interactive": true,
     "_timeout": "20",
@@ -19,27 +19,27 @@
     "master_instances": 1,
     "environment": "",
     "fuzz_dirs": [ "outputs" ],
-    "name": "grepS XXXX",
-    "description": "XXXX grepS M=1 N=4 YYYY 2018.09",
+    "name": "tinyexprB2 XXXX",
+    "description": "XXXX tinyexprB2 M=1 N=4 YYYY 2019.07 ZZZZ",
     "duration": 24,
     "mutation_engine": "internal",
     "target_info": {
-        "name": "grepS",
-        "source": "rode0day 2018.09",
+        "name": "tinyexprB2",
+        "source": "rode0day 2019.07",
         "known_bugs": 49,
-        "challenge_id": 12,
-        "architecture": "x86",
+        "challenge_id": 45,
+        "architecture": "x86_64",
         "src_archive": ""
-        },
+    },
     "fuzzer_info": {
         "id": 1,
         "name": "afl",
         "description": "NU_AFL",
         "version": "v2.52b"
-        },
+    },
     "verifier": {
         "id": 1,
         "name": "",
         "description": ""
-        }
+    }
 }

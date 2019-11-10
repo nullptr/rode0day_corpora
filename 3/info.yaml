@@ -9,6 +9,7 @@ challenges:
         binary_arguments: "'\\(.\\).\\(.\\)' {input_file}"
         sample_inputs: ["inputs/hi.txt"]
         source_provided: false
+        known_bugs: 55
 
     grepS:
         challenge_id: 12 
@@ -19,6 +20,7 @@ challenges:
         sample_inputs: ["inputs/hi.txt"]
         source_provided: true
         source_path: "src"
+        known_bugs: 49
 
     jpegB:
         challenge_id: 13 
@@ -28,6 +30,7 @@ challenges:
         binary_arguments: "{input_file}"
         sample_inputs: ["inputs/logo.jpg", "inputs/rodeo.jpg"]
         source_provided: false
+        known_bugs: 101
 
     jpegS:
         challenge_id: 14 
@@ -38,3 +41,4 @@ challenges:
         sample_inputs: ["inputs/logo.jpg", "inputs/rodeo.jpg"]
         source_provided: true
         source_path: "src"
+        known_bugs: 127

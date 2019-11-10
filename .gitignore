@@ -6,11 +6,18 @@ magic.h
 bin
 built
 __pycache__
+test*
+build_script
+afl_job.json
+qsym_job.json
+honggfuzz_job.json
+eclipser_job.json
+angora_job.json
 
 
 3/greps/src/src/grep
 3/jpegs/src/src/memdjpeg
-4/newgrepS/src/src/grep
+4/newgrepS/src/src/newgrep
 4/pcreS/src/src/pcre2grep
 5/fileS2/src/src/file
 6/filemagicS/src/src/file

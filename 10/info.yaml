@@ -9,6 +9,7 @@ challenges:
         binary_arguments: "-nr {input_file}"
         sample_inputs: ["inputs/seed_sip.pcap", "inputs/seed_usb.pcap"]
         source_provided: false
+        known_bugs: 76
 
     audiofileB:
         challenge_id: 42
@@ -18,6 +19,7 @@ challenges:
         binary_arguments: "{input_file} /tmp/out.mp3 format aiff"
         sample_inputs: ["inputs/seed8.wav", "inputs/seed16.wav"]
         source_provided: false
+        known_bugs: 50
 
     tcpdumpS:
         challenge_id: 43
@@ -28,6 +30,7 @@ challenges:
         sample_inputs: ["inputs/seed_sip.pcap", "inputs/seed_usb.pcap"]
         source_provided: true
         source_path: "src"
+        known_bugs: 72
 
     audiofileS:
         challenge_id: 44
@@ -38,4 +41,5 @@ challenges:
         sample_inputs: ["inputs/seed8.wav", "inputs/seed16.wav"]
         source_provided: true
         source_path: "src"
+        known_bugs: 47
 

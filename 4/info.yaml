@@ -10,6 +10,7 @@ challenges:
         sample_inputs: ["inputs/seed"]
         source_provided: true
         source_path: "src"
+        known_bugs: 4
 
     pcreS:
         challenge_id: 16
@@ -20,6 +21,7 @@ challenges:
         sample_inputs: ["inputs/pattern"]
         source_provided: true
         source_path: "src"
+        known_bugs: 37
 
     pcreB:
         challenge_id: 17 
@@ -29,4 +31,5 @@ challenges:
         binary_arguments: "-f {input_file} {install_dir}/inputs/haystack"
         sample_inputs: ["inputs/pattern"]
         source_provided: false
+        known_bugs: 106
 

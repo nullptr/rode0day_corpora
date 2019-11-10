@@ -7,7 +7,7 @@ challenges:
         install_dir: "jqB3"
         binary_path: "bin/jq"
         binary_args_COMMENT: "The binary_arguments string has python format strings so the {{ hello : . }} is escaped and should be treated as { hello : . }"
-        binary_arguments: "{install_dir}/bin/jq --slurp '[. | . | {{ hello: . }}]' {input_file}"
+        binary_arguments: "--slurp '[. | . | {{ hello: . }}]' {input_file}"
         sample_inputs: ["inputs/fixed.json"]
         source_provided: false
 
@@ -16,7 +16,7 @@ challenges:
         architecture: "x86"
         install_dir: "sqliteB3"
         binary_path: "bin/sqlite"
-        binary_arguments: "< {input_file} "
+        binary_arguments: ""
         sample_inputs: ["inputs/help.sql", "inputs/rnd.sql"]
         source_provided: false
 

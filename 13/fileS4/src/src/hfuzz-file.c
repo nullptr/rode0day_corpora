@@ -38,7 +38,7 @@ int LLVMFuzzerInitialize(int* argc, char*** argv) {
         abort();
         return 1;
     }
-    const char* magic_file = "/usr/share/misc/magic.mgc";
+    const char* magic_file = "built/share/misc/magic.mgc";
     if (*argc > 1) {
         magic_file = (*argv)[1];
     }

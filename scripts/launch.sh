@@ -100,7 +100,7 @@ fi
 # singularity exec -B "/tmp/${SLURM_JOB_ID}":/tmp $SIMG /start_fuzzing -n 8 -t $FDIR &
 CNAME="${FZ}_${TGT}_$(date +%s)"
 set -x
-docker run -d --rm --name $CNAME -v $FDIR:$FDIR -w $FDIR --cap-add=SYS_PTRACE --pid=host $DIMG -n 2 -t $FDIR
+docker run -d --rm --name $CNAME -v $FDIR:$FDIR -w $FDIR --cap-add=SYS_PTRACE -e "QEMU_RESERVED_VA=0xf700000" --pid=host $DIMG -n 2 -t $FDIR
 set +x
 
 sleep $(($T23H - $SECONDS))

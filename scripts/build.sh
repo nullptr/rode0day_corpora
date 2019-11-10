@@ -17,17 +17,29 @@ download_challenges() {
     PREFIX="https://rode0day.mit.edu/static/corpora"
     FILTER="--exclude=*/src --exclude=info.yaml --exclude=*.swp --keep-old-files"
     for i in {3..13}; do mkdir -p "$i"; done
-    wget -qO- ${PREFIX}/18.09_uioiary7291jsqeYOe6GLtdCIdtG9rFk.tar.gz | tar $FILTER -C 3 -xzf -
-    wget -qO- ${PREFIX}/18.10_dRgl8DaTW6CVbmzCRBeS8cWCWzEKKpd5.tar.gz | tar $FILTER -C 4 -xzf -
-    wget -qO- ${PREFIX}/18.11_RhNVrLtaOetyZrjtmOBlItBWNeUsqlpl.tar.gz | tar $FILTER -C 5 -xzf -
-    wget -qO- ${PREFIX}/19.01_NiEBMqGzGf9WOn0XhJXnsKNrNqFshcbh.tar.gz | tar $FILTER -C 6 -xzf -
-    wget -qO- ${PREFIX}/19.02_hCzaul3skeIWojkZv8c4rccgyV99Sqo1.tar.gz | tar $FILTER -C 7 -xzf -
-    wget -qO- ${PREFIX}/19.03_HD7hb0POwkQEIwKOo9AQcnM0GCq9mKGM.tar.gz | tar $FILTER -C 8 -xzf -
-    wget -qO- ${PREFIX}/19.05_IaGjrmYTjtDVCwMmNUuSUbUfcXMFeszE.tar.gz | tar $FILTER -C 9 -xzf -
-    wget -qO- ${PREFIX}/19.06_t5QACvuwa7SBJjvT1i5GCf14RtPDfgI3.tar.gz | tar $FILTER -C 10 -xzf -
-    wget -qO- ${PREFIX}/19.07_OyGMGe8kLozgWx9je2IbKiG2msIzixl6.tar.gz | tar $FILTER -C 11 -xzf -
-    wget -qO- ${PREFIX}/19.09_IIUBq9nEVBRwaPaZnOnZoE9qKmT20Smg.tar.gz | tar $FILTER -C 12 -xzf -
-    wget -qO- ${PREFIX}/19.10_vGBLGzVUHlUFNd5Ji2UcvtGHFlleGsrR.tar.gz | tar $FILTER -C 13 -xzf -
+    wget -qO- ${PREFIX}/18.09_uioiary7291jsqeYOe6GLtdCIdtG9rFk.tar.gz | tar $FILTER -C 3 -xzf - 2>/dev/null
+    wget -qO- ${PREFIX}/18.10_dRgl8DaTW6CVbmzCRBeS8cWCWzEKKpd5.tar.gz | tar $FILTER -C 4 -xzf - 2>/dev/null
+    wget -qO- ${PREFIX}/18.11_RhNVrLtaOetyZrjtmOBlItBWNeUsqlpl.tar.gz | tar $FILTER -C 5 -xzf - 2>/dev/null
+    wget -qO- ${PREFIX}/19.01_NiEBMqGzGf9WOn0XhJXnsKNrNqFshcbh.tar.gz | tar $FILTER -C 6 -xzf - 2>/dev/null
+    wget -qO- ${PREFIX}/19.02_hCzaul3skeIWojkZv8c4rccgyV99Sqo1.tar.gz | tar $FILTER -C 7 -xzf - 2>/dev/null
+    wget -qO- ${PREFIX}/19.03_HD7hb0POwkQEIwKOo9AQcnM0GCq9mKGM.tar.gz | tar $FILTER -C 8 -xzf - 2>/dev/null
+    wget -qO- ${PREFIX}/19.05_IaGjrmYTjtDVCwMmNUuSUbUfcXMFeszE.tar.gz | tar $FILTER -C 9 -xzf - 2>/dev/null
+    wget -qO- ${PREFIX}/19.06_t5QACvuwa7SBJjvT1i5GCf14RtPDfgI3.tar.gz | tar $FILTER -C 10 -xzf - 2>/dev/null
+    wget -qO- ${PREFIX}/19.07_OyGMGe8kLozgWx9je2IbKiG2msIzixl6.tar.gz | tar $FILTER -C 11 -xzf - 2>/dev/null
+    wget -qO- ${PREFIX}/19.09_IIUBq9nEVBRwaPaZnOnZoE9qKmT20Smg.tar.gz | tar $FILTER -C 12 -xzf - 2>/dev/null
+    wget -qO- ${PREFIX}/19.10_vGBLGzVUHlUFNd5Ji2UcvtGHFlleGsrR.tar.gz | tar $FILTER -C 13 -xzf - 2>/dev/null
+    echo "[*] all challenges downloaded!"
+}
+
+create_job_files() {
+    for i in {3..13}; do
+        ./scripts/create-configs.py --example 3/jpegb/afl_job.json --config afl_job.json --prefix lava-afl-cf -j AFL --yaml ${i}/info.yaml
+        ./scripts/create-configs.py --example 3/jpegb/qsym_job.json --config qsym_job.json -Q -j QSYM --yaml ${i}/info.yaml
+        ./scripts/create-configs.py --example 3/jpegb/honggfuzz_job.json --config honggfuzz_job.json --prefix lava-hf -j HF --yaml ${i}/info.yaml
+        ./scripts/create-configs.py --example 3/jpegb/eclipser_job.json --config eclipser_job.json -Q -j EC --yaml ${i}/info.yaml
+        ./scripts/create-configs.py --example 3/jpegb/angora_job.json --config angora_job.json --prefix lava-ang -j Ang --yaml ${i}/info.yaml
+    done
+    echo "[*] all job config files creaetd!"
 }
 
 copy_required_files() {
@@ -37,6 +49,14 @@ copy_required_files() {
     cp 12/fileS3/src/magic.mgc 12/fileS3/built/share/misc/
     mkdir -p  13/fileS4/built/share/misc
     cp 13/fileS4/src/magic.mgc 13/fileS4/built/share/misc/
+    echo "[*] required files copied"
+}
+
+do_prep() {
+    download_challenges
+    create_job_files
+    copy_required_files
+    echo "[*] setup complete! Ready to fuzz uninstrumented binaries or compile instrumented ones."
 }
 
 make_clean() {
@@ -166,7 +186,8 @@ find_clang() {
 usage() {
     echo "Usage: $0 [ [-b|--build <all|MMYY>] | [-t|--target <target_name>] ]"
     echo "                          [-L|--no-lavalogs] [-W|--show-warnings] [-X|--no-i386] [--cc <compiler>] "
-    echo "                          [--gcov] [--ccov] [--clean] [--download]"
+    echo "                          [--gcov] [--ccov] [--clean]"
+    echo "Usage: $0 [ --download | --create-configs | --copy-files | --help ] "
     exit 0
 }
 
@@ -219,12 +240,18 @@ do
             ;;
         --download)
             download_challenges
-            echo "[*] all challenges downloaded!"
+            exit 0
+            ;;
+        --create-configs)
+            create_job_files
             exit 0
             ;;
         --copy-files)
             copy_required_files
-            echo "[*] required files copied"
+            exit 0
+            ;;
+        --prep)
+            do_prep
             exit 0
             ;;
         -h|--help)

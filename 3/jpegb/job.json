@@ -1,5 +1,5 @@
 {
-    "session":"jpegB",
+    "session":"jpegb",
     "fuzzer": "/usr/local/i386/afl-fuzz",
     "input":"inputs",
     "output":"outputs",
@@ -12,7 +12,7 @@
     "_timeout": "20",
     "_afl_margs": "",
     "_file": "",
-    "_docker": "registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp:16.04",
+    "_docker": "registry.gitlab.com/rode0day/fuzzer-testing/i386/afl:16.04",
     "_dict": "dict/consts.txt",
     "dirty": false,
     "dumb": false,
@@ -20,7 +20,7 @@
     "environment": "",
     "fuzz_dirs": [ "outputs" ],
     "name": "jpegB XXXX",
-    "description": "XXXX jpegB M=1 N=4 YYYY 2018.09",
+    "description": "XXXX jpegB M=1 N=4 YYYY 2018.09 ZZZZ",
     "duration": 24,
     "mutation_engine": "internal",
     "target_info": {
@@ -35,7 +35,7 @@
         "id": 1,
         "name": "afl",
         "description": "NU_AFL",
-        "version": "v2.52b"
+        "version": "v2.56b"
         },
     "verifier": {
         "id": 1,

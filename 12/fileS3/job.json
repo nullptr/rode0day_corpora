@@ -1,12 +1,12 @@
 {
-    "session":"greps",
+    "session": "fileS3",
     "fuzzer": "/usr/local/i386/afl-fuzz",
-    "input":"inputs",
-    "output":"outputs",
-    "target":"./built/bin/grep",
-    "cmdline": "'\\(.\\).\\(.\\)' @@",
+    "input": "inputs",
+    "output": "outputs",
+    "target": "./built/bin/file",
+    "cmdline": "-m ./built/share/misc/magic.mgc @@",
     "qemu": true,
-    "mem_limit":"4096",
+    "mem_limit": "4096",
     "_time_limit": "24h",
     "interactive": true,
     "_timeout": "20",
@@ -19,27 +19,27 @@
     "master_instances": 1,
     "environment": "",
     "fuzz_dirs": [ "outputs" ],
-    "name": "grepS XXXX",
-    "description": "XXXX grepS M=1 N=4 YYYY 2018.09",
+    "name": "fileS3 XXXX",
+    "description": "XXXX fileS3 M=1 N=4 YYYY 2019.09 ZZZZ",
     "duration": 24,
     "mutation_engine": "internal",
     "target_info": {
-        "name": "grepS",
-        "source": "rode0day 2018.09",
+        "name": "fileS3",
+        "source": "rode0day 2019.09",
         "known_bugs": 49,
-        "challenge_id": 12,
+        "challenge_id": 52,
         "architecture": "x86",
         "src_archive": ""
-        },
+    },
     "fuzzer_info": {
         "id": 1,
         "name": "afl",
         "description": "NU_AFL",
         "version": "v2.52b"
-        },
+    },
     "verifier": {
         "id": 1,
         "name": "",
         "description": ""
-        }
+    }
 }

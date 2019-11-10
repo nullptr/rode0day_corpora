@@ -1,0 +1,41 @@
+{
+    "session": "jpegb",
+    "fuzzer": "eclipser",
+    "input": "inputs",
+    "output": "outputs",
+    "target": "./bin/memdjpeg",
+    "cmdline": "@@",
+    "qemu": true,
+    "mem_limit": "4096",
+    "_time_limit": "24h",
+    "_timeout": "20",
+    "_afl_margs": "",
+    "_file": "",
+    "_docker": "registry.gitlab.com/rode0day/fuzzer-testing/eclipser_runner:16.04",
+    "_dict": "dict/consts.txt",
+    "environment": "",
+    "fuzz_dirs": [ "outputs" ],
+    "name": "EC jpegb XXXX",
+    "description": "XXXX qemu jpegb M=1 N=4 YYYY 2018.09 ZZZZ",
+    "duration": 24,
+    "mutation_engine": "internal",
+    "target_info": {
+        "name": "jpegb",
+        "source": "rode0day 2018.09",
+        "known_bugs": 101,
+        "challenge_id": 13,
+        "architecture": "x86",
+        "src_archive": ""
+    },
+    "fuzzer_info": {
+        "id": 4,
+        "name": "eclipser",
+        "description": "NU_Eclipser",
+        "version": "v1.0"
+    },
+    "verifier": {
+        "id": 1,
+        "name": "",
+        "description": ""
+    }
+}

@@ -1,45 +1,45 @@
 {
-    "session":"greps",
+    "session": "tcpdumpB",
     "fuzzer": "/usr/local/i386/afl-fuzz",
-    "input":"inputs",
-    "output":"outputs",
-    "target":"./built/bin/grep",
-    "cmdline": "'\\(.\\).\\(.\\)' @@",
+    "input": "inputs",
+    "output": "outputs",
+    "target": "./bin/tcpdump",
+    "cmdline": "-nr @@",
     "qemu": true,
-    "mem_limit":"4096",
+    "mem_limit": "4096",
     "_time_limit": "24h",
     "interactive": true,
     "_timeout": "20",
     "_afl_margs": "",
     "_file": "",
-    "_docker": "registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp:16.04",
+    "_docker": "registry.gitlab.com/rode0day/fuzzer-testing/i386/afl:16.04",
     "_dict": "dict/consts.txt",
     "dirty": false,
     "dumb": false,
     "master_instances": 1,
     "environment": "",
     "fuzz_dirs": [ "outputs" ],
-    "name": "grepS XXXX",
-    "description": "XXXX grepS M=1 N=4 YYYY 2018.09",
+    "name": "AFL tcpdumpB XXXX",
+    "description": "XXXX qemu tcpdumpB M=1 N=4 YYYY 2019.06 ZZZZ",
     "duration": 24,
     "mutation_engine": "internal",
     "target_info": {
-        "name": "grepS",
-        "source": "rode0day 2018.09",
-        "known_bugs": 49,
-        "challenge_id": 12,
-        "architecture": "x86",
+        "name": "tcpdumpB",
+        "source": "rode0day 2019.06",
+        "known_bugs": 76,
+        "challenge_id": 41,
+        "architecture": "x86_64",
         "src_archive": ""
-        },
+    },
     "fuzzer_info": {
         "id": 1,
         "name": "afl",
         "description": "NU_AFL",
-        "version": "v2.52b"
-        },
+        "version": "v2.56b"
+    },
     "verifier": {
         "id": 1,
         "name": "",
         "description": ""
-        }
+    }
 }

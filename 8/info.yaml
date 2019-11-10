@@ -10,6 +10,7 @@ challenges:
         sample_inputs: ["inputs/sample.txt.bz2"]
         source_provided: true
         source_path: "src"
+        known_bugs: 6
 
     jqB2:
         challenge_id: 33
@@ -19,6 +20,7 @@ challenges:
         binary_arguments: "-eSCr . {input_file}"
         sample_inputs: ["inputs/fixed.json"]
         source_provided: false
+        known_bugs: 137
 
     pcreS2:
         challenge_id: 34
@@ -29,6 +31,7 @@ challenges:
         sample_inputs: ["inputs/patterns1", "inputs/patterns2"]
         source_provided: true
         source_path: "src"
+        known_bugs: 25
 
 
     yamlB4:
@@ -39,6 +42,7 @@ challenges:
         binary_arguments: "-c -u {input_file}"
         sample_inputs: ["inputs/sample.yaml", "inputs/movies.yaml", "inputs/john.yaml"]
         source_provided: false
+        known_bugs: 6
 
     filemagicS2:
         challenge_id: 36
@@ -49,3 +53,4 @@ challenges:
         sample_inputs: ["inputs/magic.mgc"]
         source_provided: true
         source_path: "src"
+        known_bugs: 9

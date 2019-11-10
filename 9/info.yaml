@@ -6,9 +6,10 @@ challenges:
         architecture: "x86"
         install_dir: "sqliteB"
         binary_path: "bin/sqlite"
-        binary_arguments: "< {input_file} "
+        binary_arguments: ""
         sample_inputs: ["inputs/help.sql", "inputs/rnd.sql"]
         source_provided: false
+        known_bugs: 56
 
     fileB4:
         challenge_id: 38
@@ -18,6 +19,7 @@ challenges:
         binary_arguments: "-m {install_dir}/share/misc/magic.mgc {input_file}"
         sample_inputs: ["inputs/hello"]
         source_provided: false
+        known_bugs: 42
 
     jpegB2:
         challenge_id: 39
@@ -27,6 +29,7 @@ challenges:
         binary_arguments: "{input_file}"
         sample_inputs: ["inputs/logo.jpg", "inputs/rodeo.jpg"]
         source_provided: false
+        known_bugs: 31
 
 
     jpegS2:
@@ -38,4 +41,5 @@ challenges:
         sample_inputs: ["inputs/logo.jpg", "inputs/rodeo.jpg"]
         source_provided: true
         source_path: "src"
+        known_bugs: 20
 

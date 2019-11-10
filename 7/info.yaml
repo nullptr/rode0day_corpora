@@ -11,6 +11,7 @@ challenges:
         sample_inputs: ["inputs/fixed.json"]
         source_provided: true
         source_path: "src"
+        known_bugs: 86
 
     fileB3:
         challenge_id: 28
@@ -20,6 +21,7 @@ challenges:
         binary_arguments: "-m {install_dir}/share/misc/magic.mgc {input_file}"
         sample_inputs: ["inputs/hello.txt"]
         source_provided: false
+        known_bugs: 72
 
     yamlS3:
         challenge_id: 29
@@ -31,6 +33,7 @@ challenges:
         sample_inputs: ["inputs/sample.yaml", "inputs/movies.yaml", "inputs/john.yaml"]
         source_provided: true 
         source_path: "src"
+        known_bugs: 18
 
     yamlB3:
         challenge_id: 30
@@ -40,6 +43,7 @@ challenges:
         binary_arguments: "-c -u {input_file}"
         sample_inputs: ["inputs/sample.yaml", "inputs/movies.yaml", "inputs/john.yaml"]
         source_provided: false
+        known_bugs: 9
 
     bzipB:
         challenge_id: 31
@@ -49,4 +53,5 @@ challenges:
         binary_arguments: "-dsc {input_file} > /tmp/output"
         sample_inputs: ["inputs/sample.txt.bz2"]
         source_provided: false
+        known_bugs: 21
 

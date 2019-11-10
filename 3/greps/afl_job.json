@@ -1,5 +1,5 @@
 {
-    "session":"grepS",
+    "session":"greps",
     "fuzzer": "/usr/local/i386/afl-fuzz",
     "input":"inputs",
     "output":"outputs",
