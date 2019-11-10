@@ -277,7 +277,7 @@ test_seeds:angora:
 test_solutions:3:9:angora:
   stage: test_solutions
   image: 
-    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04 
     entrypoint: [""]
   script:
     - ./scripts/build.sh --copy-files
@@ -289,7 +289,7 @@ test_solutions:3:9:angora:
 test_solutions:4:9:angora:
   stage: test_solutions
   image: 
-    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04 
     entrypoint: [""]
   script:
     - ./scripts/build.sh --copy-files
@@ -301,7 +301,7 @@ test_solutions:4:9:angora:
 test_solutions:5:9:angora:
   stage: test_solutions
   image: 
-    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04 
     entrypoint: [""]
   script:
     - ./scripts/build.sh --copy-files
@@ -313,7 +313,7 @@ test_solutions:5:9:angora:
 test_solutions:6:9:angora:
   stage: test_solutions
   image: 
-    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04 
     entrypoint: [""]
   script:
     - ./scripts/build.sh --copy-files

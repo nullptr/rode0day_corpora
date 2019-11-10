@@ -8,13 +8,14 @@ FZ=afl
 FUZZER=afl
 REGISTRY="registry.gitlab.com/rode0day/fuzzer-testing"
 TGT="$1"
+NF="2"
 DIMG="${REGISTRY}/afl_runner:16.04"
 T23H="$(( 60 * 60 * 23 ))"
 T24H="$(( 60 * 60 * 23 + 60 * 54 ))"
 
 
 usage() {
-    echo "Usage: $0 [--fuzzer <fuzzer_name>] [--limit <# seconds>] [--test] <target_name>"
+    echo "Usage: $0 [--fuzzer <fuzzer_name>] [-N <# instances>] [--limit <# seconds>] [--test] <target_name>"
     exit 1
 }
 
@@ -31,6 +32,14 @@ select_fuzzer() {
         honggfuzz)
             FZ=hf
             DIMG="${REGISTRY}/honggfuzz_runner:16.04"
+        ;;
+        eclipser)
+            FZ=ec
+            DIMG="${REGISTRY}/eclipser_runner:16.04"
+        ;;
+        angora)
+            FZ=ang
+            DIMG="${REGISTRY}angora_runner:16.04"
         ;;
         *)
             FZ=afl
@@ -56,6 +65,10 @@ while (( "$#" )); do
             T23H="$(( 60 * 10 ))"
             T24H="$(( 60 * 15 ))"
             shift
+            ;;
+        -N)
+            NFH="$2"
+            shift 2
             ;;
         -h|--help)
             usage
@@ -88,7 +101,7 @@ mkdir -p $FDIR/outputs
 while [ ! -e $FDIR/${FZ}_job.json ]; do sleep 30s; done
 
 JOB_ID=${SLURM_JOB_ID:-$(date +%m%d%_H)}
-sed -i "s/XXXX/${JOB_ID}/" $FDIR/${FZ}_job.json
+sed -i "s/XXXX/${JOB_ID}/; s/YYYY/${FUZZER}/; s/N=4/N=${NF}/" $FDIR/${FZ}_job.json
 sed -i 's/_dict/dict/' $FDIR/${FZ}_job.json
 
 if [ -e ${HOME}/Source/NU_AFL.luckyfuzz ]; then
@@ -100,7 +113,7 @@ fi
 # singularity exec -B "/tmp/${SLURM_JOB_ID}":/tmp $SIMG /start_fuzzing -n 8 -t $FDIR &
 CNAME="${FZ}_${TGT}_$(date +%s)"
 set -x
-docker run -d --rm --name $CNAME -v $FDIR:$FDIR -w $FDIR --cap-add=SYS_PTRACE -e "QEMU_RESERVED_VA=0xf700000" --pid=host $DIMG -n 2 -t $FDIR
+docker run -d --rm --name $CNAME -v $FDIR:$FDIR -w $FDIR --cap-add=SYS_PTRACE -e "QEMU_RESERVED_VA=0xf700000" --pid=host $DIMG -n $NF -t $FDIR
 set +x
 
 sleep $(($T23H - $SECONDS))

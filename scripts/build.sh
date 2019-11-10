@@ -33,11 +33,11 @@ download_challenges() {
 
 create_job_files() {
     for i in {3..13}; do
-        ./scripts/create-configs.py --example 3/jpegb/afl_job.json --config afl_job.json --prefix lava-afl-cf -j AFL --yaml ${i}/info.yaml
-        ./scripts/create-configs.py --example 3/jpegb/qsym_job.json --config qsym_job.json -Q -j QSYM --yaml ${i}/info.yaml
-        ./scripts/create-configs.py --example 3/jpegb/honggfuzz_job.json --config honggfuzz_job.json --prefix lava-hf -j HF --yaml ${i}/info.yaml
-        ./scripts/create-configs.py --example 3/jpegb/eclipser_job.json --config eclipser_job.json -Q -j EC --yaml ${i}/info.yaml
-        ./scripts/create-configs.py --example 3/jpegb/angora_job.json --config angora_job.json --prefix lava-ang -j Ang --yaml ${i}/info.yaml
+        ./scripts/create-configs.py --example 3/jpegb/afl_job.json --config afl_job.json --prefix lava-afl-cf -j AFL --yaml ${i}/info.yaml >/dev/null
+        ./scripts/create-configs.py --example 3/jpegb/qsym_job.json --config qsym_job.json -Q -j QSYM --yaml ${i}/info.yaml >/dev/null
+        ./scripts/create-configs.py --example 3/jpegb/honggfuzz_job.json --config honggfuzz_job.json --prefix lava-hf -j HF --yaml ${i}/info.yaml >/dev/null
+        ./scripts/create-configs.py --example 3/jpegb/eclipser_job.json --config eclipser_job.json -Q -j EC --yaml ${i}/info.yaml >/dev/null
+        ./scripts/create-configs.py --example 3/jpegb/angora_job.json --config angora_job.json --prefix lava-ang -j Ang --yaml ${i}/info.yaml >/dev/null
     done
     echo "[*] all job config files creaetd!"
 }
