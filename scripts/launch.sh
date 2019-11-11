@@ -1,7 +1,5 @@
 #!/bin/bash
 
-date
-grep "model name" /proc/cpuinfo | head -n 1
 SECONDS=0
 
 FZ=afl
@@ -60,7 +58,7 @@ while (( "$#" )); do
             shift
             ;;
         --pull)
-            docker pull $DIMG
+            docker pull -q $DIMG
             shift
             ;;
         -N)
@@ -82,6 +80,9 @@ FBASE=/dev/shm/fuzz
 FDIR=/dev/shm/fuzz/${FZ}/${TGT}
 SIMG=${HOME}/s_images/${FZ}.sif
 AFL=${HOME}/s_images/aflpp.sif
+
+date
+grep "model name" /proc/cpuinfo | head -n 1
 
 TGT_ROOT=$(find -mindepth 2 -maxdepth 2 -type d -name "$TGT" -printf "%P")
 if [ ! -d "$TGT_ROOT" ]; then

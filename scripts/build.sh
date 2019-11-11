@@ -242,6 +242,11 @@ do
             find_clang
             shift
             ;;
+        --scov)
+            FUNC=make_scov
+            find_clang
+            shift
+            ;;
         --clean)
             FUNC=make_clean
             shift
