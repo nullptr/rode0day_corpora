@@ -5,6 +5,9 @@ TARGET=""
 FUNC=${FUNC:-make_lava}
 CC=${CC:-gcc}
 CFLAGS=${CFLAGS:--m32 -DLAVA_LOGGING -w}
+ARGV="$@"
+DOCKER=""
+REGISTRY="registry.gitlab.com/rode0day/fuzzer-testing"
 
 declare -A CC_ABV
 
@@ -224,6 +227,11 @@ do
             CC=/angora/bin/angora-clang
             shift
             ;;
+        --docker)
+            ARGV="${ARGV/--docker $2 }"
+            DOCKER="${REGISTRY}/${2}_runner:16.04"
+            shift 2
+            ;;
         --gcov)
             FUNC=make_gcov
             CC=gcc
@@ -273,7 +281,10 @@ if [ declare -f build_${BUILD} 2>/dev/null ]; then
     exit 1
 fi
 
-if  which $CC >/dev/null; then
+if [[ -n $DOCKER ]]; then
+    docker pull $DOCKER || exit 1
+    docker run --rm -it -v "$(pwd)":/data --entrypoint ./scripts/build.sh $DOCKER "$ARGV"
+elif  which $CC >/dev/null; then
     build_${BUILD} $TARGET
 else
     echo "[-] compiler ($CC) not found."
