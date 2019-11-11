@@ -18,7 +18,7 @@ challenges:
         architecture: "x86"
         install_dir: "fileB3"
         binary_path: "bin/file"
-        binary_arguments: "-m {install_dir}/share/misc/magic.mgc {input_file}"
+        binary_arguments: "-Lm {install_dir}/share/misc/magic.mgc {input_file}"
         sample_inputs: ["inputs/hello.txt"]
         source_provided: false
         known_bugs: 72
