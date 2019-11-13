@@ -63,6 +63,7 @@ class VerifyWorker(object):
         self.binary_path = challenge['binary_path']
         self.base_dir = base_dir
         self.prefix = prefix
+        self.use_stdin = '@@' not in challenge['binary_arguments']
 
         source_dir = os.path.join(base_dir, self.install_dir, 'src', 'src')
         self.source_dir = source_dir if os.path.isdir(source_dir) else None
@@ -94,24 +95,25 @@ class VerifyWorker(object):
                 'cov_bb': len(set(trace)),
                 'cov_bbe': len(set(edge_trace))}
 
-    def run_with_dynamorio(self, crash):
+    def run_with_dynamorio(self, input_file):
         """
         Run the program with Dynamorio's drcov tool and capture basic block coverage.
            If the  source directory is present, assume the binary has symbols (non stripped),
            and collect an lcov 'coverage.info' file for source line coverage.
         """
 
-        tgt_cmd = self.get_target_command('.current_input', lavalog=self.source_dir is not None)
+        tgt_cmd = self.get_target_command(input_file, lavalog=self.source_dir is not None)
         tgt_cmd = shlex.split(tgt_cmd)
 
         is64 = is64bit(tgt_cmd[0])
         drrun = DRRUN if is64 else DRRUN32
         dr2lcov = DR2LCOV if is64 else DR2LCOV32
+        stdin_fd = open(input_file, 'rb') if self.use_stdin else DEVNULL
         with tempfile.TemporaryDirectory() as out:
             args = [drrun, '-t', 'drcov', '-logdir', out, '--']+tgt_cmd
             logger.info("%s", " ".join(args))
             try:
-                run(args, stdout=DEVNULL, stderr=DEVNULL, timeout=30)
+                run(args, stdin=stdin_fd, stdout=DEVNULL, stderr=DEVNULL, timeout=30)
             except TimeoutExpired:
                 logger.error("Timeout in drrun")
             files = glob.glob("{}/*.log".format(out))
@@ -129,6 +131,9 @@ class VerifyWorker(object):
                 run(args, stdout=DEVNULL, stderr=DEVNULL)
             else:
                 logger.error("NO SOURCE: %s", self.install_dir)
+        if self.use_stdin:
+            stdin_fd.close()
+
         return stats
 
     def run_exploitable(self, crash):
@@ -181,8 +186,11 @@ class VerifyWorker(object):
         tgt_cmd = self.get_target_command(input_file, lavalog=True)
         if tgt_cmd is None:
             return None
+
+        stdin_fd = open(input_file, 'rb') if self.use_stdin else DEVNULL
+
         logger.info("Executing: %s", tgt_cmd)
-        p = Popen(tgt_cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
+        p = Popen(tgt_cmd, stdin=stdin_fd, stdout=PIPE, stderr=PIPE, shell=True)
         try:
             sout, serr = p.communicate(timeout=15)
         except TimeoutExpired:
@@ -190,6 +198,10 @@ class VerifyWorker(object):
             p.kill()
             return r
         r['returncode'] = p.returncode
+
+        if self.use_stdin:
+            stdin_fd.close()
+
         lava = serr.find(b'LAVALOG:')
         if lava > 0:
             msg = serr[lava:].split(maxsplit=3)
