@@ -29,7 +29,10 @@ LIBOBJ = \
 
 
 jpeg: $(LIBOBJ) example-pre.o
-	$(CC) $(CFLAGS) -o jpeg $^
+	$(CC) $(CFLAGS) -o $@ $^
+
+hfuzz-jpeg: $(LIBOBJ) hfuzz-jpeg-pre.o
+	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
 	rm -f *.o \
