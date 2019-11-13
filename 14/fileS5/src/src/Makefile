@@ -15,30 +15,29 @@ LIBOBJ = \
     cdf_time-pre.o \
     compress-pre.o \
     ctime_r-pre.o \
-    der-pre.c \
-    dprintf-pre.c \
+    der-pre.o \
+    dprintf-pre.o \
     encoding-pre.o \
-    file-pre.o \
     fmtcheck-pre.o \
     fsmagic-pre.o \
     funcs-pre.o \
     getline-pre.o \
     getopt_long-pre.o \
-    gmtime_r-pre.c \
-    is_json-pre.c \
+    gmtime_r-pre.o \
+    is_json-pre.o \
     is_tar-pre.o \
-    localtime_r-pre.c \
+    localtime_r-pre.o \
     magic-pre.o \
     pread-pre.o \
     print-pre.o \
     readcdf-pre.o \
     readelf-pre.o \
-    seccomp-pre.c \
+    seccomp-pre.o \
     softmagic-pre.o \
     strcasestr-pre.o \
     strlcat-pre.o \
     strlcpy-pre.o \
-    teststrchr-pre.c \
+    teststrchr-pre.o \
     vasprintf-pre.o
 
 
@@ -53,8 +52,11 @@ LIBOBJ = \
 magic.h : ${HDR}
 	sed -e "s/X.YY/$$(echo 5.35 | tr -d .)/" < ${HDR} > $@
 
-file : magic.h $(LIBOBJ)
-	 $(CC) -g $(CFLAGS) -o $@ $^ -lz
+file : magic.h $(LIBOBJ) file-pre.o
+	 $(CC) -g $(CFLAGS) -o $@ $(LIBOBJ) file-pre.o -lz
+
+hfuzz-file : magic.h $(LIBOBJ) hfuzz-file-pre.o
+	 $(CC) -g $(CFLAGS) -o $@ $(LIBOBJ) hfuzz-file-pre.o -lz
 
 preclean : 
 	rm -f *-pre.c
