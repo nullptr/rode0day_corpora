@@ -6,7 +6,7 @@ challenges:
         architecture: "x86"
         install_dir: "grepb"
         binary_path: "bin/grep"
-        binary_arguments: "'\\(.\\).\\(.\\)' {input_file}"
+        binary_arguments: "'\\(.\\).\\(.\\)'"
         sample_inputs: ["inputs/hi.txt"]
         source_provided: false
         known_bugs: 55
@@ -16,7 +16,7 @@ challenges:
         architecture: "x86"
         install_dir: "greps"
         binary_path: "built/bin/grep"
-        binary_arguments: "'\\(.\\).\\(.\\)' {input_file}"
+        binary_arguments: "'\\(.\\).\\(.\\)'"
         sample_inputs: ["inputs/hi.txt"]
         source_provided: true
         source_path: "src"

@@ -228,7 +228,7 @@ do
             shift
             ;;
         --docker)
-            ARGV="${ARGV/--docker $2 }"
+            ARGV="${ARGV/--docker $2}"
             DOCKER="${REGISTRY}/${2}_runner:16.04"
             shift 2
             ;;
@@ -288,7 +288,7 @@ fi
 
 if [[ -n $DOCKER ]]; then
     docker pull $DOCKER || exit 1
-    docker run --rm -it -v "$(pwd)":/data --entrypoint ./scripts/build.sh $DOCKER "$ARGV"
+    docker run --rm -it -v "$(pwd)":/data --entrypoint /data/scripts/build.sh $DOCKER $ARGV
 elif  which $CC >/dev/null; then
     build_${BUILD} $TARGET
 else

@@ -255,6 +255,8 @@ build:angora:
     paths:
       - ./*/*/lava-ang
     expire_in: 1 week
+  only:
+    - master
 
 test_seeds:angora:
   stage: test_seeds
@@ -273,6 +275,8 @@ test_seeds:angora:
     - ./scripts/test-solution.py -p lava-ang 9/info.yaml
   dependencies:
     - build:angora
+  only:
+    - master
 
 test_solutions:3:9:angora:
   stage: test_solutions
@@ -285,6 +289,8 @@ test_solutions:3:9:angora:
     - ./scripts/test-solution.py -p lava-ang 3/info.yaml
   dependencies:
     - build:angora
+  only:
+    - master
 
 test_solutions:4:9:angora:
   stage: test_solutions
@@ -297,6 +303,8 @@ test_solutions:4:9:angora:
     - ./scripts/test-solution.py -p lava-ang 4/info.yaml
   dependencies:
     - build:angora
+  only:
+    - master
 
 test_solutions:5:9:angora:
   stage: test_solutions
@@ -309,6 +317,8 @@ test_solutions:5:9:angora:
     - ./scripts/test-solution.py -p lava-ang 5/info.yaml
   dependencies:
     - build:angora
+  only:
+    - master
 
 test_solutions:6:9:angora:
   stage: test_solutions
@@ -322,4 +332,6 @@ test_solutions:6:9:angora:
     - ./scripts/test-solution.py -p lava-ang 6/info.yaml
   dependencies:
     - build:angora
+  only:
+    - master
 

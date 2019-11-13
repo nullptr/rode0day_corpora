@@ -110,9 +110,18 @@ fi
 # Docker command line options
 # singularity exec -B "/tmp/${SLURM_JOB_ID}":/tmp $SIMG /start_fuzzing -n 8 -t $FDIR &
 CNAME="${FZ}_${TGT}_$(date +%s)"
-set -x
-docker run -d --rm --name $CNAME -v $FDIR:$FDIR -w $FDIR --cap-add=SYS_PTRACE -e "QEMU_RESERVED_VA=0xf700000" --pid=host $DIMG -n $NF -t $FDIR
-set +x
+echo "[*] starting docker container $CNAME"
+docker run -d --rm --name $CNAME -v $FDIR:$FDIR -w $FDIR --cap-add=SYS_PTRACE \
+    -e "QEMU_RESERVED_VA=0xf700000" --hostname "$(hostname)-docker-${TGT}" \
+    --pid=host $DIMG -n $NF -t $FDIR
+
+handle_term(){
+    echo "[*] Caught SIGTERM signal, shutting down!"
+    docker stop -t 30 $CNAME
+    exit 0
+}
+
+trap handle_term SIGTERM SIGINT SIGHUP
 
 sleep $(($T23H - $SECONDS))
 
