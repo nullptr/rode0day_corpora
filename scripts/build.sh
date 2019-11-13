@@ -19,7 +19,7 @@ CC_ABV[angora-clang]="ang"
 download_challenges() {
     PREFIX="https://rode0day.mit.edu/static/corpora"
     FILTER="--exclude=*/src --exclude=info.yaml --exclude=*.swp --keep-old-files"
-    for i in {3..13}; do mkdir -p "$i"; done
+    for i in {3..14}; do mkdir -p "$i"; done
     wget -qO- ${PREFIX}/18.09_uioiary7291jsqeYOe6GLtdCIdtG9rFk.tar.gz | tar $FILTER -C 3 -xzf - 2>/dev/null
     wget -qO- ${PREFIX}/18.10_dRgl8DaTW6CVbmzCRBeS8cWCWzEKKpd5.tar.gz | tar $FILTER -C 4 -xzf - 2>/dev/null
     wget -qO- ${PREFIX}/18.11_RhNVrLtaOetyZrjtmOBlItBWNeUsqlpl.tar.gz | tar $FILTER -C 5 -xzf - 2>/dev/null
@@ -31,11 +31,12 @@ download_challenges() {
     wget -qO- ${PREFIX}/19.07_OyGMGe8kLozgWx9je2IbKiG2msIzixl6.tar.gz | tar $FILTER -C 11 -xzf - 2>/dev/null
     wget -qO- ${PREFIX}/19.09_IIUBq9nEVBRwaPaZnOnZoE9qKmT20Smg.tar.gz | tar $FILTER -C 12 -xzf - 2>/dev/null
     wget -qO- ${PREFIX}/19.10_vGBLGzVUHlUFNd5Ji2UcvtGHFlleGsrR.tar.gz | tar $FILTER -C 13 -xzf - 2>/dev/null
+    wget -qO- ${PREFIX}/19.11_AEXUadf28ERWHUISDFHIUSDChiuaefa2.tar.gz | tar $FILTER -C 14 -xzf - 2>/dev/null
     echo "[*] all challenges downloaded!"
 }
 
 create_job_files() {
-    for i in {3..13}; do
+    for i in {3..14}; do
         ./scripts/create-configs.py --example 3/jpegb/afl_job.json --config afl_job.json --prefix lava-afl-cf -j AFL --yaml ${i}/info.yaml >/dev/null
         ./scripts/create-configs.py --example 3/jpegb/qsym_job.json --config qsym_job.json -Q -j QSYM --yaml ${i}/info.yaml >/dev/null
         ./scripts/create-configs.py --example 3/jpegb/honggfuzz_job.json --config honggfuzz_job.json --prefix lava-hf -j HF --yaml ${i}/info.yaml >/dev/null
@@ -52,6 +53,8 @@ copy_required_files() {
     cp 12/fileS3/src/magic.mgc 12/fileS3/built/share/misc/
     mkdir -p  13/fileS4/built/share/misc
     cp 13/fileS4/src/magic.mgc 13/fileS4/built/share/misc/
+    mkdir -p  14/fileS5/built/share/misc
+    cp 14/fileS5/src/magic.mgc 14/fileS5/built/share/misc/
     echo "[*] required files copied"
 }
 
@@ -172,7 +175,7 @@ build_comp() {
 }
 
 build_all() {
-  for comp in 3 4 5 6 7 8 9 10 11 12 13; do
+  for comp in 3 4 5 6 7 8 9 10 11 12 13 14; do
       build_comp $comp
   done
 }
