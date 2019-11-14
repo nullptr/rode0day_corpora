@@ -141,7 +141,7 @@ while [ "$SECONDS" -lt "$T24H" ]
 do
     sleep 5m
 done
-N_QUEUE=$(ls outputs/*/queue/* | wc -l)
-N_CRASHES=$(ls outputs/*/crashes/* | wc -l)
+N_QUEUE=$(ls ${FDIR}/outputs/*/queue/* | wc -l)
+N_CRASHES=$(ls ${FDIR}/outputs/*/crashes/* | wc -l)
 echo "[*] Fuzzing finished:  Elapsed = $SECONDS  $(date) Queue=$N_QUEUE Crashes=$N_CRASHES"
 docker stop -t 30 $CNAME

@@ -10,10 +10,18 @@ DOCKER=""
 REGISTRY="registry.gitlab.com/rode0day/fuzzer-testing"
 
 declare -A CC_ABV
-
 CC_ABV[afl-clang-fast]="afl-cf"
 CC_ABV[hfuzz-clang]="hf"
 CC_ABV[angora-clang]="ang"
+
+declare -A IMAGES
+IMAGES[afl]="${REGISTRY}/i386/afl_runner:16.04"
+IMAGES[aflpp]="${REGISTRY}/i386/aflpp_runner:16.04"
+IMAGES[afl64]="${REGISTRY}/afl_runner:16.04"
+IMAGES[aflpp64]="${REGISTRY}/aflpp_runner:16.04"
+IMAGES[honggfuzz]="${REGISTRY}/i386/honggfuzz_runner:16.04"
+IMAGES[honggfuzz64]="${REGISTRY}/honggfuzz_runner:16.04"
+IMAGES[angora]="${REGISTRY}/angora_runner:16.04"
 
 
 download_challenges() {
@@ -37,7 +45,8 @@ download_challenges() {
 
 create_job_files() {
     for i in {3..14}; do
-        ./scripts/create-configs.py --example 3/jpegb/afl_job.json --config afl_job.json --prefix lava-afl-cf -j AFL --yaml ${i}/info.yaml >/dev/null
+#       ./scripts/create-configs.py --example 3/jpegb/afl_job.json --config afl_job.json --prefix lava-afl-cf -j AFL --yaml ${i}/info.yaml >/dev/null
+        ./scripts/create-configs.py --example 3/jpegb/afl_job.json --config afl_job.json -Q -j AFL --yaml ${i}/info.yaml >/dev/null
         ./scripts/create-configs.py --example 3/jpegb/qsym_job.json --config qsym_job.json -Q -j QSYM --yaml ${i}/info.yaml >/dev/null
         ./scripts/create-configs.py --example 3/jpegb/honggfuzz_job.json --config honggfuzz_job.json --prefix lava-hf -j HF --yaml ${i}/info.yaml >/dev/null
         ./scripts/create-configs.py --example 3/jpegb/eclipser_job.json --config eclipser_job.json -Q -j EC --yaml ${i}/info.yaml >/dev/null
@@ -193,6 +202,7 @@ usage() {
     echo "Usage: $0 [ [-b|--build <all|MMYY>] | [-t|--target <target_name>] ]"
     echo "                          [-L|--no-lavalogs] [-W|--show-warnings] [-X|--no-i386] [--cc <compiler>] "
     echo "                          [--gcov] [--ccov] [--clean]"
+    echo "          [ --docker < afl | aflpp | honggfuzz | angora | afl64 | aflpp64 | honggfuzz64 > ]"
     echo "Usage: $0 [ --download | --create-configs | --copy-files | --help ] "
     exit 0
 }
@@ -232,7 +242,7 @@ do
             ;;
         --docker)
             ARGV="${ARGV/--docker $2}"
-            DOCKER="${REGISTRY}/${2}_runner:16.04"
+            DOCKER="${IMAGES[$2]}"
             shift 2
             ;;
         --gcov)

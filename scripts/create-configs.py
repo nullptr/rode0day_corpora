@@ -23,9 +23,9 @@ COMPS = {2: '18.07',
 
 def parse_args():
     p = argparse.ArgumentParser(description="create/update config file[s] for fuzzing jobs")
-    p.add_argument("--yaml", default=None, help="Rode0day 'info.yaml' file")
     p.add_argument("--example", default=None, required=True, help="Template job config file")
-    p.add_argument("--config", default="job.json", help="Job config filename")
+    p.add_argument("--yaml", default=None, help="Rode0day 'info.yaml' file (create all job configs)")
+    p.add_argument("--config", default="job.json", help="Job config filename (default=job.json)")
     p.add_argument("-j", "--name",  default="AFL", help="Job name prefix (default=AFL)")
     p.add_argument("--prefix", default=None, help="binary path prefix (lava-install)")
     p.add_argument("--fuzzer", default=None, help="path to fuzzer binary")

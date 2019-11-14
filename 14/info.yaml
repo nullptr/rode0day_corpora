@@ -1,0 +1,40 @@
+rode0day_id: 14
+
+challenges:
+    pcreB4:
+        challenge_id: 58
+        architecture: "x86"
+        install_dir: "pcreB4"
+        binary_path: "bin/pcre2grep"
+        binary_arguments: "-f {input_file} {install_dir}/share/passwd"
+        sample_inputs: ["inputs/patterns1", "inputs/patterns2"]
+        source_provided: false
+
+    sqliteB4:
+        challenge_id: 59
+        architecture: "x86"
+        install_dir: "sqliteB4"
+        binary_path: "bin/sqlite"
+        binary_arguments: ""
+        sample_inputs: ["inputs/rnd.sql"]
+        source_provided: false
+
+    jpegS5:
+        challenge_id: 60
+        architecture: "x86"
+        install_dir: "jpegS5"
+        binary_path: "built/bin/jpeg"
+        binary_arguments: "{input_file}"
+        sample_inputs: ["inputs/logo.jpg", "inputs/rodeo.jpg"]
+        source_provided: true
+        source_path: "src"
+
+    fileS5:
+        challenge_id: 61
+        architecture: "x86"
+        install_dir: "fileS5"
+        binary_path: "built/bin/file"
+        binary_arguments: "-m {install_dir}/built/share/misc/magic.mgc {input_file}"
+        sample_inputs: ["inputs/hello.txt"]
+        source_provided: true
+        source_path: "src"
