@@ -6,6 +6,18 @@
 
 `./scripts/build.sh --docker afl --build all`
 
+
+- build all targets for all fuzzers
+
+```
+./scripts/build.sh --prep
+(cd 10 && ./fix_tcpdump_for_i386.sh)
+./scripts/build.sh --docker afl --build all
+./scripts/build.sh --docker honggfuzz --build all
+(cd 10 && ./fix_tcpdump_for_x86_64.sh)
+./scripts/build.sh --docker angora --build all
+```
+
 ```
 Usage: ./scripts/build.sh 
         -b|--build <all|MMYY>       default action is to build all, otherwise identify competition by MMYY (i.e. 1809)
