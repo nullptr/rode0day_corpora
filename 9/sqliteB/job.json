@@ -28,7 +28,7 @@
         "source": "rode0day 2019.05",
         "known_bugs": 56,
         "challenge_id": 37,
-        "architecture": "x86_64",
+        "architecture": "x86",
         "src_archive": ""
         },
     "fuzzer_info": {

@@ -55,6 +55,7 @@ while (( "$#" )); do
         --test)
             T23H="$(( 60 * 10 ))"
             T24H="$(( 60 * 15 ))"
+            USE_DICT=1
             shift
             ;;
         --pull)
@@ -62,8 +63,12 @@ while (( "$#" )); do
             shift
             ;;
         -N)
-            NFH="$2"
+            NF="$2"
             shift 2
+            ;;
+        -D|--dict)
+            USE_DICT=1
+            shift
             ;;
         -h|--help)
             usage
@@ -100,11 +105,14 @@ while [ ! -e $FDIR/${FZ}_job.json ]; do sleep 30s; done
 
 JOB_ID=${SLURM_JOB_ID:-$(date +%m%d%_H)}
 sed -i "s/XXXX/${JOB_ID}/; s/YYYY/${FZ}/; s/N=4/N=${NF}/" $FDIR/${FZ}_job.json
-sed -i 's/_dict/dict/' $FDIR/${FZ}_job.json
 
-if [ -e ${HOME}/Source/NU_AFL.luckyfuzz ]; then
-    cp ${HOME}/Source/NU_AFL.luckyfuzz $FDIR/.luckyfuzz
-    ls -la $FDIR/
+if [ "$USE_DICT" = "1" ]; then
+    sed -i 's/_dict/dict/' $FDIR/job.json
+fi
+
+if [ -e ${HOME}/Source/NU_${FZ}.luckyfuzz ]; then
+    cp ${HOME}/Source/NU_${FZ}.luckyfuzz $FDIR/.luckyfuzz
+    ls -la $FDIR/.luckyfuzz
 fi
 
 # Docker command line options

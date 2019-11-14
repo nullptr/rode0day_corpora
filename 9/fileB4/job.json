@@ -1,6 +1,6 @@
 {
     "session":"fileB4",
-    "fuzzer": "/usr/local/i386/afl-fuzz",
+    "fuzzer": "/usr/local/bin/i386/afl-fuzz",
     "input":"inputs",
     "output":"outputs",
     "target":"./bin/file",
@@ -28,7 +28,7 @@
         "source": "rode0day 2019.05",
         "known_bugs": 42,
         "challenge_id": 38,
-        "architecture": "x86_64",
+        "architecture": "x86",
         "src_archive": ""
         },
     "fuzzer_info": {

@@ -73,6 +73,7 @@ Usage: ./scripts/launch.sh
 - update one competition with new settings
 
 `./scripts/create_configs.py --example 3/jpegb/afl_job.json --yaml 3/info.yaml -Q --time-limit 21600`
+`./scripts/create-configs.py --example 3/jpegb/honggfuzz_job.json --yaml 14/info.yaml --config honggfuzz_job.json -Q -j HF`
 
 ```
 usage: create-configs.py [-h] --example EXAMPLE [--yaml YAML]

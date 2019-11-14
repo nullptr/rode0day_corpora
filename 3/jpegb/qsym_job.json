@@ -16,7 +16,7 @@
     "_dict": "dict/consts.txt",
     "dirty": false,
     "dumb": false,
-    "master_instances": 1,
+    "master_instances": 0,
     "environment": "",
     "fuzz_dirs": [ "outputs" ],
     "name": "QSYM jpegb XXXX",
