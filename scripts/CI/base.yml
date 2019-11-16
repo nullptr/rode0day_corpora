@@ -1,0 +1,24 @@
+
+.build:
+  stage: build
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/afl_runner:16.04
+    entrypoint: [""]
+  artifacts:
+    expire_in: 1 week
+
+.test_seeds:
+  stage: test_seeds
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/afl_runner:16.04 
+    entrypoint: [""]
+
+.test_solutions:
+  stage: test_solutions
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/afl_runner:16.04
+    entrypoint: [""]
+  artifacts:
+    paths:
+      - results*.html 
+    expire_in: 1 week

@@ -63,11 +63,24 @@ def run_tests(info, challenge_name=None):
             print_results(r)
         return
 
+    html_path = "results_{}_{:02d}.html".format(info['prefix'], int(info['rode0day_id']))
+    log = open(html_path, 'w+')
     for challenge_name, challenge in info['challenges'].items():
         r = run_test(info, challenge)
         if r is None:
             continue
         results.extend(r)
+        validated = len([1 for r in results if r['match']])
+        total = len(results)
+        ratio = float(validated / total * 100.0) if validated > 0 else 0.0
+        log.write("\t<tr><td>{}</td><td>{} - {}</td><td>{}</td><td>{}</td><td>{:0.1f}%</td></tr>\n".format(
+                  info['prefix'],
+                  info['rode0day_id'],
+                  challenge_name,
+                  validated,
+                  total,
+                  ratio))
+    log.close()
     print_results(results)
 
 

@@ -1,0 +1,30 @@
+---
+
+build:hfuzz:
+  extends: .build
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/honggfuzz_runner:16.04
+  script:
+    - ( cd 10 && ./fix_tcpdump_for_i386.sh )
+    - ./scripts/build.sh
+    - make -C 13/fileS4/src/src hfuzz-file
+    - cp 13/fileS4/src/src/hfuzz-file 13/fileS4/lava-hf/
+  artifacts:
+    paths:
+      - ./*/*/lava-hf
+
+test_seeds:hfuzz:
+  extends: .test_seeds
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/honggfuzz_runner:16.04 
+  script:
+    - ./scripts/build.sh --copy-files
+    - ./scripts/test-solution.py -p lava-hf 3/info.yaml
+    - ./scripts/test-solution.py -p lava-hf 4/info.yaml
+    - ./scripts/test-solution.py -p lava-hf 5/info.yaml
+    - ./scripts/test-solution.py -p lava-hf 6/info.yaml
+    - ./scripts/test-solution.py -p lava-hf 7/info.yaml
+    - ./scripts/test-solution.py -p lava-hf 8/info.yaml
+    - ./scripts/test-solution.py -p lava-hf 9/info.yaml
+  dependencies:
+    - build:hfuzz
