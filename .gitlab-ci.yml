@@ -9,11 +9,14 @@ stages:
 before_script:
   - sudo apt -qq update
   - sudo apt -qq install -y bsdiff
+  - ./scripts/build.sh --copy-files
 
 include:
   - scripts/CI/base.yml
   - scripts/CI/test_solutions_gcc.yml
   - scripts/CI/test_solutions_afl-clang-fast.yml
+  - scripts/CI/honggfuzz.yml
+  - scripts/CI/test_solutions_honggfuzz.yml
 
 build:afl-gcc:
   extends: .build
@@ -58,7 +61,6 @@ build:afl-clang-fast-64:
 test_seeds:1:4:afl:
   extends: .test_seeds
   script:
-    - ./scripts/build.sh --copy-files
     - ./scripts/test-solution.py -p lava-afl-gcc 3/info.yaml
     - ./scripts/test-solution.py -p lava-afl-gcc 4/info.yaml
     - ./scripts/test-solution.py -p lava-afl-gcc 5/info.yaml
@@ -77,7 +79,6 @@ test_seeds:2:4:afl:
   extends: .test_seeds
   stage: test_seeds
   script:
-    - ./scripts/build.sh --copy-files
     - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml
     - ./scripts/test-solution.py -p lava-afl-cf 4/info.yaml
     - ./scripts/test-solution.py -p lava-afl-cf 5/info.yaml
@@ -95,7 +96,6 @@ test_seeds:2:4:afl:
 test_seeds:3:4:afl:
   extends: .test_seeds
   script:
-    - ./scripts/build.sh --copy-files
     - ./scripts/test-solution.py -p lava-afl-gcc 3/info.yaml
     - ./scripts/test-solution.py -p lava-afl-gcc 4/info.yaml
     - ./scripts/test-solution.py -p lava-afl-gcc 5/info.yaml
@@ -113,7 +113,6 @@ test_seeds:3:4:afl:
 test_seeds:4:4:afl:
   extends: .test_seeds
   script:
-    - ./scripts/build.sh --copy-files
     - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml
     - ./scripts/test-solution.py -p lava-afl-cf 4/info.yaml
     - ./scripts/test-solution.py -p lava-afl-cf 5/info.yaml

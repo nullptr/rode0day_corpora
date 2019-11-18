@@ -18,7 +18,6 @@ test_seeds:hfuzz:
   image: 
     name: registry.gitlab.com/rode0day/fuzzer-testing/i386/honggfuzz_runner:16.04 
   script:
-    - ./scripts/build.sh --copy-files
     - ./scripts/test-solution.py -p lava-hf 3/info.yaml
     - ./scripts/test-solution.py -p lava-hf 4/info.yaml
     - ./scripts/test-solution.py -p lava-hf 5/info.yaml

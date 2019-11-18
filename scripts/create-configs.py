@@ -135,6 +135,7 @@ def create_jobs_from_yaml(args, example):
                 new_cfg['target'] = "./{}/{}".format(args.prefix, bin_path)
             else:
                 new_cfg['target'] = "./{}".format(d['binary_path'])
+            new_cfg['drcov_target'] = "./{}".format(d['binary_path'])
         if 'binary_arguments' in d:
             new_cfg['cmdline'] = d['binary_arguments'].format(**binary_args)
 
