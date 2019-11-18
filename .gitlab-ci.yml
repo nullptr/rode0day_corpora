@@ -7,8 +7,6 @@ stages:
   - report
 
 before_script:
-  - sudo apt -qq update
-  - sudo apt -qq install -y bsdiff
   - ./scripts/build.sh --copy-files
 
 include:

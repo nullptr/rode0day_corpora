@@ -1,6 +1,5 @@
 #!/bin/bash
 
-SECONDS=0
 
 FZ=afl
 REGISTRY="registry.gitlab.com/rode0day/fuzzer-testing"
@@ -12,33 +11,13 @@ T24H="$(( 60 * 60 * 23 + 60 * 54 ))"
 
 
 usage() {
-    echo "Usage: $0 [--fuzzer <fuzzer_name> [--pull] ] [-N <# instances>] [--limit <# seconds>] [--test] <target_name>"
+    echo "Usage: $0 [--fuzzer <fuzzer_name> [--pull] ] [-N <# instances>] [-D|--dict] [--limit <# seconds>] [--test] <target_name>"
     exit 1
 }
 
-select_fuzzer() {
-    case "$1" in
-        aflpp)
-            DIMG="${REGISTRY}/aflpp_runner:16.04"
-        ;;
-        qsym)
-            DIMG="${REGISTRY}/qsym_runner:16.04"
-        ;;
-        honggfuzz)
-            DIMG="${REGISTRY}/honggfuzz_runner:16.04"
-        ;;
-        eclipser)
-            DIMG="${REGISTRY}/eclipser_runner:16.04"
-        ;;
-        angora)
-            DIMG="${REGISTRY}angora_runner:16.04"
-        ;;
-        *)
-            DIMG="${REGISTRY}/afl_runner:16.04"
-        ;;
-    esac
+check_docker_image() {
+    docker image inspect "$1" >/dev/null || exit 1
 }
-
 
 while (( "$#" )); do
     case "$1" in
@@ -59,7 +38,7 @@ while (( "$#" )); do
             shift
             ;;
         --pull)
-            docker pull -q $DIMG
+            docker pull $DIMG | tail -n2
             shift
             ;;
         -N)
@@ -80,6 +59,7 @@ while (( "$#" )); do
     esac
 done
 
+check_docker_image $DIMG
 
 FBASE=/dev/shm/fuzz
 FDIR=/dev/shm/fuzz/${FZ}/${TGT}
@@ -88,6 +68,7 @@ AFL=${HOME}/s_images/aflpp.sif
 
 date
 grep "model name" /proc/cpuinfo | head -n 1
+SECONDS=0
 
 TGT_ROOT=$(find -mindepth 2 -maxdepth 2 -type d -name "$TGT" -printf "%P")
 if [ ! -d "$TGT_ROOT" ]; then
@@ -107,7 +88,7 @@ JOB_ID=${SLURM_JOB_ID:-$(date +%m%d%_H)}
 sed -i "s/XXXX/${JOB_ID}/; s/YYYY/${FZ}/; s/N=4/N=${NF}/" $FDIR/${FZ}_job.json
 
 if [ "$USE_DICT" = "1" ]; then
-    sed -i 's/_dict/dict/' $FDIR/job.json
+    sed -i 's/_dict/dict/' $FDIR/${FZ}_job.json
 fi
 
 if [ -e ${HOME}/Source/NU_${FZ}.luckyfuzz ]; then
@@ -151,5 +132,5 @@ do
 done
 N_QUEUE=$(ls ${FDIR}/outputs/*/queue/* | wc -l)
 N_CRASHES=$(ls ${FDIR}/outputs/*/crashes/* | wc -l)
-echo "[*] Fuzzing finished:  Elapsed = $SECONDS  $(date) Queue=$N_QUEUE Crashes=$N_CRASHES"
+echo "[*] Finished fuzzing $TGT:  Elapsed=${SECONDS}s  $(date +'%F %T') Queue=$N_QUEUE Crashes=$N_CRASHES"
 docker stop -t 30 $CNAME

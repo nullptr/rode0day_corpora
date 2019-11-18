@@ -116,6 +116,7 @@ def create_jobs_from_yaml(args, example):
 
         for k, v in d.items():
             sys.stdout.write("{};".format(v))
+        new_cfg['target_info']['name'] = name
         if 'challenge_id' in d:
             new_cfg['target_info']['challenge_id'] = d['challenge_id']
         if 'architecture' in d:
@@ -126,7 +127,6 @@ def create_jobs_from_yaml(args, example):
         if 'known_bugs' in d:
             new_cfg['target_info']['known_bugs'] = d['known_bugs']
         if 'install_dir' in d:
-            new_cfg['target_info']['name'] = d['install_dir']
             new_cfg['session'] = d['install_dir']
             new_cfg['name'] = "{} {} XXXX".format(args.name, d['install_dir'])
         if 'binary_path' in d:

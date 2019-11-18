@@ -3,10 +3,19 @@
 <head>
 <title>Rode0day Corpora Results</title>
 
+<script  src="https://code.jquery.com/jquery-3.4.1.min.js"  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="  crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+
 <style>
+table.dataTable {
+    width: auto;
+}
+
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
+  width: auto;
 }
 
 td, th {
@@ -26,12 +35,15 @@ tr:nth-child(even) {
 <div align="center">
 <h2> Lava Bug Results </h2>
 
-<table>
-    <tr>
-        <th> Prefix  </th>
-        <th> Challenge Name </th>
-        <th> Found </th>
-        <th> Total </th>
-        <th> % Validated </th>
-    </tr>
+<table id="table_id" class="compact display">
+    <thead>
+        <tr>
+            <th> Prefix  </th>
+            <th> Challenge Name </th>
+            <th> Found </th>
+            <th> Total </th>
+            <th> % Validated </th>
+        </tr>
+    </thead>
+    <tbody>
 
