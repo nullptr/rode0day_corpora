@@ -6,7 +6,7 @@ challenges:
         architecture: "x86_64"
         install_dir: "tinyexprB2"
         binary_path: "bin/math"
-        binary_arguments: ""
+        binary_arguments: "@@"
         sample_inputs: ["inputs/sum"]
         source_provided: false
 

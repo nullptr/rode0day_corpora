@@ -39,6 +39,7 @@ download_challenges() {
     wget -qO- ${PREFIX}/19.07_OyGMGe8kLozgWx9je2IbKiG2msIzixl6.tar.gz | tar $FILTER -C 11 -xzf - 2>/dev/null
     wget -qO- ${PREFIX}/19.09_IIUBq9nEVBRwaPaZnOnZoE9qKmT20Smg.tar.gz | tar $FILTER -C 12 -xzf - 2>/dev/null
     wget -qO- ${PREFIX}/19.10_vGBLGzVUHlUFNd5Ji2UcvtGHFlleGsrR.tar.gz | tar $FILTER -C 13 -xzf - 2>/dev/null
+    mv 13/jpegS4/build 13/jpegS4/built
     wget -qO- ${PREFIX}/19.11_AEXUadf28ERWHUISDFHIUSDChiuaefa2.tar.gz | tar $FILTER -C 14 -xzf - 2>/dev/null
     echo "[*] all challenges downloaded!"
 }
