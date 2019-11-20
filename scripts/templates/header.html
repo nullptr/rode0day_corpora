@@ -4,8 +4,10 @@
 <title>Rode0day Corpora Results</title>
 
 <script  src="https://code.jquery.com/jquery-3.4.1.min.js"  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="  crossorigin="anonymous"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.20/b-1.6.1/b-html5-1.6.1/r-2.2.3/datatables.min.css"/>
+ 
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.20/b-1.6.1/b-html5-1.6.1/r-2.2.3/datatables.min.js"></script>
+
 
 <style>
 table.dataTable {
@@ -27,12 +29,18 @@ td, th {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+
+.center {
+    margin: auto;
+    text-align: center;
+    width: fit-content;
+}
 </style>
 
 </head>
 <body>
 
-<div align="center">
+<div class="center">
 <h2> Lava Bug Results </h2>
 
 <table id="table_id" class="compact display">
