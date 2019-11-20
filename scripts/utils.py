@@ -14,10 +14,10 @@ try:
 except ImportError:
     pass
 
-DRRUN = '/opt/dr/bin/drrun'
+DRRUN = '/opt/dr/bin64/drrun'
 DRRUN32 = '/opt/dr/bin32/drrun'
-DR2LCOV = '/opt/dr/bin/drcov2lcov'
-DR2LCOV32 = '/opt/dr/bin32/drcov2lcov'
+DR2LCOV = '/opt/dr/tools/bin64/drcov2lcov'
+DR2LCOV32 = '/opt/dr/tools/bin32/drcov2lcov'
 
 logging.basicConfig(format='%(levelname)s:\t%(message)s')
 logger = logging.getLogger(__name__)
@@ -52,7 +52,7 @@ def is64bit(binary_filepath):
         return False
     elif e_machine == 0x3e:  # x64
         return True
-    raise Exception("[!] Unexpected e_machine value in 64-bit check: %s (e_machine: 0x%x)" % (binary_filepath, e_machine))
+    raise Exception("[!] Unexpected value in 64-bit check: %s (e_machine: 0x%x)" % (binary_filepath, e_machine))
 
 
 class VerifyWorker(object):

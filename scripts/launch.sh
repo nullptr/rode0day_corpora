@@ -8,6 +8,7 @@ NF="2"
 DIMG="${REGISTRY}/afl_runner:16.04"
 T23H="$(( 60 * 60 * 23 ))"
 T24H="$(( 60 * 60 * 23 + 60 * 54 ))"
+SCRIPT_DIR=$(dirname $0)
 
 
 usage() {
@@ -118,7 +119,7 @@ get_coverage() {
     echo "[*] Getting coverage.  Elapsed = $SECONDS  $(date)"
     cd $FDIR
     docker exec $CNAME make-gcov-src.sh
-    docker exec $CNAME afl-stats -c ${FZ}_job.json -s -g
+    docker exec $CNAME afl-stats -c ${FZ}_job.json -s -D -j 2
     # singularity exec $AFL make-gcov-src.sh
     # singularity exec $AFL afl-stats -c ${FZ}_job.json -s -g
 }

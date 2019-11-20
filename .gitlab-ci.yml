@@ -15,6 +15,7 @@ include:
   - scripts/CI/test_solutions_afl-clang-fast.yml
   - scripts/CI/honggfuzz.yml
   - scripts/CI/test_solutions_honggfuzz.yml
+  - scripts/CI/angora.yml
 
 build:afl-gcc:
   extends: .build
@@ -38,7 +39,7 @@ build:afl-gcc-64:
   extends: .build
   script:
     - ( cd 10 && ./fix_tcpdump_for_x86_64.sh )
-    - sed -i 's/ 10 / /' scripts/build.sh 
+    - sed -i 's/ 10 / /' scripts/build.sh
     - ./scripts/build.sh --cc afl-gcc -X
   artifacts:
     paths:
@@ -49,7 +50,7 @@ build:afl-clang-fast-64:
   extends: .build
   script:
     - ( cd 10 && ./fix_tcpdump_for_x86_64.sh )
-    - sed -i 's/ 10 / /' scripts/build.sh 
+    - sed -i 's/ 10 / /' scripts/build.sh
     - ./scripts/build.sh -X
   artifacts:
     paths:
