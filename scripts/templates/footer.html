@@ -4,7 +4,11 @@
 </div>
     <script>
         $(document).ready( function () {
-            $('#table_id').DataTable();
+            $('#table_id').DataTable({
+                "responsive": true,
+                "pageLength": 50,
+                buttons: [ 'copy' ]
+            });
         } );
     </script>
 </body>
