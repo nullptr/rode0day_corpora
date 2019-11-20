@@ -2,6 +2,32 @@
 
 [scripts/build.sh](scripts/build.sh)
 
+**Examples**
+
+- build all targets with `afl-clang-fast` which is the default CC in the afl_runner
+
+`./scripts/build.sh --docker afl --build all`
+
+- build targets for a specific competition
+
+`./scripts/build.sh --docker aflpp --build 1902`
+
+- build one target with a specified compiler and x86_64
+
+`./scripts/builds.sh --docker afl --build jpegS3 --cc gcc --no-i386`
+
+- build all targets for all fuzzers (instrumented)
+
+```
+./scripts/build.sh --prep
+(cd 10 && ./fix_tcpdump_for_i386.sh)
+./scripts/build.sh --docker afl --build all
+./scripts/build.sh --docker honggfuzz --build all
+(cd 10 && ./fix_tcpdump_for_x86_64.sh)
+./scripts/build.sh --docker angora --angora
+```
+
+__Usage:__
 ```
 Usage: ./scripts/build.sh 
         -b|--build <all|MMYY>       default action is to build all, otherwise identify competition by MMYY (i.e. 1809)
@@ -27,6 +53,17 @@ Usage: ./scripts/build.sh
 
 [scripts/launch.sh](scripts/launch.sh)
 
+**Examples**
+
+- launch one instance (cpu core) of AFL with greps for 900 seconds (15 min)
+
+`./scripts/launch.sh --fuzzer afl -N 1 --test greps`
+
+- launch two instances of QSYM (paired with AFL in slave mode) with grepb for 21600 seconds
+
+`./scripts/launch.sh --fuzzer qsym -N 2 --limit 21600 grepb`
+
+__Usage:__
 ```
 Usage: ./scripts/launch.sh 
     --fuzzer <fuzzer_name> [--pull]  default fuzzer is AFL, otherwise specify a fuzzer, optionally force pull docker image
@@ -38,8 +75,24 @@ Usage: ./scripts/launch.sh
 
 
 [scripts/crete_configs.py](scripts/create_configs.py)
+
+**Examples**
+- update one job config with new settings
+
+`./scripts/create_configs.py --example 3/jpegb/afl_job.json -Q `
+
+- update one job config from example with new settings
+
+`./scripts/create_configs.py --example 3/jpegb/job.json --config afl_job.json -Q `
+
+- update one competition with new settings
+
+`./scripts/create_configs.py --example 3/jpegb/afl_job.json --yaml 3/info.yaml -Q --time-limit 21600`
+`./scripts/create-configs.py --example 3/jpegb/honggfuzz_job.json --yaml 14/info.yaml --config honggfuzz_job.json -Q -j HF`
+
+__Usage:__
 ```
-usage: create-configs.py [-h] [--yaml YAML] --example EXAMPLE
+usage: create-configs.py [-h] --example EXAMPLE [--yaml YAML]
                          [--config CONFIG] [-j NAME] [--prefix PREFIX]
                          [--fuzzer FUZZER] [--input INPUT] [--output OUTPUT]
                          [-Q] [--file FILE] [--timeout TIMEOUT]
@@ -54,9 +107,9 @@ create/update config file[s] for fuzzing jobs
 
 optional arguments:
   -h, --help            show this help message and exit
-  --yaml YAML           Rode0day 'info.yaml' file
   --example EXAMPLE     Template job config file
-  --config CONFIG       Job config filename
+  --yaml YAML           Rode0day 'info.yaml' file (create all job configs)
+  --config CONFIG       Job config filename (default=job.json)
   -j NAME, --name NAME  Job name prefix (default=AFL)
   --prefix PREFIX       binary path prefix (lava-install)
   --fuzzer FUZZER       path to fuzzer binary

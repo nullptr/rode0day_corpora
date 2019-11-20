@@ -50,7 +50,7 @@ challenges:
         architecture: "x86"
         install_dir: "bzipB"
         binary_path: "bin/bzip2"
-        binary_arguments: "-dsc {input_file} > /tmp/output"
+        binary_arguments: "-dsc {input_file} > /dev/null"
         sample_inputs: ["inputs/sample.txt.bz2"]
         source_provided: false
         known_bugs: 21

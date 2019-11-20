@@ -4,6 +4,7 @@
     "input": "inputs",
     "output": "outputs",
     "target": "./lava-hf/bin/memdjpeg",
+    "drcov_target": "./bin/memdjpeg",
     "cmdline": "@@",
     "qemu": false,
     "mem_limit": "4096",

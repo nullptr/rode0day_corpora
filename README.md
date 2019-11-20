@@ -31,5 +31,5 @@ docker container, use the `build.sh` and `launch.sh` scripts.
 - `./scripts/launch.sh --fuzzer afl --pull -N 3 --test jpegb` will pull the 
   AFL [image](https://gitlab.com/Rode0day/fuzzer-testing/container_registry)
   and launch a container with 3 instances (cpu cores) of AFL against the 
-  3/greps (18.09) challenge.
+  3/jpegb (18.09) challenge.
 

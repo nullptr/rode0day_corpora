@@ -19,7 +19,8 @@ COMPS = {2: '18.07',
          10: '19.06',
          11: '19.07',
          12: '19.09',
-         13: '19.10'}
+         13: '19.10',
+         14: '19.11'}
 
 logging.basicConfig(format='%(levelname)s:\t%(message)s')
 logger = logging.getLogger(__name__)
@@ -62,11 +63,24 @@ def run_tests(info, challenge_name=None):
             print_results(r)
         return
 
+    html_path = "results_{:02d}_{}.html".format(int(info['rode0day_id']), info['prefix'])
+    log = open(html_path, 'w+')
     for challenge_name, challenge in info['challenges'].items():
-        r = run_test(info, challenge)
-        if r is None:
+        rtemp = run_test(info, challenge)
+        if rtemp is None:
             continue
-        results.extend(r)
+        results.extend(rtemp)
+        validated = len([1 for r in rtemp if r['match']])
+        total = len(rtemp)
+        ratio = float(validated / total * 100.0) if validated > 0 else 0.0
+        log.write("\t<tr><td>{}</td><td>{} - {}</td><td>{}</td><td>{}</td><td>{:0.1f}%</td></tr>\n".format(
+                  info['prefix'],
+                  info['rode0day_id'],
+                  challenge_name,
+                  validated,
+                  total,
+                  ratio))
+    log.close()
     print_results(results)
 
 

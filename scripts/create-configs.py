@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import copy
 import json
 import os
 import sys
@@ -18,14 +19,15 @@ COMPS = {2: '18.07',
          10: '19.06',
          11: '19.07',
          12: '19.09',
-         13: '19.10'}
+         13: '19.10',
+         14: '19.11'}
 
 
 def parse_args():
     p = argparse.ArgumentParser(description="create/update config file[s] for fuzzing jobs")
-    p.add_argument("--yaml", default=None, help="Rode0day 'info.yaml' file")
     p.add_argument("--example", default=None, required=True, help="Template job config file")
-    p.add_argument("--config", default="job.json", help="Job config filename")
+    p.add_argument("--yaml", default=None, help="Rode0day 'info.yaml' file (create all job configs)")
+    p.add_argument("--config", default="job.json", help="Job config filename (default=job.json)")
     p.add_argument("-j", "--name",  default="AFL", help="Job name prefix (default=AFL)")
     p.add_argument("--prefix", default=None, help="binary path prefix (lava-install)")
     p.add_argument("--fuzzer", default=None, help="path to fuzzer binary")
@@ -45,6 +47,8 @@ def parse_args():
     p.add_argument("--afl-dumb", dest="dumb", default=None, help="AFL fuzz without instrumentation (dumb mode)")
     p.add_argument("--environment", default=None, help="Environment variables, comma separated list of VAR=VAL ")
     p.add_argument("--extras", default=None, help="Extra options, comma separate list of var=val")
+    p.add_argument("-F", "--force-new-job", default=False, action='store_true',
+                   dest='submit_force', help="Do not prompt to create new job")
     return p.parse_args()
 
 
@@ -108,36 +112,41 @@ def create_jobs_from_yaml(args, example):
     binary_args = {'input_file': '@@', 'install_dir': '.'}
     for name, d in data['challenges'].items():
         sys.stdout.write("{};".format(name))
+        new_cfg = copy.deepcopy(example)
 
         for k, v in d.items():
             sys.stdout.write("{};".format(v))
+        new_cfg['target_info']['name'] = name
         if 'challenge_id' in d:
-            example['target_info']['challenge_id'] = d['challenge_id']
+            new_cfg['target_info']['challenge_id'] = d['challenge_id']
         if 'architecture' in d:
-            example['target_info']['architecture'] = d['architecture']
+            if d['architecture'] == 'x86_64':
+                new_cfg['fuzzer'] = new_cfg['fuzzer'].replace('i386', 'bin')
+                new_cfg['_docker'] = new_cfg['_docker'].replace('i386/', '')
+            new_cfg['target_info']['architecture'] = d['architecture']
         if 'known_bugs' in d:
-            example['target_info']['known_bugs'] = d['known_bugs']
+            new_cfg['target_info']['known_bugs'] = d['known_bugs']
         if 'install_dir' in d:
-            example['target_info']['name'] = d['install_dir']
-            example['session'] = d['install_dir']
-            example['name'] = "{} {} XXXX".format(args.name, d['install_dir'])
+            new_cfg['session'] = d['install_dir']
+            new_cfg['name'] = "{} {} XXXX".format(args.name, d['install_dir'])
         if 'binary_path' in d:
             if args.prefix:
                 bin_path = d['binary_path'].replace("built/", "")
-                example['target'] = "./{}/{}".format(args.prefix, bin_path)
+                new_cfg['target'] = "./{}/{}".format(args.prefix, bin_path)
             else:
-                example['target'] = "./{}".format(d['binary_path'])
+                new_cfg['target'] = "./{}".format(d['binary_path'])
+            new_cfg['drcov_target'] = "./{}".format(d['binary_path'])
         if 'binary_arguments' in d:
-            example['cmdline'] = d['binary_arguments'].format(**binary_args)
+            new_cfg['cmdline'] = d['binary_arguments'].format(**binary_args)
 
-        example['description'] = build_description(args, d, comp_date)
-        example['target_info']['source'] = "rode0day 20{}".format(comp_date)
+        new_cfg['description'] = build_description(args, d, comp_date)
+        new_cfg['target_info']['source'] = "rode0day 20{}".format(comp_date)
 
-        update_with_args(args, example)
-        add_extras(args, example)
+        update_with_args(args, new_cfg)
+        add_extras(args, new_cfg)
 
         path = os.path.join(basedir, d['install_dir'], args.config)
-        write_config(example, path)
+        write_config(new_cfg, path)
         sys.stdout.write("\n")
 
 

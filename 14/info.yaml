@@ -1,0 +1,20 @@
+rode0day_id: 14
+
+challenges:
+    pcreB4:
+        challenge_id: 58
+        architecture: "x86"
+        install_dir: "pcreB4"
+        binary_path: "bin/pcre2grep"
+        binary_arguments: "-f {input_file} {install_dir}/share/passwd"
+        sample_inputs: ["inputs/patterns1", "inputs/patterns2"]
+        source_provided: false
+
+    sqliteB4:
+        challenge_id: 59
+        architecture: "x86"
+        install_dir: "sqliteB4"
+        binary_path: "bin/sqlite"
+        binary_arguments: ""
+        sample_inputs: ["inputs/rnd.sql"]
+        source_provided: false

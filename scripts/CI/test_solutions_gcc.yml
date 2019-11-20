@@ -1,0 +1,69 @@
+---
+
+build:gcc:
+  extends: .build
+  script:
+    - ( cd 10 && ./fix_tcpdump_for_i386.sh )
+    - ./scripts/build.sh --cc gcc
+  artifacts:
+    paths:
+      - ./*/*/lava-gcc
+
+test_solutions:3:9:gcc:
+  extends: .test_solutions
+  script:
+    - tar -C 3 -xzf 3/solutions.tgz
+    - ./scripts/test-solution.py -p lava-gcc 3/info.yaml
+  dependencies:
+    - build:gcc
+
+test_solutions:4:9:gcc:
+  extends: .test_solutions
+  script:
+    - tar -C 4 -xzf 4/solutions.tgz
+    - ./scripts/test-solution.py -p lava-gcc 4/info.yaml
+  dependencies:
+    - build:gcc
+
+test_solutions:5:9:gcc:
+  extends: .test_solutions
+  script:
+    - tar -C 5 -xzf 5/solutions.tgz
+    - ./scripts/test-solution.py -p lava-gcc 5/info.yaml
+  dependencies:
+    - build:gcc
+
+test_solutions:6:9:gcc:
+  extends: .test_solutions
+  script:
+    - tar -C 6 -xzf 6/solutions.tgz
+    - (cd 6 && ./patch_solutions.sh )
+    - ./scripts/test-solution.py -p lava-gcc 6/info.yaml
+  dependencies:
+    - build:gcc
+
+test_solutions:7:9:gcc:
+  extends: .test_solutions
+  script:
+    - tar -C 7 -xzf 7/solutions.tgz
+    - (cd 7 && ./patch_solutions.sh )
+    - ./scripts/test-solution.py -p lava-gcc 7/info.yaml
+  dependencies:
+    - build:gcc
+
+test_solutions:8:9:gcc:
+  extends: .test_solutions
+  script:
+    - tar -C 8 -xzf 8/solutions.tgz
+    - (cd 8 && ./patch_solutions.sh )
+    - ./scripts/test-solution.py -p lava-gcc 8/info.yaml
+  dependencies:
+    - build:gcc
+
+test_solutions:9:9:gcc:
+  extends: .test_solutions
+  script:
+    - tar -C 9 -xzf 9/solutions.tgz
+    - ./scripts/test-solution.py -p lava-gcc 9/info.yaml
+  dependencies:
+    - build:gcc

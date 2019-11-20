@@ -15,7 +15,7 @@ challenges:
         architecture: "x86"
         install_dir: "grepB2"
         binary_path: "bin/grep"
-        binary_arguments: "'\\(.\\).\\(.\\)' {input_file}"
+        binary_arguments: "'\\(.\\).\\(.\\)'"
         sample_inputs: ["inputs/hi.txt"]
         source_provided: false
 

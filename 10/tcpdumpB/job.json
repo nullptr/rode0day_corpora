@@ -1,6 +1,6 @@
 {
     "session": "tcpdumpB",
-    "fuzzer": "/usr/local/i386/afl-fuzz",
+    "fuzzer": "/usr/local/bin/afl-fuzz",
     "input": "inputs",
     "output": "outputs",
     "target": "./bin/tcpdump",
@@ -12,7 +12,7 @@
     "_timeout": "20",
     "_afl_margs": "",
     "_file": "",
-    "_docker": "registry.gitlab.com/rode0day/fuzzer-testing/i386/afl:16.04",
+    "_docker": "registry.gitlab.com/rode0day/fuzzer-testing/afl:16.04",
     "_dict": "dict/consts.txt",
     "dirty": false,
     "dumb": false,
