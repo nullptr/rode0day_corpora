@@ -133,5 +133,5 @@ do
 done
 N_QUEUE=$(ls ${FDIR}/outputs/*/queue/* | wc -l)
 N_CRASHES=$(ls ${FDIR}/outputs/*/crashes/* | wc -l)
-echo -e "[*] Finished fuzzing $TGT: \t Elapsed=${SECONDS}s  $(date +'%F %T') Queue=$N_QUEUE Crashes=$N_CRASHES"
+printf "[*] Finished fuzzing %-16s: \t Elapsed=${SECONDS}s  $(date +'%F %T') Queue=$N_QUEUE Crashes=$N_CRASHES" $TGT
 docker stop -t 30 $CNAME
