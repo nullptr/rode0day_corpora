@@ -37,16 +37,20 @@ build:afl-clang-fast:
 
 build:afl-gcc-64:
   extends: .build
+  image:
+    name: registry.gitlab.com/rode0day/fuzzer-testing/afl_runner:16.04
   script:
     - ( cd 10 && ./fix_tcpdump_for_x86_64.sh )
-    - sed -i 's/ 10 / /' scripts/build.sh
     - ./scripts/build.sh --cc afl-gcc -X
   artifacts:
     paths:
       - ./*/*/lava-afl-gcc
+  allow_failure: true
 
 build:afl-clang-fast-64:
   extends: .build
+  image:
+    name: registry.gitlab.com/rode0day/fuzzer-testing/afl_runner:16.04
   script:
     - ( cd 10 && ./fix_tcpdump_for_x86_64.sh )
     - sed -i 's/ 10 / /' scripts/build.sh
@@ -58,17 +62,9 @@ build:afl-clang-fast-64:
 test_seeds:1:4:afl:
   extends: .test_seeds
   script:
-    - ./scripts/test-solution.py -p lava-afl-gcc 3/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 4/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 5/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 6/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 7/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 8/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 9/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 10/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 11/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 12/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 13/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 3/info.yaml 4/info.yaml
+      5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
+      10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml
   dependencies:
     - build:afl-gcc
 
@@ -76,51 +72,27 @@ test_seeds:2:4:afl:
   extends: .test_seeds
   stage: test_seeds
   script:
-    - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 4/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 5/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 6/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 7/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 8/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 9/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 10/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 11/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 12/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 13/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml 4/info.yaml
+      5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
+      10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml
   dependencies:
-    - build:afl-clang-fast-64
+    - build:afl-clang-fast
 
 test_seeds:3:4:afl:
   extends: .test_seeds
   script:
-    - ./scripts/test-solution.py -p lava-afl-gcc 3/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 4/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 5/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 6/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 7/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 8/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 9/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 10/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 11/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 12/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-gcc 13/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 3/info.yaml 4/info.yaml
+      5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
+      10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml
   dependencies:
     - build:afl-gcc-64
 
 test_seeds:4:4:afl:
   extends: .test_seeds
   script:
-    - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 4/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 5/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 6/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 7/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 8/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 9/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 10/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 11/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 12/info.yaml
-    - ./scripts/test-solution.py -p lava-afl-cf 13/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml 4/info.yaml
+      5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
+      10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml
   dependencies:
     - build:afl-clang-fast-64
 

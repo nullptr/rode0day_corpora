@@ -10,5 +10,5 @@ clean:
 install: libyaml
 	rm -rf lava-install
 	mkdir -p lava-install/bin
-	cp src/libyaml lava-install/bin/
+	cp src/libyaml lava-install/bin/yaml
 

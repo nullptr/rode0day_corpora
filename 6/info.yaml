@@ -31,7 +31,7 @@ challenges:
         architecture: "x86"
         install_dir: "pcre2B"
         binary_path: "bin/pcre2grep"
-        binary_arguments: "-f {input_file} share/passwd"
+        binary_arguments: "-f {input_file} {install_dir}/share/passwd"
         sample_inputs: ["inputs/patterns1", "inputs/patterns2"]
         source_provided: false
         known_bugs: 18
