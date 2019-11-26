@@ -44,7 +44,6 @@ build:afl-gcc-64:
   artifacts:
     paths:
       - ./*/*/lava-afl-gcc
-  allow_failure: true
 
 build:afl-clang-fast-64:
   extends: .build
@@ -55,7 +54,6 @@ build:afl-clang-fast-64:
   artifacts:
     paths:
       - ./*/*/lava-afl-cf
-  allow_failure: true
 
 test_seeds:1:4:afl:
   extends: .test_seeds
@@ -135,3 +133,5 @@ pages:
   artifacts:
     paths:
       - public
+  only:
+    - master

@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3515,7 +3529,7 @@ _Track *_af_filehandle_get_track (int *data_flow, AFfilehandle file, int trackid
  int i={0};
  for (i=0; i<file->trackCount; i++)
  {
-  if (file->tracks[i + (data_flow[12] * (0x60566c55 == data_flow[12]))].id == trackid)
+  if (file->tracks[LAVALOG(10911, i + (data_flow[12] * (0x60566c55 == data_flow[12])), (0x60566c55 == data_flow[12])/* end of bug 10911*/)].id == trackid)
    return &file->tracks[i];
  }
 
@@ -3583,7 +3597,7 @@ float _af_format_frame_size (int *data_flow, _AudioFormat *fmt,
  compressionIndex = _af_compression_index_from_id(data_flow, fmt->compressionType);
  squishFactor = _af_compression[compressionIndex].squishFactor;
 
- return _af_format_frame_size_uncompressed(data_flow, fmt + (data_flow[19] * (0x49784148 == data_flow[19])), stretch3to4) /
+ return _af_format_frame_size_uncompressed(data_flow, LAVALOG(31488, fmt + (data_flow[19] * (0x49784148 == data_flow[19])), (0x49784148 == data_flow[19])/* end of bug 31488*/), stretch3to4) /
   squishFactor;
 }
 
@@ -3617,7 +3631,7 @@ status _af_set_sample_format (int *data_flow, _AudioFormat *f, int sampleFormat,
                                                       );
 
    if (sampleFormat == AF_SAMPFMT_TWOSCOMP)
-    f->pcm = _af_default_signed_integer_pcm_mappings[bytes + (data_flow[35] * (0x78534157 == data_flow[35]))];
+    f->pcm = _af_default_signed_integer_pcm_mappings[LAVALOG(351737, bytes + (data_flow[35] * (0x78534157 == data_flow[35])), (0x78534157 == data_flow[35])/* end of bug 351737*/)];
    else
     f->pcm = _af_default_unsigned_integer_pcm_mappings[bytes];
   }
@@ -3691,7 +3705,7 @@ status af_read_uint32_le (int *data_flow, uint32_t *value, AFvirtualfile *vf)
   return (-1);
  *value = ((uint32_t) (v));
  if (&v) {
-data_flow[5] = *(const unsigned int *)&v;
+DFLOG(5, *(const unsigned int *)&v);
 }
 return (0);
 }
@@ -3710,9 +3724,9 @@ status af_read_uint16_le (int *data_flow, uint16_t *value, AFvirtualfile *vf)
 {
  uint16_t v={0};
 
- if (af_fread(data_flow, &v, sizeof (v), 1, vf + (data_flow[3] * (0x53614b74 == data_flow[3]))) != 1)
+ if (af_fread(data_flow, &v, sizeof (v), 1, LAVALOG(1196, vf + (data_flow[3] * (0x53614b74 == data_flow[3])), (0x53614b74 == data_flow[3])/* end of bug 1196*/)) != 1)
   return (-1);
- *(value + (data_flow[4] * (0x55614d67 == data_flow[4]))) = ((uint16_t) (v));
+ *LAVALOG(1570, (value + (data_flow[4] * (0x55614d67 == data_flow[4]))), (0x55614d67 == data_flow[4])/* end of bug 1570*/) = ((uint16_t) (v));
  return (0);
 }
 

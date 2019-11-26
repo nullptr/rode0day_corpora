@@ -12,6 +12,8 @@ build:hfuzz:
   artifacts:
     paths:
       - ./*/*/lava-hf
+  only:
+    - master
 
 test_seeds:hfuzz:
   extends: .test_seeds
@@ -27,3 +29,5 @@ test_seeds:hfuzz:
     - ./scripts/test-solution.py -p lava-hf 9/info.yaml
   dependencies:
     - build:hfuzz
+  only:
+    - master

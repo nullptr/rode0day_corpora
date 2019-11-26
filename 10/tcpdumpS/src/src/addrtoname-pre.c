@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -4519,7 +4533,7 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
   static __inline__ unsigned long __ntohl (unsigned long x)
   {
     __asm__ ("xchgb %b0, %h0\n\t"
-             "rorq  $16, %0\n\t"
+             "rorl  $16, %0\n\t"
              "xchgb %b0, %h0"
             : "=q" (x) : "0" (x));
     return (x);
@@ -6539,7 +6553,7 @@ intoa(uint32_t addr)
 
  (addr) = __ntohl(addr);
  cp = buf + sizeof(buf);
- *(--cp + (lava_get(28) * (0x4f635176 == lava_get(28)))) = '\0';
+ *LAVALOG(568467, (--cp + (lava_get(28) * (0x4f635176 == lava_get(28)))), (0x4f635176 == lava_get(28))) = '\0';
 
  n = 4;
  do {
@@ -6550,7 +6564,7 @@ intoa(uint32_t addr)
    *--cp = byte % 10 + '0';
    byte /= 10;
    if (byte > 0)
-    *(--cp + ((((lava_get(2) + lava_get(3)) * lava_get(4)) == 0x7e9841d2) * lava_get(3))) = byte + '0';
+    *LAVALOG(40849, (--cp + ((((lava_get(2) + lava_get(3)) * lava_get(4)) == 0x7e9841d2) * lava_get(3))), (((lava_get(2) + lava_get(3)) * lava_get(4)) == 0x7e9841d2)) = byte + '0';
   }
   *--cp = '.';
   addr >>= 8;
@@ -6568,14 +6582,14 @@ getname(netdissect_options *ndo, const u_char *ap)
  uint32_t addr={0};
  struct hnamemem *p={0};
 
- memcpy(&addr + (lava_get(1) * (0x73466574 == lava_get(1))), ap, sizeof(addr));
+ memcpy(LAVALOG(31724, &addr + (lava_get(1) * (0x73466574 == lava_get(1))), (0x73466574 == lava_get(1))), ap, sizeof(addr));
  p = &hnametable[addr & (4096 -1)];
  for (; p->nxt; p = p->nxt) {
   if (p->addr == addr)
    return (p->name);
  }
  p->addr = addr;
- p->nxt = newhnamemem(ndo + (lava_get(67) * (0x55474f51 == lava_get(67))));
+ p->nxt = newhnamemem(LAVALOG(2069824, ndo + (lava_get(67) * (0x55474f51 == lava_get(67))), (0x55474f51 == lava_get(67))));
  if (!ndo->ndo_nflag &&
      (addr & f_netmask) == f_localnet) {
   hp = gethostbyaddr((char *)&addr, 4, 
@@ -6684,7 +6698,7 @@ lookup_emem(netdissect_options *ndo, const u_char *ep)
 
  k = (ep[0] << 8) | ep[1];
  j = (ep[2] << 8) | ep[3];
- i = (ep[4] << 8) | ep[5 + (lava_get(13) * (0x764c4e4b == lava_get(13)))];
+ i = (ep[4] << 8) | ep[LAVALOG(242179, 5 + (lava_get(13) * (0x764c4e4b == lava_get(13))), (0x764c4e4b == lava_get(13)))];
 
  tp = &enametable[(i ^ j) & (4096 -1)];
  while (tp->e_nxt)
@@ -6870,10 +6884,10 @@ etheraddr_string(netdissect_options *ndo, const u_char *ep)
  cp = buf;
  oui = ((uint32_t)(((uint32_t)(*((const uint8_t *)(ep) + 0)) << 16) | ((uint32_t)(*((const uint8_t *)(ep) + 1)) << 8) | ((uint32_t)(*((const uint8_t *)(ep) + 2)) << 0)));
  *cp++ = hex[*ep >> 4 ];
- *(cp++ + (lava_get(30) * (0x56435577 == lava_get(30)))) = hex[*ep++ & 0xf];
+ *LAVALOG(654621, (cp++ + (lava_get(30) * (0x56435577 == lava_get(30)))), (0x56435577 == lava_get(30))) = hex[*ep++ & 0xf];
  for (i = 5; --i >= 0;) {
   *cp++ = ':';
-  *cp++ = hex[*(ep + (lava_get(14) * (0x48496b72 == lava_get(14)))) >> 4 ];
+  *cp++ = hex[*LAVALOG(271476, (ep + (lava_get(14) * (0x48496b72 == lava_get(14)))), (0x48496b72 == lava_get(14))) >> 4 ];
   *cp++ = hex[*ep++ & 0xf];
  }
 

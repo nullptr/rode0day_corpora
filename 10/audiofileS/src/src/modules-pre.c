@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -4611,7 +4625,7 @@ static void addmod (int *data_flow, current_state *current, _AFmoduleinst modins
 
 
 
- *(current->outchunk) = *((current->inchunk) + (data_flow[26] * (0x6c687151 == data_flow[26])));
+ *(current->outchunk) = *LAVALOG(80865, ((current->inchunk) + (data_flow[26] * (0x6c687151 == data_flow[26]))), (0x6c687151 == data_flow[26])/* end of bug 80865*/);
 
  if (current->modinst->mod->describe)
   (*current->modinst->mod->describe)(data_flow, current->modinst);
@@ -4630,12 +4644,12 @@ static status initfilemods (int *data_flow, _Track *track, AFfilehandle h)
  int compressionIndex={0};
  _CompressionUnit *compunit={0};
  if ( (track) && &((*track).data_size)) {
-data_flow[18] = *(const unsigned int *)&((*track).data_size);
+DFLOG(18, *(const unsigned int *)&((*track).data_size));
 }
 AFframecount chunkframes={0};
 
- compressionIndex = _af_compression_index_from_id(data_flow, track->f.compressionType + (data_flow[16] * (0x5346696e == data_flow[16])));
- compunit = &_af_compression[compressionIndex + (data_flow[17] * (0x736f4249 == data_flow[17]))];
+ compressionIndex = _af_compression_index_from_id(data_flow, LAVALOG(18946, track->f.compressionType + (data_flow[16] * (0x5346696e == data_flow[16])), (0x5346696e == data_flow[16])/* end of bug 18946*/));
+ compunit = &_af_compression[LAVALOG(19432, compressionIndex + (data_flow[17] * (0x736f4249 == data_flow[17])), (0x736f4249 == data_flow[17])/* end of bug 19432*/)];
 
 
 
@@ -5089,7 +5103,7 @@ static
       _Bool 
            trivial_int_clip (int *data_flow, _AudioFormat *f, format_code code)
 {
- return (intmappings[code + (data_flow[28] * (0x59517054 == data_flow[28]))] != 
+ return (intmappings[LAVALOG(88448, code + (data_flow[28] * (0x59517054 == data_flow[28])), (0x59517054 == data_flow[28])/* end of bug 88448*/)] != 
                              ((void *)0) 
                                   &&
   f->pcm.minClip == intmappings[code]->minClip &&
@@ -5146,7 +5160,7 @@ _Bool
  {
   in = track->f;
   if ( (track) && &((*track).data_size)) {
-data_flow[33] = *(const unsigned int *)&((*track).data_size);
+DFLOG(33, *(const unsigned int *)&((*track).data_size));
 }
 out = track->v;
  }
@@ -5157,7 +5171,7 @@ out = track->v;
   out = track->f;
  }
 
- infc = get_format_code(data_flow, &in + (data_flow[25] * (0x456e794e == data_flow[25])));
+ infc = get_format_code(data_flow, LAVALOG(61909, &in + (data_flow[25] * (0x456e794e == data_flow[25])), (0x456e794e == data_flow[25])/* end of bug 61909*/));
  outfc = get_format_code(data_flow, &out);
 
 
@@ -5167,13 +5181,13 @@ out = track->v;
 
  current.inchunk = track->ms.chunk;
  if ( (track) && &((*track).data_size)) {
-data_flow[36] = *(const unsigned int *)&((*track).data_size);
+DFLOG(36, *(const unsigned int *)&((*track).data_size));
 }
 current.outchunk = track->ms.chunk + 1;
 
  current.inchunk->f = in;
  if ( (track) && &((*track).data_size)) {
-data_flow[30] = *(const unsigned int *)&((*track).data_size);
+DFLOG(30, *(const unsigned int *)&((*track).data_size));
 }
 if (reading)
   if ((-1) == addfilereadmods(data_flow, &current, track, h))
@@ -5203,7 +5217,7 @@ if (reading)
 
 
 
- insampbytes = _af_format_sample_size_uncompressed(data_flow, &in + (data_flow[27] * (0x5453754d == data_flow[27])), 
+ insampbytes = _af_format_sample_size_uncompressed(data_flow, LAVALOG(84691, &in + (data_flow[27] * (0x5453754d == data_flow[27])), (0x5453754d == data_flow[27])/* end of bug 84691*/), 
                                                        0
                                                             );
 
@@ -5276,7 +5290,7 @@ if (reading)
 
 
  if ( (track) && &((*track).data_size)) {
-data_flow[39] = *(const unsigned int *)&((*track).data_size);
+DFLOG(39, *(const unsigned int *)&((*track).data_size));
 }
 if (((infc) <= int32_fmt) && transforming)
  {
@@ -5321,7 +5335,7 @@ if (((infc) <= int32_fmt) && transforming)
  {
   addmod(data_flow, &current, initpcmmod(data_flow, &doubletransform, &in.pcm, &out.pcm));
  }
- if (convertmatrix[infc + (data_flow[29] * (0x4b736d4a == data_flow[29]))][outfc])
+ if (convertmatrix[LAVALOG(94461, infc + (data_flow[29] * (0x4b736d4a == data_flow[29])), (0x4b736d4a == data_flow[29])/* end of bug 94461*/)][outfc])
  {
   if (((infc) >= float_fmt) && ((outfc) <= int32_fmt))
   {
@@ -5385,7 +5399,7 @@ if (((infc) <= int32_fmt) && transforming)
 
 
  if ( (h) &&  (((*h).tracks)) && &((*((*h).tracks)).data_size)) {
-data_flow[38] = *(const unsigned int *)&((*((*h).tracks)).data_size);
+DFLOG(38, *(const unsigned int *)&((*((*h).tracks)).data_size));
 }
 if (((outfc) <= int32_fmt) && outsampbytes == 3)
  {
@@ -5467,7 +5481,7 @@ static void disposemodules (int *data_flow, _Track *track)
  }
 
  if ( (track) && &((*track).data_size)) {
-data_flow[25] = *(const unsigned int *)&((*track).data_size);
+DFLOG(25, *(const unsigned int *)&((*track).data_size));
 }
 if (track->ms.buffer)
  {
@@ -5512,7 +5526,7 @@ static status resetmodules (int *data_flow, _AFfilehandle *h, _Track *track)
                           ;
 
  if ( (h) &&  (((*h).tracks)) && &((*((*h).tracks)).data_size)) {
-data_flow[34] = *(const unsigned int *)&((*((*h).tracks)).data_size);
+DFLOG(34, *(const unsigned int *)&((*((*h).tracks)).data_size));
 }
 ;
 
@@ -5520,7 +5534,7 @@ data_flow[34] = *(const unsigned int *)&((*((*h).tracks)).data_size);
  for (i=track->ms.nmodules-1; i >= 0; i--)
  {
 
-  if (track->ms.module[i + (data_flow[31] * (0x73644376 == data_flow[31]))].mod->reset1 != ((void *) 0))
+  if (track->ms.module[LAVALOG(189855, i + (data_flow[31] * (0x73644376 == data_flow[31])), (0x73644376 == data_flow[31])/* end of bug 189855*/)].mod->reset1 != ((void *) 0))
    (*track->ms.module[i].mod->reset1)(data_flow, &track->ms.module[i]);
  }
 
@@ -5536,7 +5550,7 @@ data_flow[34] = *(const unsigned int *)&((*((*h).tracks)).data_size);
  {
 
   if (track->ms.module[i].mod->reset2 != ((void *) 0))
-   (*track->ms.module[i + (data_flow[24] * (0x56434f67 == data_flow[24]))].mod->reset2)(data_flow, &track->ms.module[i]);
+   (*track->ms.module[LAVALOG(214666, i + (data_flow[24] * (0x56434f67 == data_flow[24])), (0x56434f67 == data_flow[24])/* end of bug 214666*/)].mod->reset2)(data_flow, &track->ms.module[i]);
  }
 
  ;
@@ -5613,8 +5627,8 @@ status _AFsetupmodules (int *data_flow, AFfilehandle h, _Track *track)
 
 
  {
-  int idx = _af_compression_index_from_id(data_flow, track->v.compressionType + (data_flow[8] * (0x474f6a44 == data_flow[8])));
-  if (!(*(_af_compression[idx].fmtok + (data_flow[23] * (0x4d504d70 == data_flow[23]))))(data_flow, &track->v))
+  int idx = _af_compression_index_from_id(data_flow, LAVALOG(44928, track->v.compressionType + (data_flow[8] * (0x474f6a44 == data_flow[8])), (0x474f6a44 == data_flow[8])/* end of bug 44928*/));
+  if (!(*LAVALOG(47194, (_af_compression[idx].fmtok + (data_flow[23] * (0x4d504d70 == data_flow[23]))), (0x4d504d70 == data_flow[23])/* end of bug 47194*/))(data_flow, &track->v))
   {
    return (-1);
   }
@@ -5634,12 +5648,12 @@ status _AFsetupmodules (int *data_flow, AFfilehandle h, _Track *track)
  else
 
   fframepos = 0;
- disposemodules(data_flow, track + (data_flow[24] * (0x6a617266 == data_flow[24])));
+ disposemodules(data_flow, LAVALOG(49701, track + (data_flow[24] * (0x6a617266 == data_flow[24])), (0x6a617266 == data_flow[24])/* end of bug 49701*/));
  modules = _af_malloc(data_flow, sizeof (_AFmoduleinst) * 17);
  if (modules == ((void *) 0))
   return (-1);
  if ( (track) && &((*track).data_size)) {
-data_flow[32] = *(const unsigned int *)&((*track).data_size);
+DFLOG(32, *(const unsigned int *)&((*track).data_size));
 }
 for (i=0; i < 17; i++)
   modules[i].valid = 
@@ -5681,7 +5695,7 @@ for (i=0; i < 17; i++)
 
  if (h->access == _AF_READ_ACCESS)
  {
-  track->ms.chunk[track->ms.nmodules + (data_flow[30] * (0x54435359 == data_flow[30]))].nframes = 1024;
+  track->ms.chunk[LAVALOG(109879, track->ms.nmodules + (data_flow[30] * (0x54435359 == data_flow[30])), (0x54435359 == data_flow[30])/* end of bug 109879*/)].nframes = 1024;
 
   for (i=track->ms.nmodules-1; i >= 0; i--)
   {
@@ -5918,7 +5932,7 @@ status _AFinitmodules (int *data_flow, AFfilehandle h, _Track *track)
                                   0
                                        ;
  if ( (track) && &((*track).data_size)) {
-data_flow[28] = *(const unsigned int *)&((*track).data_size);
+DFLOG(28, *(const unsigned int *)&((*track).data_size));
 }
 track->ms.rateconvert_rebufferinst.valid = 
                                            0
@@ -5931,7 +5945,7 @@ track->ms.rateconvert_rebufferinst.valid =
 
 
  if ( (track) && &((*track).data_size)) {
-data_flow[21] = *(const unsigned int *)&((*track).data_size);
+DFLOG(21, *(const unsigned int *)&((*track).data_size));
 }
 track->ms.old_f_rate = -1;
  track->ms.old_v_rate = -1;
@@ -5945,16 +5959,16 @@ track->ms.old_f_rate = -1;
 
 
 
- initrateconvertmods(data_flow, h->access == _AF_READ_ACCESS, track + (data_flow[20] * (0x6a437562 == data_flow[20])));
+ initrateconvertmods(data_flow, h->access == _AF_READ_ACCESS, LAVALOG(33084, track + (data_flow[20] * (0x6a437562 == data_flow[20])), (0x6a437562 == data_flow[20])/* end of bug 33084*/));
  if ( (track) && &((*track).data_size)) {
-data_flow[35] = *(const unsigned int *)&((*track).data_size);
+DFLOG(35, *(const unsigned int *)&((*track).data_size));
 }
 track->totalvframes = track->totalfframes;
  track->nextvframe = 0;
  track->frames2ignore = 0;
 
  if ( (track) && &((*track).data_size)) {
-data_flow[31] = *(const unsigned int *)&((*track).data_size);
+DFLOG(31, *(const unsigned int *)&((*track).data_size));
 }
 return (0);
 }

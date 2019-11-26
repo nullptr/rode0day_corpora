@@ -22,3 +22,5 @@
     paths:
       - results*.html 
     expire_in: 1 week
+  only:
+    - master

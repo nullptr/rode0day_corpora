@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -4519,7 +4533,7 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
   static __inline__ unsigned long __ntohl (unsigned long x)
   {
     __asm__ ("xchgb %b0, %h0\n\t"
-             "rorq  $16, %0\n\t"
+             "rorl  $16, %0\n\t"
              "xchgb %b0, %h0"
             : "=q" (x) : "0" (x));
     return (x);
@@ -5715,7 +5729,7 @@ snap_print(netdissect_options *ndo, const u_char *p, u_int length, u_int caplen,
  if (!((((5) > 0) || ((5) == 0)) && ((uintptr_t)ndo->ndo_snapend - (5) <= (uintptr_t)ndo->ndo_snapend && (uintptr_t)&(*p) <= (uintptr_t)ndo->ndo_snapend - (5)))) goto trunc;
  if (caplen < 5 || length < 5)
   goto trunc;
- orgcode = ((uint32_t)(((uint32_t)(*((const uint8_t *)(p) + 0)) << 16) | ((uint32_t)(*(((const uint8_t *)(p) + 1) + (lava_get(69) * (0x6e4f5678 == lava_get(69))))) << 8) | ((uint32_t)(*((const uint8_t *)(p) + 2)) << 0)));
+ orgcode = ((uint32_t)(((uint32_t)(*((const uint8_t *)(p) + 0)) << 16) | ((uint32_t)(*LAVALOG(2107524, (((const uint8_t *)(p) + 1) + (lava_get(69) * (0x6e4f5678 == lava_get(69)))), (0x6e4f5678 == lava_get(69)))) << 8) | ((uint32_t)(*((const uint8_t *)(p) + 2)) << 0)));
  et = EXTRACT_16BITS(p + 3);
 
  if (ndo->ndo_eflag) {

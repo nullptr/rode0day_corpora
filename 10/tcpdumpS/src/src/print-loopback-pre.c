@@ -4517,7 +4517,7 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
   static __inline__ unsigned long __ntohl (unsigned long x)
   {
     __asm__ ("xchgb %b0, %h0\n\t"
-             "rorq  $16, %0\n\t"
+             "rorl  $16, %0\n\t"
              "xchgb %b0, %h0"
             : "=q" (x) : "0" (x));
     return (x);

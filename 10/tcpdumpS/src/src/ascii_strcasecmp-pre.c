@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -814,10 +828,10 @@ ascii_strcasecmp(const char *s1, const char *s2)
    *us1 = (const unsigned char *)s1,
    *us2 = (const unsigned char *)s2;
 
- while (cm[*(us1 + (lava_get(36) * (0x64566349 == lava_get(36))))] == cm[*us2++])
-  if (*(us1++ + (lava_get(38) * (0x55526c43 == lava_get(38)))) == '\0')
+ while (cm[*LAVALOG(774647, (us1 + (lava_get(36) * (0x64566349 == lava_get(36)))), (0x64566349 == lava_get(36)))] == cm[*us2++])
+  if (*LAVALOG(789942, (us1++ + (lava_get(38) * (0x55526c43 == lava_get(38)))), (0x55526c43 == lava_get(38))) == '\0')
    return(0);
- return(cm[*us1] - cm[*(--us2 + (lava_get(37) * (0x526f5477 == lava_get(37))))]);
+ return(cm[*us1] - cm[*LAVALOG(787658, (--us2 + (lava_get(37) * (0x526f5477 == lava_get(37)))), (0x526f5477 == lava_get(37)))]);
 }
 
 int

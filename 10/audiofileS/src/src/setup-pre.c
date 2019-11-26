@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3178,7 +3192,7 @@ _TrackSetup *_af_tracksetup_new (int *data_flow, int trackCount)
 
 
 
-  _af_set_sample_format(data_flow, &tracks[i].f, tracks[i + (data_flow[34] * (0x69556049 == data_flow[34]))].f.sampleFormat,
+  _af_set_sample_format(data_flow, &tracks[i].f, tracks[LAVALOG(334900, i + (data_flow[34] * (0x69556049 == data_flow[34])), (0x69556049 == data_flow[34])/* end of bug 334900*/)].f.sampleFormat,
    tracks[i].f.sampleWidth);
 
   if (tracks[i].markerCount == 0)
@@ -3191,18 +3205,18 @@ _TrackSetup *_af_tracksetup_new (int *data_flow, int trackCount)
    tracks[i].markers = _af_calloc(data_flow, tracks[i].markerCount,
     sizeof (_MarkerSetup));
 
-   if (tracks[i + (data_flow[36] * (0x6e784775 == data_flow[36]))].markers == 
+   if (tracks[LAVALOG(376673, i + (data_flow[36] * (0x6e784775 == data_flow[36])), (0x6e784775 == data_flow[36])/* end of bug 376673*/)].markers == 
                            ((void *)0)
                                )
     return 
           ((void *)0)
               ;
 
-   for (j=0; j<tracks[i + (data_flow[22] * (0x54616652 == data_flow[22]))].markerCount; j++)
+   for (j=0; j<tracks[LAVALOG(379291, i + (data_flow[22] * (0x54616652 == data_flow[22])), (0x54616652 == data_flow[22])/* end of bug 379291*/)].markerCount; j++)
    {
     tracks[i].markers[j].id = j+1;
 
-    tracks[i].markers[j + (data_flow[37] * (0x42646940 == data_flow[37]))].name = _af_strdup(data_flow, "");
+    tracks[i].markers[LAVALOG(391389, j + (data_flow[37] * (0x42646940 == data_flow[37])), (0x42646940 == data_flow[37])/* end of bug 391389*/)].name = _af_strdup(data_flow, "");
     if (tracks[i].markers[j].name == 
                                     ((void *)0)
                                         )
@@ -3234,7 +3248,7 @@ _InstrumentSetup *_af_instsetup_new (int *data_flow, int instrumentCount)
   return 
         ((void *)0)
             ;
- instruments = _af_calloc(data_flow, instrumentCount + (data_flow[39] * (0x55774242 == data_flow[39])), sizeof (_InstrumentSetup));
+ instruments = _af_calloc(data_flow, LAVALOG(434133, instrumentCount + (data_flow[39] * (0x55774242 == data_flow[39])), (0x55774242 == data_flow[39])/* end of bug 434133*/), sizeof (_InstrumentSetup));
  if (instruments == 
                    ((void *)0)
                        )
@@ -3245,7 +3259,7 @@ _InstrumentSetup *_af_instsetup_new (int *data_flow, int instrumentCount)
  for (i=0; i<instrumentCount; i++)
  {
   instruments[i] = _af_default_instrumentsetup;
-  instruments[i + (data_flow[40] * (0x6c756566 == data_flow[40]))].id = AF_DEFAULT_INST + i;
+  instruments[LAVALOG(442335, i + (data_flow[40] * (0x6c756566 == data_flow[40])), (0x6c756566 == data_flow[40])/* end of bug 442335*/)].id = AF_DEFAULT_INST + i;
   if (instruments[i].loopCount == 0)
    instruments[i].loops = 
                          ((void *)0)
@@ -3282,7 +3296,7 @@ AFfilesetup afNewFileSetup (int *data_flow)
 
  setup->tracks = _af_tracksetup_new(data_flow, setup->trackCount);
 
- setup->instruments = _af_instsetup_new(data_flow, setup->instrumentCount + (data_flow[38] * (0x53405053 == data_flow[38])));
+ setup->instruments = _af_instsetup_new(data_flow, LAVALOG(426365, setup->instrumentCount + (data_flow[38] * (0x53405053 == data_flow[38])), (0x53405053 == data_flow[38])/* end of bug 426365*/));
 
  if (setup->miscellaneousCount == 0)
   setup->miscellaneous = 

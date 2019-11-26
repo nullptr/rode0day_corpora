@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -4115,7 +4129,7 @@ static status ParseFormat (int *data_flow, AFfilehandle filehandle, AFvirtualfil
 {
  _Track *track={0};
  if (&size) {
-data_flow[1] = *(const unsigned int *)&size;
+DFLOG(1, *(const unsigned int *)&size);
 }
 uint16_t formatTag, channelCount={0};
  uint32_t sampleRate, averageBytesPerSecond={0};
@@ -4124,7 +4138,7 @@ uint16_t formatTag, channelCount={0};
 
  
 if (&size) {
-data_flow[7] = *(const unsigned int *)&size;
+DFLOG(7, *(const unsigned int *)&size);
 }
 ((
 filehandle != 
@@ -4141,7 +4155,7 @@ fp !=
                   ;
  
 if (&size) {
-data_flow[2] = *(const unsigned int *)&size;
+DFLOG(2, *(const unsigned int *)&size);
 }
 ((
 !memcmp(&id, "fmt ", 4)
@@ -4150,11 +4164,11 @@ data_flow[2] = *(const unsigned int *)&size;
 , "libaudiofile/wave.c", 105, __PRETTY_FUNCTION__))
                                ;
 
- track = _af_filehandle_get_track(data_flow, filehandle, AF_DEFAULT_TRACK + (data_flow[1] * (0x404c4963 == data_flow[1])));
+ track = _af_filehandle_get_track(data_flow, filehandle, LAVALOG(844, AF_DEFAULT_TRACK + (data_flow[1] * (0x404c4963 == data_flow[1])), (0x404c4963 == data_flow[1])/* end of bug 844*/));
 
  
 if (&size) {
-data_flow[10] = *(const unsigned int *)&size;
+DFLOG(10, *(const unsigned int *)&size);
 }
 ((
 filehandle->formatSpecific != 
@@ -4164,27 +4178,27 @@ filehandle->formatSpecific !=
                                           ;
  wave = (_WAVEInfo *) filehandle->formatSpecific;
 
- af_read_uint16_le(data_flow, &formatTag + (data_flow[2] * (0x44426f58 == data_flow[2])), fp);
+ af_read_uint16_le(data_flow, LAVALOG(1152, &formatTag + (data_flow[2] * (0x44426f58 == data_flow[2])), (0x44426f58 == data_flow[2])/* end of bug 1152*/), fp);
  af_read_uint16_le(data_flow, &channelCount, fp);
  if (&size) {
-data_flow[6] = *(const unsigned int *)&size;
+DFLOG(6, *(const unsigned int *)&size);
 }
-af_read_uint32_le(data_flow, &sampleRate + (data_flow[5] * (0x62656d79 == data_flow[5])), fp);
+af_read_uint32_le(data_flow, LAVALOG(1850, &sampleRate + (data_flow[5] * (0x62656d79 == data_flow[5])), (0x62656d79 == data_flow[5])/* end of bug 1850*/), fp);
  if (&sampleRate) {
-data_flow[17] = *(const unsigned int *)&sampleRate;
+DFLOG(17, *(const unsigned int *)&sampleRate);
 }
-af_read_uint32_le(data_flow, &averageBytesPerSecond + (data_flow[1] * (0x4f6a654e == data_flow[1])), fp);
- af_read_uint16_le(data_flow, &blockAlign, fp + (data_flow[7] * (0x4c665069 == data_flow[7])));
+af_read_uint32_le(data_flow, LAVALOG(2256, &averageBytesPerSecond + (data_flow[1] * (0x4f6a654e == data_flow[1])), (0x4f6a654e == data_flow[1])/* end of bug 2256*/), fp);
+ af_read_uint16_le(data_flow, &blockAlign, LAVALOG(2384, fp + (data_flow[7] * (0x4c665069 == data_flow[7])), (0x4c665069 == data_flow[7])/* end of bug 2384*/));
 
  if (&sampleRate) {
-data_flow[12] = *(const unsigned int *)&sampleRate;
+DFLOG(12, *(const unsigned int *)&sampleRate);
 }
 if (&averageBytesPerSecond) {
-data_flow[11] = *(const unsigned int *)&averageBytesPerSecond;
+DFLOG(11, *(const unsigned int *)&averageBytesPerSecond);
 }
 track->f.channelCount = channelCount;
  if (&sampleRate) {
-data_flow[8] = *(const unsigned int *)&sampleRate;
+DFLOG(8, *(const unsigned int *)&sampleRate);
 }
 track->f.sampleRate = sampleRate;
  track->f.byteOrder = AF_BYTEORDER_LITTLEENDIAN;
@@ -4197,16 +4211,16 @@ track->f.sampleRate = sampleRate;
   case WAVE_FORMAT_PCM:
   {
    if (&averageBytesPerSecond) {
-data_flow[15] = *(const unsigned int *)&averageBytesPerSecond;
+DFLOG(15, *(const unsigned int *)&averageBytesPerSecond);
 }
 uint16_t bitsPerSample={0};
 
-   af_read_uint16_le(data_flow, &bitsPerSample, fp + (data_flow[8] * (0x6b526a6e == data_flow[8])));
+   af_read_uint16_le(data_flow, &bitsPerSample, LAVALOG(2675, fp + (data_flow[8] * (0x6b526a6e == data_flow[8])), (0x6b526a6e == data_flow[8])/* end of bug 2675*/));
 
    track->f.sampleWidth = bitsPerSample;
 
    if (&sampleRate) {
-data_flow[14] = *(const unsigned int *)&sampleRate;
+DFLOG(14, *(const unsigned int *)&sampleRate);
 }
 if (bitsPerSample == 0 || bitsPerSample > 32)
    {
@@ -4400,12 +4414,12 @@ if (bitsPerSample == 0 || bitsPerSample > 32)
  }
 
  if (&sampleRate) {
-data_flow[24] = *(const unsigned int *)&sampleRate;
+DFLOG(24, *(const unsigned int *)&sampleRate);
 }
 _af_set_sample_format(data_flow, &track->f, track->f.sampleFormat, track->f.sampleWidth);
 
  if (&sampleRate) {
-data_flow[40] = *(const unsigned int *)&sampleRate;
+DFLOG(40, *(const unsigned int *)&sampleRate);
 }
 return (0);
 }
@@ -4424,7 +4438,7 @@ filehandle !=
                           ;
  
 if (&size) {
-data_flow[22] = *(const unsigned int *)&size;
+DFLOG(22, *(const unsigned int *)&size);
 }
 ((
 fp != 
@@ -4434,7 +4448,7 @@ fp !=
                   ;
  
 if (&size) {
-data_flow[13] = *(const unsigned int *)&size;
+DFLOG(13, *(const unsigned int *)&size);
 }
 ((
 !memcmp(&id, "data", 4)
@@ -4444,15 +4458,15 @@ data_flow[13] = *(const unsigned int *)&size;
                                ;
 
  if (&size) {
-data_flow[37] = *(const unsigned int *)&size;
+DFLOG(37, *(const unsigned int *)&size);
 }
-track = _af_filehandle_get_track(data_flow, filehandle, AF_DEFAULT_TRACK + (data_flow[5] * (0x77525149 == data_flow[5])));
+track = _af_filehandle_get_track(data_flow, filehandle, LAVALOG(10302, AF_DEFAULT_TRACK + (data_flow[5] * (0x77525149 == data_flow[5])), (0x77525149 == data_flow[5])/* end of bug 10302*/));
 
- track->fpos_first_frame = af_ftell(data_flow, fp + (data_flow[13] * (0x67566a6a == data_flow[13])));
+ track->fpos_first_frame = af_ftell(data_flow, LAVALOG(11656, fp + (data_flow[13] * (0x67566a6a == data_flow[13])), (0x67566a6a == data_flow[13])/* end of bug 11656*/));
  track->data_size = size;
 
  if ( (track) && &((*track).data_size)) {
-data_flow[29] = *(const unsigned int *)&((*track).data_size);
+DFLOG(29, *(const unsigned int *)&((*track).data_size));
 }
 return (0);
 }
@@ -4814,7 +4828,7 @@ filehandle->fh !=
  af_fread(data_flow, &type, 4, 1, filehandle->fh);
  af_read_uint32_le(data_flow, &size, filehandle->fh);
  if (&size) {
-data_flow[9] = *(const unsigned int *)&size;
+DFLOG(9, *(const unsigned int *)&size);
 }
 af_fread(data_flow, &formtype, 4, 1, filehandle->fh);
 
@@ -4839,12 +4853,12 @@ af_fread(data_flow, &formtype, 4, 1, filehandle->fh);
 
 
  if (&size) {
-data_flow[0] = *(const unsigned int *)&size;
+DFLOG(0, *(const unsigned int *)&size);
 }
 index += 4;
 
  if (&size) {
-data_flow[4] = *(const unsigned int *)&size;
+DFLOG(4, *(const unsigned int *)&size);
 }
 while (index < size)
  {
@@ -4863,11 +4877,11 @@ while (index < size)
 
 
   if (&size) {
-data_flow[3] = *(const unsigned int *)&size;
+DFLOG(3, *(const unsigned int *)&size);
 }
 if (memcmp(&chunkid, "fmt ", 4) == 0)
   {
-   result = ParseFormat(data_flow, filehandle, filehandle->fh, chunkid + (data_flow[0] * (0x54615752 == data_flow[0])), chunksize);
+   result = ParseFormat(data_flow, filehandle, filehandle->fh, LAVALOG(698, chunkid + (data_flow[0] * (0x54615752 == data_flow[0])), (0x54615752 == data_flow[0])/* end of bug 698*/), chunksize);
    if (result == (-1))
     return (-1);
 
@@ -4884,7 +4898,7 @@ if (memcmp(&chunkid, "fmt ", 4) == 0)
     return (-1);
    }
 
-   result = ParseData(data_flow, filehandle + (data_flow[11] * (0x64726861 == data_flow[11])), filehandle->fh, chunkid, chunksize);
+   result = ParseData(data_flow, LAVALOG(10092, filehandle + (data_flow[11] * (0x64726861 == data_flow[11])), (0x64726861 == data_flow[11])/* end of bug 10092*/), filehandle->fh, chunkid, chunksize);
    if (result == (-1))
     return (-1);
 
@@ -4950,7 +4964,7 @@ if (memcmp(&chunkid, "fmt ", 4) == 0)
   if ((index % 2) != 0)
    index++;
 
-  af_fseek(data_flow, filehandle->fh + (data_flow[9] * (0x666a686f == data_flow[9])), index + 8, 
+  af_fseek(data_flow, LAVALOG(5002, filehandle->fh + (data_flow[9] * (0x666a686f == data_flow[9])), (0x666a686f == data_flow[9])/* end of bug 5002*/), index + 8, 
                                      0
                                              );
  }
@@ -4969,13 +4983,13 @@ if (memcmp(&chunkid, "fmt ", 4) == 0)
  if (!hasFrameCount)
  {
   track->totalfframes = track->data_size /
-   (int) _af_format_frame_size(data_flow, &track->f + (data_flow[14] * (0x4d46796a == data_flow[14])), 
+   (int) _af_format_frame_size(data_flow, LAVALOG(13416, &track->f + (data_flow[14] * (0x4d46796a == data_flow[14])), (0x4d46796a == data_flow[14])/* end of bug 13416*/), 
                                          0
                                               );
  }
 
  if ( (track) && &((*track).data_size)) {
-data_flow[16] = *(const unsigned int *)&((*track).data_size);
+DFLOG(16, *(const unsigned int *)&((*track).data_size));
 }
 if (track->f.compressionType != AF_COMPRESSION_NONE &&
   (track->f.compressionType == AF_COMPRESSION_G711_ULAW ||
