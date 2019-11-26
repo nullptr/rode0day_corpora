@@ -45,9 +45,9 @@ def print_results(results):
 
     if validated > 0:
         r = [validated, validated, total, float(validated / total * 100.0)]
-        logger.info("DONE: %d bugs validated.\n\tBug coverage: %d / %d (%0.1f%%) covered ", *r)
+        logger.info("DONE: %d bugs validated.\n\tBug coverage: %d / %d (%0.1f%%) valid ", *r)
     else:
-        logger.info("DONE: %d of %d inputs ran cleanly.", exited, total)
+        logger.info("DONE: %d of %d inputs ran cleanly. (%0.1f%%) valid ", exited, total, float(exited / total * 100.0))
 
 
 def run_tests(info, challenge_name=None):

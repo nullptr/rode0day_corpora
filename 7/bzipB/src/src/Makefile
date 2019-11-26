@@ -1,5 +1,5 @@
 all: bzip2
-CFLAGS += -O0 -m32 -g -gdwarf-2 
+CFLAGS += -O0 -g -gdwarf-2 
 CFLAGS +=  -Winline -D_FILE_OFFSET_BITS=64
 
 OBJS= blocksort-pre.o  \

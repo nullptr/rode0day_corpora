@@ -6445,23 +6445,19 @@ typedef ptrdiff_t __xalloc_count_type;
 
 
 
-
-
-
-
 extern _Noreturn void xalloc_die (void);
 
 void *xmalloc (size_t s)
       __attribute__ ((__malloc__)) __attribute__ ((__alloc_size__ (1)));
 void *xzalloc (int *data_flow, size_t s)
-      __attribute__ ((__malloc__)) __attribute__ ((__alloc_size__ (1)));
+      __attribute__ ((__malloc__)) __attribute__ ((__alloc_size__ (2)));
 void *xcalloc (int *data_flow, size_t n, size_t s)
-      __attribute__ ((__malloc__)) __attribute__ ((__alloc_size__ (1, 2)));
+      __attribute__ ((__malloc__)) __attribute__ ((__alloc_size__ (2, 3)));
 void *xrealloc (void *p, size_t s)
       __attribute__ ((__alloc_size__ (2)));
 void *x2realloc (int *data_flow, void *p, size_t *pn);
 void *xmemdup (int *data_flow, void const *p, size_t s)
-      __attribute__ ((__alloc_size__ (2)));
+      __attribute__ ((__alloc_size__ (3)));
 char *xstrdup (int *data_flow, char const *str)
       __attribute__ ((__malloc__));
 inline void *xnmalloc (size_t n, size_t s)
@@ -6478,7 +6474,7 @@ xnmalloc (size_t n, size_t s)
 
 
 inline void *xnrealloc (int *data_flow, void *p, size_t n, size_t s)
-                    __attribute__ ((__alloc_size__ (2, 3)));
+                    __attribute__ ((__alloc_size__ (3, 4)));
 inline void *
 xnrealloc (int *data_flow, void *p, size_t n, size_t s)
 {

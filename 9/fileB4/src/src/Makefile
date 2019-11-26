@@ -2,7 +2,7 @@ all: file
 top_srcdir = ..
 HDR = $(top_srcdir)/src/magic.h.in
 
-CFLAGS += -m32 -g -DHAVE_CONFIG_H -I. -I.. -gdwarf-2
+CFLAGS += -g -DHAVE_CONFIG_H -I. -I.. -gdwarf-2
 
 LIBOBJ = \
     apprentice-pre.o \
@@ -54,7 +54,7 @@ magic.h : ${HDR}
 	sed -e "s/X.YY/$$(echo 5.35 | tr -d .)/" < ${HDR} > $@
 
 file : magic.h $(LIBOBJ)
-	 $(CC) -g $(CFLAGS) -o $@ $^ -lz
+	 $(CC) -g $(CFLAGS) -o $@ $(LIBOBJ) -lz
 
 preclean : 
 	rm -f *-pre.c

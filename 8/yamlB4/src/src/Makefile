@@ -1,6 +1,6 @@
 all: libyaml
 
-CFLAGS += -O0 -m32 -DHAVE_CONFIG_H -I. -I.. -I../include -g -gdwarf-2
+CFLAGS += -O0 -DHAVE_CONFIG_H -I. -I.. -I../include -g -gdwarf-2
 
 LIBOBJ = \
 	api-pre.o \

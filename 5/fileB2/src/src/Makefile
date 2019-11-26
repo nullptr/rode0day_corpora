@@ -2,9 +2,7 @@ all: file
 top_srcdir = ..
 HDR = $(top_srcdir)/src/magic.h.in
 
-# Having some issues with make CFLAGS+=m32 clobbering these
-# so make them seperate
-_CFLAGS=-m32 -g -DHAVE_CONFIG_H -I. -I..
+CFLAGS += -g -DHAVE_CONFIG_H -I. -I.. -gdwarf-2
 
 LIBOBJ = \
     apprentice-pre.o \
@@ -50,7 +48,7 @@ libmagic.so : magic.h $(LIBOBJ)
 	$(CC) -shared $(CFLAGS) $(_CFLAGS) -fPIC -DPIC $< -lz -Wl,-soname -Wl,libmagic.so.1 -o $@
 
 file : magic.h $(LIBOBJ)
-	 $(CC) -g $(_CFLAGS) -o $@ $^ -lz
+	 $(CC) -g $(CFLAGS) -o $@ $(LIBOBJ) -lz
 
 preclean : 
 	rm -f *-pre.c
