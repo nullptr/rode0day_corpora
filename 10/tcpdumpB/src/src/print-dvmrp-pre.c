@@ -4506,29 +4506,6 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
 
 
   
- static __inline__ unsigned long __ntohl (unsigned long x);
-  static __inline__ unsigned short __ntohs (unsigned short x);
-
-
-
-
-
-
-  static __inline__ unsigned long __ntohl (unsigned long x)
-  {
-    __asm__ ("xchgb %b0, %h0\n\t"
-             "rorl  $16, %0\n\t"
-             "xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
-  }
-
-  static __inline__ unsigned short __ntohs (unsigned short x)
-  {
-    __asm__ ("xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
-  }
 
 typedef unsigned char nd_uint16_t[2];
 typedef unsigned char nd_uint24_t[3];
@@ -5277,20 +5254,20 @@ extern int esp_print_decrypt_buffer_by_ikev2(netdissect_options *, int,
 static inline uint16_t
 EXTRACT_16BITS(const void *p)
 {
- return ((uint16_t)__ntohs(*(const uint16_t *)(p)));
+ return ((uint16_t)ntohs(*(const uint16_t *)(p)));
 }
 
 static inline uint32_t
 EXTRACT_32BITS(const void *p)
 {
- return ((uint32_t)__ntohl(*(const uint32_t *)(p)));
+ return ((uint32_t)ntohl(*(const uint32_t *)(p)));
 }
 
 static inline uint64_t
 EXTRACT_64BITS(const void *p)
 {
- return ((uint64_t)(((uint64_t)__ntohl(*((const uint32_t *)(p) + 0))) << 32 |
-  ((uint64_t)__ntohl(*((const uint32_t *)(p) + 1))) << 0));
+ return ((uint64_t)(((uint64_t)ntohl(*((const uint32_t *)(p) + 0))) << 32 |
+  ((uint64_t)ntohl(*((const uint32_t *)(p) + 1))) << 0));
 
 }
 enum {
@@ -5449,7 +5426,7 @@ print_report(netdissect_options *ndo,
   if (bp[2])
    width = 4;
 
-  (*ndo->ndo_printf)(ndo, "\n\tMask %s", intoa(__ntohl(mask)));
+  (*ndo->ndo_printf)(ndo, "\n\tMask %s", intoa(ntohl(mask)));
   bp += 3;
   len -= 3;
   do {
@@ -5473,7 +5450,7 @@ print_report(netdissect_options *ndo,
    metric = *bp++;
    done = metric & 0x80;
    metric &= 0x7f;
-   (*ndo->ndo_printf)(ndo, "\n\t  %s metric %d", intoa(__ntohl(origin)), metric)
+   (*ndo->ndo_printf)(ndo, "\n\t  %s metric %d", intoa(ntohl(origin)), metric)
             ;
    len -= width + 1;
   } while (!done);

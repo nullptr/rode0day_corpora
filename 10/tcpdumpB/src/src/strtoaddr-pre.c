@@ -4506,29 +4506,6 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
 
 
   
- static __inline__ unsigned long __ntohl (unsigned long x);
-  static __inline__ unsigned short __ntohs (unsigned short x);
-
-
-
-
-
-
-  static __inline__ unsigned long __ntohl (unsigned long x)
-  {
-    __asm__ ("xchgb %b0, %h0\n\t"
-             "rorl  $16, %0\n\t"
-             "xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
-  }
-
-  static __inline__ unsigned short __ntohs (unsigned short x)
-  {
-    __asm__ ("xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
-  }
 
 typedef int ptrdiff_t;
 typedef long int wchar_t;
@@ -4844,7 +4821,7 @@ strtoaddr(const char *src, void *dst)
 
  val |= (parts[0] << 24) | (parts[1] << 16) | (parts[2] << 8);
  if (dst) {
-  val = __ntohl(val);
+  val = ntohl(val);
   memcpy(dst, &val, 4);
  }
  return (1);

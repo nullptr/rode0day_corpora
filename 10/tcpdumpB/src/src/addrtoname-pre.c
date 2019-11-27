@@ -4535,18 +4535,12 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
     if (&x) {
 lava_set(3, *(const unsigned int *)&x);
 }
-__asm__ ("xchgb %b0, %h0\n\t"
-             "rorl  $16, %0\n\t"
-             "xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
+    return __builtin_bswap32(x);
   }
 
   static __inline__ unsigned short __ntohs (unsigned short x)
   {
-    __asm__ ("xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
+    return __builtin_bswap16(x);
   }
 
 
