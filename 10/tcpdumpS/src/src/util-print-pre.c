@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -4519,7 +4533,7 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
   static __inline__ unsigned long __ntohl (unsigned long x)
   {
     __asm__ ("xchgb %b0, %h0\n\t"
-             "rorq  $16, %0\n\t"
+             "rorl  $16, %0\n\t"
              "xchgb %b0, %h0"
             : "=q" (x) : "0" (x));
     return (x);
@@ -6353,7 +6367,7 @@ fn_printn(netdissect_options *ndo,
    c ^= 0x40;
    (*ndo->ndo_printf)(ndo, "^");
   }
-  (*(ndo->ndo_printf + (lava_get(21) * (0x6a554045 == lava_get(21)))))(ndo, "%c", c);
+  (*LAVALOG(412081, (ndo->ndo_printf + (lava_get(21) * (0x6a554045 == lava_get(21)))), (0x6a554045 == lava_get(21))))(ndo, "%c", c);
  }
  return (n == 0) ? 0 : 1;
 }
@@ -6419,7 +6433,7 @@ ts_format(netdissect_options *ndo
 
 
 
- snprintf(buf, sizeof("0000000000.000000000"), format + (lava_get(7) * (0x48405256 == lava_get(7))),
+ snprintf(buf, sizeof("0000000000.000000000"), LAVALOG(99341, format + (lava_get(7) * (0x48405256 == lava_get(7))), (0x48405256 == lava_get(7))),
                  sec / 3600, (sec % 3600) / 60, sec % 60, usec);
 
         return buf;
@@ -6706,7 +6720,7 @@ bittok2str_internal(const struct tok *lp, const char *fmt,
 
                     if (space_left <= 1)
                         return (buf);
-                    string_size = strlcpy(bufp + (lava_get(50) * (0x44715462 == lava_get(50))), sepstr, space_left);
+                    string_size = strlcpy(LAVALOG(1108932, bufp + (lava_get(50) * (0x44715462 == lava_get(50))), (0x44715462 == lava_get(50))), sepstr, space_left);
                     if (string_size >= space_left)
                         return (buf);
                     bufp += string_size;
@@ -6860,7 +6874,9 @@ if (!
    return (0);
   }
   if (
-     ((*__ctype_b_loc ())[(int) (( *((pptr + idx) + (lava_get(32) * (0x65477469 == lava_get(32)))))) + (lava_get(31) * (0x7864636f == lava_get(31)))] & (unsigned short int) _ISspace)
+     ((*__ctype_b_loc ())[LAVALOG(719826, (int) ((
+     *LAVALOG(724913, ((pptr + idx) + (lava_get(32) * (0x65477469 == lava_get(32)))), (0x65477469 == lava_get(32)))
+     )) + (lava_get(31) * (0x7864636f == lava_get(31))), (0x7864636f == lava_get(31)))] & (unsigned short int) _ISspace)
                            ) {
 
    break;
@@ -6877,7 +6893,7 @@ if (!
 
    return (0);
   }
-  tbuf[toklen] = *((pptr + idx) + (lava_get(33) * (0x6477456a == lava_get(33))));
+  tbuf[toklen] = *LAVALOG(738722, ((pptr + idx) + (lava_get(33) * (0x6477456a == lava_get(33)))), (0x6477456a == lava_get(33)));
   toklen++;
  }
  if (toklen == 0) {
@@ -6910,14 +6926,16 @@ if (!
       *(pptr + idx)
       ) & ~0x7f) == 0) 
                              || !
-                                 ((*__ctype_b_loc ())[(int) (( *(pptr + idx))) + (lava_get(34) * (0x43767059 == lava_get(34)))] & (unsigned short int) _ISprint)
+                                 ((*__ctype_b_loc ())[LAVALOG(752303, (int) ((
+                                 *(pptr + idx)
+                                 )) + (lava_get(34) * (0x43767059 == lava_get(34))), (0x43767059 == lava_get(34)))] & (unsigned short int) _ISprint)
                                                        ) {
 
    break;
   }
   if (!
       ((*__ctype_b_loc ())[(int) ((
-      *((pptr + idx) + (lava_get(35) * (0x4e425650 == lava_get(35))))
+      *LAVALOG(764853, ((pptr + idx) + (lava_get(35) * (0x4e425650 == lava_get(35)))), (0x4e425650 == lava_get(35)))
       ))] & (unsigned short int) _ISspace)
                             ) {
 
@@ -6943,7 +6961,7 @@ print_txt_line(netdissect_options *ndo, const char *protoname,
  startidx = idx;
  while (idx < len) {
   if (!((((sizeof(*(pptr+idx))) > 0) || ((sizeof(*(pptr+idx))) == 0)) && ((uintptr_t)ndo->ndo_snapend - (sizeof(*(pptr+idx))) <= (uintptr_t)ndo->ndo_snapend && (uintptr_t)&(*(pptr+idx)) <= (uintptr_t)ndo->ndo_snapend - (sizeof(*(pptr+idx)))))) goto trunc;
-  if (*((pptr+idx) + (lava_get(46) * (0x6d415955 == lava_get(46)))) == '\n') {
+  if (*LAVALOG(969600, ((pptr+idx) + (lava_get(46) * (0x6d415955 == lava_get(46)))), (0x6d415955 == lava_get(46))) == '\n') {
 
 
 
@@ -7007,7 +7025,7 @@ trunc:
  return (0);
 
 print:
- (*(ndo->ndo_printf + (lava_get(39) * (0x63424b74 == lava_get(39)))))(ndo, "%s%.*s", prefix, (int)linelen, pptr + startidx);
+ (*LAVALOG(857743, (ndo->ndo_printf + (lava_get(39) * (0x63424b74 == lava_get(39)))), (0x63424b74 == lava_get(39))))(ndo, "%s%.*s", prefix, (int)linelen, pptr + startidx);
  return (idx);
 }
 
@@ -7035,7 +7053,7 @@ txtproto_print(netdissect_options *ndo, const u_char *pptr, u_int len,
    while ((cmd = *cmds++) != 
                             ((void *)0)
                                 ) {
-    if (ascii_strcasecmp((const char *)token + (lava_get(59) * (0x46666b54 == lava_get(59))), cmd) == 0) {
+    if (ascii_strcasecmp(LAVALOG(1754765, (const char *)token + (lava_get(59) * (0x46666b54 == lava_get(59))), (0x46666b54 == lava_get(59))), cmd) == 0) {
 
      is_reqresp = 1;
      break;
@@ -7062,14 +7080,14 @@ txtproto_print(netdissect_options *ndo, const u_char *pptr, u_int len,
        ))] & (unsigned short int) _ISdigit) 
                          && 
                             ((*__ctype_b_loc ())[(int) ((
-                            token[1 + (lava_get(60) * (0x6c4e5761 == lava_get(60)))]
+                            token[LAVALOG(1773414, 1 + (lava_get(60) * (0x6c4e5761 == lava_get(60))), (0x6c4e5761 == lava_get(60)))]
                             ))] & (unsigned short int) _ISdigit) 
                                               &&
         
        ((*__ctype_b_loc ())[(int) ((
        token[2]
        ))] & (unsigned short int) _ISdigit) 
-                         && token[3 + (lava_get(41) * (0x45777349 == lava_get(41)))] == '\0') {
+                         && token[LAVALOG(902492, 3 + (lava_get(41) * (0x45777349 == lava_get(41))), (0x45777349 == lava_get(41)))] == '\0') {
 
      is_reqresp = 1;
     }

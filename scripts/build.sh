@@ -60,12 +60,21 @@ create_job_files() {
 copy_required_files() {
     mkdir -p  5/fileS2/built/share/misc
     cp 5/fileS2/src/magic/magic.mgc 5/fileS2/built/share/misc/
-    mkdir -p  12/fileS3/built/share/misc
+    mkdir -p  5/fileB2/share/misc   5/fileB2/src/magic
+    cp 5/fileS2/src/magic/magic.mgc 5/fileB2/share/misc/
+    cp 5/fileS2/src/magic/magic.mgc 5/fileB2/src/magic/
+    cp 5/fileS2/src/magic/magic.mgc 6/filemagicB/src/
+    mkdir -p  7/fileB3/share/misc
+    cp 7/fileB3/src/magic.mgc 7/fileB3/share/misc/
+    mkdir -p  9/fileB4/share/misc
+    cp 7/fileB3/src/magic.mgc 9/fileB4/share/misc/
+    cp 7/fileB3/src/magic.mgc 9/fileB4/src/
+    mkdir -p 11/fileB5/share/misc
+    cp 7/fileB3/src/magic.mgc 11/fileB5/share/misc/
+    mkdir -p 12/fileS3/built/share/misc
     cp 12/fileS3/src/magic.mgc 12/fileS3/built/share/misc/
-    mkdir -p  13/fileS4/built/share/misc
+    mkdir -p 13/fileS4/built/share/misc
     cp 13/fileS4/src/magic.mgc 13/fileS4/built/share/misc/
-    mkdir -p  14/fileS5/built/share/misc
-    cp 14/fileS5/src/magic.mgc 14/fileS5/built/share/misc/
     echo "[*] required files copied"
 }
 
@@ -240,6 +249,7 @@ do
         --angora)
             FUNC=make_lava_angora
             CC=/angora/bin/angora-clang
+            CFLAGS=${CFLAGS//-m32/}
             shift
             ;;
         --docker)

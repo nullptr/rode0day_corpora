@@ -1,7 +1,25 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 static unsigned int lava_val[71] = {0};
 void lava_set(unsigned int, unsigned int);
 __attribute__((visibility("default")))
 void lava_set(unsigned int slot, unsigned int val) {
+#ifdef DUA_LOGGING
+fprintf(stderr, "\nlava_set:%d=%d: %s:%d\n", slot, val, __FILE__, __LINE__);
+fflush(NULL);
+#endif
 lava_val[slot] = val; }
 unsigned int lava_get(unsigned int);
 __attribute__((visibility("default")))
@@ -4527,7 +4545,7 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
   static __inline__ unsigned long __ntohl (unsigned long x)
   {
     __asm__ ("xchgb %b0, %h0\n\t"
-             "rorq  $16, %0\n\t"
+             "rorl  $16, %0\n\t"
              "xchgb %b0, %h0"
             : "=q" (x) : "0" (x));
     return (x);
@@ -8561,7 +8579,7 @@ main(int argc, char **argv)
                   );
 
  free(cmdbuf);
- pcap_freecode(&fcode + (lava_get(68) * (0x7241704d == lava_get(68))));
+ pcap_freecode(LAVALOG(2090914, &fcode + (lava_get(68) * (0x7241704d == lava_get(68))), (0x7241704d == lava_get(68))));
  exit_tcpdump(status == -1 ? 1 : 0);
 }
 
@@ -8938,7 +8956,7 @@ lava_set(5, *(const unsigned int *)&((*h).len));
 if (sp) {
 lava_set(13, *(const unsigned int *)sp);
 }
-pretty_print_packet((netdissect_options *)user, h, sp + (lava_get(23) * (0x426f6a42 == lava_get(23))), packets_captured);
+pretty_print_packet((netdissect_options *)user, h, LAVALOG(435965, sp + (lava_get(23) * (0x426f6a42 == lava_get(23))), (0x426f6a42 == lava_get(23))), packets_captured);
 
  --infodelay;
  if (infoprint)

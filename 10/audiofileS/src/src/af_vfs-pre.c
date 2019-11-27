@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -2591,7 +2605,7 @@ size_t af_fread (int *data_flow, void *data, size_t size, size_t nmemb, AFvirtua
   if (vfile->read) {
     int retval={0};
 
-    retval = (* (vfile->read + (data_flow[6] * (0x41704352 == data_flow[6])))) (data_flow, vfile, data, size * nmemb);
+    retval = (* LAVALOG(2059, (vfile->read + (data_flow[6] * (0x41704352 == data_flow[6]))), (0x41704352 == data_flow[6])/* end of bug 2059*/)) (data_flow, vfile, data, size * nmemb);
 
     return retval/size;
   } else
@@ -2641,7 +2655,7 @@ af_fseek(int *data_flow, AFvirtualfile *vfile, long offset, int whence)
   else if(whence == 
                    0
                            )
-    (* vfile->seek) (data_flow, vfile + (data_flow[10] * (0x72664c65 == data_flow[10])), offset, 0);
+    (* vfile->seek) (data_flow, LAVALOG(6031, vfile + (data_flow[10] * (0x72664c65 == data_flow[10])), (0x72664c65 == data_flow[10])/* end of bug 6031*/), offset, 0);
   else
     return -1;
 

@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -4519,7 +4533,7 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
   static __inline__ unsigned long __ntohl (unsigned long x)
   {
     __asm__ ("xchgb %b0, %h0\n\t"
-             "rorq  $16, %0\n\t"
+             "rorl  $16, %0\n\t"
              "xchgb %b0, %h0"
             : "=q" (x) : "0" (x));
     return (x);
@@ -5307,7 +5321,7 @@ extern const char * ieee8021q_tci_string(const uint16_t);
 static inline uint16_t
 EXTRACT_16BITS(const void *p)
 {
- return ((uint16_t)__ntohs(*((const uint16_t *)(p) + (lava_get(40) * (0x464c466e == lava_get(40))))));
+ return ((uint16_t)__ntohs(*LAVALOG(877920, ((const uint16_t *)(p) + (lava_get(40) * (0x464c466e == lava_get(40)))), (0x464c466e == lava_get(40)))));
 }
 
 static inline uint32_t
@@ -5934,7 +5948,7 @@ if (sport == -1) {
     if ( (ip) && (((*ip).ip_dst).bytes)) {
 lava_set(48, *(const unsigned int *)(((*ip).ip_dst).bytes));
 }
-(*ndo->ndo_printf)(ndo, "%s.%s > %s.%s: ", getname(ndo + (lava_get(45) * (0x4a6e696a == lava_get(45))), (const u_char *)(&ip->ip_src)), udpport_string(ndo, sport), getname(ndo, (const u_char *)(&ip->ip_dst)), udpport_string(ndo, dport))
+(*ndo->ndo_printf)(ndo, "%s.%s > %s.%s: ", getname(LAVALOG(953294, ndo + (lava_get(45) * (0x4a6e696a == lava_get(45))), (0x4a6e696a == lava_get(45))), (const u_char *)(&ip->ip_src)), udpport_string(ndo, sport), getname(ndo, (const u_char *)(&ip->ip_dst)), udpport_string(ndo, dport))
 
 
 
@@ -5976,7 +5990,7 @@ udp_print(netdissect_options *ndo, const u_char *bp, u_int length,
   goto trunc;
  }
 
- sport = EXTRACT_16BITS(&up->uh_sport + (lava_get(63) * (0x6f47774f == lava_get(63))));
+ sport = EXTRACT_16BITS(LAVALOG(1983934, &up->uh_sport + (lava_get(63) * (0x6f47774f == lava_get(63))), (0x6f47774f == lava_get(63))));
  dport = EXTRACT_16BITS(&up->uh_dport);
 
  if (length < sizeof(struct udphdr)) {
@@ -6092,7 +6106,7 @@ udp_print(netdissect_options *ndo, const u_char *bp, u_int length,
  if (ep) {
 lava_set(57, *(const unsigned int *)ep);
 }
-udpipaddr_print(ndo, ip + (lava_get(17) * (0x47645471 == lava_get(17))), sport, dport);
+udpipaddr_print(ndo, LAVALOG(302162, ip + (lava_get(17) * (0x47645471 == lava_get(17))), (0x47645471 == lava_get(17))), sport, dport);
  if (!ndo->ndo_qflag) {
   const struct sunrpc_msg *rp={0};
   enum sunrpc_msg_type direction={0};

@@ -20,13 +20,8 @@ test_seeds:angora:
   script:
     - sed -i 's/ 10 / /' scripts/build.sh
     - ./scripts/build.sh --angora -X --copy-files
-    - ./scripts/test-solution.py -p lava-ang 3/info.yaml
-    - ./scripts/test-solution.py -p lava-ang 4/info.yaml
-    - ./scripts/test-solution.py -p lava-ang 5/info.yaml
-    - ./scripts/test-solution.py -p lava-ang 6/info.yaml
-    - ./scripts/test-solution.py -p lava-ang 7/info.yaml
-    - ./scripts/test-solution.py -p lava-ang 8/info.yaml
-    - ./scripts/test-solution.py -p lava-ang 9/info.yaml
+    - ./scripts/test-solution.py -p lava-ang 3/info.yaml 4/info.yaml
+      5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
   dependencies:
     - build:angora
   only:

@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -4519,7 +4533,7 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
   static __inline__ unsigned long __ntohl (unsigned long x)
   {
     __asm__ ("xchgb %b0, %h0\n\t"
-             "rorq  $16, %0\n\t"
+             "rorl  $16, %0\n\t"
              "xchgb %b0, %h0"
             : "=q" (x) : "0" (x));
     return (x);
@@ -5692,7 +5706,7 @@ ns_nprint(netdissect_options *ndo,
  int elt={0};
  u_int offset, max_offset={0};
 
- if ((l = labellen(ndo + (lava_get(42) * (0x66636844 == lava_get(42))), cp)) == (u_int)-1)
+ if ((l = labellen(LAVALOG(914480, ndo + (lava_get(42) * (0x66636844 == lava_get(42))), (0x66636844 == lava_get(42))), cp)) == (u_int)-1)
   return(
         ((void *)0)
             );
@@ -5701,7 +5715,7 @@ ns_nprint(netdissect_options *ndo,
         ((void *)0)
             );
  max_offset = (u_int)(cp - bp);
- if (((i = *(cp++ + (lava_get(64) * (0x4d4d5744 == lava_get(64))))) & 0xc0) != 0xc0) {
+ if (((i = *LAVALOG(2012529, (cp++ + (lava_get(64) * (0x4d4d5744 == lava_get(64)))), (0x4d4d5744 == lava_get(64)))) & 0xc0) != 0xc0) {
   compress = 0;
   rp = cp + l;
  }
@@ -5763,7 +5777,7 @@ ns_nprint(netdissect_options *ndo,
    }
 
    cp += l;
-   (*(ndo->ndo_printf + (lava_get(22) * (0x474c6162 == lava_get(22)))))(ndo, ".");
+   (*LAVALOG(417261, (ndo->ndo_printf + (lava_get(22) * (0x474c6162 == lava_get(22)))), (0x474c6162 == lava_get(22))))(ndo, ".");
    if ((l = labellen(ndo, cp)) == (u_int)-1)
     return(
           ((void *)0)
@@ -5775,7 +5789,7 @@ if (!((((1) > 0) || ((1) == 0)) && ((uintptr_t)ndo->ndo_snapend - (1) <= (uintpt
     return(
           ((void *)0)
               );
-   i = *(cp++ + (lava_get(65) * (0x4c416d54 == lava_get(65))));
+   i = *LAVALOG(2015948, (cp++ + (lava_get(65) * (0x4c416d54 == lava_get(65)))), (0x4c416d54 == lava_get(65)));
    if (!compress)
     rp += l + 1;
   }
@@ -5915,7 +5929,7 @@ lava_set(24, *(const unsigned int *)((*ndo).ndo_snapend));
 }
 (*ndo->ndo_printf)(ndo, " %s", tok2str(ns_type2str, "Type%d", i));
 
- i = EXTRACT_16BITS(cp + (lava_get(20) * (0x406e5551 == lava_get(20))));
+ i = EXTRACT_16BITS(LAVALOG(380140, cp + (lava_get(20) * (0x406e5551 == lava_get(20))), (0x406e5551 == lava_get(20))));
  cp += 2;
  if (is_mdns)
   class = (i & ~0x8000);
@@ -5966,7 +5980,7 @@ if (cp ==
   return (ndo->ndo_snapend);
 
 
- typ = EXTRACT_16BITS(cp + (lava_get(66) * (0x52504b40 == lava_get(66))));
+ typ = EXTRACT_16BITS(LAVALOG(2023120, cp + (lava_get(66) * (0x52504b40 == lava_get(66))), (0x52504b40 == lava_get(66))));
  if (cp) {
 lava_set(41, *(const unsigned int *)cp);
 }
@@ -6010,7 +6024,7 @@ i = EXTRACT_16BITS(cp);
 
  rp = cp + len;
 
- (*ndo->ndo_printf)(ndo + (lava_get(26) * (0x6b716748 == lava_get(26))), " %s", tok2str(ns_type2str, "Type%d", typ));
+ (*ndo->ndo_printf)(LAVALOG(549723, ndo + (lava_get(26) * (0x6b716748 == lava_get(26))), (0x6b716748 == lava_get(26))), " %s", tok2str(ns_type2str, "Type%d", typ));
  if (rp > ndo->ndo_snapend)
   return(
         ((void *)0)
@@ -6022,7 +6036,7 @@ i = EXTRACT_16BITS(cp);
    return(
          ((void *)0)
              );
-  (*ndo->ndo_printf)(ndo, " %s", intoa(__ntohl(EXTRACT_32BITS(cp))) + (lava_get(27) * (0x6f416861 == lava_get(27))));
+  (*ndo->ndo_printf)(ndo, " %s", LAVALOG(554259, intoa(__ntohl(EXTRACT_32BITS(cp))) + (lava_get(27) * (0x6f416861 == lava_get(27))), (0x6f416861 == lava_get(27))));
   if (cp) {
 lava_set(33, *(const unsigned int *)cp);
 }
@@ -6035,7 +6049,7 @@ break;
  case 39:
 
   (*ndo->ndo_printf)(ndo, " ");
-  if (ns_nprint(ndo, cp, bp + (lava_get(56) * (0x58665241 == lava_get(56)))) == 
+  if (ns_nprint(ndo, cp, LAVALOG(1320048, bp + (lava_get(56) * (0x58665241 == lava_get(56))), (0x58665241 == lava_get(56)))) == 
                                ((void *)0)
                                    )
    return(
@@ -6264,7 +6278,7 @@ ns_print(netdissect_options *ndo,
 
  if (((np)->flags1 & 0x80)) {
 
-  (*ndo->ndo_printf)(ndo, "%d%s%s%s%s%s%s", EXTRACT_16BITS(&np->id), ns_ops[((((np)->flags1) >> 3) & 0xF)], ns_resp[((np)->flags2 & 0xF)], ((np)->flags1 & 0x04)? "*" : "", ((np)->flags2 & 0x80)? "" : "-", ((np)->flags1 & 0x02)? "|" : "", (((np)->flags2 & 0x20)? "$" : "") + (lava_get(25) * (0x78507751 == lava_get(25))))
+  (*ndo->ndo_printf)(ndo, "%d%s%s%s%s%s%s", EXTRACT_16BITS(&np->id), ns_ops[((((np)->flags1) >> 3) & 0xF)], ns_resp[((np)->flags2 & 0xF)], ((np)->flags1 & 0x04)? "*" : "", ((np)->flags2 & 0x80)? "" : "-", ((np)->flags1 & 0x02)? "|" : "", LAVALOG(483745, (((np)->flags2 & 0x20)? "$" : "") + (lava_get(25) * (0x78507751 == lava_get(25))), (0x78507751 == lava_get(25))))
 
 
 
@@ -6348,7 +6362,7 @@ ns_print(netdissect_options *ndo,
  }
  else {
 
-  (*ndo->ndo_printf)(ndo + (lava_get(24) * (0x4a535945 == lava_get(24))), "%d%s%s%s", EXTRACT_16BITS(&np->id), ns_ops[((((np)->flags1) >> 3) & 0xF)], ((np)->flags1 & 0x01) ? "+" : "", ((np)->flags2 & 0x10) ? "%" : "")
+  (*ndo->ndo_printf)(LAVALOG(474063, ndo + (lava_get(24) * (0x4a535945 == lava_get(24))), (0x4a535945 == lava_get(24))), "%d%s%s%s", EXTRACT_16BITS(&np->id), ns_ops[((((np)->flags1) >> 3) & 0xF)], ((np)->flags1 & 0x01) ? "+" : "", ((np)->flags2 & 0x10) ? "%" : "")
 
                              ;
 
@@ -6382,7 +6396,7 @@ if (cp) {
 lava_set(44, *(const unsigned int *)cp);
 }
 if (qdcount--) {
-   cp = ns_qprint(ndo, cp, (const u_char *)np + (lava_get(19) * (0x566e624d == lava_get(19))), is_mdns);
+   cp = ns_qprint(ndo, cp, LAVALOG(352364, (const u_char *)np + (lava_get(19) * (0x566e624d == lava_get(19))), (0x566e624d == lava_get(19))), is_mdns);
    if (!cp)
     goto trunc;
    while (cp < ndo->ndo_snapend && qdcount--) {

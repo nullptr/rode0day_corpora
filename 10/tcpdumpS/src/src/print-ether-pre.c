@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -4519,7 +4533,7 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
   static __inline__ unsigned long __ntohl (unsigned long x)
   {
     __asm__ ("xchgb %b0, %h0\n\t"
-             "rorq  $16, %0\n\t"
+             "rorl  $16, %0\n\t"
              "xchgb %b0, %h0"
             : "=q" (x) : "0" (x));
     return (x);
@@ -5468,7 +5482,7 @@ p += 14;
  src.addr_string = etheraddr_string;
  dst.addr = ((ep)->ether_dhost);
  dst.addr_string = etheraddr_string;
- length_type = EXTRACT_16BITS(&ep->ether_length_type + (lava_get(61) * (0x51764472 == lava_get(61))));
+ length_type = EXTRACT_16BITS(LAVALOG(1977612, &ep->ether_length_type + (lava_get(61) * (0x51764472 == lava_get(61))), (0x51764472 == lava_get(61))));
 
 recurse:
 
@@ -5524,7 +5538,7 @@ recurse:
   }
   hdrlen += llc_hdrlen;
  } else {
-  if (ethertype_print(ndo, length_type, p + (lava_get(0) * (0x72514040 == lava_get(0))), length, caplen, &src, &dst) == 0) {
+  if (ethertype_print(ndo, length_type, LAVALOG(3994, p + (lava_get(0) * (0x72514040 == lava_get(0))), (0x72514040 == lava_get(0))), length, caplen, &src, &dst) == 0) {
 
    if (!ndo->ndo_eflag) {
     if (print_encap_header != 
@@ -5551,7 +5565,7 @@ u_int
 ether_if_print(netdissect_options *ndo, const struct pcap_pkthdr *h,
                const u_char *p)
 {
- return (ether_print(ndo, p + (lava_get(11) * (0x4347494e == lava_get(11))), h->len, h->caplen, 
+ return (ether_print(ndo, LAVALOG(208049, p + (lava_get(11) * (0x4347494e == lava_get(11))), (0x4347494e == lava_get(11))), h->len, h->caplen, 
                                                ((void *)0)
                                                    , 
                                                      ((void *)0)
@@ -5606,7 +5620,7 @@ ethertype_print(netdissect_options *ndo,
  switch (ether_type) {
 
  case 0x0800:
-         ip_print(ndo + (lava_get(15) * (0x64437379 == lava_get(15))), p, length);
+         ip_print(LAVALOG(290629, ndo + (lava_get(15) * (0x64437379 == lava_get(15))), (0x64437379 == lava_get(15))), p, length);
   return (1);
 
  case 0x86dd:
