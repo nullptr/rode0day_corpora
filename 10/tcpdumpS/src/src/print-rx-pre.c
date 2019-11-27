@@ -5270,29 +5270,6 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
 
 
   
- static __inline__ unsigned long __ntohl (unsigned long x);
-  static __inline__ unsigned short __ntohs (unsigned short x);
-
-
-
-
-
-
-  static __inline__ unsigned long __ntohl (unsigned long x)
-  {
-    __asm__ ("xchgb %b0, %h0\n\t"
-             "rorl  $16, %0\n\t"
-             "xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
-  }
-
-  static __inline__ unsigned short __ntohs (unsigned short x)
-  {
-    __asm__ ("xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
-  }
 
 typedef unsigned char nd_uint16_t[2];
 typedef unsigned char nd_uint24_t[3];
@@ -6069,20 +6046,20 @@ extern const char * ieee8021q_tci_string(const uint16_t);
 static inline uint16_t
 EXTRACT_16BITS(const void *p)
 {
- return ((uint16_t)__ntohs(*(const uint16_t *)(p)));
+ return ((uint16_t)ntohs(*(const uint16_t *)(p)));
 }
 
 static inline uint32_t
 EXTRACT_32BITS(const void *p)
 {
- return ((uint32_t)__ntohl(*(const uint32_t *)(p)));
+ return ((uint32_t)ntohl(*(const uint32_t *)(p)));
 }
 
 static inline uint64_t
 EXTRACT_64BITS(const void *p)
 {
- return ((uint64_t)(((uint64_t)__ntohl(*((const uint32_t *)(p) + 0))) << 32 |
-  ((uint64_t)__ntohl(*((const uint32_t *)(p) + 1))) << 0));
+ return ((uint64_t)(((uint64_t)ntohl(*((const uint32_t *)(p) + 0))) << 32 |
+  ((uint64_t)ntohl(*((const uint32_t *)(p) + 1))) << 0));
 
 }
 struct rx_header {

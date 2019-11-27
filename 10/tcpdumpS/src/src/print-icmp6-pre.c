@@ -4506,29 +4506,6 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
 
 
   
- static __inline__ unsigned long __ntohl (unsigned long x);
-  static __inline__ unsigned short __ntohs (unsigned short x);
-
-
-
-
-
-
-  static __inline__ unsigned long __ntohl (unsigned long x)
-  {
-    __asm__ ("xchgb %b0, %h0\n\t"
-             "rorl  $16, %0\n\t"
-             "xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
-  }
-
-  static __inline__ unsigned short __ntohs (unsigned short x)
-  {
-    __asm__ ("xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
-  }
 
 
 
@@ -5521,20 +5498,20 @@ extern const char *addrtostr6(const void *src, char *dst, size_t size);
 static inline uint16_t
 EXTRACT_16BITS(const void *p)
 {
- return ((uint16_t)__ntohs(*(const uint16_t *)(p)));
+ return ((uint16_t)ntohs(*(const uint16_t *)(p)));
 }
 
 static inline uint32_t
 EXTRACT_32BITS(const void *p)
 {
- return ((uint32_t)__ntohl(*(const uint32_t *)(p)));
+ return ((uint32_t)ntohl(*(const uint32_t *)(p)));
 }
 
 static inline uint64_t
 EXTRACT_64BITS(const void *p)
 {
- return ((uint64_t)(((uint64_t)__ntohl(*((const uint32_t *)(p) + 0))) << 32 |
-  ((uint64_t)__ntohl(*((const uint32_t *)(p) + 1))) << 0));
+ return ((uint64_t)(((uint64_t)ntohl(*((const uint32_t *)(p) + 0))) << 32 |
+  ((uint64_t)ntohl(*((const uint32_t *)(p) + 1))) << 0));
 
 }
 
@@ -7092,7 +7069,7 @@ icmp6_nodeinfo_print(netdissect_options *ndo, u_int icmp6len, const u_char *bp, 
    if (!i)
     break;
 
-   (*ndo->ndo_printf)(ndo," [%s%s%s%s%s%s]", (i & ((uint16_t)__ntohs(0x40))) ? "a" : "", (i & ((uint16_t)__ntohs(0x20))) ? "G" : "", (i & ((uint16_t)__ntohs(0x10))) ? "S" : "", (i & ((uint16_t)__ntohs(0x8))) ? "L" : "", (i & ((uint16_t)__ntohs(0x4))) ? "C" : "", (i & ((uint16_t)__ntohs(0x2))) ? "A" : "")
+   (*ndo->ndo_printf)(ndo," [%s%s%s%s%s%s]", (i & ((uint16_t)ntohs(0x40))) ? "a" : "", (i & ((uint16_t)ntohs(0x20))) ? "G" : "", (i & ((uint16_t)ntohs(0x10))) ? "S" : "", (i & ((uint16_t)ntohs(0x8))) ? "L" : "", (i & ((uint16_t)ntohs(0x4))) ? "C" : "", (i & ((uint16_t)ntohs(0x2))) ? "A" : "")
 
 
 
@@ -7270,7 +7247,7 @@ icmp6_nodeinfo_print(netdissect_options *ndo, u_int icmp6len, const u_char *bp, 
    i = ni6->icmp6_ni_hdr.icmp6_dataun.icmp6_un_data16[1];
    if (!i)
     break;
-   (*ndo->ndo_printf)(ndo," [%s%s%s%s%s%s%s]", (i & ((uint16_t)__ntohs(0x40))) ? "a" : "", (i & ((uint16_t)__ntohs(0x20))) ? "G" : "", (i & ((uint16_t)__ntohs(0x10))) ? "S" : "", (i & ((uint16_t)__ntohs(0x8))) ? "L" : "", (i & ((uint16_t)__ntohs(0x4))) ? "C" : "", (i & ((uint16_t)__ntohs(0x2))) ? "A" : "", (i & ((uint16_t)__ntohs(0x1))) ? "T" : "")
+   (*ndo->ndo_printf)(ndo," [%s%s%s%s%s%s%s]", (i & ((uint16_t)ntohs(0x40))) ? "a" : "", (i & ((uint16_t)ntohs(0x20))) ? "G" : "", (i & ((uint16_t)ntohs(0x10))) ? "S" : "", (i & ((uint16_t)ntohs(0x8))) ? "L" : "", (i & ((uint16_t)ntohs(0x4))) ? "C" : "", (i & ((uint16_t)ntohs(0x2))) ? "A" : "", (i & ((uint16_t)ntohs(0x1))) ? "T" : "")
 
 
 
@@ -7397,7 +7374,7 @@ icmp6_rrenum_print(netdissect_options *ndo, const u_char *bp, const u_char *ep)
    (*ndo->ndo_printf)(ndo,"use(");
    if (use->rpu_flags) {
 
-    (*ndo->ndo_printf)(ndo,"%s%s,", ((use->rpu_flags) & (((uint32_t)__ntohl(0x80000000))) ? ("V") : ""), ((use->rpu_flags) & (((uint32_t)__ntohl(0x40000000))) ? ("P") : ""))
+    (*ndo->ndo_printf)(ndo,"%s%s,", ((use->rpu_flags) & (((uint32_t)ntohl(0x80000000))) ? ("V") : ""), ((use->rpu_flags) & (((uint32_t)ntohl(0x40000000))) ? ("P") : ""))
 
                                                                                     ;
 

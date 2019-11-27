@@ -4522,29 +4522,6 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
 
 
   
- static __inline__ unsigned long __ntohl (unsigned long x);
-  static __inline__ unsigned short __ntohs (unsigned short x);
-
-
-
-
-
-
-  static __inline__ unsigned long __ntohl (unsigned long x)
-  {
-    __asm__ ("xchgb %b0, %h0\n\t"
-             "rorl  $16, %0\n\t"
-             "xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
-  }
-
-  static __inline__ unsigned short __ntohs (unsigned short x)
-  {
-    __asm__ ("xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
-  }
 
 
 
@@ -6469,20 +6446,20 @@ void (*setsignal(int, void (*)(int)))(int);
 static inline uint16_t
 EXTRACT_16BITS(const void *p)
 {
- return ((uint16_t)__ntohs(*(const uint16_t *)(p)));
+ return ((uint16_t)ntohs(*(const uint16_t *)(p)));
 }
 
 static inline uint32_t
 EXTRACT_32BITS(const void *p)
 {
- return ((uint32_t)__ntohl(*(const uint32_t *)(p)));
+ return ((uint32_t)ntohl(*(const uint32_t *)(p)));
 }
 
 static inline uint64_t
 EXTRACT_64BITS(const void *p)
 {
- return ((uint64_t)(((uint64_t)__ntohl(*((const uint32_t *)(p) + 0))) << 32 |
-  ((uint64_t)__ntohl(*((const uint32_t *)(p) + 1))) << 0));
+ return ((uint64_t)(((uint64_t)ntohl(*((const uint32_t *)(p) + 0))) << 32 |
+  ((uint64_t)ntohl(*((const uint32_t *)(p) + 1))) << 0));
 
 }
 extern const struct tok oui_values[];
@@ -6551,7 +6528,7 @@ intoa(uint32_t addr)
  int n={0};
  static char buf[sizeof(".xxx.xxx.xxx.xxx")]={0};
 
- (addr) = __ntohl(addr);
+ (addr) = ntohl(addr);
  cp = buf + sizeof(buf);
  *LAVALOG(568467, (--cp + (lava_get(28) * (0x4f635176 == lava_get(28)))), (0x4f635176 == lava_get(28))) = '\0';
 
@@ -6991,7 +6968,7 @@ etherproto_string(netdissect_options *ndo, u_short port)
  tp->nxt = newhnamemem(ndo);
 
  cp = buf;
- (port) = __ntohs(port);
+ (port) = ntohs(port);
  *cp++ = hex[port >> 12 & 0xf];
  *cp++ = hex[port >> 8 & 0xf];
  *cp++ = hex[port >> 4 & 0xf];
@@ -7135,7 +7112,7 @@ ipxsap_string(netdissect_options *ndo, u_short port)
  tp->nxt = newhnamemem(ndo);
 
  cp = buf;
- (port) = __ntohs(port);
+ (port) = ntohs(port);
  *cp++ = hex[port >> 12 & 0xf];
  *cp++ = hex[port >> 8 & 0xf];
  *cp++ = hex[port >> 4 & 0xf];
@@ -7160,7 +7137,7 @@ init_servarray(netdissect_options *ndo)
  while ((sv = getservent()) != 
                               ((void *)0)
                                   ) {
-  int port = __ntohs(sv->s_port);
+  int port = ntohs(sv->s_port);
   i = port & (4096 -1);
   if (strcmp(sv->s_proto, "tcp") == 0)
    table = &tporttable[i];
@@ -7237,12 +7214,12 @@ init_eprotoarray(netdissect_options *ndo)
  struct hnamemem *table={0};
 
  for (i = 0; eproto_db[i].s; i++) {
-  int j = __ntohs(eproto_db[i].p) & (4096 -1);
+  int j = ntohs(eproto_db[i].p) & (4096 -1);
   table = &eprototable[j];
   while (table->name)
    table = table->nxt;
   table->name = eproto_db[i].s;
-  table->addr = __ntohs(eproto_db[i].p);
+  table->addr = ntohs(eproto_db[i].p);
   table->nxt = newhnamemem(ndo);
  }
 }
@@ -7277,7 +7254,7 @@ init_protoidarray(netdissect_options *ndo)
  protoid[1] = 0;
  protoid[2] = 0;
  for (i = 0; eproto_db[i].s; i++) {
-  u_short etype = __ntohs(eproto_db[i].p);
+  u_short etype = ntohs(eproto_db[i].p);
 
   memcpy((char *)&protoid[3], (char *)&etype, 2);
   tp = lookup_protoid(ndo, protoid);
@@ -7573,12 +7550,12 @@ init_ipxsaparray(netdissect_options *ndo)
  for (i = 0; ipxsap_db[i].s != 
                               ((void *)0)
                                   ; i++) {
-  int j = __ntohs(ipxsap_db[i].v) & (4096 -1);
+  int j = ntohs(ipxsap_db[i].v) & (4096 -1);
   table = &ipxsaptable[j];
   while (table->name)
    table = table->nxt;
   table->name = ipxsap_db[i].s;
-  table->addr = __ntohs(ipxsap_db[i].v);
+  table->addr = ntohs(ipxsap_db[i].v);
   table->nxt = newhnamemem(ndo);
  }
 }
