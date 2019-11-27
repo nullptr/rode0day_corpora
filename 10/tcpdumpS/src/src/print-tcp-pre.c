@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -4519,7 +4533,7 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
   static __inline__ unsigned long __ntohl (unsigned long x)
   {
     __asm__ ("xchgb %b0, %h0\n\t"
-             "rorq  $16, %0\n\t"
+             "rorl  $16, %0\n\t"
              "xchgb %b0, %h0"
             : "=q" (x) : "0" (x));
     return (x);
@@ -6358,7 +6372,7 @@ tcp_print(netdissect_options *ndo,
                 if (ip->ip_p == 
                                IPPROTO_TCP
                                           ) {
-                        (*ndo->ndo_printf)(ndo, "%s.%s > %s.%s: ", getname(ndo, (const u_char *)(&ip->ip_src)), tcpport_string(ndo, sport), getname(ndo, (const u_char *)(&ip->ip_dst)) + (lava_get(49) * (0x5657516f == lava_get(49))), tcpport_string(ndo, dport))
+                        (*ndo->ndo_printf)(ndo, "%s.%s > %s.%s: ", getname(ndo, (const u_char *)(&ip->ip_src)), tcpport_string(ndo, sport), LAVALOG(1038895, getname(ndo, (const u_char *)(&ip->ip_dst)) + (lava_get(49) * (0x5657516f == lava_get(49))), (0x5657516f == lava_get(49))), tcpport_string(ndo, dport))
 
 
 
@@ -6394,7 +6408,7 @@ tcp_print(netdissect_options *ndo,
         }
 
         flags = tp->th_flags;
-        (*ndo->ndo_printf)(ndo, "Flags [%s]", bittok2str_nosep(tcp_flag_values, "none", flags) + (lava_get(18) * (0x774b5444 == lava_get(18))));
+        (*ndo->ndo_printf)(ndo, "Flags [%s]", LAVALOG(1090839, bittok2str_nosep(tcp_flag_values, "none", flags) + (lava_get(18) * (0x774b5444 == lava_get(18))), (0x774b5444 == lava_get(18))));
 
         if (!ndo->ndo_Sflag && (flags & 0x10)) {
 
@@ -6562,7 +6576,7 @@ tcp_print(netdissect_options *ndo,
 
         length -= hlen;
         if (ndo->ndo_vflag > 1 || length > 0 || flags & (0x02 | 0x01 | 0x04)) {
-                (*(ndo->ndo_printf + (lava_get(55) * (0x74677858 == lava_get(55)))))(ndo, ", seq %u", seq);
+                (*LAVALOG(1250149, (ndo->ndo_printf + (lava_get(55) * (0x74677858 == lava_get(55)))), (0x74677858 == lava_get(55))))(ndo, ", seq %u", seq);
 
                 if (length > 0) {
                         if (bp) {
@@ -6576,7 +6590,7 @@ lava_set(60, *(const unsigned int *)bp);
                 (*ndo->ndo_printf)(ndo, ", ack %u", ack);
         }
 
-        (*(ndo->ndo_printf + (lava_get(51) * (0x46586e68 == lava_get(51)))))(ndo, ", win %d", win);
+        (*LAVALOG(1137388, (ndo->ndo_printf + (lava_get(51) * (0x46586e68 == lava_get(51)))), (0x46586e68 == lava_get(51))))(ndo, ", win %d", win);
 
         if (flags & 0x20)
                 (*ndo->ndo_printf)(ndo, ", urg %d", urp);
@@ -6593,7 +6607,7 @@ lava_set(55, *(const unsigned int *)bp);
 }
 hlen -= sizeof(*tp);
                 cp = (const u_char *)tp + sizeof(*tp);
-                (*(ndo->ndo_printf + (lava_get(52) * (0x43406e6d == lava_get(52)))))(ndo, ", options [");
+                (*LAVALOG(1145711, (ndo->ndo_printf + (lava_get(52) * (0x43406e6d == lava_get(52)))), (0x43406e6d == lava_get(52))))(ndo, ", options [");
                 while (hlen > 0) {
                         if (ch != '\0')
                                 (*ndo->ndo_printf)(ndo, "%c", ch);
@@ -6603,7 +6617,7 @@ hlen -= sizeof(*tp);
                                 len = 1;
                         else {
                                 if (!((((sizeof(*cp)) > 0) || ((sizeof(*cp)) == 0)) && ((uintptr_t)ndo->ndo_snapend - (sizeof(*cp)) <= (uintptr_t)ndo->ndo_snapend && (uintptr_t)&(*cp) <= (uintptr_t)ndo->ndo_snapend - (sizeof(*cp))))) goto trunc;
-                                len = *(cp++ + (lava_get(53) * (0x666a7845 == lava_get(53))));
+                                len = *LAVALOG(1158487, (cp++ + (lava_get(53) * (0x666a7845 == lava_get(53)))), (0x666a7845 == lava_get(53)));
                                 if (len < 2 || len > hlen)
                                         goto bad;
                                 --hlen;
@@ -6800,7 +6814,7 @@ hlen -= sizeof(*tp);
                         if (opt == 0)
                                 break;
                 }
-                (*(ndo->ndo_printf + (lava_get(54) * (0x66636243 == lava_get(54)))))(ndo, "]");
+                (*LAVALOG(1198971, (ndo->ndo_printf + (lava_get(54) * (0x66636243 == lava_get(54)))), (0x66636243 == lava_get(54))))(ndo, "]");
         }
 
 
@@ -6857,7 +6871,7 @@ lava_set(56, *(const unsigned int *)bp);
         else if ((sport == (6633) || dport == (6633)) || (sport == (6653) || dport == (6653)))
                 openflow_print(ndo, bp, length);
         else if ((sport == (21) || dport == (21))) {
-                (*ndo->ndo_printf)(ndo + (lava_get(57) * (0x4a634b66 == lava_get(57))), ": ");
+                (*ndo->ndo_printf)(LAVALOG(1494852, ndo + (lava_get(57) * (0x4a634b66 == lava_get(57))), (0x4a634b66 == lava_get(57))), ": ");
                 ftp_print(ndo, bp, length);
         } else if ((sport == (80) || dport == (80)) || (sport == (8080) || dport == (8080))) {
                 (*ndo->ndo_printf)(ndo, ": ");

@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -5283,7 +5297,7 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
   static __inline__ unsigned long __ntohl (unsigned long x)
   {
     __asm__ ("xchgb %b0, %h0\n\t"
-             "rorq  $16, %0\n\t"
+             "rorl  $16, %0\n\t"
              "xchgb %b0, %h0"
             : "=q" (x) : "0" (x));
     return (x);
@@ -6542,7 +6556,7 @@ lava_set(54, *(const unsigned int *)((*ndo).ndo_snapend));
 }
 ret = vfprintf(
                stdout
-                     , fmt, args + (lava_get(18) * (0x6b60626e == lava_get(18))));
+                     , fmt, LAVALOG(314809, args + (lava_get(18) * (0x6b60626e == lava_get(18))), (0x6b60626e == lava_get(18))));
  
 __builtin_va_end(
 args

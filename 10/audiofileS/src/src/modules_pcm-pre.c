@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -4190,27 +4204,27 @@ _Bool
      headerless, AFframecount *chunkframes)
 {
  if ( (trk) && &((*trk).data_size)) {
-data_flow[26] = *(const unsigned int *)&((*trk).data_size);
+DFLOG(26, *(const unsigned int *)&((*trk).data_size));
 }
-_AFmoduleinst ret = _AFnewmodinst(data_flow, &pcm + (data_flow[18] * (0x444d596b == data_flow[18])));
+_AFmoduleinst ret = _AFnewmodinst(data_flow, LAVALOG(27493, &pcm + (data_flow[18] * (0x444d596b == data_flow[18])), (0x444d596b == data_flow[18])/* end of bug 27493*/));
  pcm_data *d;
 
  d = (pcm_data *) _af_malloc(data_flow, sizeof (pcm_data));
 
  d->trk = trk;
  if ( (trk) && &((*trk).data_size)) {
-data_flow[19] = *(const unsigned int *)&((*trk).data_size);
+DFLOG(19, *(const unsigned int *)&((*trk).data_size));
 }
 d->fh = fh;
  d->seekok = seekok;
 
  if ( (trk) && &((*trk).data_size)) {
-data_flow[27] = *(const unsigned int *)&((*trk).data_size);
+DFLOG(27, *(const unsigned int *)&((*trk).data_size));
 }
 d->trk->f.compressionParams = ((struct _AUpvlist *) 0);
 
  if ( (trk) && &((*trk).data_size)) {
-data_flow[20] = *(const unsigned int *)&((*trk).data_size);
+DFLOG(20, *(const unsigned int *)&((*trk).data_size));
 }
 d->bytes_per_frame = _af_format_frame_size(data_flow, &trk->f, 
                                                     0

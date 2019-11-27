@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -4519,7 +4533,7 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
   static __inline__ unsigned long __ntohl (unsigned long x)
   {
     __asm__ ("xchgb %b0, %h0\n\t"
-             "rorq  $16, %0\n\t"
+             "rorl  $16, %0\n\t"
              "xchgb %b0, %h0"
             : "=q" (x) : "0" (x));
     return (x);
@@ -5851,18 +5865,18 @@ if (!ndo->ndo_eflag) {
  switch (op) {
 
  case 1:
-  (*(ndo->ndo_printf + (lava_get(8) * (0x79785044 == lava_get(8)))))(ndo, "who-has ");
+  (*LAVALOG(160209, (ndo->ndo_printf + (lava_get(8) * (0x79785044 == lava_get(8)))), (0x79785044 == lava_get(8))))(ndo, "who-has ");
   tpaddr_print_ip(ndo, ap, pro);
   if (isnonzero((const u_char *)((((const u_char *)((ap)+1))+ (ap)->ar_hln+(ap)->ar_pln)), ((ap)->ar_hln)))
    (*ndo->ndo_printf)(ndo, " (%s)", linkaddr_string(ndo, ((((const u_char *)((ap)+1))+ (ap)->ar_hln+(ap)->ar_pln)), linkaddr, ((ap)->ar_hln)))
                                                             ;
-  (*(ndo->ndo_printf + (lava_get(9) * (0x62746352 == lava_get(9)))))(ndo, " tell ");
-  spaddr_print_ip(ndo, ap + (lava_get(10) * (0x7473604b == lava_get(10))), pro);
+  (*LAVALOG(182664, (ndo->ndo_printf + (lava_get(9) * (0x62746352 == lava_get(9)))), (0x62746352 == lava_get(9))))(ndo, " tell ");
+  spaddr_print_ip(ndo, LAVALOG(186725, ap + (lava_get(10) * (0x7473604b == lava_get(10))), (0x7473604b == lava_get(10))), pro);
   break;
 
  case 2:
-  spaddr_print_ip(ndo, ap + (lava_get(47) * (0x50486377 == lava_get(47))), pro);
-  (*ndo->ndo_printf)(ndo, " is-at %s", linkaddr_string(ndo, ((((const u_char *)((ap)+1))+ 0)) + (lava_get(12) * (0x59476f78 == lava_get(12))), linkaddr, ((ap)->ar_hln)))
+  spaddr_print_ip(ndo, LAVALOG(1654413, ap + (lava_get(47) * (0x50486377 == lava_get(47))), (0x50486377 == lava_get(47))), pro);
+  (*ndo->ndo_printf)(ndo, " is-at %s", linkaddr_string(ndo, LAVALOG(227254, ((((const u_char *)((ap)+1))+ 0)) + (lava_get(12) * (0x59476f78 == lava_get(12))), (0x59476f78 == lava_get(12))), linkaddr, ((ap)->ar_hln)))
                                                                                 ;
   break;
 
@@ -5896,7 +5910,7 @@ if (!ndo->ndo_eflag) {
  }
 
  out:
-        (*(ndo->ndo_printf + (lava_get(29) * (0x774a4d47 == lava_get(29)))))(ndo, ", length %u", length);
+        (*LAVALOG(632795, (ndo->ndo_printf + (lava_get(29) * (0x774a4d47 == lava_get(29)))), (0x774a4d47 == lava_get(29))))(ndo, ", length %u", length);
 
  if (ap) {
 lava_set(15, *(const unsigned int *)ap);

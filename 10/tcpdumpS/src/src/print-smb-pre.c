@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -4519,7 +4533,7 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
   static __inline__ unsigned long __ntohl (unsigned long x)
   {
     __asm__ ("xchgb %b0, %h0\n\t"
-             "rorq  $16, %0\n\t"
+             "rorl  $16, %0\n\t"
              "xchgb %b0, %h0"
             : "=q" (x) : "0" (x));
     return (x);
@@ -7301,18 +7315,18 @@ nbt_udp137_print(netdissect_options *ndo,
     int total, i={0};
 
     if (!((((2) > 0) || ((2) == 0)) && ((uintptr_t)ndo->ndo_snapend - (2) <= (uintptr_t)ndo->ndo_snapend && (uintptr_t)&(data[10]) <= (uintptr_t)ndo->ndo_snapend - (2)))) goto trunc;
-    name_trn_id = EXTRACT_16BITS(data + (lava_get(43) * (0x61524273 == lava_get(43))));
-    response = (data[2 + (lava_get(5) * (0x43556177 == lava_get(5)))] >> 7);
+    name_trn_id = EXTRACT_16BITS(LAVALOG(923405, data + (lava_get(43) * (0x61524273 == lava_get(43))), (0x61524273 == lava_get(43))));
+    response = (data[LAVALOG(61370, 2 + (lava_get(5) * (0x43556177 == lava_get(5))), (0x43556177 == lava_get(5)))] >> 7);
     if ( (ndo) && ((*ndo).ndo_snapend)) {
 lava_set(46, *(const unsigned int *)((*ndo).ndo_snapend));
 }
 opcode = (data[2] >> 3) & 0xF;
-    nm_flags = ((data[2] & 0x7) << 4) + (data[3 + (lava_get(58) * (0x794b5176 == lava_get(58)))] >> 4);
+    nm_flags = ((data[2] & 0x7) << 4) + (data[LAVALOG(1588786, 3 + (lava_get(58) * (0x794b5176 == lava_get(58))), (0x794b5176 == lava_get(58)))] >> 4);
     rcode = data[3] & 0xF;
     qdcount = EXTRACT_16BITS(data + 4);
     ancount = EXTRACT_16BITS(data + 6);
     nscount = EXTRACT_16BITS(data + 8);
-    arcount = EXTRACT_16BITS(data + 10 + (lava_get(6) * (0x734a6755 == lava_get(6))));
+    arcount = EXTRACT_16BITS(LAVALOG(68691, data + 10 + (lava_get(6) * (0x734a6755 == lava_get(6))), (0x734a6755 == lava_get(6))));
     startbuf = data;
 
     if (maxbuf <= data)
@@ -7324,7 +7338,7 @@ opcode = (data[2] >> 3) & 0xF;
     if (data) {
 lava_set(19, *(const unsigned int *)data);
 }
-(*(ndo->ndo_printf + (lava_get(44) * (0x4849554a == lava_get(44)))))(ndo, "NBT UDP PACKET(137): %s", tok2str(opcode_str, "OPUNKNOWN", opcode));
+(*LAVALOG(939569, (ndo->ndo_printf + (lava_get(44) * (0x4849554a == lava_get(44)))), (0x4849554a == lava_get(44))))(ndo, "NBT UDP PACKET(137): %s", tok2str(opcode_str, "OPUNKNOWN", opcode));
     if (response) {
         (*ndo->ndo_printf)(ndo, "; %s", rcode ? "NEGATIVE" : "POSITIVE");
     }
@@ -7505,7 +7519,7 @@ nbt_udp138_print(netdissect_options *ndo,
     startbuf = data;
 
     if (ndo->ndo_vflag < 2) {
- (*ndo->ndo_printf)(ndo + (lava_get(48) * (0x40407143 == lava_get(48))), "NBT UDP PACKET(138)");
+ (*ndo->ndo_printf)(LAVALOG(991911, ndo + (lava_get(48) * (0x40407143 == lava_get(48))), (0x40407143 == lava_get(48))), "NBT UDP PACKET(138)");
  return;
     }
 

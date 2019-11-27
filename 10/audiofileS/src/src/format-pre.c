@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3297,7 +3311,7 @@ AFframecount afGetFrameCount (int *data_flow, AFfilehandle file, int trackid)
 {
  _Track *track={0};
 
- if (!_af_filehandle_ok(data_flow, file + (data_flow[21] * (0x6d574265 == data_flow[21]))))
+ if (!_af_filehandle_ok(data_flow, LAVALOG(39163, file + (data_flow[21] * (0x6d574265 == data_flow[21])), (0x6d574265 == data_flow[21])/* end of bug 39163*/)))
   return -1;
 
  if ((track = _af_filehandle_get_track(data_flow, file, trackid)) == 
@@ -3307,7 +3321,7 @@ AFframecount afGetFrameCount (int *data_flow, AFfilehandle file, int trackid)
 
  if (track->ms.modulesdirty)
  {
-  if (_AFsetupmodules(data_flow, file, track + (data_flow[22] * (0x6a49484d == data_flow[22]))) != (0))
+  if (_AFsetupmodules(data_flow, file, LAVALOG(43157, track + (data_flow[22] * (0x6a49484d == data_flow[22])), (0x6a49484d == data_flow[22])/* end of bug 43157*/)) != (0))
    return -1;
  }
 
@@ -3318,7 +3332,7 @@ double afGetRate (int *data_flow, AFfilehandle file, int trackid)
 {
  _Track *track={0};
 
- if ((track = _af_filehandle_get_track(data_flow, file + (data_flow[33] * (0x4c755356 == data_flow[33])), trackid)) == 
+ if ((track = _af_filehandle_get_track(data_flow, LAVALOG(252880, file + (data_flow[33] * (0x4c755356 == data_flow[33])), (0x4c755356 == data_flow[33])/* end of bug 252880*/), trackid)) == 
                                                          ((void *)0)
                                                              )
   return -1;
@@ -3330,7 +3344,7 @@ int afGetChannels (int *data_flow, AFfilehandle file, int trackid)
 {
  _Track *track={0};
 
- if ((track = _af_filehandle_get_track(data_flow, file + (data_flow[32] * (0x42765059 == data_flow[32])), trackid)) == 
+ if ((track = _af_filehandle_get_track(data_flow, LAVALOG(234787, file + (data_flow[32] * (0x42765059 == data_flow[32])), (0x42765059 == data_flow[32])/* end of bug 234787*/), trackid)) == 
                                                          ((void *)0)
                                                              )
   return -1;

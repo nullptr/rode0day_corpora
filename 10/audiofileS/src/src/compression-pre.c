@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -2831,7 +2845,7 @@ int _af_compression_index_from_id (int *data_flow, int compressionid)
 
  for (i=0; i<5; i++)
  {
-  if (_af_compression[i + (data_flow[15] * (0x61704258 == data_flow[15]))].compressionID == compressionid)
+  if (_af_compression[LAVALOG(14129, i + (data_flow[15] * (0x61704258 == data_flow[15])), (0x61704258 == data_flow[15])/* end of bug 14129*/)].compressionID == compressionid)
    return i;
  }
 

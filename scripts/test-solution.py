@@ -45,9 +45,10 @@ def print_results(results):
 
     if validated > 0:
         r = [validated, validated, total, float(validated / total * 100.0)]
-        logger.info("DONE: %d bugs validated.\n\tBug coverage: %d / %d (%0.1f%%) covered ", *r)
+        logger.info("DONE: %d bugs validated.\n\tBug coverage: %d / %d (%0.1f%%) valid ", *r)
     else:
-        logger.info("DONE: %d of %d inputs ran cleanly.", exited, total)
+        pct_valid = float(exited / total * 100.0) if exited > 0 else 0.0
+        logger.info("DONE: %d of %d inputs ran cleanly. (%0.1f%%) valid ", exited, total, pct_valid)
 
 
 def run_tests(info, challenge_name=None):
@@ -81,7 +82,7 @@ def run_tests(info, challenge_name=None):
                   total,
                   ratio))
     log.close()
-    print_results(results)
+    return results
 
 
 def run_test(info, challenge):
@@ -109,12 +110,16 @@ def main():
                         help='challenge name/ install_dir')
     parser.add_argument('-p', '--prefix', default='lava-install',
                         help='install directory prefix')
-    parser.add_argument('info_yaml', help='file path for info.yaml file')
+    parser.add_argument('info_yaml', nargs='+', help='file path(s) for info.yaml file')
     args = parser.parse_args()
-    info = parse_info(args.info_yaml)
-    info['prefix'] = args.prefix
-    run_tests(info, args.challenge)
 
+    results = list()
+    for yaml_file in args.info_yaml:
+        info = parse_info(yaml_file)
+        info['prefix'] = args.prefix
+        results.extend(run_tests(info, args.challenge))
+
+    print_results(results)
 
 if __name__ == "__main__":
     main()
