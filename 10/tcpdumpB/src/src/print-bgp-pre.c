@@ -4506,29 +4506,6 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
 
 
   
- static __inline__ unsigned long __ntohl (unsigned long x);
-  static __inline__ unsigned short __ntohs (unsigned short x);
-
-
-
-
-
-
-  static __inline__ unsigned long __ntohl (unsigned long x)
-  {
-    __asm__ ("xchgb %b0, %h0\n\t"
-             "rorl  $16, %0\n\t"
-             "xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
-  }
-
-  static __inline__ unsigned short __ntohs (unsigned short x)
-  {
-    __asm__ ("xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
-  }
 
 
 
@@ -5519,20 +5496,20 @@ extern const char * ieee8021q_tci_string(const uint16_t);
 static inline uint16_t
 EXTRACT_16BITS(const void *p)
 {
- return ((uint16_t)__ntohs(*(const uint16_t *)(p)));
+ return ((uint16_t)ntohs(*(const uint16_t *)(p)));
 }
 
 static inline uint32_t
 EXTRACT_32BITS(const void *p)
 {
- return ((uint32_t)__ntohl(*(const uint32_t *)(p)));
+ return ((uint32_t)ntohl(*(const uint32_t *)(p)));
 }
 
 static inline uint64_t
 EXTRACT_64BITS(const void *p)
 {
- return ((uint64_t)(((uint64_t)__ntohl(*((const uint32_t *)(p) + 0))) << 32 |
-  ((uint64_t)__ntohl(*((const uint32_t *)(p) + 1))) << 0));
+ return ((uint64_t)(((uint64_t)ntohl(*((const uint32_t *)(p) + 0))) << 32 |
+  ((uint64_t)ntohl(*((const uint32_t *)(p) + 1))) << 0));
 
 }
 extern const struct tok af_values[];
@@ -7724,9 +7701,9 @@ bgp_open_print(netdissect_options *ndo,
  memcpy(&bgpo, dat, 29);
 
  (*ndo->ndo_printf)(ndo, "\n\t  Version %d, ", bgpo.bgpo_version);
- (*ndo->ndo_printf)(ndo, "my AS %s, ", as_printf(ndo, astostr, sizeof(astostr), __ntohs(bgpo.bgpo_myas)))
+ (*ndo->ndo_printf)(ndo, "my AS %s, ", as_printf(ndo, astostr, sizeof(astostr), ntohs(bgpo.bgpo_myas)))
                                                                       ;
- (*ndo->ndo_printf)(ndo, "Holdtime %us, ", __ntohs(bgpo.bgpo_holdtime));
+ (*ndo->ndo_printf)(ndo, "Holdtime %us, ", ntohs(bgpo.bgpo_holdtime));
  (*ndo->ndo_printf)(ndo, "ID %s", getname(ndo, (const u_char *)(&bgpo.bgpo_id)));
  (*ndo->ndo_printf)(ndo, "\n\t  Optional parameters, length: %u", bgpo.bgpo_optlen);
 
@@ -8108,7 +8085,7 @@ bgp_print(netdissect_options *ndo,
   if (start != p)
    (*ndo->ndo_printf)(ndo, " [|BGP]");
 
-  hlen = __ntohs(bgp.bgp_len);
+  hlen = ntohs(bgp.bgp_len);
   if (hlen < 19) {
    (*ndo->ndo_printf)(ndo, "\n[|BGP Bogus header length %u < %u]", hlen, 19)
                  ;

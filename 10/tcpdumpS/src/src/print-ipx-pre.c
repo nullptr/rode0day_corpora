@@ -4506,29 +4506,6 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
 
 
   
- static __inline__ unsigned long __ntohl (unsigned long x);
-  static __inline__ unsigned short __ntohs (unsigned short x);
-
-
-
-
-
-
-  static __inline__ unsigned long __ntohl (unsigned long x)
-  {
-    __asm__ ("xchgb %b0, %h0\n\t"
-             "rorl  $16, %0\n\t"
-             "xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
-  }
-
-  static __inline__ unsigned short __ntohs (unsigned short x)
-  {
-    __asm__ ("xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
-  }
 
 
 
@@ -5307,20 +5284,20 @@ extern const char * ieee8021q_tci_string(const uint16_t);
 static inline uint16_t
 EXTRACT_16BITS(const void *p)
 {
- return ((uint16_t)__ntohs(*(const uint16_t *)(p)));
+ return ((uint16_t)ntohs(*(const uint16_t *)(p)));
 }
 
 static inline uint32_t
 EXTRACT_32BITS(const void *p)
 {
- return ((uint32_t)__ntohl(*(const uint32_t *)(p)));
+ return ((uint32_t)ntohl(*(const uint32_t *)(p)));
 }
 
 static inline uint64_t
 EXTRACT_64BITS(const void *p)
 {
- return ((uint64_t)(((uint64_t)__ntohl(*((const uint32_t *)(p) + 0))) << 32 |
-  ((uint64_t)__ntohl(*((const uint32_t *)(p) + 1))) << 0));
+ return ((uint64_t)(((uint64_t)ntohl(*((const uint32_t *)(p) + 0))) << 32 |
+  ((uint64_t)ntohl(*((const uint32_t *)(p) + 1))) << 0));
 
 }
 struct ipxHdr {
@@ -5443,7 +5420,7 @@ ipx_sap_print(netdissect_options *ndo, const u_short *ipx, u_int length)
      (*ndo->ndo_printf)(ndo, "ipx-sap-nearest-req");
 
  if (!((((sizeof(ipx[0])) > 0) || ((sizeof(ipx[0])) == 0)) && ((uintptr_t)ndo->ndo_snapend - (sizeof(ipx[0])) <= (uintptr_t)ndo->ndo_snapend && (uintptr_t)&(ipx[0]) <= (uintptr_t)ndo->ndo_snapend - (sizeof(ipx[0]))))) goto trunc;
- (*ndo->ndo_printf)(ndo, " %s", ipxsap_string(ndo, __ntohs(EXTRACT_16BITS(&ipx[0]))));
+ (*ndo->ndo_printf)(ndo, " %s", ipxsap_string(ndo, ntohs(EXTRACT_16BITS(&ipx[0]))));
  break;
 
       case 2:
@@ -5455,7 +5432,7 @@ ipx_sap_print(netdissect_options *ndo, const u_short *ipx, u_int length)
 
  for (i = 0; i < 8 && length > 0; i++) {
      if (!((((sizeof(ipx[0])) > 0) || ((sizeof(ipx[0])) == 0)) && ((uintptr_t)ndo->ndo_snapend - (sizeof(ipx[0])) <= (uintptr_t)ndo->ndo_snapend && (uintptr_t)&(ipx[0]) <= (uintptr_t)ndo->ndo_snapend - (sizeof(ipx[0]))))) goto trunc;
-     (*ndo->ndo_printf)(ndo, " %s '", ipxsap_string(ndo, __ntohs(EXTRACT_16BITS(&ipx[0]))));
+     (*ndo->ndo_printf)(ndo, " %s '", ipxsap_string(ndo, ntohs(EXTRACT_16BITS(&ipx[0]))));
      if (fn_printzp(ndo, (const u_char *)&ipx[1], 48, ndo->ndo_snapend)) {
   (*ndo->ndo_printf)(ndo, "'");
   goto trunc;

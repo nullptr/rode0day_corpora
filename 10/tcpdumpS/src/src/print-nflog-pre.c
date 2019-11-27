@@ -4506,29 +4506,6 @@ extern char *inet_nsap_ntoa (int __len, const unsigned char *__cp,
 
 
   
- static __inline__ unsigned long __ntohl (unsigned long x);
-  static __inline__ unsigned short __ntohs (unsigned short x);
-
-
-
-
-
-
-  static __inline__ unsigned long __ntohl (unsigned long x)
-  {
-    __asm__ ("xchgb %b0, %h0\n\t"
-             "rorl  $16, %0\n\t"
-             "xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
-  }
-
-  static __inline__ unsigned short __ntohs (unsigned short x)
-  {
-    __asm__ ("xchgb %b0, %h0"
-            : "=q" (x) : "0" (x));
-    return (x);
-  }
 
 typedef unsigned char nd_uint16_t[2];
 typedef unsigned char nd_uint24_t[3];
@@ -5322,7 +5299,7 @@ static const struct tok nflog_values[] = {
 static inline void
 nflog_hdr_print(netdissect_options *ndo, const nflog_hdr_t *hdr, u_int length)
 {
- (*ndo->ndo_printf)(ndo, "version %d, resource ID %d", hdr->nflog_version, __ntohs(hdr->nflog_rid));
+ (*ndo->ndo_printf)(ndo, "version %d, resource ID %d", hdr->nflog_version, ntohs(hdr->nflog_rid));
 
  if (!ndo->ndo_qflag) {
   (*ndo->ndo_printf)(ndo,", family %s (%d)", tok2str(nflog_values, "Unknown", hdr->nflog_family), hdr->nflog_family)

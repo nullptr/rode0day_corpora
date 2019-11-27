@@ -3,7 +3,6 @@
 build:gcc:
   extends: .build
   script:
-    - ( cd 10 && ./fix_tcpdump_for_i386.sh )
     - ./scripts/build.sh --cc gcc
   artifacts:
     paths:
@@ -65,5 +64,13 @@ test_solutions:9:9:gcc:
   script:
     - tar -C 9 -xzf 9/solutions.tgz
     - ./scripts/test-solution.py -p lava-gcc 9/info.yaml
+  dependencies:
+    - build:gcc
+
+test_solutions:9:10:gcc:
+  extends: .test_solutions
+  script:
+    - tar -C 10 -xzf 10/solutions.tgz
+    - ./scripts/test-solution.py -p lava-gcc 10/info.yaml
   dependencies:
     - build:gcc

@@ -1,15 +1,23 @@
 #!/bin/bash
 
 fuzzer=${1:-qsym}
+RUNC=${2:-docker}
 
-docker pull registry.gitlab.com/rode0day/fuzzer-testing/${fuzzer}_runner:16.04 || exit 1
+[ $(which $RUNC) ] || exit 1
 
-logfile="testing-${fuzzer}.log"
-rm -f $logfile 
+if [ "$RUNC" = "singularity" ]; then
+    simg=${HOME}/s_images/${fuzzer}.sif
+    rm -f $simg
+    singularity pull --force --name $simg shub://shub-fuzz/${fuzzer}
+    logfile="testing-singularity-${fuzzer}.log"
+else
+    docker pull registry.gitlab.com/rode0day/fuzzer-testing/${fuzzer}_runner:16.04 || exit 1
+    logfile="testing-docker-${fuzzer}.log"
+fi
+rm -f $logfile
 
-while read target; do
-    ./scripts/launch.sh --test --fuzzer ${fuzzer} -N 2 $target | tee -a $logfile
-done <<< "grepb
+read -r -d '' TARGETS << EOM
+grepb
 greps
 jpegb
 jpegs
@@ -59,6 +67,16 @@ sqliteB3
 fileS5
 jpegS5
 pcreB4
-sqliteB4"
+sqliteB4
+EOM
 
-grep 'Finished' $logfile
+SECONDS=0
+if [ "$RUNC" = "singularity" ]; then
+    echo "$TARGETS" | xargs -I{} -P 10 sh -c "nohup ./scripts/submit_job.sh ${fuzzer} '{}' 2 --test > testing-singularity-${fuzzer}-{}.log"
+else
+    echo "$TARGETS" | xargs -I{} -P 10 sh -c "nohup ./scripts/launch.sh --test --fuzzer ${fuzzer} -N 2 '{}' > testing-docker-${fuzzer}-{}.log"
+fi
+
+logfile="testing-${RUNC}-${fuzzer}.log"
+grep 'Finished' *${RUNC}*.log > $logfile
+echo "[*] Finished in $SECONDS secs on $(date)" | tee -a $logfile
