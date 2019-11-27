@@ -35,13 +35,13 @@ build:afl-clang-fast:
     paths:
       - ./*/*/lava-afl-cf
 
-build:afl-gcc-64:
+build:gcc-64:
   extends: .build
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/afl_runner:16.04
   script:
     - ( cd 10 && ./fix_tcpdump_for_x86_64.sh )
-    - ./scripts/build.sh --cc afl-gcc -X
+    - ./scripts/build.sh --cc gcc -X
   artifacts:
     paths:
       - ./*/*/lava-afl-gcc
@@ -59,7 +59,7 @@ build:afl-clang-fast-64:
     paths:
       - ./*/*/lava-afl-cf
 
-test_seeds:1:4:afl:
+test_seeds:afl-gcc:
   extends: .test_seeds
   script:
     - ./scripts/test-solution.py -p lava-afl-gcc 3/info.yaml 4/info.yaml
@@ -68,7 +68,7 @@ test_seeds:1:4:afl:
   dependencies:
     - build:afl-gcc
 
-test_seeds:2:4:afl:
+test_seeds:afl-clang-fast:
   extends: .test_seeds
   stage: test_seeds
   script:
@@ -78,16 +78,16 @@ test_seeds:2:4:afl:
   dependencies:
     - build:afl-clang-fast
 
-test_seeds:3:4:afl:
+test_seeds:gcc-64:
   extends: .test_seeds
   script:
     - ./scripts/test-solution.py -p lava-afl-gcc 3/info.yaml 4/info.yaml
       5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
       10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml
   dependencies:
-    - build:afl-gcc-64
+    - build:gcc-64
 
-test_seeds:4:4:afl:
+test_seeds:afl-clang-fast-64:
   extends: .test_seeds
   script:
     - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml 4/info.yaml
