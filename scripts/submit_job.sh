@@ -83,9 +83,9 @@ sbatch --job-name="${FUZZ}.${TGT}.run"  \
        --partition="general,infiniband,gpu" \
        --nodes=1 \
        --tasks-per-node=1 \
-       --cpus-per-taks="$(( $NF + 4 ))" \
+       --cpus-per-task="$(( $NF + 4 ))" \
        --cpu-freq=Performance \
-       fuzz.script
+       $(dirname $0)/fuzz.sh
 else
     TDIR="$(mktemp -d)"
     source $(dirname $0)/fuzz.sh
