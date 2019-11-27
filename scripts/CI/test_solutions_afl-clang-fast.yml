@@ -58,3 +58,11 @@ test_solutions:9:9:afl-clang-fast:
     - ./scripts/test-solution.py -p lava-afl-cf 9/info.yaml
   dependencies:
     - build:afl-clang-fast
+
+test_solutions:9:10:afl-clang-fast:
+  extends: .test_solutions
+  script:
+    - tar -C 10 -xzf 10/solutions.tgz
+    - ./scripts/test-solution.py -p lava-afl-cf 10/info.yaml
+  dependencies:
+    - build:afl-clang-fast

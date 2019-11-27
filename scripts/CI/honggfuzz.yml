@@ -5,7 +5,6 @@ build:hfuzz:
   image: 
     name: registry.gitlab.com/rode0day/fuzzer-testing/i386/honggfuzz_runner:16.04
   script:
-    - ( cd 10 && ./fix_tcpdump_for_i386.sh )
     - ./scripts/build.sh
     - make -C 13/fileS4/src/src hfuzz-file
     - cp 13/fileS4/src/src/hfuzz-file 13/fileS4/lava-hf/
@@ -21,7 +20,7 @@ test_seeds:hfuzz:
     name: registry.gitlab.com/rode0day/fuzzer-testing/i386/honggfuzz_runner:16.04 
   script:
     - ./scripts/test-solution.py -p lava-hf 3/info.yaml 4/info.yaml
-      5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
+      5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml 10/info.yaml
   dependencies:
     - build:hfuzz
   only:
