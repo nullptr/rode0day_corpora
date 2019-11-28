@@ -138,6 +138,8 @@ def create_jobs_from_yaml(args, example):
             new_cfg['drcov_target'] = "./{}".format(d['binary_path'])
         if 'binary_arguments' in d:
             new_cfg['cmdline'] = d['binary_arguments'].format(**binary_args)
+        if 'timeout' in d:
+            new_cfg['timeout'] = d['timeout']
 
         new_cfg['description'] = build_description(args, d, comp_date)
         new_cfg['target_info']['source'] = "rode0day 20{}".format(comp_date)

@@ -21,6 +21,7 @@ challenges:
         sample_inputs: ["inputs/fixed.json"]
         source_provided: false
         known_bugs: 137
+        timeout: 9000
 
     pcreS2:
         challenge_id: 34

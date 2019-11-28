@@ -50,4 +50,5 @@ challenges:
         sample_inputs: ["inputs/fixed.json"]
         source_provided: true
         source_path: "src"
+        timeout: 9000
 

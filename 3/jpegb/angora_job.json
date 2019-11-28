@@ -10,7 +10,7 @@
     "mem_limit": "4096",
     "_time_limit": "24h",
     "interactive": true,
-    "_timeout": "20",
+    "timeout": 2000,
     "_afl_margs": "",
     "_file": "",
     "_docker": "registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04",

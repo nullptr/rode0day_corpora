@@ -78,5 +78,5 @@ else
 fi
 
 logfile="testing-${RUNC}-${fuzzer}.log"
-grep 'Finished' *${RUNC}*.log > $logfile
+grep 'Finished' *-${RUNC}-${fuzzer}-*.log > $logfile
 echo "[*] Finished in $SECONDS secs on $(date)" | tee -a $logfile

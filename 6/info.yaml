@@ -13,6 +13,7 @@ challenges:
         source_provided: true
         source_path: "src"
         known_bugs: 64
+        timeout: 9000
 
     jqB:
         challenge_id: 23
@@ -25,6 +26,7 @@ challenges:
         sample_inputs: ["inputs/fixed.json"]
         source_provided: false
         known_bugs: 33
+        timeout: 9000
 
     pcre2B:
         challenge_id: 24
