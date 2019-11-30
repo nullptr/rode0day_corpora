@@ -47,7 +47,7 @@ while (( "$#" )); do
             ;;
         --pull)
             rm -f $SIMG
-            singularity pull --name $SIMG shub://shub-fuzz/$FZ
+            singularity pull --force --name $SIMG shub://shub-fuzz/$FZ
             shift
             ;;
         -D|--dict)
@@ -83,10 +83,9 @@ sbatch --job-name="${FUZZ}.${TGT}.run"  \
        --partition="general,infiniband,gpu" \
        --nodes=1 \
        --tasks-per-node=1 \
-       --cpus-per-task="$(( $NF + 4 ))" \
+       --cpus-per-task="$(( $NF + 2 ))" \
        --cpu-freq=Performance \
        $(dirname $0)/fuzz.sh
 else
-    TDIR="$(mktemp -d)"
     source $(dirname $0)/fuzz.sh
 fi

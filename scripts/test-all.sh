@@ -64,10 +64,8 @@ fileS4
 jpegS4
 jqB3
 sqliteB3
-fileS5
 jpegS5
 pcreB4
-sqliteB4
 EOM
 
 SECONDS=0
@@ -78,5 +76,5 @@ else
 fi
 
 logfile="testing-${RUNC}-${fuzzer}.log"
-grep 'Finished' *-${RUNC}-${fuzzer}-*.log > $logfile
+grep -h 'Finished' *-${RUNC}-${fuzzer}-*.log > $logfile
 echo "[*] Finished in $SECONDS secs on $(date)" | tee -a $logfile
