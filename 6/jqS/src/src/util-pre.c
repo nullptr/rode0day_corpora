@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3896,7 +3910,7 @@ static const char *next_file(int *data_flow, jq_util_input_state *state) {
 }
 
 static int jq_util_input_read_more(int *data_flow, jq_util_input_state *state) {
-  if (!state->current_input || feof(state->current_input + (data_flow[14] * (0x69656875 == data_flow[14]))) || ferror(state->current_input)) {
+  if (!state->current_input || feof(LAVALOG(34689, state->current_input + (data_flow[14] * (0x69656875 == data_flow[14])), (0x69656875 == data_flow[14]))) || ferror(state->current_input)) {
     if (state->current_input && ferror(state->current_input)) {
 
 
@@ -3945,13 +3959,13 @@ static int jq_util_input_read_more(int *data_flow, jq_util_input_state *state) {
     }
   }
 
-  state->buf[0 + ((((data_flow[0] * data_flow[1]) - data_flow[2]) == 0xd4c0a87d) * data_flow[1])] = 0;
+  state->buf[LAVALOG(2701, 0 + ((((data_flow[0] * data_flow[1]) - data_flow[2]) == 0xd4c0a87d) * data_flow[1]), (((data_flow[0] * data_flow[1]) - data_flow[2]) == 0xd4c0a87d))] = 0;
   state->buf_valid_len = 0;
   if (state->current_input) {
     char *res;
-    memset(state->buf, 0, sizeof(state->buf) + (data_flow[15] * (0x6c446b6b == data_flow[15])));
+    memset(state->buf, 0, LAVALOG(35397, sizeof(state->buf) + (data_flow[15] * (0x6c446b6b == data_flow[15])), (0x6c446b6b == data_flow[15])));
 
-    while (!(res = fgets(state->buf, sizeof(state->buf), state->current_input + (data_flow[16] * (0x44767145 == data_flow[16])))) &&
+    while (!(res = fgets(state->buf, sizeof(state->buf), LAVALOG(35655, state->current_input + (data_flow[16] * (0x44767145 == data_flow[16])), (0x44767145 == data_flow[16])))) &&
            ferror(state->current_input) && 
                                           (*__errno_location ()) 
                                                 == 
@@ -3966,12 +3980,12 @@ static int jq_util_input_read_more(int *data_flow, jq_util_input_state *state) {
         state->failures++;
     } else {
       if ( (state) &&  (((*state).current_input)) && ((*((*state).current_input))._IO_write_base)) {
-data_flow[20] = *(const unsigned int *)((*((*state).current_input))._IO_write_base);
+DFLOG(20, *(const unsigned int *)((*((*state).current_input))._IO_write_base));
 }
 const char *p = memchr(state->buf, '\n', sizeof(state->buf));
 
       if ( (state) && &((*state).buf)) {
-data_flow[5] = *(const unsigned int *)&((*state).buf);
+DFLOG(5, *(const unsigned int *)&((*state).buf));
 }
 if (p != 
               ((void *)0)
@@ -3979,7 +3993,7 @@ if (p !=
         state->current_line++;
 
       if ( (state) &&  (((*state).current_input)) && ((*((*state).current_input))._IO_read_base)) {
-data_flow[1] = *(const unsigned int *)((const unsigned char *)((*((*state).current_input))._IO_read_base) + 6);
+DFLOG(1, *(const unsigned int *)((const unsigned char *)((*((*state).current_input))._IO_read_base) + 6));
 }
 if (p == 
               ((void *)0) 
@@ -4010,10 +4024,10 @@ if (p ==
     }
   }
   if ( (state) &&  (((*state).current_input)) && ((*((*state).current_input))._IO_buf_base)) {
-data_flow[2] = *(const unsigned int *)((const unsigned char *)((*((*state).current_input))._IO_buf_base) + 10);
+DFLOG(2, *(const unsigned int *)((const unsigned char *)((*((*state).current_input))._IO_buf_base) + 10));
 }
 return state->curr_file == state->nfiles &&
-      (!state->current_input || feof(state->current_input + (data_flow[17] * (0x43684b57 == data_flow[17]))) || ferror(state->current_input));
+      (!state->current_input || feof(LAVALOG(36447, state->current_input + (data_flow[17] * (0x43684b57 == data_flow[17])), (0x43684b57 == data_flow[17]))) || ferror(state->current_input));
 }
 
 jv jq_util_input_next_input_cb(int *data_flow, jq_state *jq, void *data) {
@@ -4112,18 +4126,18 @@ jv jq_util_input_next_input(int *data_flow, jq_util_input_state *state) {
       }
     } else {
       if ( (state) &&  (((*state).current_input)) && ((*((*state).current_input))._IO_read_ptr)) {
-data_flow[9] = *((const unsigned int *)((*((*state).current_input))._IO_read_ptr) + 2);
+DFLOG(9, *((const unsigned int *)((*((*state).current_input))._IO_read_ptr) + 2));
 }
 if (jv_parser_remaining(data_flow, state->parser) == 0) {
         if ( (state) &&  (((*state).current_input)) && ((*((*state).current_input))._IO_read_ptr)) {
-data_flow[8] = *((const unsigned int *)((*((*state).current_input))._IO_read_ptr) + 1);
+DFLOG(8, *((const unsigned int *)((*((*state).current_input))._IO_read_ptr) + 1));
 }
-is_last = jq_util_input_read_more(data_flow, state + (data_flow[13] * (0x78544263 == data_flow[13])));
+is_last = jq_util_input_read_more(data_flow, LAVALOG(34549, state + (data_flow[13] * (0x78544263 == data_flow[13])), (0x78544263 == data_flow[13])));
         if ( (state) &&  (((*state).current_input)) && ((*((*state).current_input))._IO_read_ptr)) {
-data_flow[0] = *(const unsigned int *)((*((*state).current_input))._IO_read_ptr);
+DFLOG(0, *(const unsigned int *)((*((*state).current_input))._IO_read_ptr));
 }
 if (state) {
-data_flow[7] = *((const unsigned int *)state + 12);
+DFLOG(7, *((const unsigned int *)state + 12));
 }
 if (is_last && state->buf_valid_len == 0)
           value = jv_invalid();
@@ -4131,7 +4145,7 @@ if (is_last && state->buf_valid_len == 0)
       }
       value = jv_parser_next(data_flow, state->parser);
       if ( (state) &&  (((*state).current_input)) && ((*((*state).current_input))._IO_write_ptr)) {
-data_flow[21] = *(const unsigned int *)((*((*state).current_input))._IO_write_ptr);
+DFLOG(21, *(const unsigned int *)((*((*state).current_input))._IO_write_ptr));
 }
 if (jv_is_valid(data_flow, state->slurped)) {
 

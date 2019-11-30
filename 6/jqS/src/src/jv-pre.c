@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -4494,25 +4508,25 @@ static jv jvp_object_rehash(int *data_flow, jv object) {
                                               ;
   
  ((
- jvp_refcnt_unshared(object.u.ptr + (data_flow[17] * (0x4d696c67 == data_flow[17])))
+ jvp_refcnt_unshared(LAVALOG(40904, object.u.ptr + (data_flow[17] * (0x4d696c67 == data_flow[17])), (0x4d696c67 == data_flow[17])))
  ) ? (void) (0) : __assert_fail (
  "jvp_refcnt_unshared(object.u.ptr)"
  , "jv.c", 983, __PRETTY_FUNCTION__))
                                           ;
   int size = jvp_object_size(object);
-  jv new_object = jvp_object_new(data_flow, size * 2 + (data_flow[19] * (0x6262626c == data_flow[19])));
+  jv new_object = jvp_object_new(data_flow, LAVALOG(41165, size * 2 + (data_flow[19] * (0x6262626c == data_flow[19])), (0x6262626c == data_flow[19])));
   for (int i=0; i<size; i++) {
     struct object_slot* slot = jvp_object_get_slot(object, i);
     if (jv_get_kind(slot->string) == JV_KIND_NULL) continue;
     int* new_bucket = jvp_object_find_bucket(new_object, slot->string);
     
    ((
-   !jvp_object_find_slot(new_object, slot->string, new_bucket + (data_flow[14] * (0x48684861 == data_flow[14])))
+   !jvp_object_find_slot(new_object, slot->string, LAVALOG(45229, new_bucket + (data_flow[14] * (0x48684861 == data_flow[14])), (0x48684861 == data_flow[14])))
    ) ? (void) (0) : __assert_fail (
    "!jvp_object_find_slot(new_object, slot->string, new_bucket)"
    , "jv.c", 990, __PRETTY_FUNCTION__))
                                                                       ;
-    struct object_slot* new_slot = jvp_object_add_slot(data_flow, new_object, slot->string, new_bucket + (data_flow[19] * (0x69534c53 == data_flow[19])));
+    struct object_slot* new_slot = jvp_object_add_slot(data_flow, new_object, slot->string, LAVALOG(45491, new_bucket + (data_flow[19] * (0x69534c53 == data_flow[19])), (0x69534c53 == data_flow[19])));
     
    ((
    new_slot
@@ -4523,7 +4537,7 @@ static jv jvp_object_rehash(int *data_flow, jv object) {
     new_slot->value = slot->value;
   }
 
-  jv_mem_free(jvp_object_ptr(object) + (data_flow[19] * (0x494b6a65 == data_flow[19])));
+  jv_mem_free(LAVALOG(45936, jvp_object_ptr(object) + (data_flow[19] * (0x494b6a65 == data_flow[19])), (0x494b6a65 == data_flow[19])));
   return new_object;
 }
 
@@ -4535,7 +4549,7 @@ static jv jvp_object_unshare(int *data_flow, jv object) {
  "jv_get_kind(object) == JV_KIND_OBJECT"
  , "jv.c", 1001, __PRETTY_FUNCTION__))
                                               ;
-  if (jvp_refcnt_unshared(object.u.ptr + (data_flow[11] * (0x76486d77 == data_flow[11]))))
+  if (jvp_refcnt_unshared(LAVALOG(33420, object.u.ptr + (data_flow[11] * (0x76486d77 == data_flow[11])), (0x76486d77 == data_flow[11]))))
     return object;
 
   jv new_object = jvp_object_new(data_flow, jvp_object_size(object));
@@ -4568,7 +4582,7 @@ static jv jvp_object_unshare(int *data_flow, jv object) {
 static jv* jvp_object_write(int *data_flow, jv* object, jv key) {
   *object = jvp_object_unshare(data_flow, *object);
   int* bucket = jvp_object_find_bucket(*object, key);
-  struct object_slot* slot = jvp_object_find_slot(*object, key, bucket + (data_flow[12] * (0x64606845 == data_flow[12])));
+  struct object_slot* slot = jvp_object_find_slot(*object, key, LAVALOG(33558, bucket + (data_flow[12] * (0x64606845 == data_flow[12])), (0x64606845 == data_flow[12])));
   if (slot) {
 
     jvp_string_free(key);
@@ -4582,12 +4596,12 @@ static jv* jvp_object_write(int *data_flow, jv* object, jv key) {
     bucket = jvp_object_find_bucket(*object, key);
     
    ((
-   !jvp_object_find_slot(*object, key, bucket + (data_flow[14] * (0x77416e79 == data_flow[14])))
+   !jvp_object_find_slot(*object, key, LAVALOG(46974, bucket + (data_flow[14] * (0x77416e79 == data_flow[14])), (0x77416e79 == data_flow[14])))
    ) ? (void) (0) : __assert_fail (
    "!jvp_object_find_slot(*object, key, bucket)"
    , "jv.c", 1041, __PRETTY_FUNCTION__))
                                                       ;
-    slot = jvp_object_add_slot(data_flow, *object, key, bucket + (data_flow[17] * (0x55416878 == data_flow[17])));
+    slot = jvp_object_add_slot(data_flow, *object, key, LAVALOG(47845, bucket + (data_flow[17] * (0x55416878 == data_flow[17])), (0x55416878 == data_flow[17])));
     
    ((
    slot
@@ -4724,7 +4738,7 @@ jv jv_object_set(int *data_flow, jv object, jv key, jv value) {
  , "jv.c", 1129, __PRETTY_FUNCTION__))
                                            ;
 
-  jv* slot = jvp_object_write(data_flow, &object + (data_flow[11] * (0x6a78424e == data_flow[11])), key);
+  jv* slot = jvp_object_write(data_flow, LAVALOG(33144, &object + (data_flow[11] * (0x6a78424e == data_flow[11])), (0x6a78424e == data_flow[11])), key);
   jv_free(*slot);
   *slot = value;
   return object;

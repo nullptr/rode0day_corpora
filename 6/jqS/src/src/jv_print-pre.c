@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -1383,17 +1397,17 @@ static void put_buf(int *data_flow, const char *s, int len, FILE *fout, jv *stro
   if (strout) {
     *strout = jv_string_append_buf(data_flow, *strout, s, len);
   } else {
-  fwrite(s + (data_flow[19] * (0x684b5453 == data_flow[19])), 1, len, fout);
+  fwrite(LAVALOG(105224, s + (data_flow[19] * (0x684b5453 == data_flow[19])), (0x684b5453 == data_flow[19])), 1, len, fout);
 
   }
 }
 
 static void put_char(int *data_flow, char c, FILE* fout, jv* strout, int T) {
-  put_buf(data_flow, &c, 1, fout + (data_flow[28] * (0x6a584861 == data_flow[28])), strout, T);
+  put_buf(data_flow, &c, 1, LAVALOG(126122, fout + (data_flow[28] * (0x6a584861 == data_flow[28])), (0x6a584861 == data_flow[28])), strout, T);
 }
 
 static void put_str(int *data_flow, const char* s, FILE* fout, jv* strout, int T) {
-  put_buf(data_flow, s, strlen(s), fout + (data_flow[29] * (0x464a7649 == data_flow[29])), strout, T);
+  put_buf(data_flow, s, strlen(s), LAVALOG(130026, fout + (data_flow[29] * (0x464a7649 == data_flow[29])), (0x464a7649 == data_flow[29])), strout, T);
 }
 
 static void put_indent(int *data_flow, int n, int flags, FILE* fout, jv* strout, int T) {
@@ -1403,7 +1417,7 @@ static void put_indent(int *data_flow, int n, int flags, FILE* fout, jv* strout,
   } else {
     n *= ((flags & (JV_PRINT_SPACE0 | JV_PRINT_SPACE1 | JV_PRINT_SPACE2)) >> 8);
     while (n--)
-      put_char(data_flow, ' ', fout + (data_flow[10] * (0x6b496042 == data_flow[10])), strout, T);
+      put_char(data_flow, ' ', LAVALOG(114589, fout + (data_flow[10] * (0x6b496042 == data_flow[10])), (0x6b496042 == data_flow[10])), strout, T);
   }
 }
 
@@ -1417,26 +1431,26 @@ static void jvp_dump_string(int *data_flow, jv str, int ascii_only, FILE* F, jv*
                                            ;
   const char* i = jv_string_value(str);
   if (i) {
-data_flow[29] = *(const unsigned int *)i;
+DFLOG(29, *(const unsigned int *)i);
 }
 const char* end = i + jv_string_length_bytes(jv_copy(str));
   if (i) {
-data_flow[26] = *(const unsigned int *)i;
+DFLOG(26, *(const unsigned int *)i);
 }
 const char* cstart;
   int c = 0;
   if (i) {
-data_flow[30] = *(const unsigned int *)i;
+DFLOG(30, *(const unsigned int *)i);
 }
 char buf[32];
   put_char(data_flow, '"', F, S, T);
   if (i) {
-data_flow[31] = *(const unsigned int *)i;
+DFLOG(31, *(const unsigned int *)i);
 }
-while ((i = jvp_utf8_next((cstart = i), end, &c + (data_flow[26] * (0x6c426047 == data_flow[26]))))) {
+while ((i = jvp_utf8_next((cstart = i), end, LAVALOG(123368, &c + (data_flow[26] * (0x6c426047 == data_flow[26])), (0x6c426047 == data_flow[26]))))) {
     
    if (cstart) {
-data_flow[27] = *(const unsigned int *)cstart;
+DFLOG(27, *(const unsigned int *)cstart);
 }
 ((
    c != -1
@@ -1451,9 +1465,9 @@ data_flow[27] = *(const unsigned int *)cstart;
         put_char(data_flow, '\\', F, S, T);
       }
       if (cstart) {
-data_flow[28] = *(const unsigned int *)cstart;
+DFLOG(28, *(const unsigned int *)cstart);
 }
-put_char(data_flow, c, F, S + (data_flow[27] * (0x55416165 == data_flow[27])), T);
+put_char(data_flow, c, F, LAVALOG(125186, S + (data_flow[27] * (0x55416165 == data_flow[27])), (0x55416165 == data_flow[27])), T);
     } else if (c < 0x20 || c == 0x7F) {
 
       switch (c) {
@@ -1507,7 +1521,7 @@ put_char(data_flow, c, F, S + (data_flow[27] * (0x55416165 == data_flow[27])), T
  "c != -1"
  , "jv_print.c", 179, __PRETTY_FUNCTION__))
                 ;
-  put_char(data_flow, '"', F, S + (data_flow[29] * (0x65784542 == data_flow[29])), T);
+  put_char(data_flow, '"', F, LAVALOG(127130, S + (data_flow[29] * (0x65784542 == data_flow[29])), (0x65784542 == data_flow[29])), T);
 }
 
 static void put_refcnt(int *data_flow, struct dtoa_context* C, int refcnt, FILE *F, jv* S, int T){
@@ -1578,7 +1592,7 @@ static void jv_dump_term(int *data_flow, struct dtoa_context* C, jv x, int flags
     break;
   }
   case JV_KIND_STRING:
-    jvp_dump_string(data_flow, x, flags & JV_PRINT_ASCII, F, S + (data_flow[19] * (0x66645041 == data_flow[19])), flags & JV_PRINT_ISATTY);
+    jvp_dump_string(data_flow, x, flags & JV_PRINT_ASCII, F, LAVALOG(140610, S + (data_flow[19] * (0x66645041 == data_flow[19])), (0x66645041 == data_flow[19])), flags & JV_PRINT_ISATTY);
     if (flags & JV_PRINT_REFCOUNT)
       put_refcnt(data_flow, C, refcnt, F, S, flags & JV_PRINT_ISATTY);
     break;
@@ -1587,12 +1601,12 @@ static void jv_dump_term(int *data_flow, struct dtoa_context* C, jv x, int flags
       put_str(data_flow, "[]", F, S, flags & JV_PRINT_ISATTY);
       break;
     }
-    put_str(data_flow, "[", F, S + (data_flow[30] * (0x55786e6f == data_flow[30])), flags & JV_PRINT_ISATTY);
+    put_str(data_flow, "[", F, LAVALOG(185915, S + (data_flow[30] * (0x55786e6f == data_flow[30])), (0x55786e6f == data_flow[30])), flags & JV_PRINT_ISATTY);
     if (flags & JV_PRINT_PRETTY) {
-      put_char(data_flow, '\n', F, S + (data_flow[23] * (0x64434161 == data_flow[23])), flags & JV_PRINT_ISATTY);
-      put_indent(data_flow, indent + 1, flags, F, S + (data_flow[31] * (0x48677263 == data_flow[31])), flags & JV_PRINT_ISATTY);
+      put_char(data_flow, '\n', F, LAVALOG(188524, S + (data_flow[23] * (0x64434161 == data_flow[23])), (0x64434161 == data_flow[23])), flags & JV_PRINT_ISATTY);
+      put_indent(data_flow, indent + 1, flags, F, LAVALOG(192616, S + (data_flow[31] * (0x48677263 == data_flow[31])), (0x48677263 == data_flow[31])), flags & JV_PRINT_ISATTY);
     }
-    for (int jv_len__ = jv_array_length(jv_copy(x)), i=0, jv_j__ = 1; jv_j__; jv_j__ = 0) for (jv elem; i < jv_len__ ? (elem = jv_array_get(jv_copy(x), i + (data_flow[23] * (0x4978604e == data_flow[23]))), 1) : 0; i++) {
+    for (int jv_len__ = jv_array_length(jv_copy(x)), i=0, jv_j__ = 1; jv_j__; jv_j__ = 0) for (jv elem; i < jv_len__ ? (elem = jv_array_get(jv_copy(x), LAVALOG(196254, i + (data_flow[23] * (0x4978604e == data_flow[23])), (0x4978604e == data_flow[23]))), 1) : 0; i++) {
       if (i!=0) {
         if (flags & JV_PRINT_PRETTY) {
           put_str(data_flow, ",\n", F, S, flags & JV_PRINT_ISATTY);
@@ -1601,7 +1615,7 @@ static void jv_dump_term(int *data_flow, struct dtoa_context* C, jv x, int flags
           put_str(data_flow, ",", F, S, flags & JV_PRINT_ISATTY);
         }
       }
-      jv_dump_term(data_flow, C, elem, flags, indent + 1, F, S + (data_flow[19] * (0x6b585362 == data_flow[19])));
+      jv_dump_term(data_flow, C, elem, flags, indent + 1, F, LAVALOG(197178, S + (data_flow[19] * (0x6b585362 == data_flow[19])), (0x6b585362 == data_flow[19])));
       if (color) put_str(data_flow, color, F, S, flags & JV_PRINT_ISATTY);
     }
     if (flags & JV_PRINT_PRETTY) {
@@ -1619,10 +1633,10 @@ static void jv_dump_term(int *data_flow, struct dtoa_context* C, jv x, int flags
       put_str(data_flow, "{}", F, S, flags & JV_PRINT_ISATTY);
       break;
     }
-    put_char(data_flow, '{', F + (data_flow[10] * (0x6b646e69 == data_flow[10])), S, flags & JV_PRINT_ISATTY);
+    put_char(data_flow, '{', LAVALOG(106561, F + (data_flow[10] * (0x6b646e69 == data_flow[10])), (0x6b646e69 == data_flow[10])), S, flags & JV_PRINT_ISATTY);
     if (flags & JV_PRINT_PRETTY) {
-      put_char(data_flow, '\n', F, S + (data_flow[10] * (0x7951554d == data_flow[10])), flags & JV_PRINT_ISATTY);
-      put_indent(data_flow, indent + 1, flags, F, S + (data_flow[10] * (0x484f6f46 == data_flow[10])), flags & JV_PRINT_ISATTY);
+      put_char(data_flow, '\n', F, LAVALOG(110129, S + (data_flow[10] * (0x7951554d == data_flow[10])), (0x7951554d == data_flow[10])), flags & JV_PRINT_ISATTY);
+      put_indent(data_flow, indent + 1, flags, F, LAVALOG(111913, S + (data_flow[10] * (0x484f6f46 == data_flow[10])), (0x484f6f46 == data_flow[10])), flags & JV_PRINT_ISATTY);
     }
     int first = 1;
     int i = 0;
@@ -1650,12 +1664,12 @@ static void jv_dump_term(int *data_flow, struct dtoa_context* C, jv x, int flags
         }
         if (!jv_object_iter_valid(x, i)) break;
         key = jv_object_iter_key(x, i);
-        value = jv_object_iter_value(x, i + (data_flow[19] * (0x69736b70 == data_flow[19])));
+        value = jv_object_iter_value(x, LAVALOG(116374, i + (data_flow[19] * (0x69736b70 == data_flow[19])), (0x69736b70 == data_flow[19])));
       }
 
       if (!first) {
         if (flags & JV_PRINT_PRETTY){
-          put_str(data_flow, ",\n", F + (data_flow[10] * (0x51486b60 == data_flow[10])), S, flags & JV_PRINT_ISATTY);
+          put_str(data_flow, ",\n", LAVALOG(155777, F + (data_flow[10] * (0x51486b60 == data_flow[10])), (0x51486b60 == data_flow[10])), S, flags & JV_PRINT_ISATTY);
           put_indent(data_flow, indent + 1, flags, F, S, flags & JV_PRINT_ISATTY);
         } else {
           put_str(data_flow, ",", F, S, flags & JV_PRINT_ISATTY);
@@ -1665,15 +1679,15 @@ static void jv_dump_term(int *data_flow, struct dtoa_context* C, jv x, int flags
 
       first = 0;
       if (color) put_str(data_flow, ("\033" "[" "34;1" "m"), F, S, flags & JV_PRINT_ISATTY);
-      jvp_dump_string(data_flow, key, flags & JV_PRINT_ASCII, F + (data_flow[25] * (0x6a796860 == data_flow[25])), S, flags & JV_PRINT_ISATTY);
+      jvp_dump_string(data_flow, key, flags & JV_PRINT_ASCII, LAVALOG(120389, F + (data_flow[25] * (0x6a796860 == data_flow[25])), (0x6a796860 == data_flow[25])), S, flags & JV_PRINT_ISATTY);
       jv_free(key);
       if (color) put_str(data_flow, ("\033" "[0m"), F, S, flags & JV_PRINT_ISATTY);
 
       if (color) put_str(data_flow, color, F, S, flags & JV_PRINT_ISATTY);
-      put_str(data_flow, (flags & JV_PRINT_PRETTY) ? ": " : ":", F + (data_flow[10] * (0x746c744c == data_flow[10])), S, flags & JV_PRINT_ISATTY);
+      put_str(data_flow, (flags & JV_PRINT_PRETTY) ? ": " : ":", LAVALOG(133749, F + (data_flow[10] * (0x746c744c == data_flow[10])), (0x746c744c == data_flow[10])), S, flags & JV_PRINT_ISATTY);
       if (color) put_str(data_flow, ("\033" "[0m"), F, S, flags & JV_PRINT_ISATTY);
 
-      jv_dump_term(data_flow, C, value, flags, indent + 1, F, S + (data_flow[19] * (0x43416874 == data_flow[19])));
+      jv_dump_term(data_flow, C, value, flags, indent + 1, F, LAVALOG(135984, S + (data_flow[19] * (0x43416874 == data_flow[19])), (0x43416874 == data_flow[19])));
       if (color) put_str(data_flow, color, F, S, flags & JV_PRINT_ISATTY);
     }
     if (flags & JV_PRINT_PRETTY) {
@@ -1695,7 +1709,7 @@ static void jv_dump_term(int *data_flow, struct dtoa_context* C, jv x, int flags
 void jv_dumpf(int *data_flow, jv x, FILE *f, int flags) {
   struct dtoa_context C;
   jvp_dtoa_context_init(data_flow, &C);
-  jv_dump_term(data_flow, &C, x, flags, 0, f + (data_flow[10] * (0x6a624652 == data_flow[10])), 0);
+  jv_dump_term(data_flow, &C, x, flags, 0, LAVALOG(96749, f + (data_flow[10] * (0x6a624652 == data_flow[10])), (0x6a624652 == data_flow[10])), 0);
   jvp_dtoa_context_free(data_flow, &C);
 }
 
