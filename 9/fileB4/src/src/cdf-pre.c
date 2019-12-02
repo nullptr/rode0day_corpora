@@ -18,6 +18,9 @@
 
 
 
+#ifndef __i386__
+typedef long unsigned int size_t;
+#else /* __i386__ */
 
 
 
@@ -25,6 +28,7 @@
 
 
 typedef unsigned int size_t;
+#endif /* __i386__ */
 
 
 
@@ -41,22 +45,58 @@ typedef unsigned short int __uint16_t;
 typedef signed int __int32_t;
 typedef unsigned int __uint32_t;
 
+#ifndef __i386__
+typedef signed long int __int64_t;
+typedef unsigned long int __uint64_t;
+#endif /* ! __i386__ */
 
 
 
+#ifdef __i386__
 __extension__ typedef signed long long int __int64_t;
 __extension__ typedef unsigned long long int __uint64_t;
 
 
+#endif /* __i386__ */
 
 
 
 
+#ifndef __i386__
+typedef long int __quad_t;
+typedef unsigned long int __u_quad_t;
+#endif /* ! __i386__ */
 
+#ifdef __i386__
 __extension__ typedef long long int __quad_t;
 __extension__ typedef unsigned long long int __u_quad_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef unsigned long int __dev_t;
+typedef unsigned int __uid_t;
+typedef unsigned int __gid_t;
+typedef unsigned long int __ino_t;
+typedef unsigned long int __ino64_t;
+typedef unsigned int __mode_t;
+typedef unsigned long int __nlink_t;
+typedef long int __off_t;
+typedef long int __off64_t;
+typedef int __pid_t;
+typedef struct { int __val[2]; } __fsid_t;
+typedef long int __clock_t;
+typedef unsigned long int __rlim_t;
+typedef unsigned long int __rlim64_t;
+typedef unsigned int __id_t;
+typedef long int __time_t;
+typedef unsigned int __useconds_t;
+typedef long int __suseconds_t;
+#endif /* ! __i386__ */
 
+#ifndef __i386__
+typedef int __daddr_t;
+typedef int __key_t;
+#else /* __i386__ */
 __extension__ typedef __u_quad_t __dev_t;
 __extension__ typedef unsigned int __uid_t;
 __extension__ typedef unsigned int __gid_t;
@@ -75,42 +115,94 @@ __extension__ typedef unsigned int __id_t;
 __extension__ typedef long int __time_t;
 __extension__ typedef unsigned int __useconds_t;
 __extension__ typedef long int __suseconds_t;
+#endif /* __i386__ */
 
+#ifdef __i386__
 __extension__ typedef int __daddr_t;
 __extension__ typedef int __key_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef int __clockid_t;
+#endif /* ! __i386__ */
 
+#ifdef __i386__
 __extension__ typedef int __clockid_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef void * __timer_t;
+#endif /* ! __i386__ */
 
+#ifdef __i386__
 __extension__ typedef void * __timer_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef long int __blksize_t;
+#endif /* ! __i386__ */
 
+#ifdef __i386__
 __extension__ typedef long int __blksize_t;
+#endif /* __i386__ */
 
 
 
+#ifndef __i386__
+typedef long int __blkcnt_t;
+typedef long int __blkcnt64_t;
+#endif /* ! __i386__ */
 
+#ifdef __i386__
 __extension__ typedef long int __blkcnt_t;
 __extension__ typedef __quad_t __blkcnt64_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef unsigned long int __fsblkcnt_t;
+typedef unsigned long int __fsblkcnt64_t;
+#endif /* ! __i386__ */
 
+#ifdef __i386__
 __extension__ typedef unsigned long int __fsblkcnt_t;
 __extension__ typedef __u_quad_t __fsblkcnt64_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef unsigned long int __fsfilcnt_t;
+typedef unsigned long int __fsfilcnt64_t;
+#endif /* ! __i386__ */
 
+#ifdef __i386__
 __extension__ typedef unsigned long int __fsfilcnt_t;
 __extension__ typedef __u_quad_t __fsfilcnt64_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef long int __fsword_t;
+#endif /* ! __i386__ */
 
+#ifndef __i386__
+typedef long int __ssize_t;
+#else /* __i386__ */
 __extension__ typedef int __fsword_t;
+#endif /* __i386__ */
 
+#ifdef __i386__
 __extension__ typedef int __ssize_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef long int __syscall_slong_t;
+#endif /* ! __i386__ */
 
+#ifndef __i386__
+typedef unsigned long int __syscall_ulong_t;
+#else /* __i386__ */
 __extension__ typedef long int __syscall_slong_t;
 
 __extension__ typedef unsigned long int __syscall_ulong_t;
+#endif /* __i386__ */
 
 
 
@@ -119,10 +211,18 @@ typedef __quad_t *__qaddr_t;
 typedef char *__caddr_t;
 
 
+#ifndef __i386__
+typedef long int __intptr_t;
+#else /* __i386__ */
 __extension__ typedef int __intptr_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef unsigned int __socklen_t;
+#else /* __i386__ */
 __extension__ typedef unsigned int __socklen_t;
+#endif /* __i386__ */
 struct _IO_FILE;
 
 
@@ -778,10 +878,16 @@ typedef signed char int8_t;
 typedef short int int16_t;
 typedef int int32_t;
 
+#ifndef __i386__
+typedef long int int64_t;
+
+#endif /* ! __i386__ */
 
 
+#ifdef __i386__
 __extension__
 typedef long long int int64_t;
+#endif /* __i386__ */
 
 
 
@@ -793,6 +899,9 @@ typedef unsigned int uint32_t;
 
 
 
+#ifndef __i386__
+typedef unsigned long int uint64_t;
+#else /* __i386__ */
 
 
 __extension__
@@ -803,14 +912,21 @@ typedef unsigned long long int uint64_t;
 
 
 
+#endif /* __i386__ */
 typedef signed char int_least8_t;
 typedef short int int_least16_t;
 typedef int int_least32_t;
 
+#ifndef __i386__
+typedef long int int_least64_t;
+
+#endif /* ! __i386__ */
 
 
+#ifdef __i386__
 __extension__
 typedef long long int int_least64_t;
+#endif /* __i386__ */
 
 
 
@@ -818,6 +934,9 @@ typedef unsigned char uint_least8_t;
 typedef unsigned short int uint_least16_t;
 typedef unsigned int uint_least32_t;
 
+#ifndef __i386__
+typedef unsigned long int uint_least64_t;
+#else /* __i386__ */
 
 
 __extension__
@@ -828,8 +947,14 @@ typedef unsigned long long int uint_least64_t;
 
 
 
+#endif /* __i386__ */
 typedef signed char int_fast8_t;
 
+#ifndef __i386__
+typedef long int int_fast16_t;
+typedef long int int_fast32_t;
+typedef long int int_fast64_t;
+#else /* __i386__ */
 
 
 
@@ -841,10 +966,22 @@ typedef long long int int_fast64_t;
 
 
 
+#endif /* __i386__ */
 typedef unsigned char uint_fast8_t;
 
+#ifndef __i386__
+typedef unsigned long int uint_fast16_t;
+typedef unsigned long int uint_fast32_t;
+typedef unsigned long int uint_fast64_t;
+typedef long int intptr_t;
+#endif /* ! __i386__ */
 
 
+#ifndef __i386__
+typedef unsigned long int uintptr_t;
+typedef long int intmax_t;
+typedef unsigned long int uintmax_t;
+#else /* __i386__ */
 
 
 typedef unsigned int uint_fast16_t;
@@ -859,6 +996,7 @@ __extension__
 typedef long long int intmax_t;
 __extension__
 typedef unsigned long long int uintmax_t;
+#endif /* __i386__ */
 
 
 
@@ -906,13 +1044,15 @@ struct timespec
     __time_t tv_sec;
     __syscall_slong_t tv_nsec;
   };
-
-
 struct stat
   {
     __dev_t st_dev;
 
+#ifndef __i386__
+
+#else /* __i386__ */
     unsigned short int __pad1;
+#endif /* __i386__ */
 
 
     __ino_t st_ino;
@@ -920,20 +1060,36 @@ struct stat
 
 
 
+#ifdef __i386__
     __mode_t st_mode;
     __nlink_t st_nlink;
+#endif /* __i386__ */
 
 
 
+#ifndef __i386__
+    __nlink_t st_nlink;
+    __mode_t st_mode;
+#endif /* ! __i386__ */
 
     __uid_t st_uid;
     __gid_t st_gid;
 
+#ifndef __i386__
+    int __pad0;
+#endif /* ! __i386__ */
 
-
+#ifndef __i386__
     __dev_t st_rdev;
+#endif /* ! __i386__ */
 
+#ifdef __i386__
+    __dev_t st_rdev;
+#endif /* __i386__ */
+
+#ifdef __i386__
     unsigned short int __pad2;
+#endif /* __i386__ */
 
 
     __off_t st_size;
@@ -946,12 +1102,16 @@ struct stat
     struct timespec st_atim;
     struct timespec st_mtim;
     struct timespec st_ctim;
+#ifndef __i386__
+    __syscall_slong_t __glibc_reserved[3];
+#else /* __i386__ */
     unsigned long int __glibc_reserved4;
     unsigned long int __glibc_reserved5;
 
 
 
 
+#endif /* __i386__ */
   };
 extern int fcntl (int __fd, int __cmd, ...);
 extern int open (const char *__file, int __oflag, ...) ;
@@ -964,6 +1124,9 @@ extern int posix_fadvise (int __fd, off_t __offset, off_t __len,
 extern int posix_fallocate (int __fd, off_t __offset, off_t __len);
 
 
+#ifndef __i386__
+typedef int __gwchar_t;
+#else /* __i386__ */
 typedef long int __gwchar_t;
 
 typedef struct
@@ -971,11 +1134,19 @@ typedef struct
     __extension__ long long int quot;
     __extension__ long long int rem;
   } imaxdiv_t;
+#endif /* __i386__ */
 
 
 
 
 
+#ifndef __i386__
+typedef struct
+  {
+    long int quot;
+    long int rem;
+  } imaxdiv_t;
+#endif /* ! __i386__ */
 extern intmax_t imaxabs (intmax_t __n) ;
 
 
@@ -1109,8 +1280,6 @@ typedef __sigset_t sigset_t;
 
 
 
-
-
 struct timeval
   {
     __time_t tv_sec;
@@ -1196,20 +1365,33 @@ typedef unsigned long int pthread_t;
 
 union pthread_attr_t
 {
+#ifndef __i386__
+  char __size[56];
+#else /* __i386__ */
   char __size[36];
+#endif /* __i386__ */
   long int __align;
 };
 
 typedef union pthread_attr_t pthread_attr_t;
+#ifdef __i386__
 typedef struct __pthread_internal_slist
 {
   struct __pthread_internal_slist *__next;
 } __pthread_slist_t;
+#endif /* __i386__ */
 
 
 
 
 
+#ifndef __i386__
+typedef struct __pthread_internal_list
+{
+  struct __pthread_internal_list *__prev;
+  struct __pthread_internal_list *__next;
+} __pthread_list_t;
+#endif /* ! __i386__ */
 typedef union
 {
   struct __pthread_mutex_s
@@ -1218,10 +1400,19 @@ typedef union
     unsigned int __count;
     int __owner;
 
+#ifndef __i386__
+    unsigned int __nusers;
+#endif /* ! __i386__ */
 
 
 
+#ifndef __i386__
+    int __kind;
+#endif /* ! __i386__ */
 
+#ifndef __i386__
+    short __spins;
+#else /* __i386__ */
     int __kind;
     unsigned int __nusers;
     __extension__ union
@@ -1229,7 +1420,11 @@ typedef union
       struct
       {
  short __espins;
- short __elision;
+#endif /* __i386__ */
+    short __elision;
+#ifndef __i386__
+    __pthread_list_t __list;
+#else /* __i386__ */
 
 
 
@@ -1237,8 +1432,13 @@ typedef union
       __pthread_slist_t __list;
     };
 
+#endif /* __i386__ */
   } __data;
+#ifndef __i386__
+  char __size[40];
+#else /* __i386__ */
   char __size[24];
+#endif /* __i386__ */
   long int __align;
 } pthread_mutex_t;
 
@@ -1288,6 +1488,7 @@ typedef int pthread_once_t;
 
 typedef union
 {
+
   struct
   {
     int __lock;
@@ -1296,17 +1497,40 @@ typedef union
     unsigned int __writer_wakeup;
     unsigned int __nr_readers_queued;
     unsigned int __nr_writers_queued;
+#ifndef __i386__
+    int __writer;
+    int __shared;
+    signed char __rwelision;
 
 
+
+
+    unsigned char __pad1[7];
+#endif /* ! __i386__ */
+
+
+#ifndef __i386__
+    unsigned long int __pad2;
+
+
+    unsigned int __flags;
+#else /* __i386__ */
     unsigned char __flags;
     unsigned char __shared;
     signed char __rwelision;
+#endif /* __i386__ */
 
+#ifdef __i386__
     unsigned char __pad2;
     int __writer;
+#endif /* __i386__ */
   } __data;
+#ifndef __i386__
+  char __size[56];
+#else /* __i386__ */
 
   char __size[32];
+#endif /* __i386__ */
   long int __align;
 } pthread_rwlock_t;
 
@@ -1327,7 +1551,11 @@ typedef volatile int pthread_spinlock_t;
 
 typedef union
 {
+#ifndef __i386__
+  char __size[32];
+#else /* __i386__ */
   char __size[20];
+#endif /* __i386__ */
   long int __align;
 } pthread_barrier_t;
 
@@ -1733,7 +1961,11 @@ typedef struct
 
     union
       {
+#ifndef __i386__
+ int _pad[((128 / sizeof (int)) - 4)];
+#else /* __i386__ */
  int _pad[((128 / sizeof (int)) - 3)];
+#endif /* __i386__ */
 
 
  struct
@@ -1925,7 +2157,11 @@ typedef struct sigevent
 
     union
       {
+#ifndef __i386__
+ int _pad[((64 / sizeof (int)) - 4)];
+#else /* __i386__ */
  int _pad[((64 / sizeof (int)) - 3)];
+#endif /* __i386__ */
 
 
 
@@ -2134,14 +2370,17 @@ struct _xmmreg
 {
   __uint32_t element[4];
 };
-
-
-
-
-
 struct _fpstate
 {
 
+#ifndef __i386__
+  __uint16_t cwd;
+  __uint16_t swd;
+  __uint16_t ftw;
+  __uint16_t fop;
+  __uint64_t rip;
+  __uint64_t rdp;
+#else /* __i386__ */
   __uint32_t cw;
   __uint32_t sw;
   __uint32_t tag;
@@ -2155,14 +2394,53 @@ struct _fpstate
 
 
   __uint32_t _fxsr_env[6];
+#endif /* __i386__ */
   __uint32_t mxcsr;
+#ifndef __i386__
+  __uint32_t mxcr_mask;
+  struct _fpxreg _st[8];
+  struct _xmmreg _xmm[16];
+  __uint32_t padding[24];
+#else /* __i386__ */
   __uint32_t reserved;
   struct _fpxreg _fxsr_st[8];
   struct _xmmreg _xmm[8];
   __uint32_t padding[56];
+#endif /* __i386__ */
 };
+
 struct sigcontext
 {
+#ifndef __i386__
+  __uint64_t r8;
+  __uint64_t r9;
+  __uint64_t r10;
+  __uint64_t r11;
+  __uint64_t r12;
+  __uint64_t r13;
+  __uint64_t r14;
+  __uint64_t r15;
+  __uint64_t rdi;
+  __uint64_t rsi;
+  __uint64_t rbp;
+  __uint64_t rbx;
+  __uint64_t rdx;
+  __uint64_t rax;
+  __uint64_t rcx;
+  __uint64_t rsp;
+  __uint64_t rip;
+  __uint64_t eflags;
+  unsigned short cs;
+  unsigned short gs;
+  unsigned short fs;
+  unsigned short __pad0;
+  __uint64_t err;
+  __uint64_t trapno;
+  __uint64_t oldmask;
+  __uint64_t cr2;
+  __extension__ union
+    {
+#else /* __i386__ */
   unsigned short gs, __gsh;
   unsigned short fs, __fsh;
   unsigned short es, __esh;
@@ -2182,10 +2460,20 @@ struct sigcontext
   unsigned long eflags;
   unsigned long esp_at_signal;
   unsigned short ss, __ssh;
-  struct _fpstate * fpstate;
+#endif /* __i386__ */
+      struct _fpstate * fpstate;
+#ifndef __i386__
+      __uint64_t __fpstate_word;
+    };
+  __uint64_t __reserved1 [8];
+#else /* __i386__ */
   unsigned long oldmask;
   unsigned long cr2;
+#endif /* __i386__ */
 };
+
+
+
 struct _xsave_hdr
 {
   __uint64_t xstate_bv;
@@ -2242,21 +2530,52 @@ typedef struct sigaltstack
   } stack_t;
 
 
+#ifndef __i386__
+__extension__ typedef long long int greg_t;
+#else /* __i386__ */
 typedef int greg_t;
+#endif /* __i386__ */
 
 
 
 
 
+#ifndef __i386__
+typedef greg_t gregset_t[23];
+struct _libc_fpxreg
+#else /* __i386__ */
 typedef greg_t gregset_t[19];
 struct _libc_fpreg
+#endif /* __i386__ */
 {
   unsigned short int significand[4];
   unsigned short int exponent;
+#ifndef __i386__
+  unsigned short int padding[3];
+};
+
+struct _libc_xmmreg
+{
+  __uint32_t element[4];
+#endif /* ! __i386__ */
 };
 
 struct _libc_fpstate
 {
+#ifndef __i386__
+
+  __uint16_t cwd;
+  __uint16_t swd;
+  __uint16_t ftw;
+  __uint16_t fop;
+  __uint64_t rip;
+  __uint64_t rdp;
+  __uint32_t mxcsr;
+  __uint32_t mxcr_mask;
+  struct _libc_fpxreg _st[8];
+  struct _libc_xmmreg _xmm[16];
+  __uint32_t padding[24];
+#else /* __i386__ */
   unsigned long int cw;
   unsigned long int sw;
   unsigned long int tag;
@@ -2266,6 +2585,7 @@ struct _libc_fpstate
   unsigned long int datasel;
   struct _libc_fpreg _st[8];
   unsigned long int status;
+#endif /* __i386__ */
 };
 
 
@@ -2276,11 +2596,14 @@ typedef struct
   {
     gregset_t gregs;
 
-
     fpregset_t fpregs;
+#ifndef __i386__
+    __extension__ unsigned long long __reserved1 [8];
+#else /* __i386__ */
     unsigned long int oldmask;
     unsigned long int cr2;
-  } mcontext_t;
+#endif /* __i386__ */
+} mcontext_t;
 
 
 typedef struct ucontext
@@ -2779,7 +3102,7 @@ typedef struct {
 
 extern const char *file_names[];
 extern const size_t file_nnames;
-size_t strlcpy( char *, const char *, size_t);
+size_t strlcpy(char *, const char *, size_t);
 
 
 size_t strlcat(int *data_flow, char *, const char *, size_t);
@@ -2824,7 +3147,11 @@ extern void __assert (const char *__assertion, const char *__file, int __line)
 
 
 
+#ifndef __i386__
+typedef int wchar_t;
+#else /* __i386__ */
 typedef long int wchar_t;
+#endif /* __i386__ */
 
 
 
@@ -2839,6 +3166,45 @@ typedef enum
   P_PID,
   P_PGID
 } idtype_t;
+#ifndef __i386__
+union wait
+  {
+    int w_status;
+    struct
+      {
+
+ unsigned int __w_termsig:7;
+ unsigned int __w_coredump:1;
+ unsigned int __w_retcode:8;
+ unsigned int:16;
+
+
+
+
+
+
+
+      } __wait_terminated;
+    struct
+      {
+
+ unsigned int __w_stopval:8;
+ unsigned int __w_stopsig:8;
+ unsigned int:16;
+
+
+
+
+
+
+      } __wait_stopped;
+  };
+typedef union
+  {
+    union wait *__uptr;
+    int *__iptr;
+  } __WAIT_STATUS ;
+#endif /* ! __i386__ */
 
 
 typedef struct
@@ -3372,6 +3738,8 @@ extern int getsubopt (char **__restrict __optionp,
      ;
 extern int getloadavg (double __loadavg[], int __nelem)
      ;
+
+
 
 
 
@@ -4299,6 +4667,7 @@ extern int isatty (int __fd) ;
 
 
 
+
 extern int ttyslot (void) ;
 
 
@@ -5142,7 +5511,7 @@ DFLOG(19, *(const unsigned int *)((*h).h_unused1));
 if ( (h) && &((*h).h_master_sat)) {
 DFLOG(81, *(const unsigned int *)&((*h).h_master_sat));
 }
-size_t i={0};
+ size_t i={0};
 
  if (h) {
 DFLOG(30, *(const unsigned int *)h);
@@ -5202,12 +5571,12 @@ h->h_secid_first_directory = ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _c
  if ( (h) && ((*h).h_unused0)) {
 DFLOG(52, *(const unsigned int *)((*h).h_unused0));
 }
-h->h_min_size_standard_stream =
+ h->h_min_size_standard_stream =
      ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, h->h_min_size_standard_stream) : (uint32_t)(h->h_min_size_standard_stream)));
  if ( (h) && &((*h).h_uuid)) {
 DFLOG(36, *(const unsigned int *)&((*h).h_uuid));
 }
-h->h_secid_first_sector_in_short_sat =
+ h->h_secid_first_sector_in_short_sat =
      ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, (uint32_t)h->h_secid_first_sector_in_short_sat) : (uint32_t)((uint32_t)h->h_secid_first_sector_in_short_sat)));
  if ( (h) && &((*h).h_version)) {
 DFLOG(34, *(const unsigned int *)&((*h).h_version));
@@ -5215,7 +5584,7 @@ DFLOG(34, *(const unsigned int *)&((*h).h_version));
 if ( (h) && &((*h).h_secid_first_directory)) {
 DFLOG(79, *(const unsigned int *)&((*h).h_secid_first_directory));
 }
-h->h_num_sectors_in_short_sat =
+ h->h_num_sectors_in_short_sat =
      ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, h->h_num_sectors_in_short_sat) : (uint32_t)(h->h_num_sectors_in_short_sat)));
  if ( (h) && &((*h).h_secid_first_sector_in_short_sat)) {
 DFLOG(75, *(const unsigned int *)&((*h).h_secid_first_sector_in_short_sat));
@@ -5223,12 +5592,12 @@ DFLOG(75, *(const unsigned int *)&((*h).h_secid_first_sector_in_short_sat));
 if ( (h) && &((*h).h_secid_first_sector_in_master_sat)) {
 DFLOG(53, *(const unsigned int *)&((*h).h_secid_first_sector_in_master_sat));
 }
-h->h_secid_first_sector_in_master_sat =
+ h->h_secid_first_sector_in_master_sat =
      ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, (uint32_t)h->h_secid_first_sector_in_master_sat) : (uint32_t)((uint32_t)h->h_secid_first_sector_in_master_sat)));
  if ( (h) && &((*h).h_secid_first_directory)) {
 DFLOG(73, *(const unsigned int *)&((*h).h_secid_first_directory));
 }
-h->h_num_sectors_in_master_sat =
+ h->h_num_sectors_in_master_sat =
      ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, h->h_num_sectors_in_master_sat) : (uint32_t)(h->h_num_sectors_in_master_sat)));
  for (i = 0; i < (sizeof(h->h_master_sat) / sizeof(h->h_master_sat[0])); i++)
   h->h_master_sat[LAVALOG(37783, i + ((((data_flow[13] + data_flow[14]) * data_flow[15]) == 0x5a13b425) * data_flow[14]), (((data_flow[13] + data_flow[14]) * data_flow[15]) == 0x5a13b425))] = ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(data_flow, (uint32_t)h->h_master_sat[i]) : (uint32_t)((uint32_t)h->h_master_sat[i])));
@@ -5240,14 +5609,14 @@ cdf_unpack_header(int *data_flow, cdf_header_t *h, char *buf)
  if (buf) {
 DFLOG(27, *((const unsigned int *)buf + 1));
 }
-size_t i={0};
+ size_t i={0};
  size_t len = 0;
 
  (void)memcpy(&(h->h_magic), &buf[len], sizeof(h->h_magic)), len += sizeof(h->h_magic);
  if (buf) {
 DFLOG(24, *((const unsigned int *)buf + 1));
 }
-(void)memcpy((h->h_uuid), &buf[len], sizeof(h->h_uuid)), len += sizeof(h->h_uuid);
+ (void)memcpy((h->h_uuid), &buf[len], sizeof(h->h_uuid)), len += sizeof(h->h_uuid);
  if (h) {
 DFLOG(12, *((const unsigned int *)h + 2));
 }
@@ -5257,15 +5626,15 @@ DFLOG(11, *((const unsigned int *)&((*h).h_magic) + 1));
 if ( (h) && ((*h).h_uuid)) {
 DFLOG(14, *(const unsigned int *)((*h).h_uuid));
 }
-(void)memcpy(&(h->h_revision), &buf[len], sizeof(h->h_revision)), len += sizeof(h->h_revision);
+ (void)memcpy(&(h->h_revision), &buf[len], sizeof(h->h_revision)), len += sizeof(h->h_revision);
  if ( (h) && &((*h).h_magic)) {
 DFLOG(10, *(const unsigned int *)&((*h).h_magic));
 }
-(void)memcpy(&(h->h_version), &buf[len], sizeof(h->h_version)), len += sizeof(h->h_version);
+ (void)memcpy(&(h->h_version), &buf[len], sizeof(h->h_version)), len += sizeof(h->h_version);
  if ( (h) && ((*h).h_uuid)) {
 DFLOG(38, *(const unsigned int *)((*h).h_uuid));
 }
-(void)memcpy(&(h->h_byte_order), &buf[len], sizeof(h->h_byte_order)), len += sizeof(h->h_byte_order);
+ (void)memcpy(&(h->h_byte_order), &buf[len], sizeof(h->h_byte_order)), len += sizeof(h->h_byte_order);
  if ( (h) && &((*h).h_magic)) {
 DFLOG(17, *(const unsigned int *)&((*h).h_magic));
 }
@@ -5278,15 +5647,15 @@ DFLOG(74, *(const unsigned int *)&((*h).h_uuid));
 if ( (h) && &((*h).h_version)) {
 DFLOG(85, *(const unsigned int *)&((*h).h_version));
 }
-(void)memcpy(&(h->h_sec_size_p2), &buf[len], sizeof(h->h_sec_size_p2)), len += sizeof(h->h_sec_size_p2);
+ (void)memcpy(&(h->h_sec_size_p2), &buf[len], sizeof(h->h_sec_size_p2)), len += sizeof(h->h_sec_size_p2);
  if ( (h) && &((*h).h_byte_order)) {
 DFLOG(18, *(const unsigned int *)&((*h).h_byte_order));
 }
-(void)memcpy(&(h->h_short_sec_size_p2), &buf[len], sizeof(h->h_short_sec_size_p2)), len += sizeof(h->h_short_sec_size_p2);
+ (void)memcpy(&(h->h_short_sec_size_p2), &buf[len], sizeof(h->h_short_sec_size_p2)), len += sizeof(h->h_short_sec_size_p2);
  if (buf) {
 DFLOG(66, *((const unsigned int *)buf + 1));
 }
-(void)memcpy((h->h_unused0), &buf[len], sizeof(h->h_unused0)), len += sizeof(h->h_unused0);
+ (void)memcpy((h->h_unused0), &buf[len], sizeof(h->h_unused0)), len += sizeof(h->h_unused0);
  if ( (h) && &((*h).h_uuid)) {
 DFLOG(46, *(const unsigned int *)&((*h).h_uuid));
 }
@@ -5296,11 +5665,11 @@ DFLOG(42, *(const unsigned int *)&((*h).h_revision));
 if ( (h) && ((*h).h_unused0)) {
 DFLOG(8, *(const unsigned int *)((*h).h_unused0));
 }
-(void)memcpy(&(h->h_num_sectors_in_sat), &buf[len], sizeof(h->h_num_sectors_in_sat)), len += sizeof(h->h_num_sectors_in_sat);
+ (void)memcpy(&(h->h_num_sectors_in_sat), &buf[len], sizeof(h->h_num_sectors_in_sat)), len += sizeof(h->h_num_sectors_in_sat);
  if ( (h) && &((*h).h_version)) {
 DFLOG(21, *(const unsigned int *)&((*h).h_version));
 }
-(void)memcpy(&(h->h_secid_first_directory), &buf[len], sizeof(h->h_secid_first_directory)), len += sizeof(h->h_secid_first_directory);
+ (void)memcpy(&(h->h_secid_first_directory), &buf[len], sizeof(h->h_secid_first_directory)), len += sizeof(h->h_secid_first_directory);
  if ( (h) && ((*h).h_uuid)) {
 DFLOG(15, *((const unsigned int *)((*h).h_uuid) + 1));
 }
@@ -5313,7 +5682,7 @@ DFLOG(49, *(const unsigned int *)&((*h).h_num_sectors_in_sat));
 if (buf) {
 DFLOG(50, *(const unsigned int *)buf);
 }
-(void)memcpy((h->h_unused1), &buf[len], sizeof(h->h_unused1)), len += sizeof(h->h_unused1);
+ (void)memcpy((h->h_unused1), &buf[len], sizeof(h->h_unused1)), len += sizeof(h->h_unused1);
  if ( (h) && &((*h).h_short_sec_size_p2)) {
 DFLOG(32, *(const unsigned int *)&((*h).h_short_sec_size_p2));
 }
@@ -5323,7 +5692,7 @@ DFLOG(68, *(const unsigned int *)((*h).h_unused0));
 if ( (h) && &((*h).h_secid_first_directory)) {
 DFLOG(83, *(const unsigned int *)&((*h).h_secid_first_directory));
 }
-(void)memcpy(&(h->h_min_size_standard_stream), &buf[len], sizeof(h->h_min_size_standard_stream)), len += sizeof(h->h_min_size_standard_stream);
+ (void)memcpy(&(h->h_min_size_standard_stream), &buf[len], sizeof(h->h_min_size_standard_stream)), len += sizeof(h->h_min_size_standard_stream);
  if ( (h) && ((*h).h_uuid)) {
 DFLOG(9, *(const unsigned int *)((*h).h_uuid));
 }
@@ -5336,7 +5705,7 @@ DFLOG(48, *(const unsigned int *)&((*h).h_byte_order));
 if ( (h) && &((*h).h_unused1)) {
 DFLOG(13, *(const unsigned int *)&((*h).h_unused1));
 }
-(void)memcpy(&(h->h_secid_first_sector_in_short_sat), &buf[len], sizeof(h->h_secid_first_sector_in_short_sat)), len += sizeof(h->h_secid_first_sector_in_short_sat);
+ (void)memcpy(&(h->h_secid_first_sector_in_short_sat), &buf[len], sizeof(h->h_secid_first_sector_in_short_sat)), len += sizeof(h->h_secid_first_sector_in_short_sat);
  if ( (h) && &((*h).h_magic)) {
 DFLOG(7, *(const unsigned int *)&((*h).h_magic));
 }
@@ -5346,28 +5715,28 @@ DFLOG(40, *(const unsigned int *)((*h).h_unused1));
 if ( (h) && &((*h).h_secid_first_sector_in_short_sat)) {
 DFLOG(65, *(const unsigned int *)&((*h).h_secid_first_sector_in_short_sat));
 }
-(void)memcpy(&(h->h_num_sectors_in_short_sat), &buf[len], sizeof(h->h_num_sectors_in_short_sat)), len += sizeof(h->h_num_sectors_in_short_sat);
+ (void)memcpy(&(h->h_num_sectors_in_short_sat), &buf[len], sizeof(h->h_num_sectors_in_short_sat)), len += sizeof(h->h_num_sectors_in_short_sat);
  if ( (h) && &((*h).h_unused0)) {
 DFLOG(16, *(const unsigned int *)&((*h).h_unused0));
 }
 if ( (h) && &((*h).h_secid_first_directory)) {
 DFLOG(37, *(const unsigned int *)&((*h).h_secid_first_directory));
 }
-(void)memcpy(&(h->h_secid_first_sector_in_master_sat), &buf[len], sizeof(h->h_secid_first_sector_in_master_sat)), len += sizeof(h->h_secid_first_sector_in_master_sat);
+ (void)memcpy(&(h->h_secid_first_sector_in_master_sat), &buf[len], sizeof(h->h_secid_first_sector_in_master_sat)), len += sizeof(h->h_secid_first_sector_in_master_sat);
  if ( (h) && &((*h).h_secid_first_sector_in_master_sat)) {
 DFLOG(84, *(const unsigned int *)&((*h).h_secid_first_sector_in_master_sat));
 }
 if (buf) {
 DFLOG(23, *(const unsigned int *)buf);
 }
-(void)memcpy(&(h->h_num_sectors_in_master_sat), &buf[len], sizeof(h->h_num_sectors_in_master_sat)), len += sizeof(h->h_num_sectors_in_master_sat);
+ (void)memcpy(&(h->h_num_sectors_in_master_sat), &buf[len], sizeof(h->h_num_sectors_in_master_sat)), len += sizeof(h->h_num_sectors_in_master_sat);
  if ( (h) && ((*h).h_unused1)) {
 DFLOG(61, *(const unsigned int *)((*h).h_unused1));
 }
 if (buf) {
 DFLOG(62, *(const unsigned int *)buf);
 }
-for (i = 0; i < (sizeof(h->h_master_sat) / sizeof(h->h_master_sat[0])); i++)
+ for (i = 0; i < (sizeof(h->h_master_sat) / sizeof(h->h_master_sat[0])); i++)
   (void)memcpy(&(h->h_master_sat[i]), &buf[len], sizeof(h->h_master_sat[i])), len += sizeof(h->h_master_sat[i]);
 }
 
@@ -5525,7 +5894,7 @@ DFLOG(31, *(const unsigned int *)&((*h).h_byte_order));
 if ( (h) && ((*h).h_unused0)) {
 DFLOG(72, *(const unsigned int *)((*h).h_unused0));
 }
-if (h->h_magic != 0xE11AB1A1E011CFD0LL) {
+ if (h->h_magic != 0xE11AB1A1E011CFD0LL) {
  
 
 
@@ -5533,7 +5902,7 @@ if (h->h_magic != 0xE11AB1A1E011CFD0LL) {
   if ( (h) && &((*h).h_secid_first_directory)) {
 DFLOG(70, *(const unsigned int *)&((*h).h_secid_first_directory));
 }
-goto out;
+  goto out;
  }
  if (h->h_sec_size_p2 > 20) {
   ;
@@ -5554,7 +5923,7 @@ out:
  if ( (h) && ((*h).h_unused1)) {
 DFLOG(57, *(const unsigned int *)((*h).h_unused1));
 }
-return -1;
+ return -1;
 }
 
 
