@@ -25,7 +25,7 @@ test_seeds:angora:
   only:
     - master
 
-test_solutions:3:9:angora:
+test_solutions:3:10:angora:
   extends: .test_solutions
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
@@ -37,7 +37,7 @@ test_solutions:3:9:angora:
   only:
     - master
 
-test_solutions:4:9:angora:
+test_solutions:4:10:angora:
   extends: .test_solutions
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
@@ -49,7 +49,7 @@ test_solutions:4:9:angora:
   only:
     - master
 
-test_solutions:5:9:angora:
+test_solutions:5:10:angora:
   extends: .test_solutions
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
@@ -61,7 +61,7 @@ test_solutions:5:9:angora:
   only:
     - master
 
-test_solutions:6:9:angora:
+test_solutions:6:10:angora:
   extends: .test_solutions
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
@@ -74,7 +74,7 @@ test_solutions:6:9:angora:
   only:
     - master
 
-test_solutions:7:9:angora:
+test_solutions:7:10:angora:
   extends: .test_solutions
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
@@ -87,7 +87,7 @@ test_solutions:7:9:angora:
   only:
     - master
 
-test_solutions:8:9:angora:
+test_solutions:8:10:angora:
   extends: .test_solutions
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
@@ -100,7 +100,7 @@ test_solutions:8:9:angora:
   only:
     - master
 
-test_solutions:9:9:angora:
+test_solutions:9:10:angora:
   extends: .test_solutions
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
@@ -112,12 +112,13 @@ test_solutions:9:9:angora:
   only:
     - master
 
-test_solutions:9:10:angora:
+test_solutions:10:10:angora:
   extends: .test_solutions
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
   script:
     - tar -C 10 -xzf 10/solutions.tgz
+    - (cd 10 && ./patch_solutions.sh )
     - ./scripts/test-solution.py -p lava-ang 10/info.yaml
   dependencies:
     - build:angora

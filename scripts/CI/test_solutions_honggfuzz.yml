@@ -1,6 +1,6 @@
 ---
 
-test_solutions:3:9:honggfuzz:
+test_solutions:3:10:honggfuzz:
   extends: .test_solutions
   image: 
     name: registry.gitlab.com/rode0day/fuzzer-testing/i386/honggfuzz_runner:16.04
@@ -10,7 +10,7 @@ test_solutions:3:9:honggfuzz:
   dependencies:
     - build:hfuzz
 
-test_solutions:4:9:honggfuzz:
+test_solutions:4:10:honggfuzz:
   extends: .test_solutions
   image: 
     name: registry.gitlab.com/rode0day/fuzzer-testing/i386/honggfuzz_runner:16.04
@@ -20,7 +20,7 @@ test_solutions:4:9:honggfuzz:
   dependencies:
     - build:hfuzz
 
-test_solutions:5:9:honggfuzz:
+test_solutions:5:10:honggfuzz:
   extends: .test_solutions
   image: 
     name: registry.gitlab.com/rode0day/fuzzer-testing/i386/honggfuzz_runner:16.04
@@ -30,7 +30,7 @@ test_solutions:5:9:honggfuzz:
   dependencies:
     - build:hfuzz
 
-test_solutions:6:9:honggfuzz:
+test_solutions:6:10:honggfuzz:
   extends: .test_solutions
   image: 
     name: registry.gitlab.com/rode0day/fuzzer-testing/i386/honggfuzz_runner:16.04
@@ -41,7 +41,7 @@ test_solutions:6:9:honggfuzz:
   dependencies:
     - build:hfuzz
 
-test_solutions:7:9:honggfuzz:
+test_solutions:7:10:honggfuzz:
   extends: .test_solutions
   image: 
     name: registry.gitlab.com/rode0day/fuzzer-testing/i386/honggfuzz_runner:16.04
@@ -52,7 +52,7 @@ test_solutions:7:9:honggfuzz:
   dependencies:
     - build:hfuzz
 
-test_solutions:8:9:honggfuzz:
+test_solutions:8:10:honggfuzz:
   extends: .test_solutions
   image: 
     name: registry.gitlab.com/rode0day/fuzzer-testing/i386/honggfuzz_runner:16.04
@@ -63,12 +63,23 @@ test_solutions:8:9:honggfuzz:
   dependencies:
     - build:hfuzz
 
-test_solutions:9:9:honggfuzz:
+test_solutions:9:10:honggfuzz:
   extends: .test_solutions
   image: 
     name: registry.gitlab.com/rode0day/fuzzer-testing/i386/honggfuzz_runner:16.04
   script:
     - tar -C 9 -xzf 9/solutions.tgz
     - ./scripts/test-solution.py -p lava-hf 9/info.yaml
+  dependencies:
+    - build:hfuzz
+
+test_solutions:10:10:honggfuzz:
+  extends: .test_solutions
+  image: 
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/honggfuzz_runner:16.04
+  script:
+    - tar -C 10 -xzf 10/solutions.tgz
+    - (cd 10 && ./patch_solutions.sh )
+    - ./scripts/test-solution.py -p lava-hf 10/info.yaml
   dependencies:
     - build:hfuzz

@@ -13,6 +13,7 @@ include:
   - scripts/CI/base.yml
   - scripts/CI/test_solutions_gcc.yml
   - scripts/CI/test_solutions_afl-clang-fast.yml
+  - scripts/CI/test_solutions_afl-clang-fast-64.yml
   - scripts/CI/honggfuzz.yml
   - scripts/CI/test_solutions_honggfuzz.yml
   - scripts/CI/angora.yml
