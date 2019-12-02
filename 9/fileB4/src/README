@@ -1,0 +1,6 @@
+file 5.35 from https://github.com/file/file/releases/tag/FILE5_35
+
+Preprocessed and initialized. Both 32 and 64-bit source files merged into single files
+with an #IFDEF x86_64 to determine which source should be used
+
+Simplified makefile
