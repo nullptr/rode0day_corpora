@@ -70,7 +70,7 @@ EOM
 
 SECONDS=0
 if [ "$RUNC" = "singularity" ]; then
-    echo "$TARGETS" | xargs -I{} -P 10 sh -c "nohup ./scripts/submit_job.sh ${fuzzer} '{}' 2 --test > testing-singularity-${fuzzer}-{}.log"
+    echo "$TARGETS" | xargs -I{} -P 10 sh -c "nohup ./scripts/launch_job.sh ${fuzzer} '{}' 2 --test --no-sbatch > testing-singularity-${fuzzer}-{}.log"
 else
     echo "$TARGETS" | xargs -I{} -P 10 sh -c "nohup ./scripts/launch.sh --test --fuzzer ${fuzzer} -N 2 '{}' > testing-docker-${fuzzer}-{}.log"
 fi

@@ -9,9 +9,7 @@ bail() {
 [ -n "$TGT" ] || bail "TGT not defined"
 [ -n "$NF" ] || bail "num fuzzers (NF) not defined"
 
-SCRIPT_PATH="$(readlink -f $0)"
-BASE_DIR="$(dirname $(dirname $SCRIPT_PATH))"
-TGT_ROOT=$(find $BASE_DIR -mindepth 2 -maxdepth 2 -type d -name "$TGT" -printf "%p")
+TGT_ROOT=$(find -mindepth 2 -maxdepth 2 -type d -name "$TGT" -printf "%p")
 [ -d "$TGT_ROOT" ] || bail "failed to find TGT_ROOT"
 
 #

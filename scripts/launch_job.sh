@@ -31,6 +31,7 @@ ABV[angora]=ang
 
 FUZZ=${ABV[$FZ]}
 SIMG=${HOME}/s_images/${FZ}.sif
+USE_SBATCH=true
 
 while (( "$#" )); do
     case "$1" in
@@ -54,6 +55,10 @@ while (( "$#" )); do
             USE_DICT=1
             shift
             ;;
+        --no-sbatch)
+            USE_SBATCH=false
+            shift
+            ;;
         -h|--help)
             usage
             ;;
@@ -74,7 +79,7 @@ TGT_ROOT=$(find  -mindepth 2 -maxdepth 2 -type d -name "$TGT" -printf "%p")
 
 echo "[*] Using target: $TGT, fuzzer: $FZ ($FUZZ), n CPUs: $NF"
 
-if [ $(which sbatch 2>/dev/null) ]; then
+if $USE_SBATCH; then
 #      --partition="general,infiniband,gpu" \
 #      --partition="general" \
 sbatch --job-name="${FUZZ}.${TGT}.run"  \
