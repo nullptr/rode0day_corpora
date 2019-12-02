@@ -16,7 +16,7 @@
 .test_solutions:
   stage: test_solutions
   image: 
-    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/afl_runner:16.04
+    name: registry.gitlab.com/rode0day/fuzzer-testing/afl_runner:16.04
     entrypoint: [""]
   artifacts:
     paths:

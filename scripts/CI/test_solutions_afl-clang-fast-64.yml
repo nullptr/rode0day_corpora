@@ -1,69 +1,85 @@
 ---
 
-test_solutions:3:10:afl-clang-fast:
+test_solutions:3:10:afl-clang-fast-64:
   extends: .test_solutions
   script:
     - tar -C 3 -xzf 3/solutions.tgz
     - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml
   dependencies:
-    - build:afl-clang-fast
+    - build:afl-clang-fast-64
+  only:
+    - dev
 
-test_solutions:4:10:afl-clang-fast:
+test_solutions:4:10:afl-clang-fast-64:
   extends: .test_solutions
   script:
     - tar -C 4 -xzf 4/solutions.tgz
     - ./scripts/test-solution.py -p lava-afl-cf 4/info.yaml
   dependencies:
-    - build:afl-clang-fast
+    - build:afl-clang-fast-64
+  only:
+    - dev
 
-test_solutions:5:10:afl-clang-fast:
+test_solutions:5:10:afl-clang-fast-64:
   extends: .test_solutions
   script:
     - tar -C 5 -xzf 5/solutions.tgz
     - ./scripts/test-solution.py -p lava-afl-cf 5/info.yaml
   dependencies:
-    - build:afl-clang-fast
+    - build:afl-clang-fast-64
+  only:
+    - dev
 
-test_solutions:6:10:afl-clang-fast:
+test_solutions:6:10:afl-clang-fast-64:
   extends: .test_solutions
   script:
     - tar -C 6 -xzf 6/solutions.tgz
     - (cd 6 && ./patch_solutions.sh )
     - ./scripts/test-solution.py -p lava-afl-cf 6/info.yaml
   dependencies:
-    - build:afl-clang-fast
+    - build:afl-clang-fast-64
+  only:
+    - dev
 
-test_solutions:7:10:afl-clang-fast:
+test_solutions:7:10:afl-clang-fast-64:
   extends: .test_solutions
   script:
     - tar -C 7 -xzf 7/solutions.tgz
     - (cd 7 && ./patch_solutions.sh )
     - ./scripts/test-solution.py -p lava-afl-cf 7/info.yaml
   dependencies:
-    - build:afl-clang-fast
+    - build:afl-clang-fast-64
+  only:
+    - dev
 
-test_solutions:8:10:afl-clang-fast:
+test_solutions:8:10:afl-clang-fast-64:
   extends: .test_solutions
   script:
     - tar -C 8 -xzf 8/solutions.tgz
     - (cd 8 && ./patch_solutions.sh )
     - ./scripts/test-solution.py -p lava-afl-cf 8/info.yaml
   dependencies:
-    - build:afl-clang-fast
+    - build:afl-clang-fast-64
+  only:
+    - dev
 
-test_solutions:9:10:afl-clang-fast:
+test_solutions:9:10:afl-clang-fast-64:
   extends: .test_solutions
   script:
     - tar -C 9 -xzf 9/solutions.tgz
     - ./scripts/test-solution.py -p lava-afl-cf 9/info.yaml
   dependencies:
-    - build:afl-clang-fast
+    - build:afl-clang-fast-64
+  only:
+    - dev
 
-test_solutions:10:10:afl-clang-fast:
+test_solutions:10:10:afl-clang-fast-64:
   extends: .test_solutions
   script:
     - tar -C 10 -xzf 10/solutions.tgz
     - (cd 10 && ./patch_solutions.sh )
     - ./scripts/test-solution.py -p lava-afl-cf 10/info.yaml
   dependencies:
-    - build:afl-clang-fast
+    - build:afl-clang-fast-64
+  only:
+    - dev

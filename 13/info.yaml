@@ -10,6 +10,7 @@ challenges:
         binary_arguments: "--slurp '[. | . | {{ hello: . }}]' {input_file}"
         sample_inputs: ["inputs/fixed.json"]
         source_provided: false
+        timeout: 9000
 
     sqliteB3:
         challenge_id: 55

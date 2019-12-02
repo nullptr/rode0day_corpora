@@ -12,6 +12,7 @@ challenges:
         source_provided: true
         source_path: "src"
         known_bugs: 86
+        timeout: 9000
 
     fileB3:
         challenge_id: 28

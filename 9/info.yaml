@@ -31,7 +31,6 @@ challenges:
         source_provided: false
         known_bugs: 31
 
-
     jpegS2:
         challenge_id: 40
         architecture: "x86"

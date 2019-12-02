@@ -64,19 +64,17 @@ fileS4
 jpegS4
 jqB3
 sqliteB3
-fileS5
 jpegS5
 pcreB4
-sqliteB4
 EOM
 
 SECONDS=0
 if [ "$RUNC" = "singularity" ]; then
-    echo "$TARGETS" | xargs -I{} -P 10 sh -c "nohup ./scripts/submit_job.sh ${fuzzer} '{}' 2 --test > testing-singularity-${fuzzer}-{}.log"
+    echo "$TARGETS" | xargs -I{} -P 10 sh -c "nohup ./scripts/launch_job.sh ${fuzzer} '{}' 2 --test --no-sbatch > testing-singularity-${fuzzer}-{}.log"
 else
     echo "$TARGETS" | xargs -I{} -P 10 sh -c "nohup ./scripts/launch.sh --test --fuzzer ${fuzzer} -N 2 '{}' > testing-docker-${fuzzer}-{}.log"
 fi
 
 logfile="testing-${RUNC}-${fuzzer}.log"
-grep 'Finished' *${RUNC}*.log > $logfile
+grep -h 'Finished' *-${RUNC}-${fuzzer}-*.log > $logfile
 echo "[*] Finished in $SECONDS secs on $(date)" | tee -a $logfile

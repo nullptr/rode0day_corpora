@@ -8,7 +8,6 @@ NF="2"
 DIMG="${REGISTRY}/afl_runner:16.04"
 T23H="$(( 60 * 60 * 23 + 60 * 30 ))"
 T24H="$(( 60 * 60 * 23 ))"
-SCRIPT_DIR=$(dirname $0)
 
 
 usage() {
@@ -62,4 +61,5 @@ done
 
 check_docker_image $DIMG
 
+cd $(dirname $0)/../
 source $(dirname $0)/fuzz.sh

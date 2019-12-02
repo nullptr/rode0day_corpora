@@ -7,12 +7,13 @@ challenges:
         install_dir: "jqS"
         binary_path: "built/bin/jq"
         binary_args_COMMENT: "The binary_arguments string has python format strings so the {{ hello : . }} is escaped and should be treated as { hello : . }"
-        binary_arguments: "--slurp '[. | . | {{ hello: . }}]' {input_file} {install_dir}/built/share/fixed.json"
+        binary_arguments: "--slurp '[. | . | {{ hello: . }}]' {input_file}"
            
         sample_inputs: ["inputs/fixed.json"]
         source_provided: true
         source_path: "src"
         known_bugs: 64
+        timeout: 9000
 
     jqB:
         challenge_id: 23
@@ -25,6 +26,7 @@ challenges:
         sample_inputs: ["inputs/fixed.json"]
         source_provided: false
         known_bugs: 33
+        timeout: 9000
 
     pcre2B:
         challenge_id: 24
