@@ -7,6 +7,7 @@ build:gcc:
   artifacts:
     paths:
       - ./*/*/lava-gcc
+    expire_in: 1 year
 
 test_solutions:3:10:gcc:
   extends: .test_solutions

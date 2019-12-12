@@ -14,9 +14,12 @@ various fuzzers. Here's an example of building `hfuzz-clang` instrumented
 - Build the greps challenge: `./scripts/build.sh --docker honggfuzz --target greps`
 
 Or just download pre-built instrumented binaries (zip archives):
-- [afl-clang-fast](https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:all)
+- [afl-clang-fast](https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:afl-clang-fast)
 - [hfuzz-clang](https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:hfuzz)
 - [angora-clang](https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:angora)
+
+Non-instrumented, lava-logging enabled, compiled with gcc:
+- [lava-gcc](https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:gcc)
 
 
 
@@ -26,6 +29,9 @@ Or just download pre-built instrumented binaries (zip archives):
 **Quick Start**: If you want to fuzz the binaries with a pre-built 
 docker container, use the `build.sh` and `launch.sh` scripts.
 
+- *Optional*
+    - copy `example_db_config.json` to `db_config.json` 
+    - modify for your postgresql instance or the [monitor](/Rode0day/Monitoring) docker service
 - `./scripts/build.sh --prep` will download the binaries, copy a few required 
   files, and create default job config files.
 - `./scripts/launch.sh --fuzzer afl --pull -N 3 --test jpegb` will pull the 

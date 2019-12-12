@@ -25,8 +25,8 @@ IMAGES[angora]="${REGISTRY}/angora_runner:16.04"
 
 
 download_challenges() {
-    PREFIX="https://rode0day.mit.edu/static/corpora"
-    FILTER="--exclude=*/src --exclude=info.yaml --exclude=*.swp --keep-old-files"
+    local PREFIX="https://rode0day.mit.edu/static/corpora"
+    local FILTER="--exclude=*/src --exclude=info.yaml --exclude=*.swp --keep-old-files"
     for i in {3..14}; do mkdir -p "$i"; done
     wget -qO- ${PREFIX}/18.09_uioiary7291jsqeYOe6GLtdCIdtG9rFk.tar.gz | tar $FILTER -C 3 -xzf - 2>/dev/null
     wget -qO- ${PREFIX}/18.10_dRgl8DaTW6CVbmzCRBeS8cWCWzEKKpd5.tar.gz | tar $FILTER -C 4 -xzf - 2>/dev/null
@@ -45,14 +45,18 @@ download_challenges() {
 }
 
 create_job_files() {
+    if [ -e db_config.json ]; then
+        local MERGE="-M db_config.json"
+    fi
+
     for i in {3..14}; do
-#       ./scripts/create-configs.py --example 3/jpegb/afl_job.json --config afl_job.json --prefix lava-afl-cf -j AFL --yaml ${i}/info.yaml >/dev/null
-        ./scripts/create-configs.py --example 3/jpegb/afl_job.json --config afl_job.json -Q -j AFL --yaml ${i}/info.yaml >/dev/null
-        ./scripts/create-configs.py --example 3/jpegb/qsym_job.json --config qsym_job.json -Q -j QSYM --yaml ${i}/info.yaml >/dev/null
-        ./scripts/create-configs.py --example 3/jpegb/honggfuzz_job.json --config honggfuzz_job.json -Q -j HF --yaml ${i}/info.yaml >/dev/null
-#       ./scripts/create-configs.py --example 3/jpegb/honggfuzz_job.json --config honggfuzz_job.json --prefix lava-hf -j HF --yaml ${i}/info.yaml >/dev/null
-        ./scripts/create-configs.py --example 3/jpegb/eclipser_job.json --config eclipser_job.json -Q -j EC --yaml ${i}/info.yaml >/dev/null
-        ./scripts/create-configs.py --example 3/jpegb/angora_job.json --config angora_job.json --prefix lava-ang -j Ang --yaml ${i}/info.yaml >/dev/null
+#       ./scripts/create-configs.py -e 3/jpegb/afl_job.json -c afl_job.json -p lava-afl-cf -j AFL -y ${i}/info.yaml $MERGE >/dev/null
+        ./scripts/create-configs.py -e 3/jpegb/afl_job.json -c afl_job.json -Q -j AFL -y ${i}/info.yaml $MERGE >/dev/null
+        ./scripts/create-configs.py -e 3/jpegb/qsym_job.json -c qsym_job.json -Q -j QSYM -y ${i}/info.yaml $MERGE >/dev/null
+        ./scripts/create-configs.py -e 3/jpegb/honggfuzz_job.json -c honggfuzz_job.json -Q -j HF -y ${i}/info.yaml $MERGE >/dev/null
+#       ./scripts/create-configs.py -e 3/jpegb/honggfuzz_job.json -c honggfuzz_job.json -p lava-hf -j HF -y ${i}/info.yaml $MERGE >/dev/null
+        ./scripts/create-configs.py -e 3/jpegb/eclipser_job.json -c eclipser_job.json -Q -j EC -y ${i}/info.yaml $MERGE >/dev/null
+        ./scripts/create-configs.py -e 3/jpegb/angora_job.json -c angora_job.json -p lava-ang -j Ang -y ${i}/info.yaml $MERGE >/dev/null
     done
     echo "[*] all job config files creaetd!"
 }
@@ -187,8 +191,8 @@ build_one(){
 }
 
 build_comp() {
-    comp=${1:-3}
-    TGTS=$(find $comp/ -mindepth 1 -maxdepth 1 -type d -printf "%f ")
+    local comp=${1:-3}
+    local TGTS=$(find $comp/ -mindepth 1 -maxdepth 1 -type d -printf "%f ")
     for tgt in $TGTS; do
         [ -e ${comp}/${tgt}/src/Makefile ] || continue
         $FUNC "${comp}/${tgt}"

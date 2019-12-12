@@ -45,7 +45,7 @@ if [ "$USE_DICT" = "dict" ]; then
 fi
 
 if [ -e ${HOME}/Source/NU_${FZ}.luckyfuzz ]; then
-    cp ${HOME}/Source/NU_${FZ}.luckyfuzz $FDIR/.luckyfuzz
+    cp -f ${HOME}/Source/NU_${FZ}.luckyfuzz $FDIR/.luckyfuzz
     ls -la $FDIR/.luckyfuzz
 fi
 
@@ -54,17 +54,20 @@ if [ "$RUNC" = "singularity" ]; then
     TDIR="/tmp/$JOB_ID"
     mkdir -p "${TDIR}"
     AFL_NO_AFFINITY=1 \
-    singularity instance start -B "${TDIR}":/tmp $SIMG $CNAME -n $NF -t $FDIR
+    singularity instance start -B "${TDIR}":/tmp $SIMG $CNAME -n $NF -t $FDIR -M $CNAME
+    # singularity run -B "${TDIR}":/tmp $SIMG -n $NF -t $FDIR -M $CNAME
 else
     echo "[*] starting docker container $CNAME"
     docker run -d --rm --name $CNAME -v $FDIR:$FDIR -w $FDIR --cap-add=SYS_PTRACE \
         -e "QEMU_RESERVED_VA=0xf700000" --hostname "$(hostname)-docker-${TGT}" \
-        --pid=host $DIMG -n $NF -t $FDIR
+        --pid=host --ulimit "core=0" $DIMG -n $NF -t $FDIR -M $CNAME
 fi
 
 handle_term(){
     echo "[*] Caught SIGTERM signal, shutting down!"
+    [ "$RUNC" = "singularity" ] &&  singularity exec $SIMG /start_fuzzing --stop
     [ "$RUNC" = "singularity" ] &&  singularity instance stop -s TERM $CNAME
+    [ "$RUNC" = "docker" ] && docker exec $CNAME /start_fuzzing --stop
     [ "$RUNC" = "docker" ] && docker stop -t 30 $CNAME
     exit 0
 }
@@ -81,6 +84,8 @@ get_coverage() {
     if [ "$RUNC" = "singularity" ]; then
         singularity exec instance://${CNAME} make-gcov-src.sh
         singularity exec instance://${CNAME} afl-stats -c ${FZ}_job.json -s -g --afl-drcov -j 4
+        # singularity exec $SIMG make-gcov-src.sh
+        # singularity exec $SIMG afl-stats -c ${FZ}_job.json -s -g --afl-drcov -j 4
     else
         docker exec $CNAME make-gcov-src.sh
         docker exec $CNAME afl-stats -c ${FZ}_job.json -s -g --afl-drcov -j 4

@@ -5,8 +5,13 @@ import copy
 import json
 import os
 import sys
-import yaml
 from collections import OrderedDict
+#  try to load yaml, fail gracefully
+try:
+    import yaml
+except ImportError:
+    pass
+
 
 COMPS = {2: '18.07',
          3: '18.09',
@@ -25,11 +30,11 @@ COMPS = {2: '18.07',
 
 def parse_args():
     p = argparse.ArgumentParser(description="create/update config file[s] for fuzzing jobs")
-    p.add_argument("--example", default=None, required=True, help="Template job config file")
-    p.add_argument("--yaml", default=None, help="Rode0day 'info.yaml' file (create all job configs)")
-    p.add_argument("--config", default="job.json", help="Job config filename (default=job.json)")
+    p.add_argument("-e", "--example", default=None, required=True, help="Template job config file")
+    p.add_argument("-y", "--yaml", default=None, help="Rode0day 'info.yaml' file (create all job configs)")
+    p.add_argument("-c", "--config", default="job.json", help="Job config filename (default=job.json)")
     p.add_argument("-j", "--name",  default="AFL", help="Job name prefix (default=AFL)")
-    p.add_argument("--prefix", default=None, help="binary path prefix (lava-install)")
+    p.add_argument("-p", "--prefix", default=None, help="binary path prefix (lava-install)")
     p.add_argument("--fuzzer", default=None, help="path to fuzzer binary")
     p.add_argument("--input", default="inputs", help="seed directory")
     p.add_argument("--output", default="outputs", help="sync directory")
@@ -47,6 +52,7 @@ def parse_args():
     p.add_argument("--afl-dumb", dest="dumb", default=None, help="AFL fuzz without instrumentation (dumb mode)")
     p.add_argument("--environment", default=None, help="Environment variables, comma separated list of VAR=VAL ")
     p.add_argument("--extras", default=None, help="Extra options, comma separate list of var=val")
+    p.add_argument("-M", "--merge", default=None, help="Merge example with extra config file")
     p.add_argument("-F", "--force-new-job", default=False, action='store_true',
                    dest='submit_force', help="Do not prompt to create new job")
     return p.parse_args()
@@ -75,6 +81,17 @@ def update_with_args(args, example):
             continue
         if v is not None:
             example[k] = v
+    if args.merge is not None:
+        merge_with_config(example, args.merge)
+
+
+def merge_with_config(example, config_path):
+    if not os.path.isfile(config_path):
+        print("[-] extra config file not found ({})!".format(config_path))
+        return
+    with open(config_path) as f:
+        extra = ordered_load_json(f)
+    example.update(extra)
 
 
 def build_description(args, data, comp_date):
@@ -102,6 +119,34 @@ def write_config(config, path):
     json.dump(config, open(path, 'w'), indent=4)
 
 
+def update_from_yaml(args, data, cfg):
+    d = data
+    binary_args = {'input_file': '@@', 'install_dir': '.'}
+    if 'challenge_id' in d:
+        cfg['target_info']['challenge_id'] = d['challenge_id']
+    if 'architecture' in d:
+        if d['architecture'] == 'x86_64':
+            cfg['fuzzer'] = cfg['fuzzer'].replace('i386', 'bin')
+            cfg['_docker'] = cfg['_docker'].replace('i386/', '')
+        cfg['target_info']['architecture'] = d['architecture']
+    if 'known_bugs' in d:
+        cfg['target_info']['known_bugs'] = d['known_bugs']
+    if 'install_dir' in d:
+        cfg['session'] = d['install_dir']
+        cfg['name'] = "{} {} XXXX".format(args.name, d['install_dir'])
+    if 'binary_path' in d:
+        if args.prefix:
+            bin_path = d['binary_path'].replace("built/", "")
+            cfg['target'] = "./{}/{}".format(args.prefix, bin_path)
+        else:
+            cfg['target'] = "./{}".format(d['binary_path'])
+        cfg['drcov_target'] = "./{}".format(d['binary_path'])
+    if 'binary_arguments' in d:
+        cfg['cmdline'] = d['binary_arguments'].format(**binary_args)
+    if 'timeout' in d:
+        cfg['timeout'] = d['timeout']
+
+
 def create_jobs_from_yaml(args, example):
     with open(args.yaml) as f:
         basedir = os.path.dirname(os.path.abspath(args.yaml))
@@ -109,7 +154,6 @@ def create_jobs_from_yaml(args, example):
 
     comp_date = COMPS[data['rode0day_id']]
 
-    binary_args = {'input_file': '@@', 'install_dir': '.'}
     for name, d in data['challenges'].items():
         sys.stdout.write("{};".format(name))
         new_cfg = copy.deepcopy(example)
@@ -117,29 +161,8 @@ def create_jobs_from_yaml(args, example):
         for k, v in d.items():
             sys.stdout.write("{};".format(v))
         new_cfg['target_info']['name'] = name
-        if 'challenge_id' in d:
-            new_cfg['target_info']['challenge_id'] = d['challenge_id']
-        if 'architecture' in d:
-            if d['architecture'] == 'x86_64':
-                new_cfg['fuzzer'] = new_cfg['fuzzer'].replace('i386', 'bin')
-                new_cfg['_docker'] = new_cfg['_docker'].replace('i386/', '')
-            new_cfg['target_info']['architecture'] = d['architecture']
-        if 'known_bugs' in d:
-            new_cfg['target_info']['known_bugs'] = d['known_bugs']
-        if 'install_dir' in d:
-            new_cfg['session'] = d['install_dir']
-            new_cfg['name'] = "{} {} XXXX".format(args.name, d['install_dir'])
-        if 'binary_path' in d:
-            if args.prefix:
-                bin_path = d['binary_path'].replace("built/", "")
-                new_cfg['target'] = "./{}/{}".format(args.prefix, bin_path)
-            else:
-                new_cfg['target'] = "./{}".format(d['binary_path'])
-            new_cfg['drcov_target'] = "./{}".format(d['binary_path'])
-        if 'binary_arguments' in d:
-            new_cfg['cmdline'] = d['binary_arguments'].format(**binary_args)
-        if 'timeout' in d:
-            new_cfg['timeout'] = d['timeout']
+
+        update_from_yaml(args, d, new_cfg)
 
         new_cfg['description'] = build_description(args, d, comp_date)
         new_cfg['target_info']['source'] = "rode0day 20{}".format(comp_date)
@@ -161,6 +184,9 @@ def main():
             example = ordered_load_json(f)
 
     if args.yaml and example:
+        if 'yaml' not in sys.modules:
+            print("[-] Error yaml module not found, aborting!")
+            sys.exit(1)
         if os.path.exists(args.yaml):
             create_jobs_from_yaml(args, example)
             return

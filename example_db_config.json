@@ -1,0 +1,8 @@
+{
+    "database": {
+      "name": "fuzzing",
+      "user": "postgres",
+      "host": "localhost",
+      "db_passwd": "DefaultPGPassword"
+        }
+}
