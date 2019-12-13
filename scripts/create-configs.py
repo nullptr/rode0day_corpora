@@ -135,12 +135,14 @@ def update_from_yaml(args, data, cfg):
         cfg['session'] = d['install_dir']
         cfg['name'] = "{} {} XXXX".format(args.name, d['install_dir'])
     if 'binary_path' in d:
+        bin_path = d['binary_path'].replace("built/", "")
         if args.prefix:
-            bin_path = d['binary_path'].replace("built/", "")
             cfg['target'] = "./{}/{}".format(args.prefix, bin_path)
         else:
             cfg['target'] = "./{}".format(d['binary_path'])
         cfg['drcov_target'] = "./{}".format(d['binary_path'])
+        if 'lava_target' in cfg:
+            cfg['lava_target'] = "./lava-gcc/{}".format(bin_path)
     if 'binary_arguments' in d:
         cfg['cmdline'] = d['binary_arguments'].format(**binary_args)
     if 'timeout' in d:

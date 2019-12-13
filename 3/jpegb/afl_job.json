@@ -5,7 +5,7 @@
     "output": "outputs",
     "target": "./bin/memdjpeg",
     "drcov_target": "./bin/memdjpeg",
-    "lava_target": "./lava_gcc/bin/memdjpeg",
+    "lava_target": "./lava-gcc/bin/memdjpeg",
     "cmdline": "@@",
     "qemu": true,
     "mem_limit":"4096",
