@@ -33,6 +33,7 @@ build:afl-clang-fast:
   artifacts:
     paths:
       - ./*/*/lava-afl-cf
+    expire_in: 6 mos
 
 build:gcc-64:
   extends: .build

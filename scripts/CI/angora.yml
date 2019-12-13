@@ -9,6 +9,7 @@ build:angora:
   artifacts:
     paths:
       - ./*/*/lava-ang
+    expire_in: 6 mos
   only:
     - master
 
