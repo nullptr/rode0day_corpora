@@ -46,7 +46,7 @@ download_challenges() {
 
 create_job_files() {
     if [ -e db_config.json ]; then
-        local MERGE="-M db_config.json"
+        local MERGE="--merge db_config.json"
     fi
 
     for i in {3..14}; do
@@ -58,7 +58,7 @@ create_job_files() {
         ./scripts/create-configs.py -e 3/jpegb/eclipser_job.json -c eclipser_job.json -Q -j EC -y ${i}/info.yaml $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/angora_job.json -c angora_job.json -p lava-ang -j Ang -y ${i}/info.yaml $MERGE >/dev/null
     done
-    echo "[*] all job config files creaetd!"
+    echo "[*] all job config files created!"
 }
 
 copy_required_files() {
