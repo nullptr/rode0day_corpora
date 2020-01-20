@@ -140,7 +140,7 @@ def update_from_yaml(args, data, cfg):
             cfg['target'] = "./{}/{}".format(args.prefix, bin_path)
         else:
             cfg['target'] = "./{}".format(d['binary_path'])
-        cfg['drcov_target'] = "./{}".format(d['binary_path'])
+        cfg['drcov_target'] = "./lava-gcc/{}".format(bin_path)
         if 'lava_target' in cfg:
             cfg['lava_target'] = "./lava-gcc/{}".format(bin_path)
     if 'binary_arguments' in d:

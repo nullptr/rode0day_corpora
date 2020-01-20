@@ -197,10 +197,11 @@ class VerifyWorker(object):
             logger.error("timeout expired for: %s", input_file)
             p.kill()
             return r
-        r['returncode'] = p.returncode
+        finally:
+            if self.use_stdin:
+                stdin_fd.close()
 
-        if self.use_stdin:
-            stdin_fd.close()
+        r['returncode'] = p.returncode
 
         lava = serr.find(b'LAVALOG:')
         if lava > 0:

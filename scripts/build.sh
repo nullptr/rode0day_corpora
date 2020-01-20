@@ -44,6 +44,12 @@ download_challenges() {
     echo "[*] all challenges downloaded!"
 }
 
+download_lava_gcc() {
+    wget -qO /tmp/lava_gcc.zip https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:gcc 2>/dev/null
+    python3 -m zipfile -e /tmp/lava_gcc.zip .
+    rm -f /tmp/lava_gcc.zip
+}
+
 create_job_files() {
     if [ -e db_config.json ]; then
         local MERGE="--merge db_config.json"
@@ -83,7 +89,8 @@ copy_required_files() {
 }
 
 do_prep() {
-    download_challenges
+#   download_challenges
+    download_lava_gcc
     create_job_files
     copy_required_files
     echo "[*] setup complete! Ready to fuzz uninstrumented binaries or compile instrumented ones."

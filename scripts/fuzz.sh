@@ -58,25 +58,11 @@ if [ "$RUNC" = "singularity" ]; then
     # singularity run -B "${TDIR}":/tmp $SIMG -n $NF -t $FDIR -M $CNAME
 else
     echo "[*] starting docker container $CNAME"
-    docker run -d --rm --name $CNAME -v $FDIR:$FDIR -w $FDIR --cap-add=SYS_PTRACE \
+    docker run -d --rm --name $CNAME -v $FDIR:$FDIR -w $FDIR \
+        --cap-add=SYS_PTRACE --security-opt seccomp=unconfined \
         -e "QEMU_RESERVED_VA=0xf700000" --hostname "$(hostname)-docker-${TGT}" \
         --pid=host --ulimit "core=0" $DIMG -n $NF -t $FDIR -M $CNAME
 fi
-
-handle_term(){
-    echo "[*] Caught SIGTERM signal, shutting down!"
-    [ "$RUNC" = "singularity" ] &&  singularity exec $SIMG /start_fuzzing --stop
-    [ "$RUNC" = "singularity" ] &&  singularity instance stop -s TERM $CNAME
-    [ "$RUNC" = "docker" ] && docker exec $CNAME /start_fuzzing --stop
-    [ "$RUNC" = "docker" ] && docker stop -t 30 $CNAME
-    exit 0
-}
-
-trap handle_term SIGTERM SIGINT SIGHUP
-
-[ -e $HOME/.local/bin/rsync_results.sh ] && source $HOME/.local/bin/rsync_results.sh
-
-sleep $(( $T23H - $SECONDS ))
 
 get_coverage() {
     echo "[*] Getting coverage.  Elapsed = $SECONDS  $(date)"
@@ -90,11 +76,34 @@ get_coverage() {
         docker exec $CNAME make-gcov-src.sh
         docker exec $CNAME afl-stats -c ${FZ}_job.json -s -g --afl-drcov -j 4
     fi
+    echo "[*] Coverage finished.  Elapsed = $SECONDS  $(date)"
 }
 
-[ -d ${FDIR}/src ] && get_coverage
+stop_signularity() {
+    singularity exec $SIMG /start_fuzzing --stop
+    sleep 5s
+    singularity instance stop -s TERM $CNAME
+}
 
-echo "[*] Coverage finished.  Elapsed = $SECONDS  $(date)"
+stop_docker() {
+    docker exec $CNAME /start_fuzzing --stop
+    sleep 5s
+    docker stop -t 30 $CNAME
+}
+
+handle_term(){
+    echo "[*] Caught SIGTERM signal, shutting down!"
+    [ "$RUNC" = "singularity" ] &&  stop_singularity
+    [ "$RUNC" = "docker" ] && stop_docker
+    exit 0
+}
+
+trap handle_term SIGTERM SIGINT SIGHUP
+
+[ -e $HOME/.local/bin/rsync_results.sh ] && source $HOME/.local/bin/rsync_results.sh
+
+sleep $(( $T23H - $SECONDS ))
+
 sleep $(( $T24H - $SECONDS ))
 
 N_QUEUE=$(ls ${FDIR}/outputs/*/queue/* | wc -l)
@@ -104,8 +113,14 @@ N_CRASHES=$(ls ${FDIR}/outputs/*/crashes/* | wc -l)
 printf "[*] Finished fuzzing %-14s: Elapsed=${SECONDS}s  $(date +'%F %T') Queue=$N_QUEUE Crashes=$N_CRASHES\n" $TGT
 
 if [ "$RUNC" = "singularity" ]; then
-    singularity instance stop -s TERM -t 30 $CNAME
+    stop_singularity
     rm -Rf $FDIR
     exit 0
 fi
-[ "$RUNC" = "docker" ] && docker stop -t 30 $CNAME
+
+if [ "$RUNC" = "docker" ]; then
+    docker exec $CNAME /start_fuzzing --stop
+    [ -d ${FDIR}/src ] && get_coverage
+    sleep 15s
+    docker stop -t 30 $CNAME
+fi
