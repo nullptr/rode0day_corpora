@@ -24,6 +24,26 @@ IMAGES[honggfuzz64]="${REGISTRY}/honggfuzz_runner:16.04"
 IMAGES[angora]="${REGISTRY}/angora_runner:16.04"
 
 
+download_lava_gcc() {
+    wget -qO /tmp/lava_gcc.zip https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:gcc 2>/dev/null
+    python3 -m zipfile -e /tmp/lava_gcc.zip .
+    rm -f /tmp/lava_gcc.zip
+    chmod +x */*/lava-gcc/bin/*
+}
+
+download_prebuilt() {
+    declare -A JOBURLS
+    JOBURLS[gcc]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:gcc"
+    JOBURLS[afl-clang-fast]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:afl-clang-fast"
+    JOBURLS[hfuzz-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:hfuzz"
+    JOBURLS[angora-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:angora"
+
+    wget -qO /tmp/lava.zip $JOBURLS[$1] 2>/dev/null
+    python3 -m zipfile -e /tmp/lava.zip
+    rm -f /tmp/lava.zip
+    chmod +x */*/lava-*/bin/*
+}
+
 download_challenges() {
     local PREFIX="https://rode0day.mit.edu/static/corpora"
     local FILTER="--exclude=*/src --exclude=info.yaml --exclude=*.swp --keep-old-files"
@@ -42,12 +62,6 @@ download_challenges() {
     rm -Rf 13/jpegS4/built && mv 13/jpegS4/build 13/jpegS4/built
     wget -qO- ${PREFIX}/19.11_AEXUadf28ERWHUISDFHIUSDChiuaefa2.tar.gz | tar $FILTER -C 14 -xzf - 2>/dev/null
     echo "[*] all challenges downloaded!"
-}
-
-download_lava_gcc() {
-    wget -qO /tmp/lava_gcc.zip https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:gcc 2>/dev/null
-    python3 -m zipfile -e /tmp/lava_gcc.zip .
-    rm -f /tmp/lava_gcc.zip
 }
 
 create_job_files() {
@@ -290,6 +304,10 @@ do
             ;;
         --download)
             download_challenges
+            exit 0
+            ;;
+        --prebuilt)
+            download_prebuilt $1
             exit 0
             ;;
         --create-configs)

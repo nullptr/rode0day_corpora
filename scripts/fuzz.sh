@@ -68,9 +68,8 @@ get_coverage() {
     echo "[*] Getting coverage.  Elapsed = $SECONDS  $(date)"
     cd $FDIR
     if [ "$RUNC" = "singularity" ]; then
-        singularity exec instance://${CNAME} make-gcov-src.sh
+        singularity exec $SIMG make-gcov-src.sh
         singularity exec instance://${CNAME} afl-stats -c ${FZ}_job.json -s -g --afl-drcov -j 4
-        # singularity exec $SIMG make-gcov-src.sh
         # singularity exec $SIMG afl-stats -c ${FZ}_job.json -s -g --afl-drcov -j 4
     else
         docker exec $CNAME make-gcov-src.sh
@@ -106,15 +105,26 @@ sleep $(( $T23H - $SECONDS ))
 
 sleep $(( $T24H - $SECONDS ))
 
-N_QUEUE=$(ls ${FDIR}/outputs/*/queue/* | wc -l)
-N_CRASHES=$(ls ${FDIR}/outputs/*/crashes/* | wc -l)
-# A_QUEUE=$(ls ${FDIR}/outputs/angora/queue/* | wc -l)
-# Q_QUEUE=$(ls ${FDIR}/outputs/*Q*/queue/* | wc -l)
-printf "[*] Finished fuzzing %-14s: Elapsed=${SECONDS}s  $(date +'%F %T') Queue=$N_QUEUE Crashes=$N_CRASHES\n" $TGT
+local N_QUEUE=$(ls ${FDIR}/outputs/*/queue/* | wc -l)
+local N_CRASHES=$(ls ${FDIR}/outputs/*/crashes/* | wc -l)
+local MESSAGE="Queue=$N_QUEUE Crashes=$N_CRASHES"
+
+if [ "$FZ" = "angora" ]; then
+    local A_QUEUE=$(ls ${FDIR}/outputs/angora/queue/* | wc -l)
+    MESSAGE="$MESSAGE Ang-Q=$A_QUEUE"
+fi
+
+if [ "$FZ" = "qsym" ]; then
+    local Q_QUEUE=$(ls ${FDIR}/outputs/*Q*/queue/* | wc -l)
+    MESSAGE="$MESSAGE Qsym-Q=$Q_QUEUE"
+fi
+
+printf "[*] Finished fuzzing %-14s: Elapsed=${SECONDS}s  $(date +'%F %T') $MESSAGE\n" $TGT
 
 if [ "$RUNC" = "singularity" ]; then
-    stop_singularity
-    rm -Rf $FDIR
+    singularity exec $SIMG /start_fuzzing --stop
+    [ -d ${FDIR}/src ] && get_coverage
+    sleep 15s
     exit 0
 fi
 
