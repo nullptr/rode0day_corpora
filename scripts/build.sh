@@ -70,7 +70,7 @@ create_job_files() {
     fi
 
     for i in {3..14}; do
-#       ./scripts/create-configs.py -e 3/jpegb/afl_job.json -c afl_job.json -p lava-afl-cf -j AFL -y ${i}/info.yaml $MERGE >/dev/null
+#       ./scripts/create-configs.py -e 3/jpegb/afl_job.json -c afl_job.json -p lava-afl-cf -j AFL -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/afl_job.json -c afl_job.json -Q -j AFL -y ${i}/info.yaml $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/qsym_job.json -c qsym_job.json -Q -j QSYM -y ${i}/info.yaml $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/honggfuzz_job.json -c honggfuzz_job.json -Q -j HF -y ${i}/info.yaml $MERGE >/dev/null

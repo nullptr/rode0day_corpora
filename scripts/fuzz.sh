@@ -123,14 +123,12 @@ printf "[*] Finished fuzzing %-14s: Elapsed=${SECONDS}s  $(date +'%F %T') $MESSA
 
 if [ "$RUNC" = "singularity" ]; then
     singularity exec $SIMG /start_fuzzing --stop
-    [ -d ${FDIR}/src ] && get_coverage
     sleep 15s
     exit 0
 fi
 
 if [ "$RUNC" = "docker" ]; then
     docker exec $CNAME /start_fuzzing --stop
-    [ -d ${FDIR}/src ] && get_coverage
     sleep 15s
-    docker stop -t 30 $CNAME
+    echo docker stop -t 30 $CNAME
 fi
