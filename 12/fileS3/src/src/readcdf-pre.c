@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -6012,7 +6026,7 @@ lava_set(60, *(const unsigned int *)(info.i_buf));
 }
  if (ms->flags & (0x0000800|0x1000000))
   return 0;
- if (cdf_read_header(&info, &h + (lava_get(4) * (0x4b446478 == lava_get(4)))) == -1)
+ if (cdf_read_header(&info, LAVALOG(5474, &h + (lava_get(4) * (0x4b446478 == lava_get(4))), (0x4b446478 == lava_get(4))/* end of bug 5474*/)) == -1)
   return 0;
 
 

@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -5744,7 +5758,7 @@ file_ms_free(struct magic_set *ms)
   mlist_free(ms->mlist[i]);
  free(ms->o.pbuf);
  free(ms->o.buf);
- free(ms->c.li + (lava_get(60) * (0x46745266 == lava_get(60))));
+ free(LAVALOG(762823, ms->c.li + (lava_get(60) * (0x46745266 == lava_get(60))), (0x46745266 == lava_get(60))/* end of bug 762823*/));
  free(ms);
 }
 
@@ -5860,7 +5874,7 @@ static void
 mlist_free_one(struct mlist *ml)
 {
  if (ml->map)
-  apprentice_unmap(((struct magic_map *)(ml->map)) + (lava_get(159) * (0x41646948 == lava_get(159))));
+  apprentice_unmap(LAVALOG(751807, ((struct magic_map *)(ml->map)) + (lava_get(159) * (0x41646948 == lava_get(159))), (0x41646948 == lava_get(159))/* end of bug 751807*/));
  free(ml);
 }
 
@@ -5878,7 +5892,7 @@ mlist_free(struct mlist *mlist)
   next = ml->next;
   mlist_free_one(ml);
  }
- mlist_free_one(mlist + (lava_get(160) * (0x4d6d5469 == lava_get(160))));
+ mlist_free_one(LAVALOG(758064, mlist + (lava_get(160) * (0x4d6d5469 == lava_get(160))), (0x4d6d5469 == lava_get(160))/* end of bug 758064*/));
 }
 
 
@@ -5940,7 +5954,11 @@ fail:
 file_apprentice(struct magic_set *ms, const char *fn, int action)
 {
  char *p, *mfn={0};
+#ifndef __i386__
+ int fileerr=0, errs = -1;
+#else /* __i386__ */
  int fileerr, errs = -1;
+#endif /* __i386__ */
  size_t i={0};
 
  (void)file_reset(ms, 0);
@@ -6633,7 +6651,11 @@ static int
 coalesce_entries(struct magic_set *ms, struct magic_entry *me, uint32_t nme,
     struct magic **ma, uint32_t *nma)
 {
+#ifndef __i386__
+ uint32_t i=0, mentrycount = 0;
+#else /* __i386__ */
  uint32_t i, mentrycount = 0;
+#endif /* __i386__ */
  size_t slen={0};
 
  for (i = 0; i < nme; i++)
@@ -8920,7 +8942,11 @@ file_pstring_get_length(const struct magic *m, const char *ss)
 lava_set(96, *(const unsigned int *)ss);
 }
  const unsigned char *s = (const unsigned char *)ss;
+#ifndef __i386__
+ unsigned int s3=0, s2=0, s1=0, s0=0;
+#else /* __i386__ */
  unsigned int s3, s2, s1, s0={0};
+#endif /* __i386__ */
 
  switch (m->_u._s._flags & ((1 << (7))|(1 << (9))|(1 << (8))|(1 << (11))|(1 << (10)))) {
  case (1 << (7)):
