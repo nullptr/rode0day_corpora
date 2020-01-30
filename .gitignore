@@ -5,6 +5,7 @@
 magic.h
 bin
 built
+solutions
 __pycache__
 test*
 build_script

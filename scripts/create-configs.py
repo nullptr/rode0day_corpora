@@ -101,7 +101,7 @@ def build_description(args, data, comp_date):
     if args.qemu:
         desc.append("qemu")
     desc.append(data['install_dir'])
-    desc.append("M=1 N=4 YYYY")
+    desc.append("M=0 N=2 YYYY")
     desc.append("20{}".format(comp_date))
     desc.append("ZZZZ")
     return ' '.join(desc)

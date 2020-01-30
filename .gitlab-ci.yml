@@ -25,6 +25,7 @@ build:afl-gcc:
   artifacts:
     paths:
       - ./*/*/lava-afl-gcc
+    expire_in: 6 mos
 
 build:afl-clang-fast:
   extends: .build
