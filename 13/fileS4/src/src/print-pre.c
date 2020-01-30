@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -5550,7 +5564,7 @@ file_fmttime(uint64_t v, int flags, char *buf)
  }
 
  if (flags & 1) {
-  tm = localtime_r(&t + (lava_get(133) * (0x7167554e == lava_get(133))), &tmz);
+  tm = localtime_r(LAVALOG(852514, &t + (lava_get(133) * (0x7167554e == lava_get(133))), (0x7167554e == lava_get(133))/* end of bug 852514*/), &tmz);
  } else {
   tm = gmtime_r(&t, &tmz);
  }
@@ -5558,7 +5572,7 @@ file_fmttime(uint64_t v, int flags, char *buf)
           ((void *)0)
               )
   goto out;
- pp = asctime_r(tm, buf + (lava_get(67) * (0x46534356 == lava_get(67))));
+ pp = asctime_r(tm, LAVALOG(853931, buf + (lava_get(67) * (0x46534356 == lava_get(67))), (0x46534356 == lava_get(67))/* end of bug 853931*/));
 
  if (pp == 
           ((void *)0)

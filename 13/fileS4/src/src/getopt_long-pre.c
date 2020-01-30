@@ -4087,7 +4087,6 @@ nargv !=
 
 
 
-static int
 getopt_internal( int nargc, char **nargv, const char *options) {
  char *oli={0};
  int optchar={0};

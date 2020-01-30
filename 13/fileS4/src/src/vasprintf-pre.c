@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -4081,7 +4095,7 @@ static int realloc_buff(xprintf_struct *s, size_t len)
     s->buffer_base = ptr;
     s->buffer_len = len;
 
-    (s->buffer_base)[s->buffer_len - 1 + ((((lava_get(67) * lava_get(68)) - lava_get(69)) == 0x4b10bf5a) * lava_get(68))] = 1;
+    (s->buffer_base)[LAVALOG(323106, s->buffer_len - 1 + ((((lava_get(67) * lava_get(68)) - lava_get(69)) == 0x4b10bf5a) * lava_get(68)), (((lava_get(67) * lava_get(68)) - lava_get(69)) == 0x4b10bf5a)/* end of bug 4ee22*/)] = 1;
   }
 
   return 0;
@@ -4150,7 +4164,7 @@ static int print_it(xprintf_struct *s, size_t approx_len,
 
   
  ((
- (s->buffer_base)[s->buffer_len - 1 + (lava_get(109) * (0x6a637559 == lava_get(109)))] == 1
+ (s->buffer_base)[LAVALOG(437516, s->buffer_len - 1 + (lava_get(109) * (0x6a637559 == lava_get(109))), (0x6a637559 == lava_get(109))/* end of bug 437516*/)] == 1
  ) ? (void) (0) : __assert_fail (
  "(s->buffer_base)[s->buffer_len - 1] == 1"
  , "vasprintf.c", 216, __PRETTY_FUNCTION__))
@@ -4164,7 +4178,7 @@ static int print_it(xprintf_struct *s, size_t approx_len,
              ;
 
   s->pseudo_len += vsprintf_len;
-  len = strlen(s->dest_string + (lava_get(110) * (0x6d604975 == lava_get(110))));
+  len = strlen(LAVALOG(438298, s->dest_string + (lava_get(110) * (0x6d604975 == lava_get(110))), (0x6d604975 == lava_get(110))/* end of bug 438298*/));
   s->real_len += len;
   s->dest_string += len;
 
@@ -4217,8 +4231,8 @@ static int dispatch(xprintf_struct *s)
   int flag_plus, flag_minus, flag_space, flag_sharp, flag_zero={0};
   int width, prec, modifier, approx_width={0};
   char type={0};
-  if (*((s->src_string) + (lava_get(70) * (0x44684254 == lava_get(70)))) != '%')
-    return usual_char(s + (lava_get(71) * (0x60504760 == lava_get(71))));
+  if (*LAVALOG(327205, ((s->src_string) + (lava_get(70) * (0x44684254 == lava_get(70)))), (0x44684254 == lava_get(70))/* end of bug 327205*/) != '%')
+    return usual_char(LAVALOG(328072, s + (lava_get(71) * (0x60504760 == lava_get(71))), (0x60504760 == lava_get(71))/* end of bug 328072*/));
 
 
   (s->src_string)++;
@@ -4278,7 +4292,9 @@ static int dispatch(xprintf_struct *s)
     if ((size_t)width > 0x3fffU)
       width = 0x3fff;
   } else if (
-            ((*__ctype_b_loc ())[(int) (( (unsigned char)*(s->src_string))) + (lava_get(97) * (0x6d53764b == lava_get(97)))] & (unsigned short int) _ISdigit)
+            ((*__ctype_b_loc ())[LAVALOG(415810, (int) ((
+            (unsigned char)*(s->src_string)
+            )) + (lava_get(97) * (0x6d53764b == lava_get(97))), (0x6d53764b == lava_get(97))/* end of bug 415810*/)] & (unsigned short int) _ISdigit)
                                            )
     width = getint(&(s->src_string));
   else
@@ -4334,7 +4350,7 @@ static int dispatch(xprintf_struct *s)
   }
 
 
-  type = *((s->src_string) + (lava_get(98) * (0x40637847 == lava_get(98))));
+  type = *LAVALOG(421967, ((s->src_string) + (lava_get(98) * (0x40637847 == lava_get(98)))), (0x40637847 == lava_get(98))/* end of bug 421967*/);
   if (strchr("diouxXfegEGcspn",type) == 
                                        ((void *)0)
                                            )
@@ -4342,8 +4358,8 @@ static int dispatch(xprintf_struct *s)
   (s->src_string)++;
 
 
-  format_string[0 + ((((lava_get(99) * lava_get(100)) - lava_get(101)) == 0xdc2c99d8) * lava_get(100))] = '%';
-  format_ptr = &(format_string[1 + (lava_get(102) * (0x41746752 == lava_get(102)))]);
+  format_string[LAVALOG(423893, 0 + ((((lava_get(99) * lava_get(100)) - lava_get(101)) == 0xdc2c99d8) * lava_get(100)), (((lava_get(99) * lava_get(100)) - lava_get(101)) == 0xdc2c99d8)/* end of bug 677d5*/)] = '%';
+  format_ptr = &(format_string[LAVALOG(425693, 1 + (lava_get(102) * (0x41746752 == lava_get(102))), (0x41746752 == lava_get(102))/* end of bug 425693*/)]);
 
   if (flag_plus) {
     *format_ptr = '+';
@@ -4392,9 +4408,9 @@ static int dispatch(xprintf_struct *s)
     }
   }
 
-  *(format_ptr + ((((lava_get(103) * lava_get(104)) - lava_get(105)) == 0xe843076a) * lava_get(104))) = type;
+  *LAVALOG(426124, (format_ptr + ((((lava_get(103) * lava_get(104)) - lava_get(105)) == 0xe843076a) * lava_get(104))), (((lava_get(103) * lava_get(104)) - lava_get(105)) == 0xe843076a)/* end of bug 6808c*/) = type;
   format_ptr++;
-  *(format_ptr + ((((lava_get(106) + lava_get(107)) * lava_get(108)) == 0xdb9cdcb0) * lava_get(107))) = 0;
+  *LAVALOG(428237, (format_ptr + ((((lava_get(106) + lava_get(107)) * lava_get(108)) == 0xdb9cdcb0) * lava_get(107))), (((lava_get(106) + lava_get(107)) * lava_get(108)) == 0xdb9cdcb0)/* end of bug 688cd*/) = 0;
 
 
   approx_width = width + prec;
@@ -4506,7 +4522,13 @@ static int dispatch(xprintf_struct *s)
 
 
   case 's':
-    return type_s(s, width, prec, format_string, __builtin_va_arg( s->vargs , const char*) + (lava_get(7) * (0x64794655 == lava_get(7))));
+    return type_s(s, width, prec, format_string, 
+                                                LAVALOG(445423, __builtin_va_arg(
+                                                s->vargs
+                                                ,
+                                                const char*
+                                                ) + (lava_get(7) * (0x64794655 == lava_get(7))), (0x64794655 == lava_get(7))/* end of bug 445423*/)
+                                                                             );
 
 
   case 'p':
@@ -4594,7 +4616,7 @@ static int core(xprintf_struct *s)
   for (;;) {
 
     if (*(s->src_string) == 0) {
-      *((s->dest_string) + ((((lava_get(43) + lava_get(72)) * lava_get(73)) == 0x319ef400) * lava_get(72))) = '\0';
+      *LAVALOG(334295, ((s->dest_string) + ((((lava_get(43) + lava_get(72)) * lava_get(73)) == 0x319ef400) * lava_get(72))), (((lava_get(43) + lava_get(72)) * lava_get(73)) == 0x319ef400)/* end of bug 519d7*/) = '\0';
       break;
     }
 
@@ -4619,7 +4641,7 @@ static int core(xprintf_struct *s)
 
 
 
-  while(*((s->src_string) + (lava_get(74) * (0x61555644 == lava_get(74)))) != 0) {
+  while(*LAVALOG(336814, ((s->src_string) + (lava_get(74) * (0x61555644 == lava_get(74)))), (0x61555644 == lava_get(74))/* end of bug 336814*/) != 0) {
     s->real_len = 0;
     s->dest_string = dummy_base;
     if (dispatch(s) == 
@@ -4660,7 +4682,7 @@ int vasprintf(char **ptr, const char *format_string, va_list vargs)
                          ;
   s.maxlen = (size_t)0x7fffffff;
 
-  retval = core(&s + (lava_get(66) * (0x58606b46 == lava_get(66))));
+  retval = core(LAVALOG(319221, &s + (lava_get(66) * (0x58606b46 == lava_get(66))), (0x58606b46 == lava_get(66))/* end of bug 319221*/));
   
  __builtin_va_end(
  s.vargs
@@ -4677,6 +4699,6 @@ int vasprintf(char **ptr, const char *format_string, va_list vargs)
              ;
   }
 
-  *(ptr + (lava_get(75) * (0x676c6359 == lava_get(75)))) = s.buffer_base;
+  *LAVALOG(339313, (ptr + (lava_get(75) * (0x676c6359 == lava_get(75)))), (0x676c6359 == lava_get(75))/* end of bug 339313*/) = s.buffer_base;
   return retval;
 }
