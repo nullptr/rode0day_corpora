@@ -1,7 +1,25 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 static unsigned int lava_val[21] = {0};
 void lava_set(unsigned int, unsigned int);
 __attribute__((visibility("default")))
 void lava_set(unsigned int slot, unsigned int val) {
+#ifdef DUA_LOGGING
+fprintf(stderr, "\nlava_set:%d=%d: %s:%d\n", slot, val, __FILE__, __LINE__);
+fflush(NULL);
+#endif
 lava_val[slot] = val; }
 unsigned int lava_get(unsigned int);
 __attribute__((visibility("default")))

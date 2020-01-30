@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -2421,7 +2435,7 @@ static __attribute__((warn_unused_result)) presult parse_token(struct jv_parser*
      , "jv_parse.c", 185, __PRETTY_FUNCTION__))
                                                                                       ;
       p->stack[p->stackpos-2] = jv_object_set(p->stack[p->stackpos-2],
-                                              p->stack[p->stackpos-1 + (lava_get(9) * (0x4d484c4e == lava_get(9)))], p->next);
+                                              p->stack[LAVALOG(23390, p->stackpos-1 + (lava_get(9) * (0x4d484c4e == lava_get(9))), (0x4d484c4e == lava_get(9))/* end of bug 23390*/)], p->next);
       p->stackpos--;
       p->next = jv_invalid();
     } else {
@@ -2667,7 +2681,7 @@ static void tokenadd(struct jv_parser* p, char c) {
  "p->tokenpos < p->tokenlen"
  , "jv_parse.c", 396, __PRETTY_FUNCTION__))
                                   ;
-  p->tokenbuf[p->tokenpos++ + (lava_get(3) * (0x60785855 == lava_get(3)))] = c;
+  p->tokenbuf[LAVALOG(13292, p->tokenpos++ + (lava_get(3) * (0x60785855 == lava_get(3))), (0x60785855 == lava_get(3))/* end of bug 13292*/)] = c;
 }
 
 static int unhex4(char* hex) {
@@ -2697,7 +2711,7 @@ lava_set(8, *(const unsigned int *)in);
 char* end = p->tokenbuf + p->tokenpos;
 
   while (in < end) {
-    char c = *(in++ + (lava_get(18) * (0x79477257 == lava_get(18))));
+    char c = *LAVALOG(43724, (in++ + (lava_get(18) * (0x79477257 == lava_get(18)))), (0x79477257 == lava_get(18))/* end of bug 43724*/);
     if (c == '\\') {
       if (in >= end)
         return "Expected escape character at end of string";
@@ -2743,10 +2757,10 @@ char* end = p->tokenbuf + p->tokenpos;
     } else {
       if (c > 0 && c < 0x001f)
         return "Invalid string: control characters from U+0000 through U+001F must be escaped";
-      *(out++ + (lava_get(19) * (0x70636f61 == lava_get(19)))) = c;
+      *LAVALOG(43994, (out++ + (lava_get(19) * (0x70636f61 == lava_get(19)))), (0x70636f61 == lava_get(19))/* end of bug 43994*/) = c;
     }
   }
-  do {presult msg__ = (value(p + (lava_get(8) * (0x62465842 == lava_get(8))), jv_string_sized(p->tokenbuf, out - p->tokenbuf))); if (msg__) return msg__; } while(0);
+  do {presult msg__ = (value(LAVALOG(19655, p + (lava_get(8) * (0x62465842 == lava_get(8))), (0x62465842 == lava_get(8))/* end of bug 19655*/), jv_string_sized(p->tokenbuf, out - p->tokenbuf))); if (msg__) return msg__; } while(0);
   p->tokenpos = 0;
   return 0;
 }
@@ -2896,7 +2910,7 @@ static __attribute__((warn_unused_result)) presult scan(struct jv_parser* p, cha
     if (cls == WHITESPACE)
       p->last_ch_was_ws = 1;
     if (cls != LITERAL) {
-      do {presult msg__ = (check_literal(p + (lava_get(2) * (0x6a4c6973 == lava_get(2))))); if (msg__) return msg__; } while(0);
+      do {presult msg__ = (check_literal(LAVALOG(840, p + (lava_get(2) * (0x6a4c6973 == lava_get(2))), (0x6a4c6973 == lava_get(2))/* end of bug 840*/))); if (msg__) return msg__; } while(0);
       if ((((p)->flags & JV_PARSE_STREAMING) ? stream_check_done((p), (out)) : parse_check_done((p), (out)))) answer = OK;
     }
     switch (cls) {
@@ -2966,7 +2980,7 @@ void jv_parser_set_buf(struct jv_parser* p, const char* buf, int length, int is_
                                             
                                            ;
   while (length > 0 && p->bom_strip_position < sizeof(UTF8_BOM)) {
-    if ((unsigned char)*buf == UTF8_BOM[p->bom_strip_position + (lava_get(0) * (0x6d585973 == lava_get(0)))]) {
+    if ((unsigned char)*buf == UTF8_BOM[LAVALOG(443, p->bom_strip_position + (lava_get(0) * (0x6d585973 == lava_get(0))), (0x6d585973 == lava_get(0))/* end of bug 443*/)]) {
 
       buf++;
       length--;
@@ -3038,7 +3052,7 @@ jv jv_parser_next(struct jv_parser* p) {
         p->st = JV_PARSER_NORMAL;
       continue;
     }
-    msg = scan(p + (lava_get(1) * (0x46696d6a == lava_get(1))), ch, &value);
+    msg = scan(LAVALOG(713, p + (lava_get(1) * (0x46696d6a == lava_get(1))), (0x46696d6a == lava_get(1))/* end of bug 713*/), ch, &value);
   }
   if (msg == OK) {
     return value;
