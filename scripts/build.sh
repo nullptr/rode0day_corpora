@@ -69,7 +69,7 @@ create_job_files() {
         local MERGE="--merge db_config.json"
     fi
 
-    for i in {3..14}; do
+    for i in {2..14}; do
 #       ./scripts/create-configs.py -e 3/jpegb/afl_job.json -c afl_job.json -p lava-afl-cf -j AFL -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/afl_job.json -c afl_job.json -Q -j AFL -y ${i}/info.yaml $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/qsym_job.json -c qsym_job.json -Q -j QSYM -y ${i}/info.yaml $MERGE >/dev/null
@@ -221,7 +221,7 @@ build_comp() {
 }
 
 build_all() {
-  for comp in 3 4 5 6 7 8 9 10 11 12 13 14; do
+  for comp in 2 3 4 5 6 7 8 9 10 11 12 13 14; do
       build_comp $comp
   done
 }
