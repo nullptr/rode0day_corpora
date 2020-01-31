@@ -12,7 +12,7 @@ bail() {
 TGT_ROOT=$(find -mindepth 2 -maxdepth 2 -type d -name "$TGT" -printf "%p")
 [ -d "$TGT_ROOT" ] || bail "failed to find TGT_ROOT"
 
-#
+# confirm container service, default to docker
 if [ $(which docker 2>/dev/null) ]; then
     RUNC=${RUNC:-docker}
 elif [ $(which singularity 2>/dev/null) ]; then
@@ -25,7 +25,6 @@ FBASE=/dev/shm/fuzz
 FDIR=/dev/shm/fuzz/${FZ}/${TGT}
 SIMG=${HOME}/s_images/${FZ}.sif
 
-echo "[*] Using target: $TGT_ROOT, fuzzing with $FZ for $T24H seconds"
 rm -Rf $FDIR || bail "failed to remove $FDIR"
 mkdir -p $FDIR || bail "failed to create $FDIR"
 rsync -a  $TGT_ROOT/ $FDIR/
@@ -33,9 +32,9 @@ mkdir -p $FDIR/outputs
 
 while [ ! -e $FDIR/${FZ}_job.json ]; do sleep 30s; done
 
+echo "[*] Using target: $TGT_ROOT, fuzzing with $FZ for $T24H seconds"
 date
 grep "model name" /proc/cpuinfo | head -n 1
-SECONDS=0
 
 JOB_ID=${SLURM_JOB_ID:-$(date +%H%M%S)}
 sed -i "s/XXXX/${JOB_ID}/; s/YYYY/${FZ}/; s/N=4/N=${NF}/" $FDIR/${FZ}_job.json
@@ -49,13 +48,14 @@ if [ -e ${HOME}/Source/NU_${FZ}.luckyfuzz ]; then
     ls -la $FDIR/.luckyfuzz
 fi
 
+SECONDS=0
 CNAME="${FZ}_${TGT}_$(date +%s)"
 if [ "$RUNC" = "singularity" ]; then
     TDIR="/tmp/$JOB_ID"
     mkdir -p "${TDIR}"
     AFL_NO_AFFINITY=1 \
-    singularity instance start -B "${TDIR}":/tmp $SIMG $CNAME -n $NF -t $FDIR -M $CNAME
-    # singularity run -B "${TDIR}":/tmp $SIMG -n $NF -t $FDIR -M $CNAME
+    # singularity instance start -B "${TDIR}":/tmp $SIMG $CNAME -n $NF -t $FDIR -M $CNAME
+    singularity run -B "${TDIR}":/tmp $SIMG -n $NF -t $FDIR -M $CNAME &
 else
     echo "[*] starting docker container $CNAME"
     docker run -d --rm --name $CNAME -v $FDIR:$FDIR -w $FDIR \
@@ -69,8 +69,8 @@ get_coverage() {
     cd $FDIR
     if [ "$RUNC" = "singularity" ]; then
         singularity exec $SIMG make-gcov-src.sh
-        singularity exec instance://${CNAME} afl-stats -c ${FZ}_job.json -s -g --afl-drcov -j 4
-        # singularity exec $SIMG afl-stats -c ${FZ}_job.json -s -g --afl-drcov -j 4
+        # singularity exec instance://${CNAME} afl-stats -c ${FZ}_job.json -s -g --afl-drcov -j 4
+        singularity exec -B "${TDIR}":/tmp $SIMG afl-stats -c ${FZ}_job.json -s -g --afl-drcov -j 4
     else
         docker exec $CNAME make-gcov-src.sh
         docker exec $CNAME afl-stats -c ${FZ}_job.json -s -g --afl-drcov -j 4
@@ -79,7 +79,7 @@ get_coverage() {
 }
 
 stop_signularity() {
-    singularity exec $SIMG /start_fuzzing --stop
+    singularity exec -B "${TDIR}":/tmp $SIMG /start_fuzzing --stop
     sleep 5s
     singularity instance stop -s TERM $CNAME
 }
@@ -97,6 +97,7 @@ handle_term(){
     exit 0
 }
 
+cd $FDIR
 trap handle_term SIGTERM SIGINT SIGHUP
 
 [ -e $HOME/.local/bin/rsync_results.sh ] && source $HOME/.local/bin/rsync_results.sh
@@ -105,24 +106,24 @@ sleep $(( $T23H - $SECONDS ))
 
 sleep $(( $T24H - $SECONDS ))
 
-local N_QUEUE=$(ls ${FDIR}/outputs/*/queue/* | wc -l)
-local N_CRASHES=$(ls ${FDIR}/outputs/*/crashes/* | wc -l)
-local MESSAGE="Queue=$N_QUEUE Crashes=$N_CRASHES"
+N_QUEUE=$(ls ${FDIR}/outputs/*/queue/* | wc -l)
+N_CRASHES=$(ls ${FDIR}/outputs/*/crashes/* | wc -l)
+MESSAGE="Queue=$N_QUEUE Crashes=$N_CRASHES"
 
 if [ "$FZ" = "angora" ]; then
-    local A_QUEUE=$(ls ${FDIR}/outputs/angora/queue/* | wc -l)
+    A_QUEUE=$(ls ${FDIR}/outputs/angora/queue/* | wc -l)
     MESSAGE="$MESSAGE Ang-Q=$A_QUEUE"
 fi
 
 if [ "$FZ" = "qsym" ]; then
-    local Q_QUEUE=$(ls ${FDIR}/outputs/*Q*/queue/* | wc -l)
+    Q_QUEUE=$(ls ${FDIR}/outputs/*Q*/queue/* | wc -l)
     MESSAGE="$MESSAGE Qsym-Q=$Q_QUEUE"
 fi
 
 printf "[*] Finished fuzzing %-14s: Elapsed=${SECONDS}s  $(date +'%F %T') $MESSAGE\n" $TGT
 
 if [ "$RUNC" = "singularity" ]; then
-    singularity exec $SIMG /start_fuzzing --stop
+    singularity exec -B "${TDIR}":/tmp $SIMG /start_fuzzing --stop
     sleep 15s
     exit 0
 fi
