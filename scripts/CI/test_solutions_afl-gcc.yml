@@ -1,27 +1,34 @@
 ---
 
-test_solutions:3:10:afl-gcc:
+test_solutions:2:13:afl-gcc:
+  script:
+    - tar -C 2 -xzf 2/solutions.tgz
+    - ./scripts/test-solution.py -p lava-afl-gcc 2/info.yaml
+  dependencies:
+    - build:afl-gcc
+
+test_solutions:3:13:afl-gcc:
   script:
     - tar -C 3 -xzf 3/solutions.tgz
     - ./scripts/test-solution.py -p lava-afl-gcc 3/info.yaml
   dependencies:
     - build:afl-gcc
 
-test_solutions:4:10:afl-gcc:
+test_solutions:4:13:afl-gcc:
   script:
     - tar -C 4 -xzf 4/solutions.tgz
     - ./scripts/test-solution.py -p lava-afl-gcc 4/info.yaml
   dependencies:
     - build:afl-gcc
 
-test_solutions:5:10:afl-gcc:
+test_solutions:5:13:afl-gcc:
   script:
     - tar -C 5 -xzf 5/solutions.tgz
     - ./scripts/test-solution.py -p lava-afl-gcc 5/info.yaml
   dependencies:
     - build:afl-gcc
 
-test_solutions:6:10:afl-gcc:
+test_solutions:6:13:afl-gcc:
   script:
     - tar -C 6 -xzf 6/solutions.tgz
     - (cd 6 && ./patch_solutions.sh )
@@ -29,7 +36,7 @@ test_solutions:6:10:afl-gcc:
   dependencies:
     - build:afl-gcc
 
-test_solutions:7:10:afl-gcc:
+test_solutions:7:13:afl-gcc:
   script:
     - tar -C 7 -xzf 7/solutions.tgz
     - (cd 7 && ./patch_solutions.sh )
@@ -37,7 +44,7 @@ test_solutions:7:10:afl-gcc:
   dependencies:
     - build:afl-gcc
 
-test_solutions:8:10:afl-gcc:
+test_solutions:8:13:afl-gcc:
   script:
     - tar -C 8 -xzf 8/solutions.tgz
     - (cd 8 && ./patch_solutions.sh )
@@ -45,17 +52,38 @@ test_solutions:8:10:afl-gcc:
   dependencies:
     - build:afl-gcc
 
-test_solutions:9:10:afl-gcc:
+test_solutions:9:13:afl-gcc:
   script:
     - tar -C 9 -xzf 9/solutions.tgz
     - ./scripts/test-solution.py -p lava-afl-gcc 9/info.yaml
   dependencies:
     - build:afl-gcc
 
-test_solutions:10:10:afl-gcc:
+test_solutions:10:13:afl-gcc:
   script:
     - tar -C 10 -xzf 10/solutions.tgz
     - (cd 10 && ./patch_solutions.sh )
     - ./scripts/test-solution.py -p lava-afl-gcc 10/info.yaml
+  dependencies:
+    - build:afl-gcc
+
+test_solutions:11:13:afl-gcc:
+  script:
+    - tar -C 11 -xzf 11/solutions.tgz
+    - ./scripts/test-solution.py -p lava-afl-gcc 11/info.yaml
+  dependencies:
+    - build:afl-gcc
+
+test_solutions:12:13:afl-gcc:
+  script:
+    - tar -C 12 -xzf 12/solutions.tgz
+    - ./scripts/test-solution.py -p lava-afl-gcc 12/info.yaml
+  dependencies:
+    - build:afl-gcc
+
+test_solutions:13:13:afl-gcc:
+  script:
+    - tar -C 13 -xzf 13/solutions.tgz
+    - ./scripts/test-solution.py -p lava-afl-gcc 13/info.yaml
   dependencies:
     - build:afl-gcc
