@@ -4028,7 +4028,15 @@ static const char illoptstring[] = "unknown option -- %s";
 
 
 
+#ifndef __i386__
+static int
+gcd(a, b)
+ int a;
+ int b;
+{
+#else /* __i386__ */
 static int gcd(int a, int b) {
+#endif /* __i386__ */
  int c={0};
 
  c = a % b;
@@ -4047,7 +4055,16 @@ static int gcd(int a, int b) {
 
 
 static void
+#ifndef __i386__
+permute_args(panonopt_start, panonopt_end, opt_end, nargv)
+ int panonopt_start;
+ int panonopt_end;
+ int opt_end;
+ char **nargv;
+{
+#else /* __i386__ */
 permute_args(int panonopt_start, int panonopt_end, int opt_end, char **nargv) {
+#endif /* __i386__ */
  int cstart, cyclelen, i, j, ncycle, nnonopts, nopts, pos={0};
  char *swap={0};
 
@@ -4088,7 +4105,15 @@ nargv !=
 
 
 static int
+#ifndef __i386__
+getopt_internal(nargc, nargv, options)
+ int nargc;
+ char **nargv;
+ const char *options;
+{
+#else /* __i386__ */
 getopt_internal( int nargc, char **nargv, const char *options) {
+#endif /* __i386__ */
  char *oli={0};
  int optchar={0};
 
@@ -4243,7 +4268,15 @@ start:
  return optchar;
 }
 int
+#ifndef __i386__
+getopt(nargc, nargv, options)
+ int nargc;
+ char * const *nargv;
+ const char *options;
+{
+#else /* __i386__ */
 getopt( int nargc, char * const *nargv, const char *options) {
+#endif /* __i386__ */
  int retval={0};
 
  
@@ -4285,7 +4318,17 @@ options !=
 
 
 int
+#ifndef __i386__
+getopt_long(nargc, nargv, options, long_options, idx)
+ int nargc;
+ char * const *nargv;
+ const char *options;
+ const struct option *long_options;
+ int *idx;
+{
+#else /* __i386__ */
 getopt_long( int nargc, char * const *nargv, const char *options, const struct option *long_options, int *idx) {
+#endif /* __i386__ */
  int retval={0};
 
 

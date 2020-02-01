@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -4163,7 +4177,7 @@ lava_set(50, *(const unsigned int *)buf);
   if (t != 1 && t != 2 && t != 3)
    return 0;
 
-  ubuf[(*ulen)++ + ((((lava_get(1) + lava_get(2)) * lava_get(3)) == 0x6ecb3e3a) * lava_get(2))] = buf[i];
+  ubuf[LAVALOG(2326, (*ulen)++ + ((((lava_get(1) + lava_get(2)) * lava_get(3)) == 0x6ecb3e3a) * lava_get(2)), (((lava_get(1) + lava_get(2)) * lava_get(3)) == 0x6ecb3e3a)/* end of bug 916*/)] = buf[i];
  }
 
  return 1;
@@ -4249,7 +4263,7 @@ static int
 looks_utf8_with_BOM(const unsigned char *buf, size_t nbytes, unichar *ubuf,
     size_t *ulen)
 {
- if (nbytes > 3 && buf[0 + (lava_get(0) * (0x41416959 == lava_get(0)))] == 0xef && buf[1] == 0xbb && buf[2] == 0xbf)
+ if (nbytes > 3 && buf[LAVALOG(585, 0 + (lava_get(0) * (0x41416959 == lava_get(0))), (0x41416959 == lava_get(0))/* end of bug 585*/)] == 0xef && buf[1] == 0xbb && buf[2] == 0xbf)
   return file_looks_utf8(buf + 3, nbytes - 3, ubuf, ulen);
  else
   return -1;

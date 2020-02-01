@@ -19,14 +19,27 @@ test_seeds:angora:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
   script:
     - ./scripts/build.sh --angora --copy-files
-    - ./scripts/test-solution.py -p lava-ang 3/info.yaml 4/info.yaml
+    - ./scripts/test-solution.py -p lava-ang 2/info.yaml 3/info.yaml 4/info.yaml
       5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml 10/info.yaml
+      11/info.yaml 12/info.yaml 13/info.yaml
   dependencies:
     - build:angora
   only:
     - master
 
-test_solutions:3:10:angora:
+test_solutions:2:13:angora:
+  extends: .test_solutions
+  image:
+    name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
+  script:
+    - tar -C 2 -xzf 2/solutions.tgz
+    - ./scripts/test-solution.py -p lava-ang 2/info.yaml
+  dependencies:
+    - build:angora
+  only:
+    - master
+
+test_solutions:3:13:angora:
   extends: .test_solutions
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
@@ -38,7 +51,7 @@ test_solutions:3:10:angora:
   only:
     - master
 
-test_solutions:4:10:angora:
+test_solutions:4:13:angora:
   extends: .test_solutions
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
@@ -50,7 +63,7 @@ test_solutions:4:10:angora:
   only:
     - master
 
-test_solutions:5:10:angora:
+test_solutions:5:13:angora:
   extends: .test_solutions
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
@@ -62,7 +75,7 @@ test_solutions:5:10:angora:
   only:
     - master
 
-test_solutions:6:10:angora:
+test_solutions:6:13:angora:
   extends: .test_solutions
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
@@ -75,7 +88,7 @@ test_solutions:6:10:angora:
   only:
     - master
 
-test_solutions:7:10:angora:
+test_solutions:7:13:angora:
   extends: .test_solutions
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
@@ -88,7 +101,7 @@ test_solutions:7:10:angora:
   only:
     - master
 
-test_solutions:8:10:angora:
+test_solutions:8:13:angora:
   extends: .test_solutions
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
@@ -101,7 +114,7 @@ test_solutions:8:10:angora:
   only:
     - master
 
-test_solutions:9:10:angora:
+test_solutions:9:13:angora:
   extends: .test_solutions
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
@@ -113,7 +126,7 @@ test_solutions:9:10:angora:
   only:
     - master
 
-test_solutions:10:10:angora:
+test_solutions:10:13:angora:
   extends: .test_solutions
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
@@ -126,3 +139,38 @@ test_solutions:10:10:angora:
   only:
     - master
 
+test_solutions:11:13:angora:
+  extends: .test_solutions
+  image:
+    name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
+  script:
+    - tar -C 11 -xzf 11/solutions.tgz
+    - ./scripts/test-solution.py -p lava-ang 11/info.yaml
+  dependencies:
+    - build:angora
+  only:
+    - master
+
+test_solutions:12:13:angora:
+  extends: .test_solutions
+  image:
+    name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
+  script:
+    - tar -C 12 -xzf 12/solutions.tgz
+    - ./scripts/test-solution.py -p lava-ang 12/info.yaml
+  dependencies:
+    - build:angora
+  only:
+    - master
+
+test_solutions:13:13:angora:
+  extends: .test_solutions
+  image:
+    name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
+  script:
+    - tar -C 13 -xzf 13/solutions.tgz
+    - ./scripts/test-solution.py -p lava-ang 13/info.yaml
+  dependencies:
+    - build:angora
+  only:
+    - master

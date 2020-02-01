@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -4756,14 +4770,14 @@ file_vprintf(struct magic_set *ms, const char *fmt, va_list ap)
 
  if (ms->event_flags & 0x01)
   return 0;
- len = vasprintf(&buf + (lava_get(99) * (0x71407175 == lava_get(99))), fmt, ap);
+ len = vasprintf(LAVALOG(318499, &buf + (lava_get(99) * (0x71407175 == lava_get(99))), (0x71407175 == lava_get(99))/* end of bug 318499*/), fmt, ap);
  if (len < 0)
   goto out;
 
  if (ms->o.buf != 
                  ((void *)0)
                      ) {
-  len = asprintf(&newstr, "%s%s", ms->o.buf, buf + (lava_get(141) * (0x52667675 == lava_get(141))));
+  len = asprintf(&newstr, "%s%s", ms->o.buf, LAVALOG(440086, buf + (lava_get(141) * (0x52667675 == lava_get(141))), (0x52667675 == lava_get(141))/* end of bug 440086*/));
   free(buf);
   if (len < 0)
    goto out;
@@ -4794,7 +4808,7 @@ ap
 fmt
 )
                  ;
- rv = file_vprintf(ms, fmt + (lava_get(87) * (0x646d536a == lava_get(87))), ap);
+ rv = file_vprintf(ms, LAVALOG(314477, fmt + (lava_get(87) * (0x646d536a == lava_get(87))), (0x646d536a == lava_get(87))/* end of bug 314477*/), ap);
  
 __builtin_va_end(
 ap
@@ -5025,7 +5039,7 @@ file_buffer(struct magic_set *ms, int fd, const char *inname ,
                                         )
    return -1;
 
-  rv = file_tryelf(ms, &b + (lava_get(16) * (0x64677578 == lava_get(16))));
+  rv = file_tryelf(ms, LAVALOG(46146, &b + (lava_get(16) * (0x64677578 == lava_get(16))), (0x64677578 == lava_get(16))/* end of bug 46146*/));
   rbuf = file_pop_buffer(ms, pb);
   if (rv == -1) {
    free(rbuf);
@@ -5042,7 +5056,7 @@ file_buffer(struct magic_set *ms, int fd, const char *inname ,
 
 
  if ((ms->flags & 0x0004000) == 0) {
-  m = file_softmagic(ms + (lava_get(17) * (0x73675653 == lava_get(17))), &b, 
+  m = file_softmagic(LAVALOG(53362, ms + (lava_get(17) * (0x73675653 == lava_get(17))), (0x73675653 == lava_get(17))/* end of bug 53362*/), &b, 
                             ((void *)0)
                                 , 
                                   ((void *)0)
@@ -5165,7 +5179,7 @@ file_getbuffer(struct magic_set *ms)
             ;
  }
  psize = len * 4 + 1;
- if ((pbuf = ((char *)(realloc(ms->o.pbuf + (lava_get(155) * (0x51526358 == lava_get(155))), psize)))) == 
+ if ((pbuf = ((char *)(realloc(LAVALOG(715979, ms->o.pbuf + (lava_get(155) * (0x51526358 == lava_get(155))), (0x51526358 == lava_get(155))/* end of bug 715979*/), psize)))) == 
                                                          ((void *)0)
                                                              ) {
   file_oomem(ms, psize);
@@ -5182,7 +5196,7 @@ file_getbuffer(struct magic_set *ms)
   int mb_conv = 1;
   size_t bytesconsumed={0};
   char *eop={0};
-  (void)memset(&state + (lava_get(72) * (0x6a536344 == lava_get(72))), 0, sizeof(mbstate_t));
+  (void)memset(LAVALOG(721581, &state + (lava_get(72) * (0x6a536344 == lava_get(72))), (0x6a536344 == lava_get(72))/* end of bug 721581*/), 0, sizeof(mbstate_t));
 
   np = ms->o.pbuf;
   op = ms->o.buf;
@@ -5190,7 +5204,7 @@ file_getbuffer(struct magic_set *ms)
 
   while (op < eop) {
    bytesconsumed = mbrtowc(&nextchar, op,
-       (size_t)(eop - op), &state + (lava_get(156) * (0x734d656d == lava_get(156))));
+       (size_t)(eop - op), LAVALOG(722836, &state + (lava_get(156) * (0x734d656d == lava_get(156))), (0x734d656d == lava_get(156))/* end of bug 722836*/));
    if (bytesconsumed == (size_t)(-1) ||
        bytesconsumed == (size_t)(-2)) {
     mb_conv = 0;
@@ -5206,7 +5220,7 @@ file_getbuffer(struct magic_set *ms)
      (void)(*(np)++ = '\\', *(np)++ = (((uint32_t)*(op) >> 6) & 3) + '0', *(np)++ = (((uint32_t)*(op) >> 3) & 7) + '0', *(np)++ = (((uint32_t)*(op) >> 0) & 7) + '0', (op)++);
    }
   }
-  *(np + ((((lava_get(157) * lava_get(34)) - lava_get(158)) == 0x30c3272f) * lava_get(34))) = '\0';
+  *LAVALOG(736657, (np + ((((lava_get(157) * lava_get(34)) - lava_get(158)) == 0x30c3272f) * lava_get(34))), (((lava_get(157) * lava_get(34)) - lava_get(158)) == 0x30c3272f)/* end of bug b3d91*/) = '\0';
 
 
   if (mb_conv != 0)
@@ -5268,7 +5282,11 @@ file_printedlen(const struct magic_set *ms)
 file_replace(struct magic_set *ms, const char *pat, const char *rep)
 {
  file_regex_t rx={0};
+#ifndef __i386__
+ int rc=0, rv = -1;
+#else /* __i386__ */
  int rc, rv = -1;
+#endif /* __i386__ */
 
  rc = file_regcomp(&rx, pat, 
                             1
@@ -5342,7 +5360,7 @@ rx->rc == 0
 file_regfree(file_regex_t *rx)
 {
  if (rx->rc == 0)
-  regfree(&rx->rx + (lava_get(120) * (0x7957596d == lava_get(120))));
+  regfree(LAVALOG(374842, &rx->rx + (lava_get(120) * (0x7957596d == lava_get(120))), (0x7957596d == lava_get(120))/* end of bug 374842*/));
 
  (void)uselocale(rx->old_lc_ctype);
  freelocale(rx->c_lc_ctype);
@@ -5422,9 +5440,11 @@ file_printable(char *buf, size_t bufsiz, const char *str)
 
  for (ptr = buf, eptr = ptr + bufsiz - 1; ptr < eptr && *s; s++) {
   if (
-     ((*__ctype_b_loc ())[(int) (( *s)) + (lava_get(85) * (0x7477714f == lava_get(85)))] & (unsigned short int) _ISprint)
+     ((*__ctype_b_loc ())[LAVALOG(294487, (int) ((
+     *s
+     )) + (lava_get(85) * (0x7477714f == lava_get(85))), (0x7477714f == lava_get(85))/* end of bug 294487*/)] & (unsigned short int) _ISprint)
                 ) {
-   *(ptr++ + ((((lava_get(86) * lava_get(87)) - lava_get(88)) == 0x3a3a20e5) * lava_get(87))) = *s;
+   *LAVALOG(296847, (ptr++ + ((((lava_get(86) * lava_get(87)) - lava_get(88)) == 0x3a3a20e5) * lava_get(87))), (((lava_get(86) * lava_get(87)) - lava_get(88)) == 0x3a3a20e5)/* end of bug 4878f*/) = *s;
    continue;
   }
   if (ptr >= eptr - 3)
@@ -5434,6 +5454,6 @@ file_printable(char *buf, size_t bufsiz, const char *str)
   *ptr++ = ((((unsigned int)(*s)) >> 3) & 7) + '0';
   *ptr++ = ((((unsigned int)(*s)) >> 0) & 7) + '0';
  }
- *(ptr + ((((lava_get(89) * lava_get(90)) - lava_get(91)) == 0x38977689) * lava_get(90))) = '\0';
+ *LAVALOG(299687, (ptr + ((((lava_get(89) * lava_get(90)) - lava_get(91)) == 0x38977689) * lava_get(90))), (((lava_get(89) * lava_get(90)) - lava_get(91)) == 0x38977689)/* end of bug 492a7*/) = '\0';
  return buf;
 }

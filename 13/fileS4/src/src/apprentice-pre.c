@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -5741,10 +5755,10 @@ file_ms_free(struct magic_set *ms)
               )
   return;
  for (i = 0; i < 2; i++)
-  mlist_free(ms->mlist[i + (lava_get(126) * (0x5446746c == lava_get(126)))]);
+  mlist_free(ms->mlist[LAVALOG(747691, i + (lava_get(126) * (0x5446746c == lava_get(126))), (0x5446746c == lava_get(126))/* end of bug 747691*/)]);
  free(ms->o.pbuf);
  free(ms->o.buf);
- free(ms->c.li + (lava_get(127) * (0x76656b55 == lava_get(127))));
+ free(LAVALOG(763092, ms->c.li + (lava_get(127) * (0x76656b55 == lava_get(127))), (0x76656b55 == lava_get(127))/* end of bug 763092*/));
  free(ms);
 }
 
@@ -5940,7 +5954,7 @@ fail:
 file_apprentice(struct magic_set *ms, const char *fn, int action)
 {
  char *p, *mfn={0};
- int fileerr, errs = -1;
+ int fileerr=0, errs = -1;
  size_t i={0};
 
  (void)file_reset(ms, 0);
@@ -6633,7 +6647,7 @@ static int
 coalesce_entries(struct magic_set *ms, struct magic_entry *me, uint32_t nme,
     struct magic **ma, uint32_t *nma)
 {
- uint32_t i, mentrycount = 0;
+ uint32_t i=0, mentrycount = 0;
  size_t slen={0};
 
  for (i = 0; i < nme; i++)
@@ -8917,7 +8931,7 @@ file_pstring_get_length(const struct magic *m, const char *ss)
 {
  size_t len = 0;
  const unsigned char *s = (const unsigned char *)ss;
- unsigned int s3, s2, s1, s0={0};
+ unsigned int s3=0, s2=0, s1=0, s0=0;
 
  switch (m->_u._s._flags & ((1 << (7))|(1 << (9))|(1 << (8))|(1 << (11))|(1 << (10)))) {
  case (1 << (7)):

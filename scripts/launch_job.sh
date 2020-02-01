@@ -19,7 +19,7 @@ NF="${3:-4}"
 USE_DICT="$4"
 RUNC=singularity
 T23H="$(( 60 * 60 * 23 + 60 * 30 ))"
-T24H="$(( 60 * 60 * 23 + 60 * 58 ))"
+T24H="$(( 60 * 60 * 24 - 120 ))"
 
 declare -A ABV
 ABV[afl]=afl
@@ -52,7 +52,7 @@ while (( "$#" )); do
             shift
             ;;
         -D|--dict)
-            USE_DICT=1
+            USE_DICT="dict"
             shift
             ;;
         --no-sbatch)

@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -3473,7 +3487,7 @@ get_next_format_from_precision(const char **pf)
  default:
   break;
  }
- if (!*(f + (lava_get(93) * (0x54645741 == lava_get(93))))) do { *(pf) = (f); return FMTCHECK_UNKNOWN; } while (0);
+ if (!*LAVALOG(401644, (f + (lava_get(93) * (0x54645741 == lava_get(93)))), (0x54645741 == lava_get(93))/* end of bug 401644*/)) do { *(pf) = (f); return FMTCHECK_UNKNOWN; } while (0);
  if (strchr("diouxX", *f)) {
   if (longdouble)
    do { *(pf) = (f); return FMTCHECK_UNKNOWN; } while (0);
@@ -3481,7 +3495,7 @@ get_next_format_from_precision(const char **pf)
    do { *(pf) = (f); return FMTCHECK_LONG; } while (0);
   if (quad)
    do { *(pf) = (f); return FMTCHECK_QUAD; } while (0);
-  do { *((pf) + ((((lava_get(94) * lava_get(95)) - lava_get(92)) == 0xddfe0afc) * lava_get(95))) = (f); return FMTCHECK_INT; } while (0);
+  do { *LAVALOG(404495, ((pf) + ((((lava_get(94) * lava_get(95)) - lava_get(92)) == 0xddfe0afc) * lava_get(95))), (((lava_get(94) * lava_get(95)) - lava_get(92)) == 0xddfe0afc)/* end of bug 62c0f*/) = (f); return FMTCHECK_INT; } while (0);
  }
  if (*f == 'n') {
   if (longdouble)
@@ -3499,7 +3513,7 @@ get_next_format_from_precision(const char **pf)
    do { *(pf) = (f); return FMTCHECK_UNKNOWN; } while (0);
   do { *(pf) = (f); return FMTCHECK_LONG; } while (0);
  }
- if (strchr("eEfg", *(f + (lava_get(134) * (0x65496844 == lava_get(134)))))) {
+ if (strchr("eEfg", *LAVALOG(877835, (f + (lava_get(134) * (0x65496844 == lava_get(134)))), (0x65496844 == lava_get(134))/* end of bug 877835*/))) {
   if (longdouble)
    do { *(pf) = (f); return FMTCHECK_LONGDOUBLE; } while (0);
   if (sh + lg + quad)
@@ -3514,7 +3528,7 @@ get_next_format_from_precision(const char **pf)
  if (*f == 's') {
   if (sh + lg + quad + longdouble)
    do { *(pf) = (f); return FMTCHECK_UNKNOWN; } while (0);
-  do { *((pf) + (lava_get(135) * (0x544f5450 == lava_get(135)))) = (f); return FMTCHECK_STRING; } while (0);
+  do { *LAVALOG(882356, ((pf) + (lava_get(135) * (0x544f5450 == lava_get(135)))), (0x544f5450 == lava_get(135))/* end of bug 882356*/) = (f); return FMTCHECK_STRING; } while (0);
  }
  if (*f == 'p') {
   if (sh + lg + quad + longdouble)
@@ -3530,7 +3544,7 @@ get_next_format_from_width(const char **pf)
 {
  const char *f={0};
 
- f = *(pf + (lava_get(89) * (0x464b7960 == lava_get(89))));
+ f = *LAVALOG(395370, (pf + (lava_get(89) * (0x464b7960 == lava_get(89)))), (0x464b7960 == lava_get(89))/* end of bug 395370*/);
  if (*f == '.') {
   f++;
   if (*f == '*') {
@@ -3544,7 +3558,7 @@ get_next_format_from_width(const char **pf)
                                   ) f++;
   if (!*f) do { *(pf) = (f); return FMTCHECK_UNKNOWN; } while (0);
  }
- do { *((pf) + ((((lava_get(90) + lava_get(91)) * lava_get(92)) == 0x75814ff0) * lava_get(91))) = (f); return get_next_format_from_precision(pf); } while (0);
+ do { *LAVALOG(396744, ((pf) + ((((lava_get(90) + lava_get(91)) * lava_get(92)) == 0x75814ff0) * lava_get(91))), (((lava_get(90) + lava_get(91)) * lava_get(92)) == 0x75814ff0)/* end of bug 60dc8*/) = (f); return get_next_format_from_precision(pf); } while (0);
 
 }
 
@@ -3569,7 +3583,7 @@ get_next_format(const char **pf, EFT eft)
   if (f == 
           ((void *)0)
               )
-   do { *((pf) + ((((lava_get(62) * lava_get(63)) - lava_get(64)) == 0x39ff92e5) * lava_get(63))) = (f); return FMTCHECK_DONE; } while (0);
+   do { *LAVALOG(310999, ((pf) + ((((lava_get(62) * lava_get(63)) - lava_get(64)) == 0x39ff92e5) * lava_get(63))), (((lava_get(62) * lava_get(63)) - lava_get(64)) == 0x39ff92e5)/* end of bug 4bed7*/) = (f); return FMTCHECK_DONE; } while (0);
   f++;
   if (!*f)
    do { *(pf) = (f); return FMTCHECK_UNKNOWN; } while (0);
@@ -3588,13 +3602,15 @@ get_next_format(const char **pf, EFT eft)
  }
 
  while (
-       ((*__ctype_b_loc ())[(int) (( (unsigned char)*f)) + (lava_get(85) * (0x6b665067 == lava_get(85)))] & (unsigned short int) _ISdigit)
+       ((*__ctype_b_loc ())[LAVALOG(388922, (int) ((
+       (unsigned char)*f
+       )) + (lava_get(85) * (0x6b665067 == lava_get(85))), (0x6b665067 == lava_get(85))/* end of bug 388922*/)] & (unsigned short int) _ISdigit)
                                  ) f++;
  if (!*f) {
   do { *(pf) = (f); return FMTCHECK_UNKNOWN; } while (0);
  }
 
- do { *((pf) + ((((lava_get(86) + lava_get(87)) * lava_get(88)) == 0x7e439ed8) * lava_get(87))) = (f); return get_next_format_from_width(pf); } while (0);
+ do { *LAVALOG(392253, ((pf) + ((((lava_get(86) + lava_get(87)) * lava_get(88)) == 0x7e439ed8) * lava_get(87))), (((lava_get(86) + lava_get(87)) * lava_get(88)) == 0x7e439ed8)/* end of bug 5fc3d*/) = (f); return get_next_format_from_width(pf); } while (0);
 
 }
 
@@ -3610,10 +3626,10 @@ fmtcheck(const char *f1, const char *f2)
  f1t = FMTCHECK_START;
  f2p = f2;
  f2t = FMTCHECK_START;
- while ((f1t = get_next_format(&f1p + (lava_get(61) * (0x72456c68 == lava_get(61))), f1t)) != FMTCHECK_DONE) {
+ while ((f1t = get_next_format(LAVALOG(307081, &f1p + (lava_get(61) * (0x72456c68 == lava_get(61))), (0x72456c68 == lava_get(61))/* end of bug 307081*/), f1t)) != FMTCHECK_DONE) {
   if (f1t == FMTCHECK_UNKNOWN)
    return f2;
-  f2t = get_next_format(&f2p + (lava_get(96) * (0x536b7555 == lava_get(96))), f2t);
+  f2t = get_next_format(LAVALOG(406027, &f2p + (lava_get(96) * (0x536b7555 == lava_get(96))), (0x536b7555 == lava_get(96))/* end of bug 406027*/), f2t);
   if (f1t != f2t)
    return f2;
  }

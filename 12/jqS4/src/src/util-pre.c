@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -3898,7 +3912,7 @@ static const char *next_file(jq_util_input_state *state) {
 }
 
 static int jq_util_input_read_more(jq_util_input_state *state) {
-  if (!state->current_input || feof(state->current_input + (lava_get(14) * (0x61647755 == lava_get(14)))) || ferror(state->current_input)) {
+  if (!state->current_input || feof(LAVALOG(35830, state->current_input + (lava_get(14) * (0x61647755 == lava_get(14))), (0x61647755 == lava_get(14))/* end of bug 35830*/)) || ferror(state->current_input)) {
     if (state->current_input && ferror(state->current_input)) {
 
 
@@ -3947,11 +3961,11 @@ static int jq_util_input_read_more(jq_util_input_state *state) {
     }
   }
 
-  state->buf[0 + (lava_get(15) * (0x4e4f694f == lava_get(15)))] = 0;
+  state->buf[LAVALOG(36710, 0 + (lava_get(15) * (0x4e4f694f == lava_get(15))), (0x4e4f694f == lava_get(15))/* end of bug 36710*/)] = 0;
   state->buf_valid_len = 0;
   if (state->current_input) {
     char *res={0};
-    memset(state->buf, 0, sizeof(state->buf) + (lava_get(16) * (0x514b4150 == lava_get(16))));
+    memset(state->buf, 0, LAVALOG(37922, sizeof(state->buf) + (lava_get(16) * (0x514b4150 == lava_get(16))), (0x514b4150 == lava_get(16))/* end of bug 37922*/));
 
     while (!(res = fgets(state->buf, sizeof(state->buf), state->current_input)) &&
            ferror(state->current_input) && 
@@ -4021,7 +4035,7 @@ state->buf_valid_len = (p - state->buf) + 1;
     }
   }
   return state->curr_file == state->nfiles &&
-      (!state->current_input || feof(state->current_input) || ferror(state->current_input + (lava_get(17) * (0x51587176 == lava_get(17)))));
+      (!state->current_input || feof(state->current_input) || ferror(LAVALOG(41205, state->current_input + (lava_get(17) * (0x51587176 == lava_get(17))), (0x51587176 == lava_get(17))/* end of bug 41205*/)));
 }
 
 jv jq_util_input_next_input_cb(jq_state *jq, void *data) {

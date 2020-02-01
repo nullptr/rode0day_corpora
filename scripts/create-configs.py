@@ -43,16 +43,16 @@ def parse_args():
     p.add_argument("--timeout", default=None, help="timout for executions (ms)")
     p.add_argument("--mem-limit", default=None, help="memory limit for child process (MB)")
     p.add_argument("--time-limit", default=None, help="fuzzing campaign time limit")
-    p.add_argument("--exec-limit", default=None, help="fuzzing campaign execution limit")
+    p.add_argument("--exec-limit", default=None, type=int, help="fuzzing campaign execution limit")
     p.add_argument("--docker", default=None, help="docker container for fuzzing (multi-container mode)")
     p.add_argument("--more-args", dest='afl_margs', default=None, help="extra arguments for fuzzer")
     p.add_argument("--dictionary", dest='dict', default=None, help="AFL/Libfuzzer dictionary file/directory")
-    p.add_argument("--master-instances", default=None, help="# of master instances (0-?)")
+    p.add_argument("-M", "--master-instances", default=None, type=int, help="# of master instances (0-?)")
     p.add_argument("--afl-no-det", dest="dirty", default=None, help="AFL quick & dirty (skip deterministic steps")
     p.add_argument("--afl-dumb", dest="dumb", default=None, help="AFL fuzz without instrumentation (dumb mode)")
     p.add_argument("--environment", default=None, help="Environment variables, comma separated list of VAR=VAL ")
     p.add_argument("--extras", default=None, help="Extra options, comma separate list of var=val")
-    p.add_argument("-M", "--merge", default=None, help="Merge example with extra config file")
+    p.add_argument("--merge", default=None, help="Merge example with extra config file")
     p.add_argument("-F", "--force-new-job", default=False, action='store_true',
                    dest='submit_force', help="Do not prompt to create new job")
     return p.parse_args()
@@ -101,7 +101,7 @@ def build_description(args, data, comp_date):
     if args.qemu:
         desc.append("qemu")
     desc.append(data['install_dir'])
-    desc.append("M=1 N=4 YYYY")
+    desc.append("M=0 N=2 YYYY")
     desc.append("20{}".format(comp_date))
     desc.append("ZZZZ")
     return ' '.join(desc)
@@ -140,7 +140,7 @@ def update_from_yaml(args, data, cfg):
             cfg['target'] = "./{}/{}".format(args.prefix, bin_path)
         else:
             cfg['target'] = "./{}".format(d['binary_path'])
-        cfg['drcov_target'] = "./{}".format(d['binary_path'])
+        cfg['drcov_target'] = "./lava-gcc/{}".format(bin_path)
         if 'lava_target' in cfg:
             cfg['lava_target'] = "./lava-gcc/{}".format(bin_path)
     if 'binary_arguments' in d:

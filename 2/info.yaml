@@ -67,8 +67,6 @@ challenges:
         binary_path: "bin/deconstruct"
         binary_arguments: "{input_file}"
         sample_inputs: ["inputs/john.yaml", "inputs/movies.yaml"]
-        library_dir: "lib"
-        libraries_modified: ["libyaml-0.so.2.0.5"]
         source_provided: false
 
     yamlS1:

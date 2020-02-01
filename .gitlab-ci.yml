@@ -25,6 +25,7 @@ build:afl-gcc:
   artifacts:
     paths:
       - ./*/*/lava-afl-gcc
+    expire_in: 6 mos
 
 build:afl-clang-fast:
   extends: .build
@@ -59,7 +60,7 @@ build:afl-clang-fast-64:
 test_seeds:afl-gcc:
   extends: .test_seeds
   script:
-    - ./scripts/test-solution.py -p lava-afl-gcc 3/info.yaml 4/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-gcc 2/info.yaml 3/info.yaml 4/info.yaml
       5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
       10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml
   dependencies:
@@ -69,7 +70,7 @@ test_seeds:afl-clang-fast:
   extends: .test_seeds
   stage: test_seeds
   script:
-    - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml 4/info.yaml
+    - ./scripts/test-solution.py -p lava-afl-cf 2/info.yaml 3/info.yaml 4/info.yaml
       5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
       10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml
   dependencies:

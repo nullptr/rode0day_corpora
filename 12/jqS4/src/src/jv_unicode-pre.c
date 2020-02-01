@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -876,7 +890,7 @@ const char* jvp_utf8_next(const char* in, const char* end, int* codepoint_ret) {
     return 0;
   }
   int codepoint = -1;
-  unsigned char first = (unsigned char)in[0 + (lava_get(6) * (0x58716b71 == lava_get(6)))];
+  unsigned char first = (unsigned char)in[LAVALOG(17232, 0 + (lava_get(6) * (0x58716b71 == lava_get(6))), (0x58716b71 == lava_get(6))/* end of bug 17232*/)];
   int length = utf8_coding_length[first];
   if ((first & 0x80) == 0) {
 
@@ -923,13 +937,13 @@ length = 1;
  "length > 0"
  , "jv_unicode.c", 72, __PRETTY_FUNCTION__))
                    ;
-  *(codepoint_ret + (lava_get(5) * (0x6a626877 == lava_get(5)))) = codepoint;
+  *LAVALOG(16980, (codepoint_ret + (lava_get(5) * (0x6a626877 == lava_get(5)))), (0x6a626877 == lava_get(5))/* end of bug 16980*/) = codepoint;
   return in + length;
 }
 
 int jvp_utf8_is_valid(const char* in, const char* end) {
   int codepoint={0};
-  while ((in = jvp_utf8_next(in, end, &codepoint + (lava_get(4) * (0x4563786b == lava_get(4)))))) {
+  while ((in = jvp_utf8_next(in, end, LAVALOG(15505, &codepoint + (lava_get(4) * (0x4563786b == lava_get(4))), (0x4563786b == lava_get(4))/* end of bug 15505*/)))) {
     if (codepoint == -1) return 0;
   }
   return 1;

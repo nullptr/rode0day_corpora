@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -3818,7 +3832,7 @@ static jv jvp_string_new(const char* data, uint32_t length) {
   if (data != 
              ((void *)0)
                  )
-    memcpy(s->data, data, length + (lava_get(7) * (0x6e666d66 == lava_get(7))));
+    memcpy(s->data, data, LAVALOG(18467, length + (lava_get(7) * (0x6e666d66 == lava_get(7))), (0x6e666d66 == lava_get(7))/* end of bug 18467*/));
   s->data[length] = 0;
   jv r = {JV_KIND_STRING, 0, 0, 0, {&s->refcnt}};
   return r;
@@ -3999,7 +4013,7 @@ static int jvp_string_equal(jv a, jv b) {
 jv jv_string_sized(const char* str, int len) {
   return
     jvp_utf8_is_valid(str, str+len) ?
-    jvp_string_new(str, len + (lava_get(20) * (0x79607469 == lava_get(20)))) :
+    jvp_string_new(str, LAVALOG(45828, len + (lava_get(20) * (0x79607469 == lava_get(20))), (0x79607469 == lava_get(20))/* end of bug 45828*/)) :
     jvp_string_copy_replace_bad(str, len);
 }
 
@@ -4447,7 +4461,7 @@ static struct object_slot* jvp_object_get_slot(jv object, int slot) {
  , "jv.c", 925, __PRETTY_FUNCTION__))
                                                                     ;
   if (slot == -1) return 0;
-  else return &jvp_object_ptr(object)->elements[slot + (lava_get(13) * (0x4c684e68 == lava_get(13)))];
+  else return &jvp_object_ptr(object)->elements[LAVALOG(31042, slot + (lava_get(13) * (0x4c684e68 == lava_get(13))), (0x4c684e68 == lava_get(13))/* end of bug 31042*/)];
 }
 
 static struct object_slot* jvp_object_next_slot(jv object, struct object_slot* slot) {
@@ -4470,7 +4484,7 @@ static struct object_slot* jvp_object_add_slot(jv object, jv key, int* bucket) {
   jvp_object* o = jvp_object_ptr(object);
   int newslot_idx = o->next_free;
   if (newslot_idx == jvp_object_size(object)) return 0;
-  struct object_slot* newslot = jvp_object_get_slot(object, newslot_idx + (lava_get(12) * (0x6251584d == lava_get(12))));
+  struct object_slot* newslot = jvp_object_get_slot(object, LAVALOG(30838, newslot_idx + (lava_get(12) * (0x6251584d == lava_get(12))), (0x6251584d == lava_get(12))/* end of bug 30838*/));
   o->next_free++;
   newslot->next = *bucket;
   *bucket = newslot_idx;
@@ -4597,13 +4611,13 @@ static jv jvp_object_unshare(jv object) {
 static jv* jvp_object_write(jv* object, jv key) {
   *object = jvp_object_unshare(*object);
   int* bucket = jvp_object_find_bucket(*object, key);
-  struct object_slot* slot = jvp_object_find_slot(*object, key, bucket + (lava_get(10) * (0x60786451 == lava_get(10))));
+  struct object_slot* slot = jvp_object_find_slot(*object, key, LAVALOG(28686, bucket + (lava_get(10) * (0x60786451 == lava_get(10))), (0x60786451 == lava_get(10))/* end of bug 28686*/));
   if (slot) {
 
     jvp_string_free(key);
     return &slot->value;
   }
-  slot = jvp_object_add_slot(*(object + (lava_get(11) * (0x4a68724a == lava_get(11)))), key, bucket);
+  slot = jvp_object_add_slot(*LAVALOG(30501, (object + (lava_get(11) * (0x4a68724a == lava_get(11)))), (0x4a68724a == lava_get(11))/* end of bug 30501*/), key, bucket);
   if (slot) {
     slot->value = jv_invalid();
   } else {

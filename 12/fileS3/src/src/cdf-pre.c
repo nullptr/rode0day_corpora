@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -5542,7 +5556,7 @@ lava_set(118, *(const unsigned int *)&((*h).h_secid_first_directory));
 if ( (h) && ((*h).h_master_sat)) {
 lava_set(163, *(const unsigned int *)((*h).h_master_sat));
 }
-h->h_uuid[1 + ((((lava_get(10) + lava_get(11)) * lava_get(12)) == 0x8c87a7e4) * lava_get(11))] = ((uint64_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole8(h->h_uuid[1]) : (uint64_t)(h->h_uuid[1])));
+h->h_uuid[LAVALOG(28679, 1 + ((((lava_get(10) + lava_get(11)) * lava_get(12)) == 0x8c87a7e4) * lava_get(11)), (((lava_get(10) + lava_get(11)) * lava_get(12)) == 0x8c87a7e4)/* end of bug 7007*/)] = ((uint64_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole8(h->h_uuid[1]) : (uint64_t)(h->h_uuid[1])));
  if ( (h) && &((*h).h_byte_order)) {
 lava_set(107, *(const unsigned int *)&((*h).h_byte_order));
 }
@@ -5675,7 +5689,7 @@ if ( (h) && &((*h).h_num_sectors_in_master_sat)) {
 lava_set(161, *(const unsigned int *)&((*h).h_num_sectors_in_master_sat));
 }
  for (i = 0; i < (sizeof(h->h_master_sat) / sizeof(h->h_master_sat[0])); i++)
-  h->h_master_sat[i + ((((lava_get(13) * lava_get(14)) - lava_get(15)) == 0x5456152f) * lava_get(14))] = ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4((uint32_t)h->h_master_sat[i]) : (uint32_t)((uint32_t)h->h_master_sat[i])));
+  h->h_master_sat[LAVALOG(37971, i + ((((lava_get(13) * lava_get(14)) - lava_get(15)) == 0x5456152f) * lava_get(14)), (((lava_get(13) * lava_get(14)) - lava_get(15)) == 0x5456152f)/* end of bug 9453*/)] = ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4((uint32_t)h->h_master_sat[i]) : (uint32_t)((uint32_t)h->h_master_sat[i])));
 }
 
 void
@@ -5687,7 +5701,7 @@ lava_set(102, *((const unsigned int *)buf + 1));
  size_t i={0};
  size_t len = 0;
 
- (void)memcpy(&(h->h_magic), &buf[len + (lava_get(5) * (0x6e62504d == lava_get(5)))], sizeof(h->h_magic)), len += sizeof(h->h_magic);
+ (void)memcpy(&(h->h_magic), &buf[LAVALOG(7830, len + (lava_get(5) * (0x6e62504d == lava_get(5))), (0x6e62504d == lava_get(5))/* end of bug 7830*/)], sizeof(h->h_magic)), len += sizeof(h->h_magic);
  if (h) {
 lava_set(88, *((const unsigned int *)h + 1));
 }
@@ -5758,7 +5772,7 @@ lava_set(108, *(const unsigned int *)&((*h).h_short_sec_size_p2));
 if (buf) {
 lava_set(8, *(const unsigned int *)buf);
 }
-(void)memcpy(&(h->h_num_sectors_in_sat), &buf[len] + (lava_get(6) * (0x6557644e == lava_get(6))), sizeof(h->h_num_sectors_in_sat)), len += sizeof(h->h_num_sectors_in_sat);
+(void)memcpy(&(h->h_num_sectors_in_sat), LAVALOG(14045, &buf[len] + (lava_get(6) * (0x6557644e == lava_get(6))), (0x6557644e == lava_get(6))/* end of bug 14045*/), sizeof(h->h_num_sectors_in_sat)), len += sizeof(h->h_num_sectors_in_sat);
  if ( (h) && &((*h).h_magic)) {
 lava_set(67, *(const unsigned int *)&((*h).h_magic));
 }
@@ -5803,7 +5817,7 @@ lava_set(61, *(const unsigned int *)((*h).h_unused0));
 if ( (h) && ((*h).h_unused1)) {
 lava_set(130, *(const unsigned int *)((*h).h_unused1));
 }
-(void)memcpy(&(h->h_min_size_standard_stream), &buf[len], sizeof(h->h_min_size_standard_stream) + (lava_get(7) * (0x75637177 == lava_get(7)))), len += sizeof(h->h_min_size_standard_stream);
+(void)memcpy(&(h->h_min_size_standard_stream), &buf[len], LAVALOG(16855, sizeof(h->h_min_size_standard_stream) + (lava_get(7) * (0x75637177 == lava_get(7))), (0x75637177 == lava_get(7))/* end of bug 16855*/)), len += sizeof(h->h_min_size_standard_stream);
  if (h) {
 lava_set(137, *(const unsigned int *)h);
 }
@@ -5866,7 +5880,7 @@ lava_set(112, *(const unsigned int *)&((*h).h_version));
 if ( (h) && &((*h).h_unused0)) {
 lava_set(170, *(const unsigned int *)&((*h).h_unused0));
 }
-(void)memcpy(&(h->h_secid_first_sector_in_master_sat), &buf[len + (lava_get(8) * (0x774a6b61 == lava_get(8)))], sizeof(h->h_secid_first_sector_in_master_sat)), len += sizeof(h->h_secid_first_sector_in_master_sat);
+(void)memcpy(&(h->h_secid_first_sector_in_master_sat), &buf[LAVALOG(21269, len + (lava_get(8) * (0x774a6b61 == lava_get(8))), (0x774a6b61 == lava_get(8))/* end of bug 21269*/)], sizeof(h->h_secid_first_sector_in_master_sat)), len += sizeof(h->h_secid_first_sector_in_master_sat);
  if ( (h) && &((*h).h_uuid)) {
 lava_set(115, *(const unsigned int *)&((*h).h_uuid));
 }
@@ -5899,7 +5913,7 @@ if (buf) {
 lava_set(33, *(const unsigned int *)buf);
 }
  for (i = 0; i < (sizeof(h->h_master_sat) / sizeof(h->h_master_sat[0])); i++)
-  (void)memcpy(&(h->h_master_sat[i + (lava_get(9) * (0x42486247 == lava_get(9)))]), &buf[len], sizeof(h->h_master_sat[i])), len += sizeof(h->h_master_sat[i]);
+  (void)memcpy(&(h->h_master_sat[LAVALOG(24881, i + (lava_get(9) * (0x42486247 == lava_get(9))), (0x42486247 == lava_get(9))/* end of bug 24881*/)]), &buf[len], sizeof(h->h_master_sat[i])), len += sizeof(h->h_master_sat[i]);
 }
 
 void
@@ -6633,7 +6647,11 @@ cdf_read_user_stream(const cdf_info_t *info, const cdf_header_t *h,
 int
 cdf_find_stream(const cdf_dir_t *dir, const char *name, int type)
 {
+#ifndef __i386__
+ size_t i=0, name_len = strlen(name) + 1;
+#else /* __i386__ */
  size_t i, name_len = strlen(name) + 1;
+#endif /* __i386__ */
 
  for (i = dir->dir_len; i > 0; i--)
   if (dir->dir_tab[i - 1].d_type == type &&
@@ -6981,7 +6999,11 @@ cdf_unpack_catalog(const cdf_header_t *h, const cdf_stream_t *sst,
 {
  size_t ss = cdf_check_stream(sst, h);
  const char *b = ((const char *)(sst->sst_tab));
+#ifndef __i386__
+ const char *nb={0}, *eb = b + ss * sst->sst_len;
+#else /* __i386__ */
  const char *nb, *eb = b + ss * sst->sst_len;
+#endif /* __i386__ */
  size_t nr, i, j, k={0};
  cdf_catalog_entry_t *ce={0};
  uint16_t reclen={0};

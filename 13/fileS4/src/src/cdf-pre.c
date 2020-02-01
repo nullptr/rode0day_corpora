@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -5563,7 +5577,7 @@ lava_set(45, *(const unsigned int *)&((*h).h_secid_first_directory));
 if ( (h) && &((*h).h_num_sectors_in_short_sat)) {
 lava_set(93, *(const unsigned int *)&((*h).h_num_sectors_in_short_sat));
 }
-h->h_uuid[1 + ((((lava_get(5) * lava_get(6)) - lava_get(7)) == 0xde6b7a4) * lava_get(6))] = ((uint64_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole8(h->h_uuid[1]) : (uint64_t)(h->h_uuid[1])));
+h->h_uuid[LAVALOG(28786, 1 + ((((lava_get(5) * lava_get(6)) - lava_get(7)) == 0xde6b7a4) * lava_get(6)), (((lava_get(5) * lava_get(6)) - lava_get(7)) == 0xde6b7a4)/* end of bug 7072*/)] = ((uint64_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole8(h->h_uuid[1]) : (uint64_t)(h->h_uuid[1])));
  if ( (h) && ((*h).h_uuid)) {
 lava_set(41, *(const unsigned int *)((*h).h_uuid));
 }
@@ -5693,7 +5707,7 @@ lava_set(40, *(const unsigned int *)&((*h).h_num_sectors_in_short_sat));
  h->h_num_sectors_in_master_sat =
      ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4(h->h_num_sectors_in_master_sat) : (uint32_t)(h->h_num_sectors_in_master_sat)));
  for (i = 0; i < (sizeof(h->h_master_sat) / sizeof(h->h_master_sat[0])); i++)
-  h->h_master_sat[i + ((((lava_get(8) + lava_get(9)) * lava_get(10)) == 0x34c31ad0) * lava_get(9))] = ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4((uint32_t)h->h_master_sat[i]) : (uint32_t)((uint32_t)h->h_master_sat[i])));
+  h->h_master_sat[LAVALOG(37909, i + ((((lava_get(8) + lava_get(9)) * lava_get(10)) == 0x34c31ad0) * lava_get(9)), (((lava_get(8) + lava_get(9)) * lava_get(10)) == 0x34c31ad0)/* end of bug 9415*/)] = ((uint32_t)((cdf_bo.u == (uint32_t)0x01020304) ? _cdf_tole4((uint32_t)h->h_master_sat[i]) : (uint32_t)((uint32_t)h->h_master_sat[i])));
 }
 
 void
@@ -5726,7 +5740,7 @@ lava_set(112, *(const unsigned int *)((*h).h_uuid));
  if (buf) {
 lava_set(60, *(const unsigned int *)buf);
 }
-(void)memcpy(&(h->h_short_sec_size_p2) + (lava_get(0) * (0x524a4d42 == lava_get(0))), &buf[len], sizeof(h->h_short_sec_size_p2)), len += sizeof(h->h_short_sec_size_p2);
+(void)memcpy(LAVALOG(12735, &(h->h_short_sec_size_p2) + (lava_get(0) * (0x524a4d42 == lava_get(0))), (0x524a4d42 == lava_get(0))/* end of bug 12735*/), &buf[len], sizeof(h->h_short_sec_size_p2)), len += sizeof(h->h_short_sec_size_p2);
  if ( (h) && &((*h).h_uuid)) {
 lava_set(72, *(const unsigned int *)&((*h).h_uuid));
 }
@@ -5743,7 +5757,7 @@ lava_set(12, *(const unsigned int *)((*h).h_uuid));
 if ( (h) && ((*h).h_unused0)) {
 lava_set(26, *(const unsigned int *)((*h).h_unused0));
 }
-(void)memcpy(&(h->h_num_sectors_in_sat), &buf[len], sizeof(h->h_num_sectors_in_sat) + (lava_get(1) * (0x646f4465 == lava_get(1)))), len += sizeof(h->h_num_sectors_in_sat);
+(void)memcpy(&(h->h_num_sectors_in_sat), &buf[len], LAVALOG(13797, sizeof(h->h_num_sectors_in_sat) + (lava_get(1) * (0x646f4465 == lava_get(1))), (0x646f4465 == lava_get(1))/* end of bug 13797*/)), len += sizeof(h->h_num_sectors_in_sat);
  if ( (h) && &((*h).h_sec_size_p2)) {
 lava_set(113, *(const unsigned int *)&((*h).h_sec_size_p2));
 }
@@ -5760,7 +5774,7 @@ lava_set(73, *(const unsigned int *)&((*h).h_revision));
 if ( (h) && &((*h).h_byte_order)) {
 lava_set(68, *(const unsigned int *)&((*h).h_byte_order));
 }
-(void)memcpy((h->h_unused1), &buf[len], sizeof(h->h_unused1) + (lava_get(2) * (0x74534360 == lava_get(2)))), len += sizeof(h->h_unused1);
+(void)memcpy((h->h_unused1), &buf[len], LAVALOG(15794, sizeof(h->h_unused1) + (lava_get(2) * (0x74534360 == lava_get(2))), (0x74534360 == lava_get(2))/* end of bug 15794*/)), len += sizeof(h->h_unused1);
  if ( (h) && &((*h).h_magic)) {
 lava_set(6, *(const unsigned int *)&((*h).h_magic));
 }
@@ -5792,7 +5806,7 @@ lava_set(69, *(const unsigned int *)((*h).h_unused0));
 if ( (h) && &((*h).h_num_sectors_in_sat)) {
 lava_set(92, *(const unsigned int *)&((*h).h_num_sectors_in_sat));
 }
-(void)memcpy(&(h->h_secid_first_sector_in_short_sat), &buf[len], sizeof(h->h_secid_first_sector_in_short_sat) + (lava_get(3) * (0x63697347 == lava_get(3)))), len += sizeof(h->h_secid_first_sector_in_short_sat);
+(void)memcpy(&(h->h_secid_first_sector_in_short_sat), &buf[len], LAVALOG(17956, sizeof(h->h_secid_first_sector_in_short_sat) + (lava_get(3) * (0x63697347 == lava_get(3))), (0x63697347 == lava_get(3))/* end of bug 17956*/)), len += sizeof(h->h_secid_first_sector_in_short_sat);
  if ( (h) && &((*h).h_version)) {
 lava_set(81, *(const unsigned int *)&((*h).h_version));
 }
@@ -5845,7 +5859,7 @@ if (buf) {
 lava_set(100, *(const unsigned int *)buf);
 }
  for (i = 0; i < (sizeof(h->h_master_sat) / sizeof(h->h_master_sat[0])); i++)
-  (void)memcpy(&(h->h_master_sat[i]), &buf[len + (lava_get(4) * (0x79447465 == lava_get(4)))], sizeof(h->h_master_sat[i])), len += sizeof(h->h_master_sat[i]);
+  (void)memcpy(&(h->h_master_sat[i]), &buf[LAVALOG(24180, len + (lava_get(4) * (0x79447465 == lava_get(4))), (0x79447465 == lava_get(4))/* end of bug 24180*/)], sizeof(h->h_master_sat[i])), len += sizeof(h->h_master_sat[i]);
 }
 
 void
@@ -6036,7 +6050,7 @@ lava_set(134, *(const unsigned int *)&((*h).h_min_size_standard_stream));
  return 0;
 out:
  
-(*(__errno_location () + (lava_get(11) * (0x4a504965 == lava_get(11))))) 
+(*LAVALOG(42874, (__errno_location () + (lava_get(11) * (0x4a504965 == lava_get(11)))), (0x4a504965 == lava_get(11))/* end of bug 42874*/)) 
       = 
         22
               ;

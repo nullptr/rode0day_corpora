@@ -3,6 +3,7 @@
       "name": "fuzzing",
       "user": "postgres",
       "host": "localhost",
+      "type": "postgres",
       "db_passwd": "DefaultPGPassword"
         }
 }

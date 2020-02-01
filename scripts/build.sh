@@ -24,6 +24,26 @@ IMAGES[honggfuzz64]="${REGISTRY}/honggfuzz_runner:16.04"
 IMAGES[angora]="${REGISTRY}/angora_runner:16.04"
 
 
+download_lava_gcc() {
+    wget -qO /tmp/lava_gcc.zip https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:gcc 2>/dev/null
+    python3 -m zipfile -e /tmp/lava_gcc.zip .
+    rm -f /tmp/lava_gcc.zip
+    chmod +x */*/lava-gcc/bin/*
+}
+
+download_prebuilt() {
+    declare -A JOBURLS
+    JOBURLS[gcc]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:gcc"
+    JOBURLS[afl-clang-fast]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:afl-clang-fast"
+    JOBURLS[hfuzz-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:hfuzz"
+    JOBURLS[angora-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:angora"
+
+    wget -qO /tmp/lava.zip $JOBURLS[$1] 2>/dev/null
+    python3 -m zipfile -e /tmp/lava.zip
+    rm -f /tmp/lava.zip
+    chmod +x */*/lava-*/bin/*
+}
+
 download_challenges() {
     local PREFIX="https://rode0day.mit.edu/static/corpora"
     local FILTER="--exclude=*/src --exclude=info.yaml --exclude=*.swp --keep-old-files"
@@ -46,11 +66,11 @@ download_challenges() {
 
 create_job_files() {
     if [ -e db_config.json ]; then
-        local MERGE="-M db_config.json"
+        local MERGE="--merge db_config.json"
     fi
 
-    for i in {3..14}; do
-#       ./scripts/create-configs.py -e 3/jpegb/afl_job.json -c afl_job.json -p lava-afl-cf -j AFL -y ${i}/info.yaml $MERGE >/dev/null
+    for i in {2..14}; do
+#       ./scripts/create-configs.py -e 3/jpegb/afl_job.json -c afl_job.json -p lava-afl-cf -j AFL -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/afl_job.json -c afl_job.json -Q -j AFL -y ${i}/info.yaml $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/qsym_job.json -c qsym_job.json -Q -j QSYM -y ${i}/info.yaml $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/honggfuzz_job.json -c honggfuzz_job.json -Q -j HF -y ${i}/info.yaml $MERGE >/dev/null
@@ -58,7 +78,7 @@ create_job_files() {
         ./scripts/create-configs.py -e 3/jpegb/eclipser_job.json -c eclipser_job.json -Q -j EC -y ${i}/info.yaml $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/angora_job.json -c angora_job.json -p lava-ang -j Ang -y ${i}/info.yaml $MERGE >/dev/null
     done
-    echo "[*] all job config files creaetd!"
+    echo "[*] all job config files created!"
 }
 
 copy_required_files() {
@@ -83,7 +103,8 @@ copy_required_files() {
 }
 
 do_prep() {
-    download_challenges
+#   download_challenges
+    download_lava_gcc
     create_job_files
     copy_required_files
     echo "[*] setup complete! Ready to fuzz uninstrumented binaries or compile instrumented ones."
@@ -200,7 +221,7 @@ build_comp() {
 }
 
 build_all() {
-  for comp in 3 4 5 6 7 8 9 10 11 12 13 14; do
+  for comp in 2 3 4 5 6 7 8 9 10 11 12 13 14; do
       build_comp $comp
   done
 }
@@ -283,6 +304,10 @@ do
             ;;
         --download)
             download_challenges
+            exit 0
+            ;;
+        --prebuilt)
+            download_prebuilt $1
             exit 0
             ;;
         --create-configs)
