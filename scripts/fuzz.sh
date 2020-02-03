@@ -8,6 +8,7 @@ bail() {
 [ -n "$FZ" ] || bail "FZ not defined"
 [ -n "$TGT" ] || bail "TGT not defined"
 [ -n "$NF" ] || bail "num fuzzers (NF) not defined"
+export TGT FZ
 
 TGT_ROOT=$(find -mindepth 2 -maxdepth 2 -type d -name "$TGT" -printf "%p")
 [ -d "$TGT_ROOT" ] || bail "failed to find TGT_ROOT"
@@ -56,6 +57,7 @@ if [ "$RUNC" = "singularity" ]; then
     AFL_NO_AFFINITY=1 \
     # singularity instance start -B "${TDIR}":/tmp $SIMG $CNAME -n $NF -t $FDIR -M $CNAME
     singularity run -B "${TDIR}":/tmp $SIMG -n $NF -t $FDIR -M $CNAME &
+    echo "New singularity process $!"
 else
     echo "[*] starting docker container $CNAME"
     docker run -d --rm --name $CNAME -v $FDIR:$FDIR -w $FDIR \

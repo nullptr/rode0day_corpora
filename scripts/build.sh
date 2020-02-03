@@ -38,8 +38,8 @@ download_prebuilt() {
     JOBURLS[hfuzz-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:hfuzz"
     JOBURLS[angora-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:angora"
 
-    wget -qO /tmp/lava.zip $JOBURLS[$1] 2>/dev/null
-    python3 -m zipfile -e /tmp/lava.zip
+    wget -qO /tmp/lava.zip ${JOBURLS[$1]} 2>/dev/null
+    python3 -m zipfile -e /tmp/lava.zip .
     rm -f /tmp/lava.zip
     chmod +x */*/lava-*/bin/*
 }
@@ -307,7 +307,7 @@ do
             exit 0
             ;;
         --prebuilt)
-            download_prebuilt $1
+            download_prebuilt $2
             exit 0
             ;;
         --create-configs)
