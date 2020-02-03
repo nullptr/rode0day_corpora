@@ -133,5 +133,6 @@ fi
 if [ "$RUNC" = "docker" ]; then
     docker exec $CNAME /start_fuzzing --stop
     sleep 15s
+    docker wait $CNAME
     echo docker stop -t 30 $CNAME
 fi
