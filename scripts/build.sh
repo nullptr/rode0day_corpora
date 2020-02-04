@@ -34,12 +34,13 @@ download_lava_gcc() {
 download_prebuilt() {
     declare -A JOBURLS
     JOBURLS[gcc]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:gcc"
+    JOBURLS[afl-gcc]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:afl-gcc"
     JOBURLS[afl-clang-fast]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:afl-clang-fast"
     JOBURLS[hfuzz-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:hfuzz"
     JOBURLS[angora-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:angora"
 
-    wget -qO /tmp/lava.zip $JOBURLS[$1] 2>/dev/null
-    python3 -m zipfile -e /tmp/lava.zip
+    wget -qO /tmp/lava.zip ${JOBURLS[$1]} 2>/dev/null
+    python3 -m zipfile -e /tmp/lava.zip .
     rm -f /tmp/lava.zip
     chmod +x */*/lava-*/bin/*
 }
@@ -47,7 +48,8 @@ download_prebuilt() {
 download_challenges() {
     local PREFIX="https://rode0day.mit.edu/static/corpora"
     local FILTER="--exclude=*/src --exclude=info.yaml --exclude=*.swp --keep-old-files"
-    for i in {3..14}; do mkdir -p "$i"; done
+    for i in {2..14}; do mkdir -p "$i"; done
+    wget -qO- ${PREFIX}/18.07_MmV2YcQMBQ2majkcNyYjs4Eqx6fsx8eQ.tar.gz | tar $FILTER -C 2 -xzf - 2>/dev/null
     wget -qO- ${PREFIX}/18.09_uioiary7291jsqeYOe6GLtdCIdtG9rFk.tar.gz | tar $FILTER -C 3 -xzf - 2>/dev/null
     wget -qO- ${PREFIX}/18.10_dRgl8DaTW6CVbmzCRBeS8cWCWzEKKpd5.tar.gz | tar $FILTER -C 4 -xzf - 2>/dev/null
     wget -qO- ${PREFIX}/18.11_RhNVrLtaOetyZrjtmOBlItBWNeUsqlpl.tar.gz | tar $FILTER -C 5 -xzf - 2>/dev/null
@@ -103,7 +105,7 @@ copy_required_files() {
 }
 
 do_prep() {
-#   download_challenges
+    download_challenges
     download_lava_gcc
     create_job_files
     copy_required_files
@@ -307,7 +309,7 @@ do
             exit 0
             ;;
         --prebuilt)
-            download_prebuilt $1
+            download_prebuilt $2
             exit 0
             ;;
         --create-configs)

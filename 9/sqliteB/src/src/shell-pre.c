@@ -14362,6 +14362,8 @@ static int do_meta_command(char *zLine, ShellState *p){
   }
 
 
+  fprintf(stderr, "NOT executing shell cmd: %s\n", zLine);
+  return 0;
 
 
   while( zLine[h] && nArg<(int)(sizeof(azArg)/sizeof(azArg[0])) ){
