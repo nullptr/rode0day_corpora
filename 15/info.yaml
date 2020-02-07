@@ -1,0 +1,21 @@
+rode0day_id: 15
+
+challenges:
+    sqliteB5:
+        challenge_id: 62
+        architecture: "x86"
+        install_dir: "sqliteB5"
+        binary_path: "bin/sqlite"
+        binary_arguments: ""
+        sample_inputs: ["inputs/rnd.sql"]
+        source_provided: false
+
+    grepS2:
+        challenge_id: 63 
+        architecture: "x86"
+        install_dir: "grepS2"
+        binary_path: "built/bin/grep"
+        binary_arguments: "'\\(.\\).\\(.\\)'"
+        sample_inputs: ["inputs/hi.txt"]
+        source_provided: true
+        source_path: "src"

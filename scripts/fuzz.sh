@@ -61,7 +61,7 @@ if [ "$RUNC" = "singularity" ]; then
 else
     echo "[*] starting docker container $CNAME"
     docker run -d --rm --name $CNAME -v $FDIR:$FDIR -w $FDIR \
-        --cap-add=SYS_PTRACE --security-opt seccomp=unconfined \
+        --cap-add=SYS_PTRACE --security-opt seccomp=unconfined -e "TGT=${TGT}" \
         -e "QEMU_RESERVED_VA=0xf700000" --hostname "$(hostname)-docker-${TGT}" \
         --pid=host --ulimit "core=0" $DIMG -n $NF -t $FDIR -M $CNAME
 fi
@@ -81,13 +81,13 @@ get_coverage() {
 }
 
 stop_signularity() {
-    singularity exec -B "${TDIR}":/tmp $SIMG /start_fuzzing --stop
+    singularity exec -B "${TDIR}":/tmp $SIMG /start_fuzzing --stop $TGT
     sleep 5s
     singularity instance stop -s TERM $CNAME
 }
 
 stop_docker() {
-    docker exec $CNAME /start_fuzzing --stop
+    docker exec $CNAME /start_fuzzing --stop $TGT
     sleep 5s
     docker stop -t 30 $CNAME
 }
@@ -125,13 +125,13 @@ fi
 printf "[*] Finished fuzzing %-14s: Elapsed=${SECONDS}s  $(date +'%F %T') $MESSAGE\n" $TGT
 
 if [ "$RUNC" = "singularity" ]; then
-    singularity exec -B "${TDIR}":/tmp $SIMG /start_fuzzing --stop
+    singularity exec -B "${TDIR}":/tmp $SIMG /start_fuzzing --stop $TGT
     sleep 15s
     exit 0
 fi
 
 if [ "$RUNC" = "docker" ]; then
-    docker exec $CNAME /start_fuzzing --stop
+    docker exec $CNAME /start_fuzzing --stop $TGT
     sleep 15s
     docker wait $CNAME
     echo docker stop -t 30 $CNAME
