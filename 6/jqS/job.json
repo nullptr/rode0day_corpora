@@ -4,7 +4,7 @@
     "input":"inputs",
     "output":"outputs",
     "target":"./built/bin/jq",
-    "cmdline": "--slurp '[. | . | { hello: . }]' @@ built/share/fixed.json",
+    "cmdline": "@@",
     "qemu": true,
     "mem_limit":"4096",
     "_time_limit": "24h",
