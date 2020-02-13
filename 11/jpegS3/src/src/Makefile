@@ -1,7 +1,6 @@
 all : jpeg
 
-CFLAGS  += -O0 -DHAVE_CONFIG_H -I. -g -gdwarf-2# --coverage -fprofile-arcs -ftest-coverage
-LDFLAGS += #--coverage
+CFLAGS  += -O0 -DHAVE_CONFIG_H -I. -g -gdwarf-2
 
 LIBOBJ = \
 	jaricom.o jcapimin.o jcapistd.o jcarith.o jccoefct.o \
@@ -20,7 +19,7 @@ LIBOBJ = \
 
 
 jpeg: $(LIBOBJ) example.o
-	$(CC) $(CFLAGS) -o jpeg $^ $(LDFLAGS)
+	$(CC) $(CFLAGS) -o jpeg $^
 
 clean:
 	rm -f *.o \
