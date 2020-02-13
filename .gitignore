@@ -10,11 +10,18 @@ __pycache__
 test*
 build_script
 afl_job.json
+aflpp_job.json
+aflrb_job.json
 qsym_job.json
 honggfuzz_job.json
 eclipser_job.json
 angora_job.json
-
+lava-gcc
+lava-afl-gcc
+lava-afl-cf
+lava-hf
+lava-ang
+lava-install
 
 3/greps/src/src/grep
 3/jpegs/src/src/memdjpeg
@@ -38,3 +45,23 @@ angora_job.json
 13/fileS4/src/src/file
 13/jpegS4/src/src/jpeg
 
+3/grepb/src/src/grep
+3/jpegb/src/src/memdjpeg
+4/pcreB/src/src/pcre2grep
+5/duktape/src/src/duk
+5/fileB2/src/src/file
+5/tinyexpr/src/src/math
+6/filemagicB/src/src/file
+6/jqB/src/src/jq
+6/pcre2B/src/src/pcre2grep
+7/bzipB/src/src/bzip2
+7/fileB3/src/src/file
+7/yamlB3/src/src/libyaml
+8/jqB2/src/src/jq
+8/yamlB4/src/src/libyaml
+9/fileB4/src/src/file
+9/jpegB2/src/src/jpeg
+9/sqliteB/src/src/sqlite
+10/audiofileB/src/src/audiofile
+10/tcpdumpB/src/src/tcpdump
+14/jpegS5/src/src/jpeg

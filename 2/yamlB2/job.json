@@ -3,7 +3,7 @@
     "fuzzer": "/usr/local/i386/afl-fuzz",
     "input":"inputs",
     "output":"outputs",
-    "target":"./bin/deconstruct",
+    "target":"./lava-gcc/bin/deconstruct",
     "cmdline": "@@",
     "qemu": true,
     "mem_limit":"4096",
