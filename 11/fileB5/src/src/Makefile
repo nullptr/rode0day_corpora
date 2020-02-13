@@ -15,8 +15,8 @@ LIBOBJ = \
     cdf_time.o \
     compress.o \
     ctime_r.o \
-    der.c \
-    dprintf.c \
+    der.o \
+    dprintf.o \
     encoding.o \
     file.o \
     fmtcheck.o \
@@ -24,21 +24,21 @@ LIBOBJ = \
     funcs.o \
     getline.o \
     getopt_long.o \
-    gmtime_r.c \
-    is_json.c \
+    gmtime_r.o \
+    is_json.o \
     is_tar.o \
-    localtime_r.c \
+    localtime_r.o \
     magic.o \
     pread.o \
     print.o \
     readcdf.o \
     readelf.o \
-    seccomp.c \
+    seccomp.o \
     softmagic.o \
     strcasestr.o \
     strlcat.o \
     strlcpy.o \
-    teststrchr.c \
+    teststrchr.o \
     vasprintf.o
 
 
