@@ -53,6 +53,7 @@ build:afl-clang-fast-64:
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/afl_runner:16.04
   script:
+    - git apply patches/jq_no_cmdline.patch
     - ./scripts/build.sh -X
   artifacts:
     paths:
@@ -61,9 +62,10 @@ build:afl-clang-fast-64:
 test_seeds:afl-gcc:
   extends: .test_seeds
   script:
+    - git apply patches/jq_no_cmdline.patch
     - ./scripts/test-solution.py -p lava-afl-gcc 2/info.yaml 3/info.yaml 4/info.yaml
       5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
-      10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml
+      10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml 14/info.yaml
   dependencies:
     - build:afl-gcc
 
@@ -89,9 +91,10 @@ test_seeds:gcc-64:
 test_seeds:afl-clang-fast-64:
   extends: .test_seeds
   script:
+    - git apply patches/jq_no_cmdline.patch
     - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml 4/info.yaml
       5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
-      10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml
+      10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml 14/info.yaml
   dependencies:
     - build:afl-clang-fast-64
 

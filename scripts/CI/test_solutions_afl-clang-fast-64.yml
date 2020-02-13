@@ -1,6 +1,6 @@
 ---
 
-test_solutions:3:10:afl-clang-fast-64:
+test_solutions:3:14:afl-clang-fast-64:
   extends: .test_solutions
   script:
     - tar -C 3 -xzf 3/solutions.tgz
@@ -10,7 +10,7 @@ test_solutions:3:10:afl-clang-fast-64:
   only:
     - dev
 
-test_solutions:4:10:afl-clang-fast-64:
+test_solutions:4:14:afl-clang-fast-64:
   extends: .test_solutions
   script:
     - tar -C 4 -xzf 4/solutions.tgz
@@ -20,7 +20,7 @@ test_solutions:4:10:afl-clang-fast-64:
   only:
     - dev
 
-test_solutions:5:10:afl-clang-fast-64:
+test_solutions:5:14:afl-clang-fast-64:
   extends: .test_solutions
   script:
     - tar -C 5 -xzf 5/solutions.tgz
@@ -30,9 +30,10 @@ test_solutions:5:10:afl-clang-fast-64:
   only:
     - dev
 
-test_solutions:6:10:afl-clang-fast-64:
+test_solutions:6:14:afl-clang-fast-64:
   extends: .test_solutions
   script:
+    - git apply patches/jq_no_cmdline.patch
     - tar -C 6 -xzf 6/solutions.tgz
     - (cd 6 && ./patch_solutions.sh )
     - ./scripts/test-solution.py -p lava-afl-cf 6/info.yaml
@@ -41,7 +42,7 @@ test_solutions:6:10:afl-clang-fast-64:
   only:
     - dev
 
-test_solutions:7:10:afl-clang-fast-64:
+test_solutions:7:14:afl-clang-fast-64:
   extends: .test_solutions
   script:
     - tar -C 7 -xzf 7/solutions.tgz
@@ -52,7 +53,7 @@ test_solutions:7:10:afl-clang-fast-64:
   only:
     - dev
 
-test_solutions:8:10:afl-clang-fast-64:
+test_solutions:8:14:afl-clang-fast-64:
   extends: .test_solutions
   script:
     - tar -C 8 -xzf 8/solutions.tgz
@@ -63,7 +64,7 @@ test_solutions:8:10:afl-clang-fast-64:
   only:
     - dev
 
-test_solutions:9:10:afl-clang-fast-64:
+test_solutions:9:14:afl-clang-fast-64:
   extends: .test_solutions
   script:
     - tar -C 9 -xzf 9/solutions.tgz
@@ -73,12 +74,44 @@ test_solutions:9:10:afl-clang-fast-64:
   only:
     - dev
 
-test_solutions:10:10:afl-clang-fast-64:
+test_solutions:10:14:afl-clang-fast-64:
   extends: .test_solutions
   script:
     - tar -C 10 -xzf 10/solutions.tgz
     - (cd 10 && ./patch_solutions.sh )
     - ./scripts/test-solution.py -p lava-afl-cf 10/info.yaml
+  dependencies:
+    - build:afl-clang-fast-64
+  only:
+    - dev
+
+test_solutions:11:14:afl-clang-fast-64:
+  extends: .test_solutions
+  script:
+    - git apply patches/jq_no_cmdline.patch
+    - tar -C 11 -xzf 11/solutions.tgz
+    - ./scripts/test-solution.py -p lava-afl-cf 11/info.yaml
+  dependencies:
+    - build:afl-clang-fast-64
+  only:
+    - dev
+
+test_solutions:12:14:afl-clang-fast-64:
+  extends: .test_solutions
+  script:
+    - git apply patches/jq_no_cmdline.patch
+    - tar -C 12 -xzf 12/solutions.tgz
+    - ./scripts/test-solution.py -p lava-afl-cf 12/info.yaml
+  dependencies:
+    - build:afl-clang-fast-64
+  only:
+    - dev
+
+test_solutions:13:14:afl-clang-fast-64:
+  extends: .test_solutions
+  script:
+    - tar -C 13 -xzf 13/solutions.tgz
+    - ./scripts/test-solution.py -p lava-afl-cf 13/info.yaml
   dependencies:
     - build:afl-clang-fast-64
   only:
