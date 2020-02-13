@@ -4131,6 +4131,10 @@ int main(int argc, char* argv[]) {
   int jq_flags = 0;
   size_t short_opts = 0;
   jv lib_search_paths = jv_null();
+  /* Rode0day -- force command line args */
+  options |= SLURP;
+  program = "[. | . | { hello: .  }]";
+  /* end - rode0day */
   for (int i=1; i<argc; i++, short_opts = 0) {
     if (args_done) {
       if (further_args_are_strings) {
