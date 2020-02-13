@@ -2573,8 +2573,6 @@ main (int argc, char **argv)
       filename_prefix_len = 2;
       status = grep_command_line_arg (".");
     }
-  else
-    status = grep_command_line_arg ("-");
 
   free (keys);
   status = 0;
