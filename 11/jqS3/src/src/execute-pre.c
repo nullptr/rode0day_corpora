@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3319,7 +3333,7 @@ static void jq_reset(int *data_flow, jq_state *jq) {
  "jq->curr_frame == 0"
  , "execute.c", 309, __PRETTY_FUNCTION__))
                             ;
-  stack_reset(data_flow, &jq->stk + (data_flow[21] * (0x57583674 == data_flow[21])));
+  stack_reset(data_flow, LAVALOG(108203, &jq->stk + (data_flow[21] * (0x57583674 == data_flow[21])), (0x57583674 == data_flow[21])));
   jv_free(jq->error);
   jq->error = jv_null();
 
