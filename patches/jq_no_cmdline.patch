@@ -1,0 +1,160 @@
+diff --git a/11/info.yaml b/11/info.yaml
+index 9dd8fb0..5903c59 100644
+--- a/11/info.yaml
++++ b/11/info.yaml
+@@ -45,7 +45,7 @@ challenges:
+         binary_path: "built/bin/jq"
+ 
+         binary_args_COMMENT: "The binary_arguments string has python format strings so the {{ hello : . }} is escaped and should be treated as { hello : . }"
+-        binary_arguments: "--slurp '[. | . | {{ hello: . }}]' {input_file} {install_dir}/built/share/fixed.json"
++        binary_arguments: "{input_file}"
+ 
+         sample_inputs: ["inputs/fixed.json"]
+         source_provided: true
+diff --git a/11/jqS3/job.json b/11/jqS3/job.json
+index f8540b7..8c7efad 100644
+--- a/11/jqS3/job.json
++++ b/11/jqS3/job.json
+@@ -4,7 +4,7 @@
+     "input": "inputs",
+     "output": "outputs",
+     "target": "./built/bin/jq",
+-    "cmdline": "--slurp '[. | . | { hello: . }]' @@ ./built/share/fixed.json",
++    "cmdline": "@@",
+     "qemu": true,
+     "mem_limit": "4096",
+     "_time_limit": "24h",
+diff --git a/11/jqS3/src/src/main-pre.c b/11/jqS3/src/src/main-pre.c
+index 71fac42..08a56b7 100644
+--- a/11/jqS3/src/src/main-pre.c
++++ b/11/jqS3/src/src/main-pre.c
+@@ -4107,6 +4107,10 @@ jq_state *jq =
+   int jq_flags = 0;
+   size_t short_opts = 0;
+   jv lib_search_paths = jv_null();
++  /* Rode0day -- force command line args */
++  options |= SLURP;
++  program = "[. | . | { hello: .  }]";
++  /* end - rode0day */
+   for (int i=1; i<argc; i++, short_opts = 0) {
+     if (args_done) {
+       if (further_args_are_strings) {
+diff --git a/12/info.yaml b/12/info.yaml
+index 19fc268..c1021de 100644
+--- a/12/info.yaml
++++ b/12/info.yaml
+@@ -35,7 +35,7 @@ challenges:
+         binary_path: "built/bin/jq"
+ 
+         binary_args_COMMENT: "The binary_arguments string has python format strings so the {{ hello : . }} is escaped and should be treated as { hello : . }"
+-        binary_arguments: "--slurp '[. | . | {{ hello: . }}]' {input_file}"
++        binary_arguments: "{input_file}"
+ 
+         sample_inputs: ["inputs/inp.json"]
+         source_provided: true
+diff --git a/12/jqS4/job.json b/12/jqS4/job.json
+index 900ef38..e8560c3 100644
+--- a/12/jqS4/job.json
++++ b/12/jqS4/job.json
+@@ -4,7 +4,7 @@
+     "input": "inputs",
+     "output": "outputs",
+     "target": "./built/bin/jq",
+-    "cmdline": "--slurp '[. | . | { hello: . }]' @@",
++    "cmdline": "@@",
+     "qemu": true,
+     "mem_limit": "4096",
+     "_time_limit": "24h",
+diff --git a/12/jqS4/src/src/main-pre.c b/12/jqS4/src/src/main-pre.c
+index a300b96..d9f56af 100644
+--- a/12/jqS4/src/src/main-pre.c
++++ b/12/jqS4/src/src/main-pre.c
+@@ -4131,6 +4131,10 @@ int main(int argc, char* argv[]) {
+   int jq_flags = 0;
+   size_t short_opts = 0;
+   jv lib_search_paths = jv_null();
++  /* Rode0day -- force command line args */
++  options |= SLURP;
++  program = "[. | . | { hello: .  }]";
++  /* end - rode0day */
+   for (int i=1; i<argc; i++, short_opts = 0) {
+     if (args_done) {
+       if (further_args_are_strings) {
+diff --git a/6/info.yaml b/6/info.yaml
+index 893e784..11ffe93 100644
+--- a/6/info.yaml
++++ b/6/info.yaml
+@@ -7,7 +7,7 @@ challenges:
+         install_dir: "jqS"
+         binary_path: "built/bin/jq"
+         binary_args_COMMENT: "The binary_arguments string has python format strings so the {{ hello : . }} is escaped and should be treated as { hello : . }"
+-        binary_arguments: "--slurp '[. | . | {{ hello: . }}]' {input_file}"
++        binary_arguments: "{input_file}"
+            
+         sample_inputs: ["inputs/fixed.json"]
+         source_provided: true
+@@ -21,7 +21,7 @@ challenges:
+         install_dir: "jqB"
+         binary_path: "bin/jq"
+         binary_args_COMMENT: "The binary_arguments string has python format strings so the {{ hello : . }} is escaped and should be treated as { hello : . }"
+-        binary_arguments: "--slurp '[. | . | {{ hello: . }}]' {input_file} {install_dir}/share/fixed.json"
++        binary_arguments: "{input_file}"
+            
+         sample_inputs: ["inputs/fixed.json"]
+         source_provided: false
+diff --git a/6/jqB/job.json b/6/jqB/job.json
+index f3d7b02..a1d8de8 100644
+--- a/6/jqB/job.json
++++ b/6/jqB/job.json
+@@ -4,7 +4,7 @@
+     "input":"inputs",
+     "output":"outputs",
+     "target":"./bin/jq",
+-    "cmdline": "--slurp '[. | . | { hello: . }]' @@ share/fixed.json",
++    "cmdline": "@@",
+     "qemu": true,
+     "mem_limit":"4096",
+     "_time_limit": "24h",
+diff --git a/6/jqB/src/src/main-pre.c b/6/jqB/src/src/main-pre.c
+index eea182f..5be9dd7 100644
+--- a/6/jqB/src/src/main-pre.c
++++ b/6/jqB/src/src/main-pre.c
+@@ -4121,6 +4121,10 @@ jq_state *jq =
+   int jq_flags = 0;
+   size_t short_opts = 0;
+   jv lib_search_paths = jv_null();
++  /* Rode0day -- force command line args */
++  options |= SLURP;
++  program = "[. | . | { hello: .  }]";
++  /* end - rode0day */
+   for (int i=1; i<argc; i++, short_opts = 0) {
+     if (args_done) {
+       if (further_args_are_strings) {
+diff --git a/6/jqS/job.json b/6/jqS/job.json
+index 0640c6d..94ef529 100644
+--- a/6/jqS/job.json
++++ b/6/jqS/job.json
+@@ -4,7 +4,7 @@
+     "input":"inputs",
+     "output":"outputs",
+     "target":"./built/bin/jq",
+-    "cmdline": "--slurp '[. | . | { hello: . }]' @@ built/share/fixed.json",
++    "cmdline": "@@",
+     "qemu": true,
+     "mem_limit":"4096",
+     "_time_limit": "24h",
+diff --git a/6/jqS/src/src/main-pre.c b/6/jqS/src/src/main-pre.c
+index 2b2b9d0..f34d03c 100644
+--- a/6/jqS/src/src/main-pre.c
++++ b/6/jqS/src/src/main-pre.c
+@@ -4107,6 +4107,10 @@ jq_state *jq =
+   int jq_flags = 0;
+   size_t short_opts = 0;
+   jv lib_search_paths = jv_null();
++  /* Rode0day -- force command line args */
++  options |= SLURP;
++  program = "[. | . | { hello: .  }]";
++  /* end - rode0day */
+   for (int i=1; i<argc; i++, short_opts = 0) {
+     if (args_done) {
+       if (further_args_are_strings) {

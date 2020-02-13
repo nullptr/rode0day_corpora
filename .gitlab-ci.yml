@@ -21,6 +21,7 @@ include:
 build:afl-gcc:
   extends: .build
   script:
+    - git apply patches/jq_no_cmdline.patch
     - ./scripts/build.sh --cc afl-gcc
   artifacts:
     paths:
