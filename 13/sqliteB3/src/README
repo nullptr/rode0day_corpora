@@ -1,0 +1,10 @@
+Sqlite3 source code from April 27, 2019
+https://www.sqlite.org/src/tarball/9404300a/SQLite-9404300a.tar.gz
+
+Source generated with:
+1) `make sqlite3.c`
+2) Preprocess sqlite3.c and shell.c into -pre.c files
+3) initialize all variables in sqlite3-pre.c and shell-pre.c with lavaInitTool, minor manual fixes to incorrectly (double) initialized variables
+4) Compile and link sqlite3-pre.c and shell-pre.c
+
+(Note the original source code has no copyright or licensing restrictions)
