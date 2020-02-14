@@ -1,0 +1,6 @@
+jq 1.6
+
+Preprocessed
+
+All variables initialized with lavaInitTool
+    Manually removed a few bad initializations lavaInitTool added
