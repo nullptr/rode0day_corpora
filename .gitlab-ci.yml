@@ -6,8 +6,10 @@ stages:
   - test_solutions
   - report
 
-before_script:
-  - ./scripts/build.sh --copy-files
+default:
+  before_script:
+    - ./scripts/build.sh --copy-files
+    - git apply patches/jq_no_cmdline.patch
 
 include:
   - scripts/CI/base.yml
@@ -21,7 +23,6 @@ include:
 build:afl-gcc:
   extends: .build
   script:
-    - git apply patches/jq_no_cmdline.patch
     - ./scripts/build.sh --cc afl-gcc
   artifacts:
     paths:
@@ -46,14 +47,12 @@ build:gcc-64:
   artifacts:
     paths:
       - ./*/*/lava-gcc
-  allow_failure: true
 
 build:afl-clang-fast-64:
   extends: .build
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/afl_runner:16.04
   script:
-    - git apply patches/jq_no_cmdline.patch
     - ./scripts/build.sh -X
   artifacts:
     paths:
@@ -62,7 +61,6 @@ build:afl-clang-fast-64:
 test_seeds:afl-gcc:
   extends: .test_seeds
   script:
-    - git apply patches/jq_no_cmdline.patch
     - ./scripts/test-solution.py -p lava-afl-gcc 2/info.yaml 3/info.yaml 4/info.yaml
       5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
       10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml 14/info.yaml
@@ -91,7 +89,6 @@ test_seeds:gcc-64:
 test_seeds:afl-clang-fast-64:
   extends: .test_seeds
   script:
-    - git apply patches/jq_no_cmdline.patch
     - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml 4/info.yaml
       5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
       10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml 14/info.yaml
