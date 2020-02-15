@@ -36,7 +36,8 @@
         "id": 1,
         "name": "afl",
         "description": "NU_AFL",
-        "version": "v2.58c"
+        "version": "v2.56b",
+        "url": "https://github.com/google/AFL"
         },
     "verifier": {
         "id": 1,

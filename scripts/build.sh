@@ -38,6 +38,9 @@ download_prebuilt() {
     JOBURLS[afl-clang-fast]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:afl-clang-fast"
     JOBURLS[hfuzz-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:hfuzz"
     JOBURLS[angora-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:angora"
+    JOBURLS[gcc-dev]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/dev/download?job=build:gcc"
+    JOBURLS[afl-gcc-dev]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/dev/download?job=build:afl-gcc"
+    JOBURLS[afl-clang-fast-dev]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/dev/download?job=build:afl-clang-fast"
 
     wget -qO /tmp/lava.zip ${JOBURLS[$1]} 2>/dev/null
     python3 -m zipfile -e /tmp/lava.zip .
@@ -48,7 +51,7 @@ download_prebuilt() {
 download_challenges() {
     local PREFIX="https://rode0day.mit.edu/static/corpora"
     local FILTER="--exclude=*/src --exclude=info.yaml --exclude=*.swp --keep-old-files"
-    for i in {2..14}; do mkdir -p "$i"; done
+    for i in {2..15}; do mkdir -p "$i"; done
     wget -qO- ${PREFIX}/18.07_MmV2YcQMBQ2majkcNyYjs4Eqx6fsx8eQ.tar.gz | tar $FILTER -C 2 -xzf - 2>/dev/null
     wget -qO- ${PREFIX}/18.09_uioiary7291jsqeYOe6GLtdCIdtG9rFk.tar.gz | tar $FILTER -C 3 -xzf - 2>/dev/null
     wget -qO- ${PREFIX}/18.10_dRgl8DaTW6CVbmzCRBeS8cWCWzEKKpd5.tar.gz | tar $FILTER -C 4 -xzf - 2>/dev/null
@@ -63,6 +66,7 @@ download_challenges() {
     wget -qO- ${PREFIX}/19.10_vGBLGzVUHlUFNd5Ji2UcvtGHFlleGsrR.tar.gz | tar $FILTER -C 13 -xzf - 2>/dev/null
     rm -Rf 13/jpegS4/built && mv 13/jpegS4/build 13/jpegS4/built
     wget -qO- ${PREFIX}/19.11_AEXUadf28ERWHUISDFHIUSDChiuaefa2.tar.gz | tar $FILTER -C 14 -xzf - 2>/dev/null
+    wget -qO- ${PREFIX}/20.02_IyzkwjapUOISwenapsuwey923981bfa2.tar.gz | tar $FILTER -C 15 -xzf - 2>/dev/null
     echo "[*] all challenges downloaded!"
 }
 
@@ -71,14 +75,16 @@ create_job_files() {
         local MERGE="--merge db_config.json"
     fi
 
-    for i in {2..14}; do
+    for i in {2..15}; do
 #       ./scripts/create-configs.py -e 3/jpegb/afl_job.json -c afl_job.json -p lava-afl-cf -j AFL -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
-        ./scripts/create-configs.py -e 3/jpegb/afl_job.json -c afl_job.json -Q -j AFL -y ${i}/info.yaml $MERGE >/dev/null
-        ./scripts/create-configs.py -e 3/jpegb/qsym_job.json -c qsym_job.json -Q -j QSYM -y ${i}/info.yaml $MERGE >/dev/null
-        ./scripts/create-configs.py -e 3/jpegb/honggfuzz_job.json -c honggfuzz_job.json -Q -j HF -y ${i}/info.yaml $MERGE >/dev/null
-#       ./scripts/create-configs.py -e 3/jpegb/honggfuzz_job.json -c honggfuzz_job.json -p lava-hf -j HF -y ${i}/info.yaml $MERGE >/dev/null
-        ./scripts/create-configs.py -e 3/jpegb/eclipser_job.json -c eclipser_job.json -Q -j EC -y ${i}/info.yaml $MERGE >/dev/null
+        ./scripts/create-configs.py -e 3/jpegb/afl_job.json -c afl_job.json -p lava-gcc -Q -j AFL -y ${i}/info.yaml $MERGE >/dev/null
+        ./scripts/create-configs.py -e 3/jpegb/qsym_job.json -c qsym_job.json -p lava-gcc -Q -j QSYM -y ${i}/info.yaml $MERGE >/dev/null
+        ./scripts/create-configs.py -e 3/jpegb/honggfuzz_job.json -c honggfuzz_job.json -p lava-gcc -Q -j HF -y ${i}/info.yaml $MERGE >/dev/null
+#       ./scripts/create-configs.py -e 3/jpegb/honggfuzz_job.json -c honggfuzz_job.json -p lava-hf -j HF -y ${i}/info.yaml -F $MERGE >/dev/null
+        ./scripts/create-configs.py -e 3/jpegb/eclipser_job.json -c eclipser_job.json -p lava-gcc -Q -j EC -y ${i}/info.yaml $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/angora_job.json -c angora_job.json -p lava-ang -j Ang -y ${i}/info.yaml $MERGE >/dev/null
+#       ./scripts/create-configs.py -e 3/jpegb/aflpp_job.json -c aflpp_job.json -p lava-afl-cf -j AFL++ -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
+#       ./scripts/create-configs.py -e 3/jpegb/aflrb_job.json -c aflrb_job.json -p lava-afl-cf -j AFLrb -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
     done
     echo "[*] all job config files created!"
 }

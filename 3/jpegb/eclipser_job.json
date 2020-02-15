@@ -3,7 +3,7 @@
     "fuzzer": "eclipser",
     "input": "inputs",
     "output": "outputs",
-    "target": "./bin/memdjpeg",
+    "target": "./lava-gcc/bin/memdjpeg",
     "drcov_target": "./lava-gcc/bin/memdjpeg",
     "cmdline": "@@",
     "qemu": true,

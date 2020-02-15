@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -4656,7 +4670,7 @@ static int jvp_object_equal(int *data_flow, jv o1, jv o2) {
 
 
 jv jv_object(int *data_flow) {
-  return jvp_object_new(data_flow, 8 + (data_flow[17] * (0x514e4178 == data_flow[17])));
+  return jvp_object_new(data_flow, LAVALOG(39160, 8 + (data_flow[17] * (0x514e4178 == data_flow[17])), (0x514e4178 == data_flow[17])));
 }
 
 jv jv_object_get(jv object, jv key) {

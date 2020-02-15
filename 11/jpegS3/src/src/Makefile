@@ -1,40 +1,26 @@
 all : jpeg
-# Build libjpeg in two steps:
-# First preprocess all the c-files and rename filename.c -> filename-pre.c
-# Then compile and link preprocessed files.
 
-# Bugs are typically injected into preprocessed code and thus these are the files we release
-
-CFLAGS += -O0 -DHAVE_CONFIG_H -I. -g -gdwarf-2
+CFLAGS  += -O0 -DHAVE_CONFIG_H -I. -g -gdwarf-2
 
 LIBOBJ = \
-	jaricom-pre.o jcapimin-pre.o jcapistd-pre.o jcarith-pre.o jccoefct-pre.o \
-	jccolor-pre.o jcdctmgr-pre.o jchuff-pre.o jcinit-pre.o jcmainct-pre.o \
-	jcmarker-pre.o jcmaster-pre.o jcomapi-pre.o jcparam-pre.o jcprepct-pre.o \
-	jcsample-pre.o 	jctrans-pre.o jdapimin-pre.o jdapistd-pre.o jdarith-pre.o \
-	jdatadst-pre.o 	jdatasrc-pre.o jdcoefct-pre.o jdcolor-pre.o jddctmgr-pre.o \
-	jdhuff-pre.o jdinput-pre.o 	jdmainct-pre.o jdmarker-pre.o jdmaster-pre.o \
-	jdmerge-pre.o jdpostct-pre.o jdsample-pre.o jdtrans-pre.o jerror-pre.o \
-	jfdctflt-pre.o jfdctfst-pre.o jfdctint-pre.o jidctflt-pre.o jidctfst-pre.o \
-	jidctint-pre.o jquant1-pre.o jquant2-pre.o jutils-pre.o jmemmgr-pre.o \
-	jmemansi-pre.o
-
-.SECONDARY:
-%-pre.c : %.c
-	gcc -include stdio.h $(CFLAGS) -E -o  $@ $(shell echo "$@" | sed -e "s/-pre//")
-	sed -i '/^#/ d' $@
+	jaricom.o jcapimin.o jcapistd.o jcarith.o jccoefct.o \
+	jccolor.o jcdctmgr.o jchuff.o jcinit.o jcmainct.o \
+	jcmarker.o jcmaster.o jcomapi.o jcparam.o jcprepct.o \
+	jcsample.o 	jctrans.o jdapimin.o jdapistd.o jdarith.o \
+	jdatadst.o 	jdatasrc.o jdcoefct.o jdcolor.o jddctmgr.o \
+	jdhuff.o jdinput.o 	jdmainct.o jdmarker.o jdmaster.o \
+	jdmerge.o jdpostct.o jdsample.o jdtrans.o jerror.o \
+	jfdctflt.o jfdctfst.o jfdctint.o jidctflt.o jidctfst.o \
+	jidctint.o jquant1.o jquant2.o jutils.o jmemmgr.o \
+	jmemansi.o
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 
-jpeg: $(LIBOBJ) example-pre.o
+jpeg: $(LIBOBJ) example.o
 	$(CC) $(CFLAGS) -o jpeg $^
 
 clean:
 	rm -f *.o \
 	rm -f jpeg
-
-preclean : 
-	rm -f *-pre.c
-	rm -f *-pre.h

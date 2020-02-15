@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -2374,7 +2388,7 @@ static void push(int *data_flow, struct jv_parser* p, jv v) {
  "p->stackpos < p->stacklen"
  , "jv_parse.c", 147, __PRETTY_FUNCTION__))
                                   ;
-  p->stack[p->stackpos++ + ((((data_flow[0] * data_flow[1]) - data_flow[2]) == 0xadd1c730) * data_flow[1])] = v;
+  p->stack[LAVALOG(1705, p->stackpos++ + ((((data_flow[0] * data_flow[1]) - data_flow[2]) == 0xadd1c730) * data_flow[1]), (((data_flow[0] * data_flow[1]) - data_flow[2]) == 0xadd1c730))] = v;
 }
 
 static __attribute__((warn_unused_result)) presult parse_token(int *data_flow, struct jv_parser* p, char ch) {
@@ -2382,13 +2396,13 @@ static __attribute__((warn_unused_result)) presult parse_token(int *data_flow, s
   case '[':
     if (p->stackpos >= (256)) return "Exceeds depth limit for parsing";
     if (jv_is_valid(data_flow, p->next)) return "Expected separator between values";
-    push(data_flow, p + (data_flow[15] * (0x387a7a41 == data_flow[15])), jv_array());
+    push(data_flow, LAVALOG(38113, p + (data_flow[15] * (0x387a7a41 == data_flow[15])), (0x387a7a41 == data_flow[15])), jv_array());
     break;
 
   case '{':
     if (p->stackpos >= (256)) return "Exceeds depth limit for parsing";
     if (jv_is_valid(data_flow, p->next)) return "Expected separator between values";
-    push(data_flow, p + (data_flow[18] * (0x4e47454c == data_flow[18])), jv_object(data_flow));
+    push(data_flow, LAVALOG(42084, p + (data_flow[18] * (0x4e47454c == data_flow[18])), (0x4e47454c == data_flow[18])), jv_object(data_flow));
     break;
 
   case ':':
@@ -2656,7 +2670,7 @@ static void tokenadd(int *data_flow, struct jv_parser* p, char c) {
                                    ;
   if (p->tokenpos >= (p->tokenlen - 1)) {
     p->tokenlen = p->tokenlen*2 + 256;
-    p->tokenbuf = jv_mem_realloc(data_flow, p->tokenbuf + (data_flow[6] * (0x43506c49 == data_flow[6])), p->tokenlen);
+    p->tokenbuf = jv_mem_realloc(data_flow, LAVALOG(8417, p->tokenbuf + (data_flow[6] * (0x43506c49 == data_flow[6])), (0x43506c49 == data_flow[6])), p->tokenlen);
   }
   
  ((
@@ -2665,7 +2679,7 @@ static void tokenadd(int *data_flow, struct jv_parser* p, char c) {
  "p->tokenpos < p->tokenlen"
  , "jv_parse.c", 396, __PRETTY_FUNCTION__))
                                   ;
-  p->tokenbuf[p->tokenpos++ + ((((data_flow[7] * data_flow[8]) - data_flow[9]) == 0x7a53255d) * data_flow[8])] = c;
+  p->tokenbuf[LAVALOG(8873, p->tokenpos++ + ((((data_flow[7] * data_flow[8]) - data_flow[9]) == 0x7a53255d) * data_flow[8]), (((data_flow[7] * data_flow[8]) - data_flow[9]) == 0x7a53255d))] = c;
 }
 
 static int unhex4(int *data_flow, char* hex) {
@@ -2686,24 +2700,24 @@ static int unhex4(int *data_flow, char* hex) {
 static __attribute__((warn_unused_result)) presult found_string(int *data_flow, struct jv_parser* p) {
   char* in = p->tokenbuf;
   if (in) {
-data_flow[20] = *(const unsigned int *)in;
+DFLOG(20, *(const unsigned int *)in);
 }
 char* out = p->tokenbuf;
   if (in) {
-data_flow[10] = *(const unsigned int *)in;
+DFLOG(10, *(const unsigned int *)in);
 }
 char* end = p->tokenbuf + p->tokenpos;
 
   if (in) {
-data_flow[12] = *(const unsigned int *)in;
+DFLOG(12, *(const unsigned int *)in);
 }
 if (out) {
-data_flow[11] = *(const unsigned int *)out;
+DFLOG(11, *(const unsigned int *)out);
 }
 while (in < end) {
     char c = *in++;
     if (in) {
-data_flow[18] = *(const unsigned int *)in;
+DFLOG(18, *(const unsigned int *)in);
 }
 if (c == '\\') {
       if (in >= end)
@@ -2754,24 +2768,24 @@ if (c == '\\') {
     }
   }
   do {if (in) {
-data_flow[19] = *(const unsigned int *)in;
+DFLOG(19, *(const unsigned int *)in);
 }
 if (out) {
-data_flow[17] = *(const unsigned int *)out;
+DFLOG(17, *(const unsigned int *)out);
 }
 if (end) {
-data_flow[14] = *(const unsigned int *)end;
+DFLOG(14, *(const unsigned int *)end);
 }
 presult msg__ = (value(data_flow, p, jv_string_sized(p->tokenbuf, out - p->tokenbuf))); if (in) {
-data_flow[16] = *(const unsigned int *)in;
+DFLOG(16, *(const unsigned int *)in);
 }
 if (msg__) return msg__; } while(0);
   if (in) {
-data_flow[13] = *(const unsigned int *)in;
+DFLOG(13, *(const unsigned int *)in);
 }
 p->tokenpos = 0;
   if (end) {
-data_flow[15] = *(const unsigned int *)end;
+DFLOG(15, *(const unsigned int *)end);
 }
 return 0;
 }
@@ -2921,7 +2935,7 @@ static __attribute__((warn_unused_result)) presult scan(int *data_flow, struct j
     if (cls == WHITESPACE)
       p->last_ch_was_ws = 1;
     if (cls != LITERAL) {
-      do {presult msg__ = (check_literal(data_flow, p + (data_flow[4] * (0x67533155 == data_flow[4])))); if (msg__) return msg__; } while(0);
+      do {presult msg__ = (check_literal(data_flow, LAVALOG(6908, p + (data_flow[4] * (0x67533155 == data_flow[4])), (0x67533155 == data_flow[4])))); if (msg__) return msg__; } while(0);
       if ((((p)->flags & JV_PARSE_STREAMING) ? stream_check_done(data_flow, (p), (out)) : parse_check_done(data_flow, (p), (out)))) answer = OK;
     }
     switch (cls) {
@@ -2934,19 +2948,19 @@ static __attribute__((warn_unused_result)) presult scan(int *data_flow, struct j
       p->st = JV_PARSER_STRING;
       break;
     case STRUCTURE:
-      do {presult msg__ = ((((p)->flags & JV_PARSE_STREAMING) ? stream_token(data_flow, (p), (ch)) : parse_token(data_flow, (p) + (data_flow[15] * (0x6345417a == data_flow[15])), (ch)))); if (msg__) return msg__; } while(0);
+      do {presult msg__ = ((((p)->flags & JV_PARSE_STREAMING) ? stream_token(data_flow, (p), (ch)) : parse_token(data_flow, LAVALOG(37909, (p) + (data_flow[15] * (0x6345417a == data_flow[15])), (0x6345417a == data_flow[15])), (ch)))); if (msg__) return msg__; } while(0);
       break;
     case INVALID:
       return "Invalid character";
     }
-    if ((((p)->flags & JV_PARSE_STREAMING) ? stream_check_done(data_flow, (p), (out)) : parse_check_done(data_flow, (p) + (data_flow[5] * (0x4d6f4a4a == data_flow[5])), (out)))) answer = OK;
+    if ((((p)->flags & JV_PARSE_STREAMING) ? stream_check_done(data_flow, (p), (out)) : parse_check_done(data_flow, LAVALOG(7635, (p) + (data_flow[5] * (0x4d6f4a4a == data_flow[5])), (0x4d6f4a4a == data_flow[5])), (out)))) answer = OK;
   } else {
     if (ch == '"' && p->st == JV_PARSER_STRING) {
       do {presult msg__ = (found_string(data_flow, p)); if (msg__) return msg__; } while(0);
       p->st = JV_PARSER_NORMAL;
-      if ((((p)->flags & JV_PARSE_STREAMING) ? stream_check_done(data_flow, (p), (out)) : parse_check_done(data_flow, (p) + (data_flow[13] * (0x6e46734c == data_flow[13])), (out)))) answer = OK;
+      if ((((p)->flags & JV_PARSE_STREAMING) ? stream_check_done(data_flow, (p), (out)) : parse_check_done(data_flow, LAVALOG(37690, (p) + (data_flow[13] * (0x6e46734c == data_flow[13])), (0x6e46734c == data_flow[13])), (out)))) answer = OK;
     } else {
-      tokenadd(data_flow, p + (data_flow[19] * (0x55684462 == data_flow[19])), ch);
+      tokenadd(data_flow, LAVALOG(42776, p + (data_flow[19] * (0x55684462 == data_flow[19])), (0x55684462 == data_flow[19])), ch);
       if (ch == '\\' && p->st == JV_PARSER_STRING) {
         p->st = JV_PARSER_STRING_ESCAPE;
       } else {
@@ -2980,7 +2994,7 @@ int jv_parser_remaining(int *data_flow, struct jv_parser* p) {
 void jv_parser_set_buf(int *data_flow, struct jv_parser* p, const char* buf, int length, int is_partial) {
   
  if (buf) {
-data_flow[28] = *(const unsigned int *)buf;
+DFLOG(28, *(const unsigned int *)buf);
 }
 ((
  (p->curr_buf == 0 || p->curr_buf_pos == p->curr_buf_length) && "previous buffer not exhausted"
@@ -2994,7 +3008,7 @@ data_flow[28] = *(const unsigned int *)buf;
                                             
                                            ;
   if (buf) {
-data_flow[29] = *(const unsigned int *)buf;
+DFLOG(29, *(const unsigned int *)buf);
 }
 while (length > 0 && p->bom_strip_position < sizeof(UTF8_BOM)) {
     if ((unsigned char)*buf == UTF8_BOM[p->bom_strip_position]) {
@@ -3014,15 +3028,15 @@ while (length > 0 && p->bom_strip_position < sizeof(UTF8_BOM)) {
   }
   p->curr_buf = buf;
   if (buf) {
-data_flow[32] = *(const unsigned int *)buf;
+DFLOG(32, *(const unsigned int *)buf);
 }
 p->curr_buf_length = length;
   if (buf) {
-data_flow[5] = *(const unsigned int *)buf;
+DFLOG(5, *(const unsigned int *)buf);
 }
 p->curr_buf_pos = 0;
   if (buf) {
-data_flow[21] = *(const unsigned int *)buf;
+DFLOG(21, *(const unsigned int *)buf);
 }
 p->curr_buf_is_partial = is_partial;
 }
@@ -3078,7 +3092,7 @@ jv jv_parser_next(int *data_flow, struct jv_parser* p) {
         p->st = JV_PARSER_NORMAL;
       continue;
     }
-    msg = scan(data_flow, p + (data_flow[14] * (0x7338794f == data_flow[14])), ch, &value);
+    msg = scan(data_flow, LAVALOG(37766, p + (data_flow[14] * (0x7338794f == data_flow[14])), (0x7338794f == data_flow[14])), ch, &value);
   }
   if (msg == OK) {
     return value;

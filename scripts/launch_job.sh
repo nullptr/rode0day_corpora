@@ -44,6 +44,7 @@ while (( "$#" )); do
             T23H="$(( 60 * 10 ))"
             T24H="$(( 60 * 15 ))"
             USE_DICT="dict"
+            NF="2"
             shift
             ;;
         --pull)

@@ -20,7 +20,8 @@ COMPS = {2: '18.07',
          11: '19.07',
          12: '19.09',
          13: '19.10',
-         14: '19.11'}
+         14: '19.11',
+         15: '20.02'}
 
 logging.basicConfig(format='%(levelname)s:\t%(message)s')
 logger = logging.getLogger(__name__)

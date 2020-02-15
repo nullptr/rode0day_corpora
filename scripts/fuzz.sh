@@ -52,16 +52,16 @@ fi
 SECONDS=0
 CNAME="${FZ}_${TGT}_$(date +%s)"
 if [ "$RUNC" = "singularity" ]; then
-    TDIR="/tmp/$JOB_ID"
-    mkdir -p "${TDIR}"
+    TDIR="$(mkdir -d /tmp/${CNAME}_XXXX)"
     AFL_NO_AFFINITY=1 \
-    # singularity instance start -B "${TDIR}":/tmp $SIMG $CNAME -n $NF -t $FDIR -M $CNAME
     singularity run -B "${TDIR}":/tmp $SIMG -n $NF -t $FDIR -M $CNAME &
-    echo "New singularity process $!"
+    # singularity instance start -B "${TDIR}":/tmp $SIMG $CNAME -n $NF -t $FDIR -M $CNAME
+    S_PID="$!"
+    echo "[*] starting singularity process $S_PID : $CNAME "
 else
     echo "[*] starting docker container $CNAME"
-    docker run -d --rm --name $CNAME -v $FDIR:$FDIR -w $FDIR \
-        --cap-add=SYS_PTRACE --security-opt seccomp=unconfined \
+    docker run -d --rm --name $CNAME -v $FDIR:$FDIR -w $FDIR -e "FZ=${FZ}"\
+        --cap-add=SYS_PTRACE --security-opt seccomp=unconfined -e "TGT=${TGT}" \
         -e "QEMU_RESERVED_VA=0xf700000" --hostname "$(hostname)-docker-${TGT}" \
         --pid=host --ulimit "core=0" $DIMG -n $NF -t $FDIR -M $CNAME
 fi
@@ -81,13 +81,13 @@ get_coverage() {
 }
 
 stop_signularity() {
-    singularity exec -B "${TDIR}":/tmp $SIMG /start_fuzzing --stop
+    singularity exec -B "${TDIR}":/tmp $SIMG /start_fuzzing --stop $TGT
     sleep 5s
-    singularity instance stop -s TERM $CNAME
+    kill -SIGTERM $S_PID
 }
 
 stop_docker() {
-    docker exec $CNAME /start_fuzzing --stop
+    docker exec $CNAME /start_fuzzing --stop $TGT
     sleep 5s
     docker stop -t 30 $CNAME
 }
@@ -125,13 +125,14 @@ fi
 printf "[*] Finished fuzzing %-14s: Elapsed=${SECONDS}s  $(date +'%F %T') $MESSAGE\n" $TGT
 
 if [ "$RUNC" = "singularity" ]; then
-    singularity exec -B "${TDIR}":/tmp $SIMG /start_fuzzing --stop
+    singularity exec -B "${TDIR}":/tmp $SIMG /start_fuzzing --stop $TGT
     sleep 15s
+    wait $S_PID
     exit 0
 fi
 
 if [ "$RUNC" = "docker" ]; then
-    docker exec $CNAME /start_fuzzing --stop
+    docker exec $CNAME /start_fuzzing --stop $TGT
     sleep 15s
     docker wait $CNAME
     echo docker stop -t 30 $CNAME

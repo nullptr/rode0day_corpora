@@ -189,7 +189,7 @@ class VerifyWorker(object):
 
         stdin_fd = open(input_file, 'rb') if self.use_stdin else DEVNULL
 
-        logger.info("Executing: %s", tgt_cmd)
+        logger.info("Executing: %s %s", tgt_cmd, input_file if self.use_stdin else "")
         p = Popen(tgt_cmd, stdin=stdin_fd, stdout=PIPE, stderr=PIPE, shell=True)
         try:
             sout, serr = p.communicate(timeout=15)

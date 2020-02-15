@@ -6,8 +6,10 @@ stages:
   - test_solutions
   - report
 
-before_script:
-  - ./scripts/build.sh --copy-files
+default:
+  before_script:
+    - ./scripts/build.sh --copy-files
+    - git apply patches/jq_no_cmdline.patch
 
 include:
   - scripts/CI/base.yml
@@ -45,7 +47,6 @@ build:gcc-64:
   artifacts:
     paths:
       - ./*/*/lava-gcc
-  allow_failure: true
 
 build:afl-clang-fast-64:
   extends: .build
@@ -62,7 +63,7 @@ test_seeds:afl-gcc:
   script:
     - ./scripts/test-solution.py -p lava-afl-gcc 2/info.yaml 3/info.yaml 4/info.yaml
       5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
-      10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml
+      10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml 14/info.yaml
   dependencies:
     - build:afl-gcc
 
@@ -90,7 +91,7 @@ test_seeds:afl-clang-fast-64:
   script:
     - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml 4/info.yaml
       5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
-      10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml
+      10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml 14/info.yaml
   dependencies:
     - build:afl-clang-fast-64
 

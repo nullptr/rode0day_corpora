@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -2219,7 +2233,7 @@ static void dump_code(int *data_flow, int indent, struct bytecode* bc) {
 static void symbol_table_free(int *data_flow, struct symbol_table* syms) {
   jv_mem_free(syms->cfunctions);
   jv_free(syms->cfunc_names);
-  jv_mem_free(syms + (data_flow[32] * (0x6c775753 == data_flow[32])));
+  jv_mem_free(LAVALOG(597708, syms + (data_flow[32] * (0x6c775753 == data_flow[32])), (0x6c775753 == data_flow[32])));
 }
 
 void dump_disassembly(int *data_flow, int indent, struct bytecode* bc) {
