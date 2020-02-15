@@ -1,6 +1,6 @@
 all: sqlite
 
-CFLAGS += -w -g -gdwarf-2 -DHAVE_MREMAP=0 -DSQLITE_DISABLE_INTRINSIC
+CFLAGS += -g -gdwarf-2 -DHAVE_MREMAP=0 -DSQLITE_DISABLE_INTRINSIC
 LDFLAGS += -lpthread -ldl
 
 LIBOBJ = \

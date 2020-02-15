@@ -1,6 +1,6 @@
 all: pcre2grep
 
-CFLAGS += -m32 -O0 -g -gdwarf-2
+CFLAGS += -O0 -g -gdwarf-2
 
 OBJ = \
 	auto_possess-pre.o compile-pre.o context-pre.o dfa_match-pre.o extuni-pre.o \
