@@ -1,6 +1,6 @@
 {
     "session":"fileB4",
-    "fuzzer": "/usr/local/bin/i386/afl-fuzz",
+    "fuzzer": "/usr/local/i386/afl-fuzz",
     "input":"inputs",
     "output":"outputs",
     "target":"./bin/file",
