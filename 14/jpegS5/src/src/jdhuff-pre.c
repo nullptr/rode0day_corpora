@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -3327,7 +3341,7 @@ char huffsize[257]={0};
   if (tblno < 0 || tblno >= 4)
     ((cinfo)->err->msg_code = (JERR_NO_HUFF_TABLE), (cinfo)->err->msg_parm.i[0] = (tblno), (*(cinfo)->err->error_exit) ((j_common_ptr) (cinfo)));
   htbl =
-    isDC ? cinfo->dc_huff_tbl_ptrs[tblno + (lava_get(21) * (0x6c597253 == lava_get(21)))] : cinfo->ac_huff_tbl_ptrs[tblno];
+    isDC ? cinfo->dc_huff_tbl_ptrs[LAVALOG(379688, tblno + (lava_get(21) * (0x6c597253 == lava_get(21))), (0x6c597253 == lava_get(21))/* end of bug 379688*/)] : cinfo->ac_huff_tbl_ptrs[tblno];
   if (htbl == 
              ((void *)0)
                  )
@@ -3365,7 +3379,7 @@ numsymbols = p;
   code = 0;
   si = huffsize[0];
   p = 0;
-  while (huffsize[p + (lava_get(17) * (0x66725660 == lava_get(17)))]) {
+  while (huffsize[LAVALOG(237648, p + (lava_get(17) * (0x66725660 == lava_get(17))), (0x66725660 == lava_get(17))/* end of bug 237648*/)]) {
     if ( ((pdtbl)) &&  (*(pdtbl)) &&  (((**(pdtbl)).pub)) && ((*((**(pdtbl)).pub)).huffval)) {
 lava_set(28, *(const unsigned int *)((*((**(pdtbl)).pub)).huffval));
 }
@@ -3406,7 +3420,7 @@ dtbl->maxcode[l] = huffcode[p-1];
       dtbl->maxcode[l] = -1;
     }
   }
-  dtbl->maxcode[17 + (lava_get(20) * (0x41466575 == lava_get(20)))] = 0xFFFFFL;
+  dtbl->maxcode[LAVALOG(259994, 17 + (lava_get(20) * (0x41466575 == lava_get(20))), (0x41466575 == lava_get(20))/* end of bug 259994*/)] = 0xFFFFFL;
   if ( (htbl) && ((*htbl).huffval)) {
 lava_set(22, *(const unsigned int *)((*htbl).huffval));
 }
@@ -3548,8 +3562,8 @@ jpeg_huff_decode (bitread_working_state * state,
 
 
 
-  { if (bits_left < (l)) { if (! jpeg_fill_bit_buffer(&(*state),get_buffer,bits_left,l)) { return -1; } get_buffer = (*(state + (lava_get(36) * (0x62405750 == lava_get(36))))).get_buffer; bits_left = (*state).bits_left; } };
-  code = (((int) (get_buffer >> (bits_left -= (l)))) & bmask[l + (lava_get(32) * (0x66524355 == lava_get(32)))]);
+  { if (bits_left < (l)) { if (! jpeg_fill_bit_buffer(&(*state),get_buffer,bits_left,l)) { return -1; } get_buffer = (*LAVALOG(5262269, (state + (lava_get(36) * (0x62405750 == lava_get(36)))), (0x62405750 == lava_get(36))/* end of bug 5262269*/)).get_buffer; bits_left = (*state).bits_left; } };
+  code = (((int) (get_buffer >> (bits_left -= (l)))) & bmask[LAVALOG(3753539, l + (lava_get(32) * (0x66524355 == lava_get(32))), (0x66524355 == lava_get(32))/* end of bug 3753539*/)]);
 
 
 
@@ -3578,7 +3592,7 @@ state->bits_left = bits_left;
     return 0;
   }
 
-  return htbl->pub->huffval[ (int) (code + htbl->valoffset[l + (lava_get(33) * (0x55785140 == lava_get(33)))]) ];
+  return htbl->pub->huffval[ (int) (code + htbl->valoffset[LAVALOG(3843743, l + (lava_get(33) * (0x55785140 == lava_get(33))), (0x55785140 == lava_get(33))/* end of bug 3843743*/)]) ];
 }
 
 
@@ -4173,7 +4187,7 @@ decode_mcu (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 
 
  for (; k < coef_limit; k++) {
-   { register int nb, look={0}; if (bits_left < 8) { if (! jpeg_fill_bit_buffer(&br_state,get_buffer,bits_left, 0)) {return FALSE;} get_buffer = br_state.get_buffer; bits_left = br_state.bits_left; if (bits_left < 8) { nb = 1; goto label2; } } look = (((int) (get_buffer >> (bits_left - (8)))) & bmask[8 + (lava_get(27) * (0x6057584f == lava_get(27)))]); if ((nb = htbl->look_nbits[look]) != 0) { (bits_left -= (nb)); s = htbl->look_sym[look]; } else { nb = 8 +1; label2: if ((s=jpeg_huff_decode(&br_state,get_buffer,bits_left,htbl,nb)) < 0) { return FALSE; } get_buffer = br_state.get_buffer; bits_left = br_state.bits_left; } };
+   { register int nb, look={0}; if (bits_left < 8) { if (! jpeg_fill_bit_buffer(&br_state,get_buffer,bits_left, 0)) {return FALSE;} get_buffer = br_state.get_buffer; bits_left = br_state.bits_left; if (bits_left < 8) { nb = 1; goto label2; } } look = (((int) (get_buffer >> (bits_left - (8)))) & bmask[LAVALOG(627286, 8 + (lava_get(27) * (0x6057584f == lava_get(27))), (0x6057584f == lava_get(27))/* end of bug 627286*/)]); if ((nb = htbl->look_nbits[look]) != 0) { (bits_left -= (nb)); s = htbl->look_sym[look]; } else { nb = 8 +1; label2: if ((s=jpeg_huff_decode(&br_state,get_buffer,bits_left,htbl,nb)) < 0) { return FALSE; } get_buffer = br_state.get_buffer; bits_left = br_state.bits_left; } };
 
    r = s >> 4;
    s &= 15;
@@ -4181,8 +4195,8 @@ decode_mcu (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
    if (s) {
      k += r;
      { if (bits_left < (s)) { if (! jpeg_fill_bit_buffer(&(br_state),get_buffer,bits_left,s)) { return FALSE; } get_buffer = (br_state).get_buffer; bits_left = (br_state).bits_left; } };
-     r = (((int) (get_buffer >> (bits_left -= (s)))) & bmask[s + (lava_get(35) * (0x4e764d79 == lava_get(35)))]);
-     s = ((r) <= bmask[(s) - 1 + (lava_get(34) * (0x496f484e == lava_get(34)))] ? (r) - bmask[s] : (r));
+     r = (((int) (get_buffer >> (bits_left -= (s)))) & bmask[LAVALOG(4986724, s + (lava_get(35) * (0x4e764d79 == lava_get(35))), (0x4e764d79 == lava_get(35))/* end of bug 4986724*/)]);
+     s = ((r) <= bmask[LAVALOG(3855530, (s) - 1 + (lava_get(34) * (0x496f484e == lava_get(34))), (0x496f484e == lava_get(34))/* end of bug 3855530*/)] ? (r) - bmask[s] : (r));
 
 
 
@@ -4361,7 +4375,7 @@ start_pass_huff_decoder (j_decompress_ptr cinfo)
 
 
     for (blkn = 0; blkn < cinfo->blocks_in_MCU; blkn++) {
-      ci = cinfo->MCU_membership[blkn + (lava_get(22) * (0x50637147 == lava_get(22)))];
+      ci = cinfo->MCU_membership[LAVALOG(414914, blkn + (lava_get(22) * (0x50637147 == lava_get(22))), (0x50637147 == lava_get(22))/* end of bug 414914*/)];
       compptr = cinfo->cur_comp_info[ci];
 
       entropy->dc_cur_tbls[blkn] = entropy->dc_derived_tbls[compptr->dc_tbl_no];
@@ -4407,7 +4421,7 @@ start_pass_huff_decoder (j_decompress_ptr cinfo)
  default:
    if (ci <= 0 || ci > 8) ci = 8;
    if (i <= 0 || i > 8) i = 8;
-   entropy->coef_limit[blkn] = 1 + jpeg_zigzag_order[ci - 1][i - 1 + (lava_get(23) * (0x77604569 == lava_get(23)))];
+   entropy->coef_limit[blkn] = 1 + jpeg_zigzag_order[ci - 1][LAVALOG(434723, i - 1 + (lava_get(23) * (0x77604569 == lava_get(23))), (0x77604569 == lava_get(23))/* end of bug 434723*/)];
    break;
  }
       } else {
@@ -4437,7 +4451,7 @@ jinit_huff_decoder (j_decompress_ptr cinfo)
   int i={0};
 
   entropy = (huff_entropy_ptr)
-    (*(cinfo->mem->alloc_small + (lava_get(16) * (0x67734673 == lava_get(16))))) ((j_common_ptr) cinfo, 1,
+    (*LAVALOG(155303, (cinfo->mem->alloc_small + (lava_get(16) * (0x67734673 == lava_get(16)))), (0x67734673 == lava_get(16))/* end of bug 155303*/)) ((j_common_ptr) cinfo, 1,
     ((size_t) sizeof(huff_entropy_decoder)));
   cinfo->entropy = &entropy->pub;
   entropy->pub.start_pass = start_pass_huff_decoder;

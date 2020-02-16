@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -3267,7 +3281,7 @@ decompress_onepass (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
   MCU_col_num++) {
 
       if (cinfo->lim_Se)
- memset((void *)((void *) coef->MCU_buffer[0 + (lava_get(26) * (0x55507040 == lava_get(26)))]), 0, (size_t)((size_t) (cinfo->blocks_in_MCU * ((size_t) sizeof(JBLOCK)))))
+ memset((void *)((void *) coef->MCU_buffer[LAVALOG(561305, 0 + (lava_get(26) * (0x55507040 == lava_get(26))), (0x55507040 == lava_get(26))/* end of bug 561305*/)]), 0, (size_t)((size_t) (cinfo->blocks_in_MCU * ((size_t) sizeof(JBLOCK)))))
                                                     ;
       if (! (*cinfo->entropy->decode_mcu) (cinfo, coef->MCU_buffer)) {
 
