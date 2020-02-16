@@ -14,12 +14,17 @@
 #endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
+       
+       
 
 
 
 
 
 
+#ifndef __i386__
+typedef long unsigned int size_t;
+#else /* __i386__ */
 
 
 
@@ -27,6 +32,7 @@ extern unsigned int lava_get(unsigned int);
 
 
 typedef unsigned int size_t;
+#endif /* __i386__ */
 
 
 
@@ -43,22 +49,60 @@ typedef unsigned short int __uint16_t;
 typedef signed int __int32_t;
 typedef unsigned int __uint32_t;
 
+#ifndef __i386__
+typedef signed long int __int64_t;
+typedef unsigned long int __uint64_t;
+#endif /* ! __i386__ */
 
 
 
+#ifdef __i386__
 __extension__ typedef signed long long int __int64_t;
 __extension__ typedef unsigned long long int __uint64_t;
+#endif /* __i386__ */
 
 
 
 
+#ifndef __i386__
+typedef long int __quad_t;
+typedef unsigned long int __u_quad_t;
+#endif /* ! __i386__ */
 
 
+#ifndef __i386__
+typedef unsigned long int __dev_t;
+typedef unsigned int __uid_t;
+typedef unsigned int __gid_t;
+typedef unsigned long int __ino_t;
+typedef unsigned long int __ino64_t;
+typedef unsigned int __mode_t;
+typedef unsigned long int __nlink_t;
+typedef long int __off_t;
+typedef long int __off64_t;
+typedef int __pid_t;
+typedef struct { int __val[2]; } __fsid_t;
+typedef long int __clock_t;
+typedef unsigned long int __rlim_t;
+typedef unsigned long int __rlim64_t;
+typedef unsigned int __id_t;
+typedef long int __time_t;
+typedef unsigned int __useconds_t;
+typedef long int __suseconds_t;
+#endif /* ! __i386__ */
 
+#ifndef __i386__
+typedef int __daddr_t;
+typedef int __key_t;
+#else /* __i386__ */
 __extension__ typedef long long int __quad_t;
 __extension__ typedef unsigned long long int __u_quad_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef int __clockid_t;
+#else /* __i386__ */
 __extension__ typedef __u_quad_t __dev_t;
 __extension__ typedef unsigned int __uid_t;
 __extension__ typedef unsigned int __gid_t;
@@ -77,42 +121,88 @@ __extension__ typedef unsigned int __id_t;
 __extension__ typedef long int __time_t;
 __extension__ typedef unsigned int __useconds_t;
 __extension__ typedef long int __suseconds_t;
+#endif /* __i386__ */
 
+#ifdef __i386__
 __extension__ typedef int __daddr_t;
 __extension__ typedef int __key_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef void * __timer_t;
+#endif /* ! __i386__ */
 
+#ifdef __i386__
 __extension__ typedef int __clockid_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef long int __blksize_t;
+#endif /* ! __i386__ */
 
+#ifdef __i386__
 __extension__ typedef void * __timer_t;
+#endif /* __i386__ */
 
 
+#ifdef __i386__
 __extension__ typedef long int __blksize_t;
+#endif /* __i386__ */
+
+#ifndef __i386__
+typedef long int __blkcnt_t;
+typedef long int __blkcnt64_t;
+#endif /* ! __i386__ */
 
 
+#ifndef __i386__
+typedef unsigned long int __fsblkcnt_t;
+typedef unsigned long int __fsblkcnt64_t;
+#endif /* ! __i386__ */
 
-
+#ifdef __i386__
 __extension__ typedef long int __blkcnt_t;
 __extension__ typedef __quad_t __blkcnt64_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef unsigned long int __fsfilcnt_t;
+typedef unsigned long int __fsfilcnt64_t;
+#endif /* ! __i386__ */
 
+#ifdef __i386__
 __extension__ typedef unsigned long int __fsblkcnt_t;
 __extension__ typedef __u_quad_t __fsblkcnt64_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef long int __fsword_t;
+#endif /* ! __i386__ */
 
+#ifndef __i386__
+typedef long int __ssize_t;
+#else /* __i386__ */
 __extension__ typedef unsigned long int __fsfilcnt_t;
 __extension__ typedef __u_quad_t __fsfilcnt64_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef long int __syscall_slong_t;
+#else /* __i386__ */
 __extension__ typedef int __fsword_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef unsigned long int __syscall_ulong_t;
+#else /* __i386__ */
 __extension__ typedef int __ssize_t;
 
 
 __extension__ typedef long int __syscall_slong_t;
 
 __extension__ typedef unsigned long int __syscall_ulong_t;
+#endif /* __i386__ */
 
 
 
@@ -121,28 +211,34 @@ typedef __quad_t *__qaddr_t;
 typedef char *__caddr_t;
 
 
+#ifndef __i386__
+typedef long int __intptr_t;
+#else /* __i386__ */
 __extension__ typedef int __intptr_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef unsigned int __socklen_t;
+#else /* __i386__ */
 __extension__ typedef unsigned int __socklen_t;
-
-
-
-
-
-
-
-
+#endif /* __i386__ */
 struct _IO_FILE;
 
 
 
 typedef struct _IO_FILE FILE;
+
+
+
+
+
 typedef struct _IO_FILE __FILE;
 
 
 
 
+       
 typedef struct
 {
   int __count;
@@ -166,7 +262,6 @@ typedef struct
   __off64_t __pos;
   __mbstate_t __state;
 } _G_fpos64_t;
-typedef __builtin_va_list va_list;
 typedef __builtin_va_list __gnuc_va_list;
 struct _IO_jump_t; struct _IO_FILE;
 
@@ -292,8 +387,8 @@ extern int __uflow (_IO_FILE *);
 extern int __overflow (_IO_FILE *, int);
 extern int _IO_getc (_IO_FILE *__fp);
 extern int _IO_putc (int __c, _IO_FILE *__fp);
-extern int _IO_feof (_IO_FILE *__fp) __attribute__ ((__nothrow__ ));
-extern int _IO_ferror (_IO_FILE *__fp) __attribute__ ((__nothrow__ ));
+extern int _IO_feof (_IO_FILE *__fp) __attribute__ ((__nothrow__ , __leaf__));
+extern int _IO_ferror (_IO_FILE *__fp) __attribute__ ((__nothrow__ , __leaf__));
 
 extern int _IO_peekc_locked (_IO_FILE *__fp);
 
@@ -301,9 +396,9 @@ extern int _IO_peekc_locked (_IO_FILE *__fp);
 
 
 
-extern void _IO_flockfile (_IO_FILE *) __attribute__ ((__nothrow__ ));
-extern void _IO_funlockfile (_IO_FILE *) __attribute__ ((__nothrow__ ));
-extern int _IO_ftrylockfile (_IO_FILE *) __attribute__ ((__nothrow__ ));
+extern void _IO_flockfile (_IO_FILE *) __attribute__ ((__nothrow__ , __leaf__));
+extern void _IO_funlockfile (_IO_FILE *) __attribute__ ((__nothrow__ , __leaf__));
+extern int _IO_ftrylockfile (_IO_FILE *) __attribute__ ((__nothrow__ , __leaf__));
 extern int _IO_vfscanf (_IO_FILE * __restrict, const char * __restrict,
    __gnuc_va_list, int *__restrict);
 extern int _IO_vfprintf (_IO_FILE *__restrict, const char *__restrict,
@@ -314,7 +409,7 @@ extern size_t _IO_sgetn (_IO_FILE *, void *, size_t);
 extern __off64_t _IO_seekoff (_IO_FILE *, __off64_t, int, int);
 extern __off64_t _IO_seekpos (_IO_FILE *, __off64_t, int);
 
-extern void _IO_free_backup_area (_IO_FILE *) __attribute__ ((__nothrow__ ));
+extern void _IO_free_backup_area (_IO_FILE *) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
@@ -333,6 +428,10 @@ typedef _G_fpos_t fpos_t;
 
 
 
+
+
+
+
 extern struct _IO_FILE *stdin;
 extern struct _IO_FILE *stdout;
 extern struct _IO_FILE *stderr;
@@ -343,32 +442,55 @@ extern struct _IO_FILE *stderr;
 
 
 
-extern int remove (const char *__filename) __attribute__ ((__nothrow__ ));
+extern int remove (const char *__filename) __attribute__ ((__nothrow__ , __leaf__));
 
-extern int rename (const char *__old, const char *__new) __attribute__ ((__nothrow__ ));
+extern int rename (const char *__old, const char *__new) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
 extern int renameat (int __oldfd, const char *__old, int __newfd,
-       const char *__new) __attribute__ ((__nothrow__ ));
+       const char *__new) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+
+
 extern FILE *tmpfile (void) ;
-extern char *tmpnam (char *__s) __attribute__ ((__nothrow__ )) ;
+extern char *tmpnam (char *__s) __attribute__ ((__nothrow__ , __leaf__)) ;
 
 
 
 
 
-extern char *tmpnam_r (char *__s) __attribute__ ((__nothrow__ )) ;
+extern char *tmpnam_r (char *__s) __attribute__ ((__nothrow__ , __leaf__)) ;
 extern char *tempnam (const char *__dir, const char *__pfx)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__malloc__)) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) ;
+
+
+
+
+
+
+
+
 extern int fclose (FILE *__stream);
 
 
 
 
 extern int fflush (FILE *__stream);
+
 extern int fflush_unlocked (FILE *__stream);
+
+
+
+
+
+
 extern FILE *fopen (const char *__restrict __filename,
       const char *__restrict __modes) ;
 
@@ -378,36 +500,45 @@ extern FILE *fopen (const char *__restrict __filename,
 extern FILE *freopen (const char *__restrict __filename,
         const char *__restrict __modes,
         FILE *__restrict __stream) ;
-extern FILE *fdopen (int __fd, const char *__modes) __attribute__ ((__nothrow__ )) ;
+
+extern FILE *fdopen (int __fd, const char *__modes) __attribute__ ((__nothrow__ , __leaf__)) ;
 extern FILE *fmemopen (void *__s, size_t __len, const char *__modes)
-  __attribute__ ((__nothrow__ )) ;
+  __attribute__ ((__nothrow__ , __leaf__)) ;
 
 
 
 
-extern FILE *open_memstream (char **__bufloc, size_t *__sizeloc) __attribute__ ((__nothrow__ )) ;
+extern FILE *open_memstream (char **__bufloc, size_t *__sizeloc) __attribute__ ((__nothrow__ , __leaf__)) ;
 
 
 
 
 
 
-extern void setbuf (FILE *__restrict __stream, char *__restrict __buf) __attribute__ ((__nothrow__ ));
+extern void setbuf (FILE *__restrict __stream, char *__restrict __buf) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 extern int setvbuf (FILE *__restrict __stream, char *__restrict __buf,
-      int __modes, size_t __n) __attribute__ ((__nothrow__ ));
+      int __modes, size_t __n) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
 
 extern void setbuffer (FILE *__restrict __stream, char *__restrict __buf,
-         size_t __size) __attribute__ ((__nothrow__ ));
+         size_t __size) __attribute__ ((__nothrow__ , __leaf__));
 
 
-extern void setlinebuf (FILE *__stream) __attribute__ ((__nothrow__ ));
+extern void setlinebuf (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+
+
 extern int fprintf (FILE *__restrict __stream,
       const char *__restrict __format, ...);
 
@@ -445,11 +576,20 @@ extern int snprintf (char *__restrict __s, size_t __maxlen,
 extern int vsnprintf (char *__restrict __s, size_t __maxlen,
         const char *__restrict __format, __gnuc_va_list __arg)
      __attribute__ ((__nothrow__)) __attribute__ ((__format__ (__printf__, 3, 0)));
+
 extern int vdprintf (int __fd, const char *__restrict __fmt,
        __gnuc_va_list __arg)
      __attribute__ ((__format__ (__printf__, 2, 0)));
 extern int dprintf (int __fd, const char *__restrict __fmt, ...)
      __attribute__ ((__format__ (__printf__, 2, 3)));
+
+
+
+
+
+
+
+
 extern int fscanf (FILE *__restrict __stream,
      const char *__restrict __format, ...) ;
 
@@ -459,13 +599,23 @@ extern int fscanf (FILE *__restrict __stream,
 extern int scanf (const char *__restrict __format, ...) ;
 
 extern int sscanf (const char *__restrict __s,
-     const char *__restrict __format, ...) __attribute__ ((__nothrow__ ));
-extern int fscanf (FILE *__restrict __stream, const char *__restrict __format, ...) __asm__ ("" "__isoc99_fscanf") ;
+     const char *__restrict __format, ...) __attribute__ ((__nothrow__ , __leaf__));
+extern int fscanf (FILE *__restrict __stream, const char *__restrict __format, ...) __asm__ ("" "__isoc99_fscanf")
+
+                               ;
+extern int scanf (const char *__restrict __format, ...) __asm__ ("" "__isoc99_scanf")
+                              ;
+extern int sscanf (const char *__restrict __s, const char *__restrict __format, ...) __asm__ ("" "__isoc99_sscanf") __attribute__ ((__nothrow__ , __leaf__))
+
+                      ;
 
 
-extern int scanf (const char *__restrict __format, ...) __asm__ ("" "__isoc99_scanf") ;
 
-extern int sscanf (const char *__restrict __s, const char *__restrict __format, ...) __asm__ ("" "__isoc99_sscanf") __attribute__ ((__nothrow__ ));
+
+
+
+
+
 extern int vfscanf (FILE *__restrict __s, const char *__restrict __format,
       __gnuc_va_list __arg)
      __attribute__ ((__format__ (__scanf__, 2, 0))) ;
@@ -480,7 +630,7 @@ extern int vscanf (const char *__restrict __format, __gnuc_va_list __arg)
 
 extern int vsscanf (const char *__restrict __s,
       const char *__restrict __format, __gnuc_va_list __arg)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__format__ (__scanf__, 2, 0)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__format__ (__scanf__, 2, 0)));
 extern int vfscanf (FILE *__restrict __s, const char *__restrict __format, __gnuc_va_list __arg) __asm__ ("" "__isoc99_vfscanf")
 
 
@@ -489,11 +639,20 @@ extern int vfscanf (FILE *__restrict __s, const char *__restrict __format, __gnu
 extern int vscanf (const char *__restrict __format, __gnuc_va_list __arg) __asm__ ("" "__isoc99_vscanf")
 
      __attribute__ ((__format__ (__scanf__, 1, 0))) ;
-extern int vsscanf (const char *__restrict __s, const char *__restrict __format, __gnuc_va_list __arg) __asm__ ("" "__isoc99_vsscanf") __attribute__ ((__nothrow__ ))
+extern int vsscanf (const char *__restrict __s, const char *__restrict __format, __gnuc_va_list __arg) __asm__ ("" "__isoc99_vsscanf") __attribute__ ((__nothrow__ , __leaf__))
 
 
 
      __attribute__ ((__format__ (__scanf__, 2, 0)));
+
+
+
+
+
+
+
+
+
 extern int fgetc (FILE *__stream);
 extern int getc (FILE *__stream);
 
@@ -502,9 +661,21 @@ extern int getc (FILE *__stream);
 
 
 extern int getchar (void);
+
 extern int getc_unlocked (FILE *__stream);
 extern int getchar_unlocked (void);
 extern int fgetc_unlocked (FILE *__stream);
+
+
+
+
+
+
+
+
+
+
+
 extern int fputc (int __c, FILE *__stream);
 extern int putc (int __c, FILE *__stream);
 
@@ -513,6 +684,7 @@ extern int putc (int __c, FILE *__stream);
 
 
 extern int putchar (int __c);
+
 extern int fputc_unlocked (int __c, FILE *__stream);
 
 
@@ -533,8 +705,17 @@ extern int getw (FILE *__stream);
 
 
 extern int putw (int __w, FILE *__stream);
+
+
+
+
+
+
+
+
 extern char *fgets (char *__restrict __s, int __n, FILE *__restrict __stream)
-          ;
+     ;
+
 extern __ssize_t __getdelim (char **__restrict __lineptr,
           size_t *__restrict __n, int __delimiter,
           FILE *__restrict __stream) ;
@@ -551,6 +732,14 @@ extern __ssize_t getdelim (char **__restrict __lineptr,
 extern __ssize_t getline (char **__restrict __lineptr,
        size_t *__restrict __n,
        FILE *__restrict __stream) ;
+
+
+
+
+
+
+
+
 extern int fputs (const char *__restrict __s, FILE *__restrict __stream);
 
 
@@ -579,10 +768,19 @@ extern size_t fread (void *__restrict __ptr, size_t __size,
 
 extern size_t fwrite (const void *__restrict __ptr, size_t __size,
         size_t __n, FILE *__restrict __s);
+
 extern size_t fread_unlocked (void *__restrict __ptr, size_t __size,
          size_t __n, FILE *__restrict __stream) ;
 extern size_t fwrite_unlocked (const void *__restrict __ptr, size_t __size,
           size_t __n, FILE *__restrict __stream);
+
+
+
+
+
+
+
+
 extern int fseek (FILE *__stream, long int __off, int __whence);
 
 
@@ -594,32 +792,49 @@ extern long int ftell (FILE *__stream) ;
 
 
 extern void rewind (FILE *__stream);
+
 extern int fseeko (FILE *__stream, __off_t __off, int __whence);
 
 
 
 
 extern __off_t ftello (FILE *__stream) ;
+
+
+
+
+
+
 extern int fgetpos (FILE *__restrict __stream, fpos_t *__restrict __pos);
 
 
 
 
 extern int fsetpos (FILE *__stream, const fpos_t *__pos);
-extern void clearerr (FILE *__stream) __attribute__ ((__nothrow__ ));
-
-extern int feof (FILE *__stream) __attribute__ ((__nothrow__ )) ;
-
-extern int ferror (FILE *__stream) __attribute__ ((__nothrow__ )) ;
 
 
 
+extern void clearerr (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__));
 
-extern void clearerr_unlocked (FILE *__stream) __attribute__ ((__nothrow__ ));
-extern int feof_unlocked (FILE *__stream) __attribute__ ((__nothrow__ )) ;
-extern int ferror_unlocked (FILE *__stream) __attribute__ ((__nothrow__ )) ;
+extern int feof (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+extern int ferror (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+
+
+
+extern void clearerr_unlocked (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__));
+extern int feof_unlocked (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
+extern int ferror_unlocked (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+
+
+
+
+
+
+
 extern void perror (const char *__s);
-
 
 
 
@@ -632,12 +847,12 @@ extern const char *const sys_errlist[];
 
 
 
-extern int fileno (FILE *__stream) __attribute__ ((__nothrow__ )) ;
+extern int fileno (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
 
 
 
 
-extern int fileno_unlocked (FILE *__stream) __attribute__ ((__nothrow__ )) ;
+extern int fileno_unlocked (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
 extern FILE *popen (const char *__command, const char *__modes) ;
 
 
@@ -650,23 +865,42 @@ extern int pclose (FILE *__stream);
 
 
 
-extern char *ctermid (char *__s) __attribute__ ((__nothrow__ ));
-extern void flockfile (FILE *__stream) __attribute__ ((__nothrow__ ));
+extern char *ctermid (char *__s) __attribute__ ((__nothrow__ , __leaf__));
+extern void flockfile (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
-extern int ftrylockfile (FILE *__stream) __attribute__ ((__nothrow__ )) ;
+extern int ftrylockfile (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
 
 
-extern void funlockfile (FILE *__stream) __attribute__ ((__nothrow__ ));
-typedef int ptrdiff_t;
+extern void funlockfile (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+
+
+
+#ifndef __i386__
+typedef long int ptrdiff_t;
 typedef int wchar_t;
+#else /* __i386__ */
+typedef int ptrdiff_t;
+typedef long int wchar_t;
+#endif /* __i386__ */
 typedef struct {
-  long long __clang_max_align_nonce1
-      __attribute__((__aligned__(__alignof__(long long))));
-  long double __clang_max_align_nonce2
-      __attribute__((__aligned__(__alignof__(long double))));
+  long long __max_align_ll __attribute__((__aligned__(__alignof__(long long))));
+  long double __max_align_ld __attribute__((__aligned__(__alignof__(long double))));
 } max_align_t;
+
+
+
+
+       
+
+
 
 
 
@@ -730,8 +964,19 @@ typedef __caddr_t caddr_t;
 
 
 typedef __key_t key_t;
+       
+
+
 typedef __clock_t clock_t;
+
+
+
+
+
 typedef __time_t time_t;
+
+
+
 typedef __clockid_t clockid_t;
 typedef __timer_t timer_t;
 
@@ -758,6 +1003,16 @@ typedef int register_t __attribute__ ((__mode__ (__word__)));
 
 
 
+static __inline unsigned int
+__bswap_32 (unsigned int __bsx)
+{
+  return __builtin_bswap32 (__bsx);
+}
+static __inline __uint64_t
+__bswap_64 (__uint64_t __bsx)
+{
+  return __builtin_bswap64 (__bsx);
+}
 
 
 
@@ -782,7 +1037,7 @@ typedef __sigset_t sigset_t;
 
 
 
-
+       
 struct timespec
   {
     __time_t tv_sec;
@@ -822,6 +1077,7 @@ typedef struct
 
 
 typedef __fd_mask fd_mask;
+
 extern int select (int __nfds, fd_set *__restrict __readfds,
      fd_set *__restrict __writefds,
      fd_set *__restrict __exceptfds,
@@ -833,16 +1089,20 @@ extern int pselect (int __nfds, fd_set *__restrict __readfds,
       const __sigset_t *__restrict __sigmask);
 
 
+
+
+
 __extension__
 extern unsigned int gnu_dev_major (unsigned long long int __dev)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__const__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 __extension__
 extern unsigned int gnu_dev_minor (unsigned long long int __dev)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__const__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 __extension__
 extern unsigned long long int gnu_dev_makedev (unsigned int __major,
             unsigned int __minor)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__const__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+
 
 
 
@@ -869,20 +1129,33 @@ typedef unsigned long int pthread_t;
 
 union pthread_attr_t
 {
+#ifndef __i386__
+  char __size[56];
+#else /* __i386__ */
   char __size[36];
+#endif /* __i386__ */
   long int __align;
 };
 
 typedef union pthread_attr_t pthread_attr_t;
+#ifdef __i386__
 typedef struct __pthread_internal_slist
 {
   struct __pthread_internal_slist *__next;
 } __pthread_slist_t;
+#endif /* __i386__ */
 
 
 
 
 
+#ifndef __i386__
+typedef struct __pthread_internal_list
+{
+  struct __pthread_internal_list *__prev;
+  struct __pthread_internal_list *__next;
+} __pthread_list_t;
+#endif /* ! __i386__ */
 typedef union
 {
   struct __pthread_mutex_s
@@ -891,10 +1164,19 @@ typedef union
     unsigned int __count;
     int __owner;
 
+#ifndef __i386__
+    unsigned int __nusers;
+#endif /* ! __i386__ */
 
 
 
+#ifndef __i386__
+    int __kind;
+#endif /* ! __i386__ */
 
+#ifndef __i386__
+    short __spins;
+#else /* __i386__ */
     int __kind;
     unsigned int __nusers;
     __extension__ union
@@ -902,7 +1184,11 @@ typedef union
       struct
       {
  short __espins;
- short __elision;
+#endif /* __i386__ */
+    short __elision;
+#ifndef __i386__
+    __pthread_list_t __list;
+#else /* __i386__ */
 
 
 
@@ -910,8 +1196,13 @@ typedef union
       __pthread_slist_t __list;
     };
 
+#endif /* __i386__ */
   } __data;
+#ifndef __i386__
+  char __size[40];
+#else /* __i386__ */
   char __size[24];
+#endif /* __i386__ */
   long int __align;
 } pthread_mutex_t;
 
@@ -961,6 +1252,7 @@ typedef int pthread_once_t;
 
 typedef union
 {
+
   struct
   {
     int __lock;
@@ -969,17 +1261,42 @@ typedef union
     unsigned int __writer_wakeup;
     unsigned int __nr_readers_queued;
     unsigned int __nr_writers_queued;
+#ifndef __i386__
+    int __writer;
+    int __shared;
+    signed char __rwelision;
 
 
+
+
+    unsigned char __pad1[7];
+
+#endif /* ! __i386__ */
+
+#ifndef __i386__
+    unsigned long int __pad2;
+#endif /* ! __i386__ */
+
+#ifdef __i386__
     unsigned char __flags;
     unsigned char __shared;
     signed char __rwelision;
+#endif /* __i386__ */
 
+#ifndef __i386__
+    unsigned int __flags;
+
+#else /* __i386__ */
     unsigned char __pad2;
     int __writer;
+#endif /* __i386__ */
   } __data;
+#ifndef __i386__
+  char __size[56];
+#else /* __i386__ */
 
   char __size[32];
+#endif /* __i386__ */
   long int __align;
 } pthread_rwlock_t;
 
@@ -1000,7 +1317,11 @@ typedef volatile int pthread_spinlock_t;
 
 typedef union
 {
+#ifndef __i386__
+  char __size[32];
+#else /* __i386__ */
   char __size[20];
+#endif /* __i386__ */
   long int __align;
 } pthread_barrier_t;
 
@@ -1009,6 +1330,9 @@ typedef union
   char __size[4];
   int __align;
 } pthread_barrierattr_t;
+
+
+
 extern int _gl_cxxalias_dummy;
 
 extern int _gl_cxxalias_dummy;
@@ -1030,13 +1354,8 @@ extern int _gl_cxxalias_dummy;
 extern int _gl_cxxalias_dummy;
 
 extern int _gl_cxxalias_dummy;
-extern int _gl_cxxalias_dummy;
-extern int _gl_cxxalias_dummy;
-extern int _gl_cxxalias_dummy;
-
-extern int _gl_cxxalias_dummy;
-extern int _gl_cxxalias_dummy;
-
+extern int _gl_cxxalias_dummy
+                                                                      ;
 extern int _gl_cxxalias_dummy;
 extern int _gl_cxxalias_dummy;
 
@@ -1055,11 +1374,19 @@ extern int _gl_cxxalias_dummy;
 extern int _gl_cxxalias_dummy;
 extern int _gl_cxxalias_dummy;
 
+extern int _gl_cxxalias_dummy;
+extern int _gl_cxxalias_dummy;
+
+extern int _gl_cxxalias_dummy;
+extern int _gl_cxxalias_dummy
+                                                                    ;
 
 extern int _gl_cxxalias_dummy;
 extern int _gl_cxxalias_dummy;
 
 extern int _gl_cxxalias_dummy;
+
+       
 
 typedef unsigned int __re_size_t;
 typedef unsigned long int __re_long_size_t;
@@ -1261,9 +1588,15 @@ struct localeinfo;
 
 struct dfamust
 {
-  _Bool exact;
-  _Bool begline;
-  _Bool endline;
+  
+ _Bool 
+      exact;
+  
+ _Bool 
+      begline;
+  
+ _Bool 
+      endline;
   char *must;
 };
 
@@ -1307,9 +1640,15 @@ extern void dfamustfree (struct dfamust *);
 
 
 
-extern void dfacomp (char const *, size_t, struct dfa *, _Bool);
+extern void dfacomp (char const *, size_t, struct dfa *, 
+                                                        _Bool
+                                                            );
 extern char *dfaexec (struct dfa *d, char const *begin, char *end,
-                      _Bool allow_nl, size_t *count, _Bool *backref);
+                      
+                     _Bool 
+                          allow_nl, size_t *count, 
+                                                   _Bool 
+                                                        *backref);
 
 
 
@@ -1318,7 +1657,9 @@ extern char *dfaexec (struct dfa *d, char const *begin, char *end,
 extern struct dfa *dfasuperset (struct dfa const *d) __attribute__ ((__pure__));
 
 
-extern _Bool dfaisfast (struct dfa const *) __attribute__ ((__pure__));
+extern 
+      _Bool 
+           dfaisfast (struct dfa const *) __attribute__ ((__pure__));
 
 
 extern void dfafree (struct dfa *);
@@ -1336,20 +1677,29 @@ extern void dfawarn (const char *);
 
 extern _Noreturn void dfaerror (const char *);
 
+
+
+
+
 extern void __assert_fail (const char *__assertion, const char *__file,
       unsigned int __line, const char *__function)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__noreturn__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__noreturn__));
 
 
 extern void __assert_perror_fail (int __errnum, const char *__file,
       unsigned int __line, const char *__function)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__noreturn__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__noreturn__));
 
 
 
 
 extern void __assert (const char *__assertion, const char *__file, int __line)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__noreturn__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__noreturn__));
+
+
+
+       
+
 
 
 
@@ -1371,53 +1721,67 @@ enum
   _ISalnum = ((11) < 8 ? ((1 << (11)) << 8) : ((1 << (11)) >> 8))
 };
 extern const unsigned short int **__ctype_b_loc (void)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__const__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 extern const __int32_t **__ctype_tolower_loc (void)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__const__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 extern const __int32_t **__ctype_toupper_loc (void)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__const__));
-extern int isalnum (int) __attribute__ ((__nothrow__ ));
-extern int isalpha (int) __attribute__ ((__nothrow__ ));
-extern int iscntrl (int) __attribute__ ((__nothrow__ ));
-extern int isdigit (int) __attribute__ ((__nothrow__ ));
-extern int islower (int) __attribute__ ((__nothrow__ ));
-extern int isgraph (int) __attribute__ ((__nothrow__ ));
-extern int isprint (int) __attribute__ ((__nothrow__ ));
-extern int ispunct (int) __attribute__ ((__nothrow__ ));
-extern int isspace (int) __attribute__ ((__nothrow__ ));
-extern int isupper (int) __attribute__ ((__nothrow__ ));
-extern int isxdigit (int) __attribute__ ((__nothrow__ ));
-
-
-
-extern int tolower (int __c) __attribute__ ((__nothrow__ ));
-
-
-extern int toupper (int __c) __attribute__ ((__nothrow__ ));
-extern int isblank (int) __attribute__ ((__nothrow__ ));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
 
 
 
 
-extern int isctype (int __c, int __mask) __attribute__ ((__nothrow__ ));
+extern int isalnum (int) __attribute__ ((__nothrow__ , __leaf__));
+extern int isalpha (int) __attribute__ ((__nothrow__ , __leaf__));
+extern int iscntrl (int) __attribute__ ((__nothrow__ , __leaf__));
+extern int isdigit (int) __attribute__ ((__nothrow__ , __leaf__));
+extern int islower (int) __attribute__ ((__nothrow__ , __leaf__));
+extern int isgraph (int) __attribute__ ((__nothrow__ , __leaf__));
+extern int isprint (int) __attribute__ ((__nothrow__ , __leaf__));
+extern int ispunct (int) __attribute__ ((__nothrow__ , __leaf__));
+extern int isspace (int) __attribute__ ((__nothrow__ , __leaf__));
+extern int isupper (int) __attribute__ ((__nothrow__ , __leaf__));
+extern int isxdigit (int) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+extern int tolower (int __c) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern int toupper (int __c) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
 
 
-extern int isascii (int __c) __attribute__ ((__nothrow__ ));
+
+
+extern int isblank (int) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
-extern int toascii (int __c) __attribute__ ((__nothrow__ ));
 
 
 
-extern int _toupper (int) __attribute__ ((__nothrow__ ));
-extern int _tolower (int) __attribute__ ((__nothrow__ ));
+extern int isctype (int __c, int __mask) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+extern int isascii (int __c) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+extern int toascii (int __c) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+extern int _toupper (int) __attribute__ ((__nothrow__ , __leaf__));
+extern int _tolower (int) __attribute__ ((__nothrow__ , __leaf__));
 typedef struct __locale_struct
 {
 
@@ -1434,28 +1798,30 @@ typedef struct __locale_struct
 
 
 typedef __locale_t locale_t;
-extern int isalnum_l (int, __locale_t) __attribute__ ((__nothrow__ ));
-extern int isalpha_l (int, __locale_t) __attribute__ ((__nothrow__ ));
-extern int iscntrl_l (int, __locale_t) __attribute__ ((__nothrow__ ));
-extern int isdigit_l (int, __locale_t) __attribute__ ((__nothrow__ ));
-extern int islower_l (int, __locale_t) __attribute__ ((__nothrow__ ));
-extern int isgraph_l (int, __locale_t) __attribute__ ((__nothrow__ ));
-extern int isprint_l (int, __locale_t) __attribute__ ((__nothrow__ ));
-extern int ispunct_l (int, __locale_t) __attribute__ ((__nothrow__ ));
-extern int isspace_l (int, __locale_t) __attribute__ ((__nothrow__ ));
-extern int isupper_l (int, __locale_t) __attribute__ ((__nothrow__ ));
-extern int isxdigit_l (int, __locale_t) __attribute__ ((__nothrow__ ));
+extern int isalnum_l (int, __locale_t) __attribute__ ((__nothrow__ , __leaf__));
+extern int isalpha_l (int, __locale_t) __attribute__ ((__nothrow__ , __leaf__));
+extern int iscntrl_l (int, __locale_t) __attribute__ ((__nothrow__ , __leaf__));
+extern int isdigit_l (int, __locale_t) __attribute__ ((__nothrow__ , __leaf__));
+extern int islower_l (int, __locale_t) __attribute__ ((__nothrow__ , __leaf__));
+extern int isgraph_l (int, __locale_t) __attribute__ ((__nothrow__ , __leaf__));
+extern int isprint_l (int, __locale_t) __attribute__ ((__nothrow__ , __leaf__));
+extern int ispunct_l (int, __locale_t) __attribute__ ((__nothrow__ , __leaf__));
+extern int isspace_l (int, __locale_t) __attribute__ ((__nothrow__ , __leaf__));
+extern int isupper_l (int, __locale_t) __attribute__ ((__nothrow__ , __leaf__));
+extern int isxdigit_l (int, __locale_t) __attribute__ ((__nothrow__ , __leaf__));
 
-extern int isblank_l (int, __locale_t) __attribute__ ((__nothrow__ ));
-
-
-
-extern int __tolower_l (int __c, __locale_t __l) __attribute__ ((__nothrow__ ));
-extern int tolower_l (int __c, __locale_t __l) __attribute__ ((__nothrow__ ));
+extern int isblank_l (int, __locale_t) __attribute__ ((__nothrow__ , __leaf__));
 
 
-extern int __toupper_l (int __c, __locale_t __l) __attribute__ ((__nothrow__ ));
-extern int toupper_l (int __c, __locale_t __l) __attribute__ ((__nothrow__ ));
+
+extern int __tolower_l (int __c, __locale_t __l) __attribute__ ((__nothrow__ , __leaf__));
+extern int tolower_l (int __c, __locale_t __l) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern int __toupper_l (int __c, __locale_t __l) __attribute__ ((__nothrow__ , __leaf__));
+extern int toupper_l (int __c, __locale_t __l) __attribute__ ((__nothrow__ , __leaf__));
+
+       
 typedef unsigned char uint8_t;
 typedef unsigned short int uint16_t;
 
@@ -1463,6 +1829,9 @@ typedef unsigned int uint32_t;
 
 
 
+#ifndef __i386__
+typedef unsigned long int uint64_t;
+#else /* __i386__ */
 
 
 __extension__
@@ -1473,14 +1842,21 @@ typedef unsigned long long int uint64_t;
 
 
 
+#endif /* __i386__ */
 typedef signed char int_least8_t;
 typedef short int int_least16_t;
 typedef int int_least32_t;
 
+#ifndef __i386__
+typedef long int int_least64_t;
+
+#endif /* ! __i386__ */
 
 
+#ifdef __i386__
 __extension__
 typedef long long int int_least64_t;
+#endif /* __i386__ */
 
 
 
@@ -1488,6 +1864,9 @@ typedef unsigned char uint_least8_t;
 typedef unsigned short int uint_least16_t;
 typedef unsigned int uint_least32_t;
 
+#ifndef __i386__
+typedef unsigned long int uint_least64_t;
+#else /* __i386__ */
 
 
 __extension__
@@ -1498,8 +1877,14 @@ typedef unsigned long long int uint_least64_t;
 
 
 
+#endif /* __i386__ */
 typedef signed char int_fast8_t;
 
+#ifndef __i386__
+typedef long int int_fast16_t;
+typedef long int int_fast32_t;
+typedef long int int_fast64_t;
+#else /* __i386__ */
 
 
 
@@ -1511,24 +1896,44 @@ typedef long long int int_fast64_t;
 
 
 
+#endif /* __i386__ */
 typedef unsigned char uint_fast8_t;
 
+#ifndef __i386__
+typedef unsigned long int uint_fast16_t;
+typedef unsigned long int uint_fast32_t;
+typedef unsigned long int uint_fast64_t;
+typedef long int intptr_t;
+#endif /* ! __i386__ */
 
 
+#ifndef __i386__
+typedef unsigned long int uintptr_t;
+typedef long int intmax_t;
+typedef unsigned long int uintmax_t;
+#endif /* ! __i386__ */
 
 
+#ifdef __i386__
 typedef unsigned int uint_fast16_t;
 typedef unsigned int uint_fast32_t;
 __extension__
 typedef unsigned long long int uint_fast64_t;
 typedef int intptr_t;
+#endif /* __i386__ */
 
 
+#ifdef __i386__
 typedef unsigned int uintptr_t;
 __extension__
 typedef long long int intmax_t;
 __extension__
 typedef unsigned long long int uintmax_t;
+#endif /* __i386__ */
+
+
+
+       
 
 
 
@@ -1539,6 +1944,7 @@ typedef unsigned long long int uintmax_t;
 
 
 
+       
 
 
 
@@ -1546,49 +1952,65 @@ typedef unsigned long long int uintmax_t;
 
 
 
+       
 
 
 
 
 
 
+       
 
 
 
+
+
+
+#ifndef __i386__
 typedef int __gwchar_t;
+#endif /* ! __i386__ */
+
+
+
+
+#ifdef __i386__
+typedef long int __gwchar_t;
+#endif /* __i386__ */
+
 typedef struct
   {
+#ifndef __i386__
+    long int quot;
+    long int rem;
+#else /* __i386__ */
     __extension__ long long int quot;
     __extension__ long long int rem;
+#endif /* __i386__ */
   } imaxdiv_t;
-
-
-
-
-
-extern intmax_t imaxabs (intmax_t __n) __attribute__ ((__nothrow__ )) __attribute__ ((__const__));
+extern intmax_t imaxabs (intmax_t __n) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
 extern imaxdiv_t imaxdiv (intmax_t __numer, intmax_t __denom)
-      __attribute__ ((__nothrow__ )) __attribute__ ((__const__));
+      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
 extern intmax_t strtoimax (const char *__restrict __nptr,
-      char **__restrict __endptr, int __base) __attribute__ ((__nothrow__ ));
+      char **__restrict __endptr, int __base) __attribute__ ((__nothrow__ , __leaf__));
 
 
 extern uintmax_t strtoumax (const char *__restrict __nptr,
-       char ** __restrict __endptr, int __base) __attribute__ ((__nothrow__ ));
+       char ** __restrict __endptr, int __base) __attribute__ ((__nothrow__ , __leaf__));
 
 
 extern intmax_t wcstoimax (const __gwchar_t *__restrict __nptr,
       __gwchar_t **__restrict __endptr, int __base)
-     __attribute__ ((__nothrow__ ));
+     __attribute__ ((__nothrow__ , __leaf__));
 
 
 extern uintmax_t wcstoumax (const __gwchar_t *__restrict __nptr,
        __gwchar_t ** __restrict __endptr, int __base)
-     __attribute__ ((__nothrow__ ));
+     __attribute__ ((__nothrow__ , __leaf__));
+
 typedef signed char gl_int8_t;
 typedef unsigned char gl_uint8_t;
 
@@ -1623,6 +2045,8 @@ typedef long int gl_intptr_t;
 typedef unsigned long int gl_uintptr_t;
 typedef int _verify_intmax_size[sizeof (intmax_t) == sizeof (uintmax_t)
                                 ? 1 : -1];
+       
+       
 
 
 
@@ -1637,6 +2061,8 @@ typedef enum
   P_PID,
   P_PGID
 } idtype_t;
+
+
 typedef struct
   {
     int quot;
@@ -1662,26 +2088,28 @@ __extension__ typedef struct
     long long int quot;
     long long int rem;
   } lldiv_t;
-extern size_t __ctype_get_mb_cur_max (void) __attribute__ ((__nothrow__ )) ;
+
+
+extern size_t __ctype_get_mb_cur_max (void) __attribute__ ((__nothrow__ , __leaf__)) ;
 
 
 
 
 extern double atof (const char *__nptr)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
 
 extern int atoi (const char *__nptr)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
 
 extern long int atol (const char *__nptr)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
 
 
 
 
 
 __extension__ extern long long int atoll (const char *__nptr)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
 
 
 
@@ -1689,18 +2117,18 @@ __extension__ extern long long int atoll (const char *__nptr)
 
 extern double strtod (const char *__restrict __nptr,
         char **__restrict __endptr)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
 
 
 extern float strtof (const char *__restrict __nptr,
-       char **__restrict __endptr) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+       char **__restrict __endptr) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 extern long double strtold (const char *__restrict __nptr,
        char **__restrict __endptr)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
@@ -1708,11 +2136,11 @@ extern long double strtold (const char *__restrict __nptr,
 
 extern long int strtol (const char *__restrict __nptr,
    char **__restrict __endptr, int __base)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 extern unsigned long int strtoul (const char *__restrict __nptr,
       char **__restrict __endptr, int __base)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
@@ -1720,12 +2148,12 @@ extern unsigned long int strtoul (const char *__restrict __nptr,
 __extension__
 extern long long int strtoq (const char *__restrict __nptr,
         char **__restrict __endptr, int __base)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 __extension__
 extern unsigned long long int strtouq (const char *__restrict __nptr,
            char **__restrict __endptr, int __base)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
@@ -1734,76 +2162,77 @@ extern unsigned long long int strtouq (const char *__restrict __nptr,
 __extension__
 extern long long int strtoll (const char *__restrict __nptr,
          char **__restrict __endptr, int __base)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 __extension__
 extern unsigned long long int strtoull (const char *__restrict __nptr,
      char **__restrict __endptr, int __base)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
 extern long int strtol_l (const char *__restrict __nptr,
      char **__restrict __endptr, int __base,
-     __locale_t __loc) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 4)));
+     __locale_t __loc) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 4)));
 
 extern unsigned long int strtoul_l (const char *__restrict __nptr,
         char **__restrict __endptr,
         int __base, __locale_t __loc)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 4)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 4)));
 
 __extension__
 extern long long int strtoll_l (const char *__restrict __nptr,
     char **__restrict __endptr, int __base,
     __locale_t __loc)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 4)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 4)));
 
 __extension__
 extern unsigned long long int strtoull_l (const char *__restrict __nptr,
        char **__restrict __endptr,
        int __base, __locale_t __loc)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 4)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 4)));
 
 extern double strtod_l (const char *__restrict __nptr,
    char **__restrict __endptr, __locale_t __loc)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 3)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 3)));
 
 extern float strtof_l (const char *__restrict __nptr,
          char **__restrict __endptr, __locale_t __loc)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 3)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 3)));
 
 extern long double strtold_l (const char *__restrict __nptr,
          char **__restrict __endptr,
          __locale_t __loc)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 3)));
-extern char *l64a (long int __n) __attribute__ ((__nothrow__ )) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 3)));
+extern char *l64a (long int __n) __attribute__ ((__nothrow__ , __leaf__)) ;
 
 
 extern long int a64l (const char *__s)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+       
 
 
 
 
 
 
+extern long int random (void) __attribute__ ((__nothrow__ , __leaf__));
 
 
-
-
-
-extern long int random (void) __attribute__ ((__nothrow__ ));
-
-
-extern void srandom (unsigned int __seed) __attribute__ ((__nothrow__ ));
+extern void srandom (unsigned int __seed) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
 
 extern char *initstate (unsigned int __seed, char *__statebuf,
-   size_t __statelen) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (2)));
+   size_t __statelen) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2)));
 
 
 
-extern char *setstate (char *__statebuf) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+extern char *setstate (char *__statebuf) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
@@ -1823,58 +2252,58 @@ struct random_data
   };
 
 extern int random_r (struct random_data *__restrict __buf,
-       gl_int32_t *__restrict __result) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+       gl_int32_t *__restrict __result) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 extern int srandom_r (unsigned int __seed, struct random_data *__buf)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2)));
 
 extern int initstate_r (unsigned int __seed, char *__restrict __statebuf,
    size_t __statelen,
    struct random_data *__restrict __buf)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (2, 4)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2, 4)));
 
 extern int setstate_r (char *__restrict __statebuf,
          struct random_data *__restrict __buf)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 
 
 
 
-extern int rand (void) __attribute__ ((__nothrow__ ));
+extern int rand (void) __attribute__ ((__nothrow__ , __leaf__));
 
-extern void srand (unsigned int __seed) __attribute__ ((__nothrow__ ));
-
-
+extern void srand (unsigned int __seed) __attribute__ ((__nothrow__ , __leaf__));
 
 
-extern int rand_r (unsigned int *__seed) __attribute__ ((__nothrow__ ));
 
 
+extern int rand_r (unsigned int *__seed) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
 
-extern double drand48 (void) __attribute__ ((__nothrow__ ));
-extern double erand48 (unsigned short int __xsubi[3]) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
 
 
-extern long int lrand48 (void) __attribute__ ((__nothrow__ ));
+extern double drand48 (void) __attribute__ ((__nothrow__ , __leaf__));
+extern double erand48 (unsigned short int __xsubi[3]) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern long int lrand48 (void) __attribute__ ((__nothrow__ , __leaf__));
 extern long int nrand48 (unsigned short int __xsubi[3])
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
-extern long int mrand48 (void) __attribute__ ((__nothrow__ ));
+extern long int mrand48 (void) __attribute__ ((__nothrow__ , __leaf__));
 extern long int jrand48 (unsigned short int __xsubi[3])
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
-extern void srand48 (long int __seedval) __attribute__ ((__nothrow__ ));
+extern void srand48 (long int __seedval) __attribute__ ((__nothrow__ , __leaf__));
 extern unsigned short int *seed48 (unsigned short int __seed16v[3])
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
-extern void lcong48 (unsigned short int __param[7]) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+extern void lcong48 (unsigned short int __param[7]) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
@@ -1892,54 +2321,71 @@ struct drand48_data
 
 
 extern int drand48_r (struct drand48_data *__restrict __buffer,
-        double *__restrict __result) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+        double *__restrict __result) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 extern int erand48_r (unsigned short int __xsubi[3],
         struct drand48_data *__restrict __buffer,
-        double *__restrict __result) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+        double *__restrict __result) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern int lrand48_r (struct drand48_data *__restrict __buffer,
         long int *__restrict __result)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 extern int nrand48_r (unsigned short int __xsubi[3],
         struct drand48_data *__restrict __buffer,
         long int *__restrict __result)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern int mrand48_r (struct drand48_data *__restrict __buffer,
         long int *__restrict __result)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 extern int jrand48_r (unsigned short int __xsubi[3],
         struct drand48_data *__restrict __buffer,
         long int *__restrict __result)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern int srand48_r (long int __seedval, struct drand48_data *__buffer)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2)));
 
 extern int seed48_r (unsigned short int __seed16v[3],
-       struct drand48_data *__buffer) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+       struct drand48_data *__buffer) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 extern int lcong48_r (unsigned short int __param[7],
         struct drand48_data *__buffer)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
-extern void *malloc (size_t __size) __attribute__ ((__nothrow__ )) __attribute__ ((__malloc__)) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+
+
+
+
+
+extern void *malloc (size_t __size) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) ;
 
 extern void *calloc (size_t __nmemb, size_t __size)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__malloc__)) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) ;
+
+
+
+
+
+
+
+
+
+
 extern void *realloc (void *__ptr, size_t __size)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__warn_unused_result__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__warn_unused_result__));
 
-extern void free (void *__ptr) __attribute__ ((__nothrow__ ));
-
-
+extern void free (void *__ptr) __attribute__ ((__nothrow__ , __leaf__));
 
 
-extern void cfree (void *__ptr) __attribute__ ((__nothrow__ ));
 
 
+extern void cfree (void *__ptr) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
@@ -1947,28 +2393,29 @@ extern void cfree (void *__ptr) __attribute__ ((__nothrow__ ));
 
 
 
-extern void *valloc (size_t __size) __attribute__ ((__nothrow__ )) __attribute__ ((__malloc__)) ;
+
+extern void *valloc (size_t __size) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) ;
 
 
 
 
 extern int posix_memalign (void **__memptr, size_t __alignment, size_t __size)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
 
 
 
 
 extern void *aligned_alloc (size_t __alignment, size_t __size)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__malloc__)) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) __attribute__ ((__alloc_size__ (2))) ;
 
 
 
 
-extern void abort (void) __attribute__ ((__nothrow__ )) __attribute__ ((__noreturn__));
+extern void abort (void) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__noreturn__));
 
 
 
-extern int atexit (void (*__func) (void)) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+extern int atexit (void (*__func) (void)) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
@@ -1976,7 +2423,7 @@ extern int atexit (void (*__func) (void)) __attribute__ ((__nothrow__ )) __attri
 
 
 
-extern int at_quick_exit (void (*__func) (void)) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+extern int at_quick_exit (void (*__func) (void)) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
@@ -1985,73 +2432,78 @@ extern int at_quick_exit (void (*__func) (void)) __attribute__ ((__nothrow__ )) 
 
 
 extern int on_exit (void (*__func) (int __status, void *__arg), void *__arg)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
 
 
 
-extern void exit (int __status) __attribute__ ((__nothrow__ )) __attribute__ ((__noreturn__));
+extern void exit (int __status) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__noreturn__));
 
 
 
 
 
-extern void quick_exit (int __status) __attribute__ ((__nothrow__ )) __attribute__ ((__noreturn__));
-
-
-
-
-
-
-
-extern void _Exit (int __status) __attribute__ ((__nothrow__ )) __attribute__ ((__noreturn__));
+extern void quick_exit (int __status) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__noreturn__));
 
 
 
 
 
 
-extern char *getenv (const char *__name) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1))) ;
+
+extern void _Exit (int __status) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__noreturn__));
+
+
+
+
+
+
+extern char *getenv (const char *__name) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
 
 
 
 
 
 extern char *secure_getenv (const char *__name)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
 
 
 
 
 
 
-extern int putenv (char *__string) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+extern int putenv (char *__string) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
 
 
 extern int setenv (const char *__name, const char *__value, int __replace)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2)));
 
 
-extern int unsetenv (const char *__name) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
-
-
-
+extern int unsetenv (const char *__name) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
-extern int clearenv (void) __attribute__ ((__nothrow__ ));
-extern char *mktemp (char *__template) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+
+
+
+extern int clearenv (void) __attribute__ ((__nothrow__ , __leaf__));
+extern char *mktemp (char *__template) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 extern int mkstemp (char *__template) __attribute__ ((__nonnull__ (1))) ;
 extern int mkstemps (char *__template, int __suffixlen) __attribute__ ((__nonnull__ (1))) ;
-extern char *mkdtemp (char *__template) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1))) ;
+extern char *mkdtemp (char *__template) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
 extern int mkostemp (char *__template, int __flags) __attribute__ ((__nonnull__ (1))) ;
 extern int mkostemps (char *__template, int __suffixlen, int __flags)
      __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
 extern int system (const char *__command) ;
 
 
@@ -2060,9 +2512,9 @@ extern int system (const char *__command) ;
 
 
 extern char *canonicalize_file_name (const char *__name)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
 extern char *realpath (const char *__restrict __name,
-         char *__restrict __resolved) __attribute__ ((__nothrow__ )) ;
+         char *__restrict __resolved) __attribute__ ((__nothrow__ , __leaf__)) ;
 
 
 
@@ -2102,13 +2554,13 @@ extern void qsort_r (void *__base, size_t __nmemb, size_t __size,
 
 
 
-extern int abs (int __x) __attribute__ ((__nothrow__ )) __attribute__ ((__const__)) ;
-extern long int labs (long int __x) __attribute__ ((__nothrow__ )) __attribute__ ((__const__)) ;
+extern int abs (int __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)) ;
+extern long int labs (long int __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)) ;
 
 
 
 __extension__ extern long long int llabs (long long int __x)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__const__)) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)) ;
 
 
 
@@ -2117,91 +2569,100 @@ __extension__ extern long long int llabs (long long int __x)
 
 
 extern div_t div (int __numer, int __denom)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__const__)) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)) ;
 extern ldiv_t ldiv (long int __numer, long int __denom)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__const__)) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)) ;
 
 
 
 
 __extension__ extern lldiv_t lldiv (long long int __numer,
         long long int __denom)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__const__)) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)) ;
+
 extern char *ecvt (double __value, int __ndigit, int *__restrict __decpt,
-     int *__restrict __sign) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (3, 4))) ;
+     int *__restrict __sign) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3, 4))) ;
 
 
 
 
 extern char *fcvt (double __value, int __ndigit, int *__restrict __decpt,
-     int *__restrict __sign) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (3, 4))) ;
+     int *__restrict __sign) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3, 4))) ;
 
 
 
 
 extern char *gcvt (double __value, int __ndigit, char *__buf)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (3))) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3))) ;
 
 
 
 
 extern char *qecvt (long double __value, int __ndigit,
       int *__restrict __decpt, int *__restrict __sign)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (3, 4))) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3, 4))) ;
 extern char *qfcvt (long double __value, int __ndigit,
       int *__restrict __decpt, int *__restrict __sign)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (3, 4))) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3, 4))) ;
 extern char *qgcvt (long double __value, int __ndigit, char *__buf)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (3))) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3))) ;
 
 
 
 
 extern int ecvt_r (double __value, int __ndigit, int *__restrict __decpt,
      int *__restrict __sign, char *__restrict __buf,
-     size_t __len) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (3, 4, 5)));
+     size_t __len) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3, 4, 5)));
 extern int fcvt_r (double __value, int __ndigit, int *__restrict __decpt,
      int *__restrict __sign, char *__restrict __buf,
-     size_t __len) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (3, 4, 5)));
+     size_t __len) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3, 4, 5)));
 
 extern int qecvt_r (long double __value, int __ndigit,
       int *__restrict __decpt, int *__restrict __sign,
       char *__restrict __buf, size_t __len)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (3, 4, 5)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3, 4, 5)));
 extern int qfcvt_r (long double __value, int __ndigit,
       int *__restrict __decpt, int *__restrict __sign,
       char *__restrict __buf, size_t __len)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (3, 4, 5)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3, 4, 5)));
 
 
 
 
 
 
-extern int mblen (const char *__s, size_t __n) __attribute__ ((__nothrow__ ));
+extern int mblen (const char *__s, size_t __n) __attribute__ ((__nothrow__ , __leaf__));
 
 
 extern int mbtowc (wchar_t *__restrict __pwc,
-     const char *__restrict __s, size_t __n) __attribute__ ((__nothrow__ ));
+     const char *__restrict __s, size_t __n) __attribute__ ((__nothrow__ , __leaf__));
 
 
-extern int wctomb (char *__s, wchar_t __wchar) __attribute__ ((__nothrow__ ));
+extern int wctomb (char *__s, wchar_t __wchar) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 extern size_t mbstowcs (wchar_t *__restrict __pwcs,
-   const char *__restrict __s, size_t __n) __attribute__ ((__nothrow__ ));
+   const char *__restrict __s, size_t __n) __attribute__ ((__nothrow__ , __leaf__));
 
 extern size_t wcstombs (char *__restrict __s,
    const wchar_t *__restrict __pwcs, size_t __n)
-     __attribute__ ((__nothrow__ ));
-extern int rpmatch (const char *__response) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+
+
+extern int rpmatch (const char *__response) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
 extern int getsubopt (char **__restrict __optionp,
         char *const *__restrict __tokens,
         char **__restrict __valuep)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2, 3))) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2, 3))) ;
 extern int ptsname_r (int __fd, char *__buf, size_t __buflen)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2)));
 
 
 extern int getpt (void);
@@ -2212,15 +2673,13 @@ extern int getpt (void);
 
 
 extern int getloadavg (double __loadavg[], int __nelem)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
 
 
-extern int _gl_cxxalias_dummy;
 
-extern int _gl_cxxalias_dummy;
 extern int _gl_cxxalias_dummy;
 
 extern int _gl_cxxalias_dummy;
@@ -2230,19 +2689,37 @@ extern int _gl_cxxalias_dummy;
 extern int _gl_cxxalias_dummy;
 
 extern int _gl_cxxalias_dummy;
+extern int _gl_cxxalias_dummy
+                                                                ;
+extern int _gl_cxxalias_dummy;
+extern int _gl_cxxalias_dummy
+                                                                ;
+extern int _gl_cxxalias_dummy;
 extern int _gl_cxxalias_dummy;
 
 extern int _gl_cxxalias_dummy;
-extern int _gl_cxxalias_dummy;
 
-extern int _gl_cxxalias_dummy;
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 extern void *memcpy (void *__restrict __dest, const void *__restrict __src,
-       size_t __n) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+       size_t __n) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern void *memmove (void *__dest, const void *__src, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 
@@ -2251,23 +2728,25 @@ extern void *memmove (void *__dest, const void *__src, size_t __n)
 
 extern void *memccpy (void *__restrict __dest, const void *__restrict __src,
         int __c, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 
 
 
-extern void *memset (void *__s, int __c, size_t __n) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+extern void *memset (void *__s, int __c, size_t __n) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 extern int memcmp (const void *__s1, const void *__s2, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 extern void *memchr (const void *__s, int __c, size_t __n)
-      __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+
 extern void *rawmemchr (const void *__s, int __c)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 extern void *memrchr (const void *__s, int __c, size_t __n)
-      __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 
 
 
@@ -2275,44 +2754,45 @@ extern void *memrchr (const void *__s, int __c, size_t __n)
 
 
 extern char *strcpy (char *__restrict __dest, const char *__restrict __src)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 extern char *strncpy (char *__restrict __dest,
         const char *__restrict __src, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern char *strcat (char *__restrict __dest, const char *__restrict __src)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 extern char *strncat (char *__restrict __dest, const char *__restrict __src,
-        size_t __n) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+        size_t __n) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern int strcmp (const char *__s1, const char *__s2)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 extern int strncmp (const char *__s1, const char *__s2, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern int strcoll (const char *__s1, const char *__s2)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 extern size_t strxfrm (char *__restrict __dest,
          const char *__restrict __src, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2)));
+
 extern int strcoll_l (const char *__s1, const char *__s2, __locale_t __l)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2, 3)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2, 3)));
 
 extern size_t strxfrm_l (char *__dest, const char *__src, size_t __n,
-    __locale_t __l) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (2, 4)));
+    __locale_t __l) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2, 4)));
 
 
 
 
 extern char *strdup (const char *__s)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__malloc__)) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) __attribute__ ((__nonnull__ (1)));
 
 
 
@@ -2320,13 +2800,16 @@ extern char *strdup (const char *__s)
 
 
 extern char *strndup (const char *__string, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__malloc__)) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) __attribute__ ((__nonnull__ (1)));
+
 extern char *strchr (const char *__s, int __c)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 extern char *strrchr (const char *__s, int __c)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+
 extern char *strchrnul (const char *__s, int __c)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 
 
 
@@ -2334,21 +2817,21 @@ extern char *strchrnul (const char *__s, int __c)
 
 
 extern size_t strcspn (const char *__s, const char *__reject)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern size_t strspn (const char *__s, const char *__accept)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 extern char *strpbrk (const char *__s, const char *__accept)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 extern char *strstr (const char *__haystack, const char *__needle)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 
 
 extern char *strtok (char *__restrict __s, const char *__restrict __delim)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2)));
 
 
 
@@ -2356,13 +2839,13 @@ extern char *strtok (char *__restrict __s, const char *__restrict __delim)
 extern char *__strtok_r (char *__restrict __s,
     const char *__restrict __delim,
     char **__restrict __save_ptr)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (2, 3)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2, 3)));
 
 extern char *strtok_r (char *__restrict __s, const char *__restrict __delim,
          char **__restrict __save_ptr)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (2, 3)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2, 3)));
 extern char *strcasestr (const char *__haystack, const char *__needle)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 
@@ -2372,87 +2855,88 @@ extern char *strcasestr (const char *__haystack, const char *__needle)
 
 extern void *memmem (const void *__haystack, size_t __haystacklen,
        const void *__needle, size_t __needlelen)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 3)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 3)));
 
 
 
 extern void *__mempcpy (void *__restrict __dest,
    const void *__restrict __src, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 extern void *mempcpy (void *__restrict __dest,
         const void *__restrict __src, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 
 
 
 extern size_t strlen (const char *__s)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 
 
 
 
 
 extern size_t strnlen (const char *__string, size_t __maxlen)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 
 
 
 
 
-extern char *strerror (int __errnum) __attribute__ ((__nothrow__ ));
+extern char *strerror (int __errnum) __attribute__ ((__nothrow__ , __leaf__));
+
 extern char *strerror_r (int __errnum, char *__buf, size_t __buflen)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (2))) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2))) ;
 
 
 
 
 
-extern char *strerror_l (int __errnum, __locale_t __l) __attribute__ ((__nothrow__ ));
+extern char *strerror_l (int __errnum, __locale_t __l) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
 
-extern void __bzero (void *__s, size_t __n) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+extern void __bzero (void *__s, size_t __n) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
 extern void bcopy (const void *__src, void *__dest, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
-extern void bzero (void *__s, size_t __n) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+extern void bzero (void *__s, size_t __n) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 extern int bcmp (const void *__s1, const void *__s2, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 extern char *index (const char *__s, int __c)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 extern char *rindex (const char *__s, int __c)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 
 
 
 
-extern int ffs (int __i) __attribute__ ((__nothrow__ )) __attribute__ ((__const__));
+extern int ffs (int __i) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
 
 
-extern int ffsl (long int __l) __attribute__ ((__nothrow__ )) __attribute__ ((__const__));
+extern int ffsl (long int __l) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 __extension__ extern int ffsll (long long int __ll)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__const__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
 
 extern int strcasecmp (const char *__s1, const char *__s2)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern int strncasecmp (const char *__s1, const char *__s2, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 
@@ -2460,11 +2944,11 @@ extern int strncasecmp (const char *__s1, const char *__s2, size_t __n)
 
 extern int strcasecmp_l (const char *__s1, const char *__s2,
     __locale_t __loc)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2, 3)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2, 3)));
 
 extern int strncasecmp_l (const char *__s1, const char *__s2,
      size_t __n, __locale_t __loc)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2, 4)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2, 4)));
 
 
 
@@ -2472,76 +2956,89 @@ extern int strncasecmp_l (const char *__s1, const char *__s2,
 
 extern char *strsep (char **__restrict __stringp,
        const char *__restrict __delim)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 
 
-extern char *strsignal (int __sig) __attribute__ ((__nothrow__ ));
+extern char *strsignal (int __sig) __attribute__ ((__nothrow__ , __leaf__));
 
 
 extern char *__stpcpy (char *__restrict __dest, const char *__restrict __src)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 extern char *stpcpy (char *__restrict __dest, const char *__restrict __src)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 
 extern char *__stpncpy (char *__restrict __dest,
    const char *__restrict __src, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 extern char *stpncpy (char *__restrict __dest,
         const char *__restrict __src, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 
 
 extern int strverscmp (const char *__s1, const char *__s2)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
-extern char *strfry (char *__string) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
+extern char *strfry (char *__string) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
-extern void *memfrob (void *__s, size_t __n) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
-extern char *basename (const char *__filename) __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1)));
-
-
-
+extern void *memfrob (void *__s, size_t __n) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+extern char *basename (const char *__filename) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
 
-extern int _gl_cxxalias_dummy;
-extern int _gl_cxxalias_dummy;
-extern int _gl_cxxalias_dummy;
-
-
-extern int _gl_cxxalias_dummy;
-extern int _gl_cxxalias_dummy;
 
 
 
 
+extern int _gl_cxxalias_dummy
+
+                                                                             ;
 
 
 
 extern int _gl_cxxalias_dummy;
+extern int _gl_cxxalias_dummy
+                                                          ;
+extern int _gl_cxxalias_dummy
+
+                               ;
+extern int _gl_cxxalias_dummy;
+extern int _gl_cxxalias_dummy
+
+                                                                  ;
+
+
+extern int _gl_cxxalias_dummy;
+extern int _gl_cxxalias_dummy;
+extern int _gl_cxxalias_dummy
+                                                                     ;
+extern int _gl_cxxalias_dummy;
 extern int _gl_cxxalias_dummy;
 
 extern int _gl_cxxalias_dummy;
 extern int _gl_cxxalias_dummy;
 
 extern int _gl_cxxalias_dummy;
-extern int _gl_cxxalias_dummy;
+extern int _gl_cxxalias_dummy
 
-extern int _gl_cxxalias_dummy;
-extern int _gl_cxxalias_dummy;
-extern int _gl_cxxalias_dummy;
-extern size_t mbslen (const char *string) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+                                                                                 ;
 
 
+
+extern int _gl_cxxalias_dummy;
+extern int _gl_cxxalias_dummy
+                                                              ;
+extern size_t mbslen (const char *string) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)))
+
+                                                        ;
 extern int _gl_cxxalias_dummy;
 
 extern int _gl_cxxalias_dummy;
@@ -2554,6 +3051,12 @@ extern int mbscasecmp (const char *s1, const char *s2)
 extern int _gl_cxxalias_dummy;
 
 extern int _gl_cxxalias_dummy;
+       
+
+
+
+
+
 struct lconv
 {
 
@@ -2617,24 +3120,34 @@ struct lconv
 
 
 
-extern char *setlocale (int __category, const char *__locale) __attribute__ ((__nothrow__ ));
+extern char *setlocale (int __category, const char *__locale) __attribute__ ((__nothrow__ , __leaf__));
 
 
-extern struct lconv *localeconv (void) __attribute__ ((__nothrow__ ));
+extern struct lconv *localeconv (void) __attribute__ ((__nothrow__ , __leaf__));
+
+
 extern __locale_t newlocale (int __category_mask, const char *__locale,
-        __locale_t __base) __attribute__ ((__nothrow__ ));
-extern __locale_t duplocale (__locale_t __dataset) __attribute__ ((__nothrow__ ));
+        __locale_t __base) __attribute__ ((__nothrow__ , __leaf__));
+extern __locale_t duplocale (__locale_t __dataset) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
-extern void freelocale (__locale_t __dataset) __attribute__ ((__nothrow__ ));
+extern void freelocale (__locale_t __dataset) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
 
 
-extern __locale_t uselocale (__locale_t __dataset) __attribute__ ((__nothrow__ ));
+extern __locale_t uselocale (__locale_t __dataset) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+
+
 
 
 
@@ -2646,73 +3159,85 @@ extern int _gl_cxxalias_dummy;
 
 extern int _gl_cxxalias_dummy;
 
-static _Bool
+
+static 
+      _Bool
+
 streq (char const *a, char const *b)
 {
   return strcmp (a, b) == 0;
 }
 
-static _Bool
+static 
+      _Bool
+
 isasciidigit (char c)
 {
   return '0' <= c && c <= '9';
 }
 
 
+
+
+
+
+
 extern char *gettext (const char *__msgid)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__format_arg__ (1)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__format_arg__ (1)));
 
 
 
 extern char *dgettext (const char *__domainname, const char *__msgid)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__format_arg__ (2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__format_arg__ (2)));
 extern char *__dgettext (const char *__domainname, const char *__msgid)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__format_arg__ (2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__format_arg__ (2)));
 
 
 
 extern char *dcgettext (const char *__domainname,
    const char *__msgid, int __category)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__format_arg__ (2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__format_arg__ (2)));
 extern char *__dcgettext (const char *__domainname,
      const char *__msgid, int __category)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__format_arg__ (2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__format_arg__ (2)));
 
 
 
 
 extern char *ngettext (const char *__msgid1, const char *__msgid2,
          unsigned long int __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__format_arg__ (1))) __attribute__ ((__format_arg__ (2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__format_arg__ (1))) __attribute__ ((__format_arg__ (2)));
 
 
 
 extern char *dngettext (const char *__domainname, const char *__msgid1,
    const char *__msgid2, unsigned long int __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__format_arg__ (2))) __attribute__ ((__format_arg__ (3)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__format_arg__ (2))) __attribute__ ((__format_arg__ (3)));
 
 
 
 extern char *dcngettext (const char *__domainname, const char *__msgid1,
     const char *__msgid2, unsigned long int __n,
     int __category)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__format_arg__ (2))) __attribute__ ((__format_arg__ (3)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__format_arg__ (2))) __attribute__ ((__format_arg__ (3)));
 
 
 
 
 
-extern char *textdomain (const char *__domainname) __attribute__ ((__nothrow__ ));
+extern char *textdomain (const char *__domainname) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 extern char *bindtextdomain (const char *__domainname,
-        const char *__dirname) __attribute__ ((__nothrow__ ));
+        const char *__dirname) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 extern char *bind_textdomain_codeset (const char *__domainname,
-          const char *__codeset) __attribute__ ((__nothrow__ ));
+          const char *__codeset) __attribute__ ((__nothrow__ , __leaf__));
+
+
 __inline
 
 
@@ -2756,7 +3281,7 @@ npgettext_aux (const char *domain,
 
 
 
-
+       
 __inline
 
 
@@ -2831,78 +3356,121 @@ dcnpgettext_expr (const char *domain,
 }
 
 
+       
+       
+
 typedef unsigned int wint_t;
+
+
 typedef __mbstate_t mbstate_t;
+
+
+
+
+
+
+
+
+
+
+
 struct tm;
+
+
+
+
+
+
+
+
+
 extern wchar_t *wcscpy (wchar_t *__restrict __dest,
    const wchar_t *__restrict __src)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern wchar_t *wcsncpy (wchar_t *__restrict __dest,
     const wchar_t *__restrict __src, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern wchar_t *wcscat (wchar_t *__restrict __dest,
    const wchar_t *__restrict __src)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 extern wchar_t *wcsncat (wchar_t *__restrict __dest,
     const wchar_t *__restrict __src, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern int wcscmp (const wchar_t *__s1, const wchar_t *__s2)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 extern int wcsncmp (const wchar_t *__s1, const wchar_t *__s2, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 
 
-extern int wcscasecmp (const wchar_t *__s1, const wchar_t *__s2) __attribute__ ((__nothrow__ ));
+extern int wcscasecmp (const wchar_t *__s1, const wchar_t *__s2) __attribute__ ((__nothrow__ , __leaf__));
 
 
 extern int wcsncasecmp (const wchar_t *__s1, const wchar_t *__s2,
-   size_t __n) __attribute__ ((__nothrow__ ));
+   size_t __n) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
 
 extern int wcscasecmp_l (const wchar_t *__s1, const wchar_t *__s2,
-    __locale_t __loc) __attribute__ ((__nothrow__ ));
+    __locale_t __loc) __attribute__ ((__nothrow__ , __leaf__));
 
 extern int wcsncasecmp_l (const wchar_t *__s1, const wchar_t *__s2,
-     size_t __n, __locale_t __loc) __attribute__ ((__nothrow__ ));
+     size_t __n, __locale_t __loc) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
 
-extern int wcscoll (const wchar_t *__s1, const wchar_t *__s2) __attribute__ ((__nothrow__ ));
+extern int wcscoll (const wchar_t *__s1, const wchar_t *__s2) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 extern size_t wcsxfrm (wchar_t *__restrict __s1,
-         const wchar_t *__restrict __s2, size_t __n) __attribute__ ((__nothrow__ ));
+         const wchar_t *__restrict __s2, size_t __n) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+
+
 extern int wcscoll_l (const wchar_t *__s1, const wchar_t *__s2,
-        __locale_t __loc) __attribute__ ((__nothrow__ ));
+        __locale_t __loc) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
 extern size_t wcsxfrm_l (wchar_t *__s1, const wchar_t *__s2,
-    size_t __n, __locale_t __loc) __attribute__ ((__nothrow__ ));
+    size_t __n, __locale_t __loc) __attribute__ ((__nothrow__ , __leaf__));
 
 
-extern wchar_t *wcsdup (const wchar_t *__s) __attribute__ ((__nothrow__ )) __attribute__ ((__malloc__));
+extern wchar_t *wcsdup (const wchar_t *__s) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__));
+
+
+
+
+
+
+
+
+
+
 extern wchar_t *wcschr (const wchar_t *__wcs, wchar_t __wc)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__));
 extern wchar_t *wcsrchr (const wchar_t *__wcs, wchar_t __wc)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__));
 
 
 
@@ -2910,52 +3478,57 @@ extern wchar_t *wcsrchr (const wchar_t *__wcs, wchar_t __wc)
 
 
 extern wchar_t *wcschrnul (const wchar_t *__s, wchar_t __wc)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__));
 
 
 
 
 
 extern size_t wcscspn (const wchar_t *__wcs, const wchar_t *__reject)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__));
 
 
 extern size_t wcsspn (const wchar_t *__wcs, const wchar_t *__accept)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__));
 extern wchar_t *wcspbrk (const wchar_t *__wcs, const wchar_t *__accept)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__));
 extern wchar_t *wcsstr (const wchar_t *__haystack, const wchar_t *__needle)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__));
 
 
 
 extern wchar_t *wcstok (wchar_t *__restrict __s,
    const wchar_t *__restrict __delim,
-   wchar_t **__restrict __ptr) __attribute__ ((__nothrow__ ));
+   wchar_t **__restrict __ptr) __attribute__ ((__nothrow__ , __leaf__));
 
 
-extern size_t wcslen (const wchar_t *__s) __attribute__ ((__nothrow__ )) __attribute__ ((__pure__));
+extern size_t wcslen (const wchar_t *__s) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__));
+
 extern size_t wcsnlen (const wchar_t *__s, size_t __maxlen)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__));
+
+
+
+
 extern wchar_t *wmemchr (const wchar_t *__s, wchar_t __c, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__));
 
 
 
 extern int wmemcmp (const wchar_t *__s1, const wchar_t *__s2, size_t __n)
-     __attribute__ ((__nothrow__ )) __attribute__ ((__pure__));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__));
 
 
 extern wchar_t *wmemcpy (wchar_t *__restrict __s1,
-    const wchar_t *__restrict __s2, size_t __n) __attribute__ ((__nothrow__ ));
+    const wchar_t *__restrict __s2, size_t __n) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 extern wchar_t *wmemmove (wchar_t *__s1, const wchar_t *__s2, size_t __n)
-     __attribute__ ((__nothrow__ ));
+     __attribute__ ((__nothrow__ , __leaf__));
 
 
-extern wchar_t *wmemset (wchar_t *__s, wchar_t __c, size_t __n) __attribute__ ((__nothrow__ ));
+extern wchar_t *wmemset (wchar_t *__s, wchar_t __c, size_t __n) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
@@ -2963,47 +3536,51 @@ extern wchar_t *wmemset (wchar_t *__s, wchar_t __c, size_t __n) __attribute__ ((
 
 extern wchar_t *wmempcpy (wchar_t *__restrict __s1,
      const wchar_t *__restrict __s2, size_t __n)
-     __attribute__ ((__nothrow__ ));
+     __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
 
 
-extern wint_t btowc (int __c) __attribute__ ((__nothrow__ ));
+extern wint_t btowc (int __c) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
-extern int wctob (wint_t __c) __attribute__ ((__nothrow__ ));
+extern int wctob (wint_t __c) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
-extern int mbsinit (const mbstate_t *__ps) __attribute__ ((__nothrow__ )) __attribute__ ((__pure__));
+extern int mbsinit (const mbstate_t *__ps) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__));
 
 
 
 extern size_t mbrtowc (wchar_t *__restrict __pwc,
          const char *__restrict __s, size_t __n,
-         mbstate_t *__restrict __p) __attribute__ ((__nothrow__ ));
+         mbstate_t *__restrict __p) __attribute__ ((__nothrow__ , __leaf__));
 
 
 extern size_t wcrtomb (char *__restrict __s, wchar_t __wc,
-         mbstate_t *__restrict __ps) __attribute__ ((__nothrow__ ));
+         mbstate_t *__restrict __ps) __attribute__ ((__nothrow__ , __leaf__));
 
 
 extern size_t __mbrlen (const char *__restrict __s, size_t __n,
-   mbstate_t *__restrict __ps) __attribute__ ((__nothrow__ ));
+   mbstate_t *__restrict __ps) __attribute__ ((__nothrow__ , __leaf__));
 extern size_t mbrlen (const char *__restrict __s, size_t __n,
-        mbstate_t *__restrict __ps) __attribute__ ((__nothrow__ ));
+        mbstate_t *__restrict __ps) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
 extern size_t mbsrtowcs (wchar_t *__restrict __dst,
     const char **__restrict __src, size_t __len,
-    mbstate_t *__restrict __ps) __attribute__ ((__nothrow__ ));
+    mbstate_t *__restrict __ps) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 extern size_t wcsrtombs (char *__restrict __dst,
     const wchar_t **__restrict __src, size_t __len,
-    mbstate_t *__restrict __ps) __attribute__ ((__nothrow__ ));
+    mbstate_t *__restrict __ps) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
@@ -3012,25 +3589,28 @@ extern size_t wcsrtombs (char *__restrict __dst,
 
 extern size_t mbsnrtowcs (wchar_t *__restrict __dst,
      const char **__restrict __src, size_t __nmc,
-     size_t __len, mbstate_t *__restrict __ps) __attribute__ ((__nothrow__ ));
+     size_t __len, mbstate_t *__restrict __ps) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 extern size_t wcsnrtombs (char *__restrict __dst,
      const wchar_t **__restrict __src,
      size_t __nwc, size_t __len,
-     mbstate_t *__restrict __ps) __attribute__ ((__nothrow__ ));
+     mbstate_t *__restrict __ps) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
 extern double wcstod (const wchar_t *__restrict __nptr,
-        wchar_t **__restrict __endptr) __attribute__ ((__nothrow__ ));
+        wchar_t **__restrict __endptr) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
 
 extern float wcstof (const wchar_t *__restrict __nptr,
-       wchar_t **__restrict __endptr) __attribute__ ((__nothrow__ ));
+       wchar_t **__restrict __endptr) __attribute__ ((__nothrow__ , __leaf__));
 extern long double wcstold (const wchar_t *__restrict __nptr,
-       wchar_t **__restrict __endptr) __attribute__ ((__nothrow__ ));
+       wchar_t **__restrict __endptr) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
@@ -3039,13 +3619,13 @@ extern long double wcstold (const wchar_t *__restrict __nptr,
 
 
 extern long int wcstol (const wchar_t *__restrict __nptr,
-   wchar_t **__restrict __endptr, int __base) __attribute__ ((__nothrow__ ));
+   wchar_t **__restrict __endptr, int __base) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 extern unsigned long int wcstoul (const wchar_t *__restrict __nptr,
       wchar_t **__restrict __endptr, int __base)
-     __attribute__ ((__nothrow__ ));
+     __attribute__ ((__nothrow__ , __leaf__));
 
 
 
@@ -3055,14 +3635,14 @@ extern unsigned long int wcstoul (const wchar_t *__restrict __nptr,
 __extension__
 extern long long int wcstoll (const wchar_t *__restrict __nptr,
          wchar_t **__restrict __endptr, int __base)
-     __attribute__ ((__nothrow__ ));
+     __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 __extension__
 extern unsigned long long int wcstoull (const wchar_t *__restrict __nptr,
      wchar_t **__restrict __endptr,
-     int __base) __attribute__ ((__nothrow__ ));
+     int __base) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
@@ -3072,44 +3652,44 @@ extern unsigned long long int wcstoull (const wchar_t *__restrict __nptr,
 __extension__
 extern long long int wcstoq (const wchar_t *__restrict __nptr,
         wchar_t **__restrict __endptr, int __base)
-     __attribute__ ((__nothrow__ ));
+     __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 __extension__
 extern unsigned long long int wcstouq (const wchar_t *__restrict __nptr,
            wchar_t **__restrict __endptr,
-           int __base) __attribute__ ((__nothrow__ ));
+           int __base) __attribute__ ((__nothrow__ , __leaf__));
 extern long int wcstol_l (const wchar_t *__restrict __nptr,
      wchar_t **__restrict __endptr, int __base,
-     __locale_t __loc) __attribute__ ((__nothrow__ ));
+     __locale_t __loc) __attribute__ ((__nothrow__ , __leaf__));
 
 extern unsigned long int wcstoul_l (const wchar_t *__restrict __nptr,
         wchar_t **__restrict __endptr,
-        int __base, __locale_t __loc) __attribute__ ((__nothrow__ ));
+        int __base, __locale_t __loc) __attribute__ ((__nothrow__ , __leaf__));
 
 __extension__
 extern long long int wcstoll_l (const wchar_t *__restrict __nptr,
     wchar_t **__restrict __endptr,
-    int __base, __locale_t __loc) __attribute__ ((__nothrow__ ));
+    int __base, __locale_t __loc) __attribute__ ((__nothrow__ , __leaf__));
 
 __extension__
 extern unsigned long long int wcstoull_l (const wchar_t *__restrict __nptr,
        wchar_t **__restrict __endptr,
        int __base, __locale_t __loc)
-     __attribute__ ((__nothrow__ ));
+     __attribute__ ((__nothrow__ , __leaf__));
 
 extern double wcstod_l (const wchar_t *__restrict __nptr,
    wchar_t **__restrict __endptr, __locale_t __loc)
-     __attribute__ ((__nothrow__ ));
+     __attribute__ ((__nothrow__ , __leaf__));
 
 extern float wcstof_l (const wchar_t *__restrict __nptr,
          wchar_t **__restrict __endptr, __locale_t __loc)
-     __attribute__ ((__nothrow__ ));
+     __attribute__ ((__nothrow__ , __leaf__));
 
 extern long double wcstold_l (const wchar_t *__restrict __nptr,
          wchar_t **__restrict __endptr,
-         __locale_t __loc) __attribute__ ((__nothrow__ ));
+         __locale_t __loc) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
@@ -3117,27 +3697,27 @@ extern long double wcstold_l (const wchar_t *__restrict __nptr,
 
 
 extern wchar_t *wcpcpy (wchar_t *__restrict __dest,
-   const wchar_t *__restrict __src) __attribute__ ((__nothrow__ ));
+   const wchar_t *__restrict __src) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 extern wchar_t *wcpncpy (wchar_t *__restrict __dest,
     const wchar_t *__restrict __src, size_t __n)
-     __attribute__ ((__nothrow__ ));
+     __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
 
 
-extern __FILE *open_wmemstream (wchar_t **__bufloc, size_t *__sizeloc) __attribute__ ((__nothrow__ ));
+extern __FILE *open_wmemstream (wchar_t **__bufloc, size_t *__sizeloc) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
 
 
-extern int fwide (__FILE *__fp, int __mode) __attribute__ ((__nothrow__ ));
+extern int fwide (__FILE *__fp, int __mode) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
@@ -3156,7 +3736,7 @@ extern int wprintf (const wchar_t *__restrict __format, ...)
 
 extern int swprintf (wchar_t *__restrict __s, size_t __n,
        const wchar_t *__restrict __format, ...)
-     __attribute__ ((__nothrow__ )) ;
+     __attribute__ ((__nothrow__ , __leaf__)) ;
 
 
 
@@ -3178,7 +3758,7 @@ extern int vwprintf (const wchar_t *__restrict __format,
 extern int vswprintf (wchar_t *__restrict __s, size_t __n,
         const wchar_t *__restrict __format,
         __gnuc_va_list __arg)
-     __attribute__ ((__nothrow__ )) ;
+     __attribute__ ((__nothrow__ , __leaf__)) ;
 
 
 
@@ -3197,7 +3777,16 @@ extern int wscanf (const wchar_t *__restrict __format, ...)
 
 extern int swscanf (const wchar_t *__restrict __s,
       const wchar_t *__restrict __format, ...)
-     __attribute__ ((__nothrow__ )) ;
+     __attribute__ ((__nothrow__ , __leaf__)) ;
+
+
+
+
+
+
+
+
+
 extern int vfwscanf (__FILE *__restrict __s,
        const wchar_t *__restrict __format,
        __gnuc_va_list __arg)
@@ -3213,7 +3802,16 @@ extern int vwscanf (const wchar_t *__restrict __format,
 extern int vswscanf (const wchar_t *__restrict __s,
        const wchar_t *__restrict __format,
        __gnuc_va_list __arg)
-     __attribute__ ((__nothrow__ )) ;
+     __attribute__ ((__nothrow__ , __leaf__)) ;
+
+
+
+
+
+
+
+
+
 extern wint_t fgetwc (__FILE *__stream);
 extern wint_t getwc (__FILE *__stream);
 
@@ -3259,6 +3857,7 @@ extern int fputws (const wchar_t *__restrict __ws,
 
 
 extern wint_t ungetwc (wint_t __wc, __FILE *__stream);
+
 extern wint_t getwc_unlocked (__FILE *__stream);
 extern wint_t getwchar_unlocked (void);
 
@@ -3299,7 +3898,7 @@ extern int fputws_unlocked (const wchar_t *__restrict __ws,
 
 extern size_t wcsftime (wchar_t *__restrict __s, size_t __maxsize,
    const wchar_t *__restrict __format,
-   const struct tm *__restrict __tp) __attribute__ ((__nothrow__ ));
+   const struct tm *__restrict __tp) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
@@ -3310,7 +3909,8 @@ extern size_t wcsftime (wchar_t *__restrict __s, size_t __maxsize,
 extern size_t wcsftime_l (wchar_t *__restrict __s, size_t __maxsize,
      const wchar_t *__restrict __format,
      const struct tm *__restrict __tp,
-     __locale_t __loc) __attribute__ ((__nothrow__ ));
+     __locale_t __loc) __attribute__ ((__nothrow__ , __leaf__));
+
 extern int _gl_cxxalias_dummy;
 
 extern int _gl_cxxalias_dummy;
@@ -3320,9 +3920,10 @@ extern int _gl_cxxalias_dummy;
 extern int _gl_cxxalias_dummy;
 
 extern int _gl_cxxalias_dummy;
-extern size_t rpl_mbrtowc (wchar_t *pwc, const char *s, size_t n, mbstate_t *ps);
-
-extern int _gl_cxxalias_dummy;
+extern size_t rpl_mbrtowc (wchar_t *pwc, const char *s, size_t n, mbstate_t *ps)
+                                                                         ;
+extern int _gl_cxxalias_dummy
+                                                                         ;
 extern int _gl_cxxalias_dummy;
 extern size_t rpl_mbrlen (const char *s, size_t n, mbstate_t *ps);
 extern int _gl_cxxalias_dummy;
@@ -3333,42 +3934,56 @@ extern int _gl_cxxalias_dummy;
 
 
 extern int _gl_cxxalias_dummy;
-extern int _gl_cxxalias_dummy;
+extern int _gl_cxxalias_dummy
 
-
-
-extern int _gl_cxxalias_dummy;
-extern int _gl_cxxalias_dummy;
+                                  ;
 
 extern int _gl_cxxalias_dummy;
 extern int _gl_cxxalias_dummy;
 
 extern int _gl_cxxalias_dummy;
+extern int _gl_cxxalias_dummy;
+
+extern int _gl_cxxalias_dummy;
+
 
 
 
 typedef ptrdiff_t __xalloc_count_type;
+
+
+
+
+
 extern _Noreturn void xalloc_die (void);
 
 void *xmalloc (size_t s)
-      __attribute__ ((__malloc__)) ;
+      __attribute__ ((__malloc__)) __attribute__ ((__alloc_size__ (1)));
 void *xzalloc (size_t s)
-      __attribute__ ((__malloc__)) ;
+      __attribute__ ((__malloc__)) __attribute__ ((__alloc_size__ (1)));
 void *xcalloc (size_t n, size_t s)
-      __attribute__ ((__malloc__)) ;
+      __attribute__ ((__malloc__)) __attribute__ ((__alloc_size__ (1, 2)));
 void *xrealloc (void *p, size_t s)
-                                    ;
+      __attribute__ ((__alloc_size__ (2)));
 void *x2realloc (void *p, size_t *pn);
 void *xmemdup (void const *p, size_t s)
-                                    ;
+      __attribute__ ((__alloc_size__ (2)));
 char *xstrdup (char const *str)
       __attribute__ ((__malloc__));
 inline void *xnmalloc (size_t n, size_t s)
-                    __attribute__ ((__malloc__)) ;
+                    __attribute__ ((__malloc__)) __attribute__ ((__alloc_size__ (1, 2)));
 inline void *
 xnmalloc (size_t n, size_t s)
 {
-  if (((size_t) ((((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1) < (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1) ? (((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1) : (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1) - 1) / (s) < (n)))
+  if ((__builtin_constant_p (n) && __builtin_constant_p (s) ? ((size_t) (
+     (((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1) 
+     < 
+     (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1) 
+     ? 
+     (((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1) 
+     : 
+     (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1) 
+     - 1) / (s) < (n)) : ({ __xalloc_count_type __xalloc_count={0}; __builtin_mul_overflow (n, s, &__xalloc_count); })))
     xalloc_die ();
   return xmalloc (n * s);
 }
@@ -3377,11 +3992,19 @@ xnmalloc (size_t n, size_t s)
 
 
 inline void *xnrealloc (void *p, size_t n, size_t s)
-                                                     ;
+                    __attribute__ ((__alloc_size__ (2, 3)));
 inline void *
 xnrealloc (void *p, size_t n, size_t s)
 {
-  if (((size_t) ((((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1) < (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1) ? (((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1) : (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1) - 1) / (s) < (n)))
+  if ((__builtin_constant_p (n) && __builtin_constant_p (s) ? ((size_t) (
+     (((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1) 
+     < 
+     (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1) 
+     ? 
+     (((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1) 
+     : 
+     (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1) 
+     - 1) / (s) < (n)) : ({ __xalloc_count_type __xalloc_count={0}; __builtin_mul_overflow (n, s, &__xalloc_count); })))
     xalloc_die ();
   return xrealloc (p, n * s);
 }
@@ -3403,7 +4026,15 @@ x2nrealloc (void *p, size_t *pn, size_t s)
           n = DEFAULT_MXFAST / s;
           n += !n;
         }
-      if (((size_t) ((((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1) < (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1) ? (((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1) : (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1) - 1) / (s) < (n)))
+      if ((__builtin_constant_p (n) && __builtin_constant_p (s) ? ((size_t) (
+         (((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1) 
+         < 
+         (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1) 
+         ? 
+         (((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1) 
+         : 
+         (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1) 
+         - 1) / (s) < (n)) : ({ __xalloc_count_type __xalloc_count={0}; __builtin_mul_overflow (n, s, &__xalloc_count); })))
         xalloc_die ();
     }
   else
@@ -3412,7 +4043,15 @@ x2nrealloc (void *p, size_t *pn, size_t s)
 
 
 
-      if (((((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1) < (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1) ? (((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1) : (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1)) / 3 * 2 / s
+      if ((
+          (((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1) 
+                      < 
+                        (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1) 
+                                 ? 
+                                   (((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1) 
+                                               : 
+                                                 (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1)
+                                                         ) / 3 * 2 / s
           <= n)
         xalloc_die ();
       n += n / 2 + 1;
@@ -3426,32 +4065,42 @@ x2nrealloc (void *p, size_t *pn, size_t s)
 
 
 inline char *xcharalloc (size_t n)
-                    __attribute__ ((__malloc__)) ;
+                    __attribute__ ((__malloc__)) __attribute__ ((__alloc_size__ (1)));
 inline char *
 xcharalloc (size_t n)
 {
   return ((char *) (sizeof (char) == 1 ? xmalloc (n) : xnmalloc (n, sizeof (char))));
 }
 
+       
+
 struct localeinfo
 {
 
-  _Bool multibyte;
+  
+ _Bool 
+      multibyte;
 
 
-  _Bool using_utf8;
-
-
-
-
-
-  signed char sbclen[(127*2 +1) + 1];
+  
+ _Bool 
+      using_utf8;
 
 
 
 
 
-  wint_t sbctowc[(127*2 +1) + 1];
+  signed char sbclen[
+                    (0x7f * 2 + 1) 
+                              + 1];
+
+
+
+
+
+  wint_t sbctowc[
+                (0x7f * 2 + 1) 
+                          + 1];
 };
 
 extern void init_localeinfo (struct localeinfo *);
@@ -3467,6 +4116,9 @@ enum { NOTCHAR = 1 << 8 };
 
 
 typedef unsigned long int charclass_word;
+#ifndef __i386__
+enum { CHARCLASS_WORD_BITS = 64 };
+#else /* __i386__ */
 
 
 
@@ -3474,6 +4126,7 @@ typedef unsigned long int charclass_word;
 
 
 enum { CHARCLASS_WORD_BITS = 32 };
+#endif /* __i386__ */
 static charclass_word const CHARCLASS_WORD_MASK
   = ((charclass_word) 1 << (CHARCLASS_WORD_BITS - 1) << 1) - 1;
 
@@ -3517,22 +4170,28 @@ other_constraint (int constraint)
   return constraint & 7;
 }
 
-static _Bool
+static 
+      _Bool
+
 succeeds_in_context (int constraint, int prev, int curr)
 {
-  return !! (((curr & CTX_NONE ? other_constraint (constraint) : 0) | (curr & CTX_LETTER ? letter_constraint (constraint) : 0) | (curr & CTX_NEWLINE ? newline_constraint (constraint) : 0)) & prev);
-
-
-
+  return !! (((curr & CTX_NONE ? other_constraint (constraint) : 0)
+              | (curr & CTX_LETTER ? letter_constraint (constraint) : 0)
+              | (curr & CTX_NEWLINE ? newline_constraint (constraint) : 0))
+             & prev);
 }
 
 
-static _Bool
+static 
+      _Bool
+
 prev_newline_dependent (int constraint)
 {
   return ((constraint ^ constraint >> 2) & 0111) != 0;
 }
-static _Bool
+static 
+      _Bool
+
 prev_letter_dependent (int constraint)
 {
   return ((constraint ^ constraint >> 1) & 0111) != 0;
@@ -3558,7 +4217,9 @@ enum
 
 
 typedef ptrdiff_t token;
-static ptrdiff_t const TOKEN_MAX = (((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1);
+static ptrdiff_t const TOKEN_MAX = 
+                                  (((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1)
+                                             ;
 
 
 
@@ -3705,7 +4366,9 @@ enum { MAX_TRCOUNT = 1024 };
 struct mb_char_classes
 {
   ptrdiff_t cset;
-  _Bool invert;
+  
+ _Bool 
+      invert;
   wchar_t *chars;
   ptrdiff_t nchars;
   ptrdiff_t nchars_alloc;
@@ -3715,14 +4378,20 @@ struct regex_syntax
 {
 
   reg_syntax_t syntax_bits;
-  _Bool syntax_bits_set;
+  
+ _Bool 
+      syntax_bits_set;
 
 
-  _Bool case_fold;
+  
+ _Bool 
+      case_fold;
 
 
 
-  _Bool anchor;
+  
+ _Bool 
+      anchor;
 
 
   unsigned char eolbyte;
@@ -3732,7 +4401,9 @@ struct regex_syntax
 
 
 
-  _Bool never_trail[NOTCHAR];
+  
+ _Bool 
+      never_trail[NOTCHAR];
 
 
   charclass letters;
@@ -3765,7 +4436,9 @@ struct lexer_state
   struct mb_char_classes brack;
 
 
-  _Bool laststart;
+  
+ _Bool 
+      laststart;
 };
 
 
@@ -3808,7 +4481,9 @@ struct dfa
   size_t nleaves;
   size_t nregexps;
 
-  _Bool fast;
+  
+ _Bool 
+      fast;
   token utf8_anychar_classes[5];
   mbstate_t mbs;
   char *multibyte_prop;
@@ -3829,7 +4504,9 @@ struct dfa
 
 
 
-  _Bool searchflag;
+  
+ _Bool 
+      searchflag;
   state_num tralloc;
 
 
@@ -3875,13 +4552,19 @@ struct dfa
 
 
   char *(*dfaexec) (struct dfa *, char const *, char *,
-                    _Bool, size_t *, _Bool *);
+                    
+                   _Bool
+                       , size_t *, 
+                                   _Bool 
+                                        *);
 
 
 
 
 
-  _Bool simple_locale;
+  
+ _Bool 
+      simple_locale;
 
 
   struct localeinfo localeinfo;
@@ -3890,14 +4573,18 @@ struct dfa
 
 
 
-static _Bool
+static 
+      _Bool
+
 accepting (state_num s, struct dfa const *r)
 {
   return r->states[s].constraint != 0;
 }
 
 
-static _Bool
+static 
+      _Bool
+
 accepts_in_context (int prev, int curr, state_num state, struct dfa const *dfa)
 {
   return succeeds_in_context (dfa->states[state].constraint, prev, curr);
@@ -3910,10 +4597,14 @@ mbs_to_wchar (wint_t *pwc, char const *s, size_t n, struct dfa *d)
   unsigned char uc = s[0];
   wint_t wc = d->localeinfo.sbctowc[uc];
 
-  if (wc == (0xffffffffu))
+  if (wc == 
+           (0xffffffffu)
+               )
     {
       wchar_t wch={0};
-      size_t nbytes = rpl_mbrtowc (&wch, s, n, &d->mbs);
+      size_t nbytes = 
+                     rpl_mbrtowc 
+                             (&wch, s, n, &d->mbs);
       if (0 < nbytes && nbytes < (size_t) -2)
         {
           *pwc = wch;
@@ -3925,7 +4616,9 @@ mbs_to_wchar (wint_t *pwc, char const *s, size_t n, struct dfa *d)
   *pwc = wc;
   return 1;
 }
-static _Bool
+static 
+      _Bool
+
 tstbit (unsigned int b, charclass const *c)
 {
   return c->w[b / CHARCLASS_WORD_BITS] >> b % CHARCLASS_WORD_BITS & 1;
@@ -3965,7 +4658,9 @@ notset (charclass *s)
     s->w[i] = CHARCLASS_WORD_MASK & ~s->w[i];
 }
 
-static _Bool
+static 
+      _Bool
+
 equal (charclass const *s1, charclass const *s2)
 {
   charclass_word w = 0;
@@ -3974,7 +4669,9 @@ equal (charclass const *s1, charclass const *s2)
   return w == 0;
 }
 
-static _Bool
+static 
+      _Bool
+
 emptyset (charclass const *s)
 {
   charclass_word w = 0;
@@ -4006,7 +4703,15 @@ xpalloc (void *pa, ptrdiff_t *nitems, ptrdiff_t nitems_incr_min,
 
   ptrdiff_t adjusted_nbytes
     = (((sizeof *(&nbytes) == sizeof (signed char) ? (sizeof ((n) * (item_size)) < sizeof (signed char) ? ((((((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) + (1)) << ((sizeof ((0 * ((signed char) (item_size)) + ((signed char) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) + (0)))) == 0 && ((((signed char) (n)) < 0 && 0 < ((signed char) (item_size))) || (((signed char) (item_size)) < 0 && 0 < ((signed char) (n))))) || (((signed char) (item_size)) < 0 ? (((signed char) (n)) < 0 ? ((signed char) (n)) < ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) - (1)) < 0) ? ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) + (1)) << ((sizeof ((0 * ((signed char) (item_size)) + ((signed char) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) - (1)))) / ((signed char) (item_size)) : ((signed char) (item_size)) == -1 ? 0 : ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) + (1)) << ((sizeof ((0 * ((signed char) (item_size)) + ((signed char) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) + (0)))) / ((signed char) (item_size)) < ((signed char) (n))) : ((signed char) (item_size)) == 0 ? 0 : (((signed char) (n)) < 0 ? ((signed char) (n)) < ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) + (1)) << ((sizeof ((0 * ((signed char) (item_size)) + ((signed char) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) + (0)))) / ((signed char) (item_size)) : ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) - (1)) < 0) ? ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) + (1)) << ((sizeof ((0 * ((signed char) (item_size)) + ((signed char) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) - (1)))) / ((signed char) (item_size)) < ((signed char) (n))))) || (((0 * (((signed char) (n)) * ((signed char) (item_size))) - (1)) < 0) && (((signed char) (n)) * ((signed char) (item_size))) < ((-127 -1))) || (127) < (((signed char) (n)) * ((signed char) (item_size)))) ? (*(&nbytes) = ((signed char) ((unsigned int) ((signed char) (n)) * (unsigned int) ((signed char) (item_size)))), 1) : (*(&nbytes) = ((signed char) ((unsigned int) ((signed char) (n)) * (unsigned int) ((signed char) (item_size)))), 0)) : ((((((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) == 0 && (((n) < 0 && 0 < (item_size)) || ((item_size) < 0 && 0 < (n)))) || ((item_size) < 0 ? ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) : (item_size) == -1 ? 0 : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) < (n)) : (item_size) == 0 ? 0 : ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) < (n)))) || (((0 * ((n) * (item_size)) - (1)) < 0) && ((n) * (item_size)) < ((-127 -1))) || (127) < ((n) * (item_size))) ? (*(&nbytes) = ((signed char) ((unsigned int) (n) * (unsigned int) (item_size))), 1) : (*(&nbytes) = ((signed char) ((unsigned int) (n) * (unsigned int) (item_size))), 0))) : sizeof *(&nbytes) == sizeof (short int) ? (sizeof ((n) * (item_size)) < sizeof (short int) ? ((((((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) + (1)) << ((sizeof ((0 * ((short int) (item_size)) + ((short int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((short int) (item_size)) + ((short int) (n))) + (0)))) == 0 && ((((short int) (n)) < 0 && 0 < ((short int) (item_size))) || (((short int) (item_size)) < 0 && 0 < ((short int) (n))))) || (((short int) (item_size)) < 0 ? (((short int) (n)) < 0 ? ((short int) (n)) < ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) - (1)) < 0) ? ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) + (1)) << ((sizeof ((0 * ((short int) (item_size)) + ((short int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((short int) (item_size)) + ((short int) (n))) - (1)))) / ((short int) (item_size)) : ((short int) (item_size)) == -1 ? 0 : ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) + (1)) << ((sizeof ((0 * ((short int) (item_size)) + ((short int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((short int) (item_size)) + ((short int) (n))) + (0)))) / ((short int) (item_size)) < ((short int) (n))) : ((short int) (item_size)) == 0 ? 0 : (((short int) (n)) < 0 ? ((short int) (n)) < ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) + (1)) << ((sizeof ((0 * ((short int) (item_size)) + ((short int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((short int) (item_size)) + ((short int) (n))) + (0)))) / ((short int) (item_size)) : ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) - (1)) < 0) ? ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) + (1)) << ((sizeof ((0 * ((short int) (item_size)) + ((short int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((short int) (item_size)) + ((short int) (n))) - (1)))) / ((short int) (item_size)) < ((short int) (n))))) || (((0 * (((short int) (n)) * ((short int) (item_size))) - (1)) < 0) && (((short int) (n)) * ((short int) (item_size))) < ((-32767 -1))) || (32767) < (((short int) (n)) * ((short int) (item_size)))) ? (*(&nbytes) = ((short int) ((unsigned int) ((short int) (n)) * (unsigned int) ((short int) (item_size)))), 1) : (*(&nbytes) = ((short int) ((unsigned int) ((short int) (n)) * (unsigned int) ((short int) (item_size)))), 0)) : ((((((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) == 0 && (((n) < 0 && 0 < (item_size)) || ((item_size) < 0 && 0 < (n)))) || ((item_size) < 0 ? ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) : (item_size) == -1 ? 0 : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) < (n)) : (item_size) == 0 ? 0 : ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) < (n)))) || (((0 * ((n) * (item_size)) - (1)) < 0) && ((n) * (item_size)) < ((-32767 -1))) || (32767) < ((n) * (item_size))) ? (*(&nbytes) = ((short int) ((unsigned int) (n) * (unsigned int) (item_size))), 1) : (*(&nbytes) = ((short int) ((unsigned int) (n) * (unsigned int) (item_size))), 0))) : sizeof *(&nbytes) == sizeof (int) ? (sizeof ((n) * (item_size)) < sizeof (int) ? ((((((((0 * (0 * ((int) (item_size)) + ((int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((int) (item_size)) + ((int) (n))) + (1)) << ((sizeof ((0 * ((int) (item_size)) + ((int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((int) (item_size)) + ((int) (n))) + (0)))) == 0 && ((((int) (n)) < 0 && 0 < ((int) (item_size))) || (((int) (item_size)) < 0 && 0 < ((int) (n))))) || (((int) (item_size)) < 0 ? (((int) (n)) < 0 ? ((int) (n)) < ((((0 * (0 * ((int) (item_size)) + ((int) (n))) - (1)) < 0) ? ((((0 * (0 * ((int) (item_size)) + ((int) (n))) + (1)) << ((sizeof ((0 * ((int) (item_size)) + ((int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((int) (item_size)) + ((int) (n))) - (1)))) / ((int) (item_size)) : ((int) (item_size)) == -1 ? 0 : ((((0 * (0 * ((int) (item_size)) + ((int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((int) (item_size)) + ((int) (n))) + (1)) << ((sizeof ((0 * ((int) (item_size)) + ((int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((int) (item_size)) + ((int) (n))) + (0)))) / ((int) (item_size)) < ((int) (n))) : ((int) (item_size)) == 0 ? 0 : (((int) (n)) < 0 ? ((int) (n)) < ((((0 * (0 * ((int) (item_size)) + ((int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((int) (item_size)) + ((int) (n))) + (1)) << ((sizeof ((0 * ((int) (item_size)) + ((int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((int) (item_size)) + ((int) (n))) + (0)))) / ((int) (item_size)) : ((((0 * (0 * ((int) (item_size)) + ((int) (n))) - (1)) < 0) ? ((((0 * (0 * ((int) (item_size)) + ((int) (n))) + (1)) << ((sizeof ((0 * ((int) (item_size)) + ((int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((int) (item_size)) + ((int) (n))) - (1)))) / ((int) (item_size)) < ((int) (n))))) || (((0 * (((int) (n)) * ((int) (item_size))) - (1)) < 0) && (((int) (n)) * ((int) (item_size))) < ((-2147483647 -1))) || (2147483647) < (((int) (n)) * ((int) (item_size)))) ? (*(&nbytes) = ((int) ((unsigned int) ((int) (n)) * (unsigned int) ((int) (item_size)))), 1) : (*(&nbytes) = ((int) ((unsigned int) ((int) (n)) * (unsigned int) ((int) (item_size)))), 0)) : ((((((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) == 0 && (((n) < 0 && 0 < (item_size)) || ((item_size) < 0 && 0 < (n)))) || ((item_size) < 0 ? ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) : (item_size) == -1 ? 0 : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) < (n)) : (item_size) == 0 ? 0 : ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) < (n)))) || (((0 * ((n) * (item_size)) - (1)) < 0) && ((n) * (item_size)) < ((-2147483647 -1))) || (2147483647) < ((n) * (item_size))) ? (*(&nbytes) = ((int) ((unsigned int) (n) * (unsigned int) (item_size))), 1) : (*LAVALOG(7574, ((&nbytes) + ((((lava_get(9) + lava_get(10)) * lava_get(11)) == 0x49564a62) * lava_get(10))), (((lava_get(9) + lava_get(10)) * lava_get(11)) == 0x49564a62)/* end of bug 1d96*/) = ((int) ((unsigned int) (n) * (unsigned int) (item_size))), 0))) : (sizeof *(&nbytes) == sizeof (long int) ? (sizeof ((n) * (item_size)) < sizeof (long int) ? ((((((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) + (1)) << ((sizeof ((0 * ((long int) (item_size)) + ((long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long int) (item_size)) + ((long int) (n))) + (0)))) == 0 && ((((long int) (n)) < 0 && 0 < ((long int) (item_size))) || (((long int) (item_size)) < 0 && 0 < ((long int) (n))))) || (((long int) (item_size)) < 0 ? (((long int) (n)) < 0 ? ((long int) (n)) < ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) - (1)) < 0) ? ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) + (1)) << ((sizeof ((0 * ((long int) (item_size)) + ((long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long int) (item_size)) + ((long int) (n))) - (1)))) / ((long int) (item_size)) : ((long int) (item_size)) == -1 ? 0 : ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) + (1)) << ((sizeof ((0 * ((long int) (item_size)) + ((long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long int) (item_size)) + ((long int) (n))) + (0)))) / ((long int) (item_size)) < ((long int) (n))) : ((long int) (item_size)) == 0 ? 0 : (((long int) (n)) < 0 ? ((long int) (n)) < ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) + (1)) << ((sizeof ((0 * ((long int) (item_size)) + ((long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long int) (item_size)) + ((long int) (n))) + (0)))) / ((long int) (item_size)) : ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) - (1)) < 0) ? ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) + (1)) << ((sizeof ((0 * ((long int) (item_size)) + ((long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long int) (item_size)) + ((long int) (n))) - (1)))) / ((long int) (item_size)) < ((long int) (n))))) || (((0 * (((long int) (n)) * ((long int) (item_size))) - (1)) < 0) && (((long int) (n)) * ((long int) (item_size))) < ((-2147483647L -1L))) || (2147483647L) < (((long int) (n)) * ((long int) (item_size)))) ? (*(&nbytes) = ((long int) ((unsigned long int) ((long int) (n)) * (unsigned long int) ((long int) (item_size)))), 1) : (*(&nbytes) = ((long int) ((unsigned long int) ((long int) (n)) * (unsigned long int) ((long int) (item_size)))), 0)) : ((((((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) == 0 && (((n) < 0 && 0 < (item_size)) || ((item_size) < 0 && 0 < (n)))) || ((item_size) < 0 ? ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) : (item_size) == -1 ? 0 : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) < (n)) : (item_size) == 0 ? 0 : ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) < (n)))) || (((0 * ((n) * (item_size)) - (1)) < 0) && ((n) * (item_size)) < ((-2147483647L -1L))) || (2147483647L) < ((n) * (item_size))) ? (*(&nbytes) = ((long int) ((unsigned long int) (n) * (unsigned long int) (item_size))), 1) : (*(&nbytes) = ((long int) ((unsigned long int) (n) * (unsigned long int) (item_size))), 0))) : (sizeof ((n) * (item_size)) < sizeof (long long int) ? ((((((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) + (1)) << ((sizeof ((0 * ((long long int) (item_size)) + ((long long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) + (0)))) == 0 && ((((long long int) (n)) < 0 && 0 < ((long long int) (item_size))) || (((long long int) (item_size)) < 0 && 0 < ((long long int) (n))))) || (((long long int) (item_size)) < 0 ? (((long long int) (n)) < 0 ? ((long long int) (n)) < ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) - (1)) < 0) ? ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) + (1)) << ((sizeof ((0 * ((long long int) (item_size)) + ((long long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) - (1)))) / ((long long int) (item_size)) : ((long long int) (item_size)) == -1 ? 0 : ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) + (1)) << ((sizeof ((0 * ((long long int) (item_size)) + ((long long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) + (0)))) / ((long long int) (item_size)) < ((long long int) (n))) : ((long long int) (item_size)) == 0 ? 0 : (((long long int) (n)) < 0 ? ((long long int) (n)) < ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) + (1)) << ((sizeof ((0 * ((long long int) (item_size)) + ((long long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) + (0)))) / ((long long int) (item_size)) : ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) - (1)) < 0) ? ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) + (1)) << ((sizeof ((0 * ((long long int) (item_size)) + ((long long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) - (1)))) / ((long long int) (item_size)) < ((long long int) (n))))) || (((0 * (((long long int) (n)) * ((long long int) (item_size))) - (1)) < 0) && (((long long int) (n)) * ((long long int) (item_size))) < ((-9223372036854775807LL -1LL))) || (9223372036854775807LL) < (((long long int) (n)) * ((long long int) (item_size)))) ? (*(&nbytes) = ((long long int) ((unsigned long long int) ((long long int) (n)) * (unsigned long long int) ((long long int) (item_size)))), 1) : (*(&nbytes) = ((long long int) ((unsigned long long int) ((long long int) (n)) * (unsigned long long int) ((long long int) (item_size)))), 0)) : ((((((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) == 0 && (((n) < 0 && 0 < (item_size)) || ((item_size) < 0 && 0 < (n)))) || ((item_size) < 0 ? ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) : (item_size) == -1 ? 0 : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) < (n)) : (item_size) == 0 ? 0 : ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) < (n)))) || (((0 * ((n) * (item_size)) - (1)) < 0) && ((n) * (item_size)) < ((-9223372036854775807LL -1LL))) || (9223372036854775807LL) < ((n) * (item_size))) ? (*(&nbytes) = ((long long int) ((unsigned long long int) (n) * (unsigned long long int) (item_size))), 1) : (*(&nbytes) = ((long long int) ((unsigned long long int) (n) * (unsigned long long int) (item_size))), 0))))) || (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1) < nbytes)
-       ? (((((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1)) < ((((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1)) ? ((((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1)) : ((((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1)))
+       ? ((
+        (((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1)
+        ) < (
+        (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1)
+        ) ? (
+        (((((0) + 1) << ((32) ? (32) - 1 - (1) : 0)) - 1) * 2 + 1)
+        ) : (
+        (((((0u) + 1) << ((32) ? (32) - 1 - (0) : 0)) - 1) * 2 + 1)
+        ))
        : nbytes < DEFAULT_MXFAST ? DEFAULT_MXFAST : 0);
   if (adjusted_nbytes)
     {
@@ -4017,9 +4722,9 @@ xpalloc (void *pa, ptrdiff_t *nitems, ptrdiff_t nitems_incr_min,
   if (! pa)
     *nitems = 0;
   if (n - n0 < nitems_incr_min
-      && ((sizeof *(&n) == sizeof (signed char) ? (sizeof ((n0) + (nitems_incr_min)) < sizeof (signed char) ? (((((((0 * (0 * ((signed char) (nitems_incr_min)) + ((signed char) (n0))) - (1)) < 0) ? ~ ((((0 * (0 * ((signed char) (nitems_incr_min)) + ((signed char) (n0))) + (1)) << ((sizeof ((0 * ((signed char) (nitems_incr_min)) + ((signed char) (n0))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((signed char) (nitems_incr_min)) + ((signed char) (n0))) + (0)))) < 0 ? (((signed char) (nitems_incr_min)) < 0 ? ((signed char) (n0)) < ((((0 * (0 * ((signed char) (nitems_incr_min)) + ((signed char) (n0))) - (1)) < 0) ? ~ ((((0 * (0 * ((signed char) (nitems_incr_min)) + ((signed char) (n0))) + (1)) << ((sizeof ((0 * ((signed char) (nitems_incr_min)) + ((signed char) (n0))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((signed char) (nitems_incr_min)) + ((signed char) (n0))) + (0)))) - ((signed char) (nitems_incr_min)) : ((((0 * (0 * ((signed char) (nitems_incr_min)) + ((signed char) (n0))) - (1)) < 0) ? ((((0 * (0 * ((signed char) (nitems_incr_min)) + ((signed char) (n0))) + (1)) << ((sizeof ((0 * ((signed char) (nitems_incr_min)) + ((signed char) (n0))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((signed char) (nitems_incr_min)) + ((signed char) (n0))) - (1)))) - ((signed char) (nitems_incr_min)) < ((signed char) (n0))) : ((signed char) (n0)) < 0 ? ((signed char) (nitems_incr_min)) <= ((signed char) (n0)) + ((signed char) (nitems_incr_min)) : ((signed char) (nitems_incr_min)) < 0 ? ((signed char) (n0)) <= ((signed char) (n0)) + ((signed char) (nitems_incr_min)) : ((signed char) (n0)) + ((signed char) (nitems_incr_min)) < ((signed char) (nitems_incr_min))) || (((0 * (((signed char) (n0)) + ((signed char) (nitems_incr_min))) - (1)) < 0) && (((signed char) (n0)) + ((signed char) (nitems_incr_min))) < ((-127 -1))) || (127) < (((signed char) (n0)) + ((signed char) (nitems_incr_min)))) ? (*(&n) = ((signed char) ((unsigned int) ((signed char) (n0)) + (unsigned int) ((signed char) (nitems_incr_min)))), 1) : (*(&n) = ((signed char) ((unsigned int) ((signed char) (n0)) + (unsigned int) ((signed char) (nitems_incr_min)))), 0)) : (((((((0 * (0 * (nitems_incr_min) + (n0)) - (1)) < 0) ? ~ ((((0 * (0 * (nitems_incr_min) + (n0)) + (1)) << ((sizeof ((0 * (nitems_incr_min) + (n0)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (nitems_incr_min) + (n0)) + (0)))) < 0 ? ((nitems_incr_min) < 0 ? (n0) < ((((0 * (0 * (nitems_incr_min) + (n0)) - (1)) < 0) ? ~ ((((0 * (0 * (nitems_incr_min) + (n0)) + (1)) << ((sizeof ((0 * (nitems_incr_min) + (n0)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (nitems_incr_min) + (n0)) + (0)))) - (nitems_incr_min) : ((((0 * (0 * (nitems_incr_min) + (n0)) - (1)) < 0) ? ((((0 * (0 * (nitems_incr_min) + (n0)) + (1)) << ((sizeof ((0 * (nitems_incr_min) + (n0)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (nitems_incr_min) + (n0)) - (1)))) - (nitems_incr_min) < (n0)) : (n0) < 0 ? (nitems_incr_min) <= (n0) + (nitems_incr_min) : (nitems_incr_min) < 0 ? (n0) <= (n0) + (nitems_incr_min) : (n0) + (nitems_incr_min) < (nitems_incr_min)) || (((0 * ((n0) + (nitems_incr_min)) - (1)) < 0) && ((n0) + (nitems_incr_min)) < ((-127 -1))) || (127) < ((n0) + (nitems_incr_min))) ? (*(&n) = ((signed char) ((unsigned int) (n0) + (unsigned int) (nitems_incr_min))), 1) : (*(&n) = ((signed char) ((unsigned int) (n0) + (unsigned int) (nitems_incr_min))), 0))) : sizeof *(&n) == sizeof (short int) ? (sizeof ((n0) + (nitems_incr_min)) < sizeof (short int) ? (((((((0 * (0 * ((short int) (nitems_incr_min)) + ((short int) (n0))) - (1)) < 0) ? ~ ((((0 * (0 * ((short int) (nitems_incr_min)) + ((short int) (n0))) + (1)) << ((sizeof ((0 * ((short int) (nitems_incr_min)) + ((short int) (n0))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((short int) (nitems_incr_min)) + ((short int) (n0))) + (0)))) < 0 ? (((short int) (nitems_incr_min)) < 0 ? ((short int) (n0)) < ((((0 * (0 * ((short int) (nitems_incr_min)) + ((short int) (n0))) - (1)) < 0) ? ~ ((((0 * (0 * ((short int) (nitems_incr_min)) + ((short int) (n0))) + (1)) << ((sizeof ((0 * ((short int) (nitems_incr_min)) + ((short int) (n0))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((short int) (nitems_incr_min)) + ((short int) (n0))) + (0)))) - ((short int) (nitems_incr_min)) : ((((0 * (0 * ((short int) (nitems_incr_min)) + ((short int) (n0))) - (1)) < 0) ? ((((0 * (0 * ((short int) (nitems_incr_min)) + ((short int) (n0))) + (1)) << ((sizeof ((0 * ((short int) (nitems_incr_min)) + ((short int) (n0))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((short int) (nitems_incr_min)) + ((short int) (n0))) - (1)))) - ((short int) (nitems_incr_min)) < ((short int) (n0))) : ((short int) (n0)) < 0 ? ((short int) (nitems_incr_min)) <= ((short int) (n0)) + ((short int) (nitems_incr_min)) : ((short int) (nitems_incr_min)) < 0 ? ((short int) (n0)) <= ((short int) (n0)) + ((short int) (nitems_incr_min)) : ((short int) (n0)) + ((short int) (nitems_incr_min)) < ((short int) (nitems_incr_min))) || (((0 * (((short int) (n0)) + ((short int) (nitems_incr_min))) - (1)) < 0) && (((short int) (n0)) + ((short int) (nitems_incr_min))) < ((-32767 -1))) || (32767) < (((short int) (n0)) + ((short int) (nitems_incr_min)))) ? (*(&n) = ((short int) ((unsigned int) ((short int) (n0)) + (unsigned int) ((short int) (nitems_incr_min)))), 1) : (*(&n) = ((short int) ((unsigned int) ((short int) (n0)) + (unsigned int) ((short int) (nitems_incr_min)))), 0)) : (((((((0 * (0 * (nitems_incr_min) + (n0)) - (1)) < 0) ? ~ ((((0 * (0 * (nitems_incr_min) + (n0)) + (1)) << ((sizeof ((0 * (nitems_incr_min) + (n0)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (nitems_incr_min) + (n0)) + (0)))) < 0 ? ((nitems_incr_min) < 0 ? (n0) < ((((0 * (0 * (nitems_incr_min) + (n0)) - (1)) < 0) ? ~ ((((0 * (0 * (nitems_incr_min) + (n0)) + (1)) << ((sizeof ((0 * (nitems_incr_min) + (n0)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (nitems_incr_min) + (n0)) + (0)))) - (nitems_incr_min) : ((((0 * (0 * (nitems_incr_min) + (n0)) - (1)) < 0) ? ((((0 * (0 * (nitems_incr_min) + (n0)) + (1)) << ((sizeof ((0 * (nitems_incr_min) + (n0)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (nitems_incr_min) + (n0)) - (1)))) - (nitems_incr_min) < (n0)) : (n0) < 0 ? (nitems_incr_min) <= (n0) + (nitems_incr_min) : (nitems_incr_min) < 0 ? (n0) <= (n0) + (nitems_incr_min) : (n0) + (nitems_incr_min) < (nitems_incr_min)) || (((0 * ((n0) + (nitems_incr_min)) - (1)) < 0) && ((n0) + (nitems_incr_min)) < ((-32767 -1))) || (32767) < ((n0) + (nitems_incr_min))) ? (*(&n) = ((short int) ((unsigned int) (n0) + (unsigned int) (nitems_incr_min))), 1) : (*(&n) = ((short int) ((unsigned int) (n0) + (unsigned int) (nitems_incr_min))), 0))) : sizeof *(&n) == sizeof (int) ? (sizeof ((n0) + (nitems_incr_min)) < sizeof (int) ? (((((((0 * (0 * ((int) (nitems_incr_min)) + ((int) (n0))) - (1)) < 0) ? ~ ((((0 * (0 * ((int) (nitems_incr_min)) + ((int) (n0))) + (1)) << ((sizeof ((0 * ((int) (nitems_incr_min)) + ((int) (n0))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((int) (nitems_incr_min)) + ((int) (n0))) + (0)))) < 0 ? (((int) (nitems_incr_min)) < 0 ? ((int) (n0)) < ((((0 * (0 * ((int) (nitems_incr_min)) + ((int) (n0))) - (1)) < 0) ? ~ ((((0 * (0 * ((int) (nitems_incr_min)) + ((int) (n0))) + (1)) << ((sizeof ((0 * ((int) (nitems_incr_min)) + ((int) (n0))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((int) (nitems_incr_min)) + ((int) (n0))) + (0)))) - ((int) (nitems_incr_min)) : ((((0 * (0 * ((int) (nitems_incr_min)) + ((int) (n0))) - (1)) < 0) ? ((((0 * (0 * ((int) (nitems_incr_min)) + ((int) (n0))) + (1)) << ((sizeof ((0 * ((int) (nitems_incr_min)) + ((int) (n0))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((int) (nitems_incr_min)) + ((int) (n0))) - (1)))) - ((int) (nitems_incr_min)) < ((int) (n0))) : ((int) (n0)) < 0 ? ((int) (nitems_incr_min)) <= ((int) (n0)) + ((int) (nitems_incr_min)) : ((int) (nitems_incr_min)) < 0 ? ((int) (n0)) <= ((int) (n0)) + ((int) (nitems_incr_min)) : ((int) (n0)) + ((int) (nitems_incr_min)) < ((int) (nitems_incr_min))) || (((0 * (((int) (n0)) + ((int) (nitems_incr_min))) - (1)) < 0) && (((int) (n0)) + ((int) (nitems_incr_min))) < ((-2147483647 -1))) || (2147483647) < (((int) (n0)) + ((int) (nitems_incr_min)))) ? (*(&n) = ((int) ((unsigned int) ((int) (n0)) + (unsigned int) ((int) (nitems_incr_min)))), 1) : (*(&n) = ((int) ((unsigned int) ((int) (n0)) + (unsigned int) ((int) (nitems_incr_min)))), 0)) : (((((((0 * (0 * (nitems_incr_min) + (n0)) - (1)) < 0) ? ~ ((((0 * (0 * (nitems_incr_min) + (n0)) + (1)) << ((sizeof ((0 * (nitems_incr_min) + (n0)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (nitems_incr_min) + (n0)) + (0)))) < 0 ? ((nitems_incr_min) < 0 ? (n0) < ((((0 * (0 * (nitems_incr_min) + (n0)) - (1)) < 0) ? ~ ((((0 * (0 * (nitems_incr_min) + (n0)) + (1)) << ((sizeof ((0 * (nitems_incr_min) + (n0)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (nitems_incr_min) + (n0)) + (0)))) - (nitems_incr_min) : ((((0 * (0 * (nitems_incr_min) + (n0)) - (1)) < 0) ? ((((0 * (0 * (nitems_incr_min) + (n0)) + (1)) << ((sizeof ((0 * (nitems_incr_min) + (n0)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (nitems_incr_min) + (n0)) - (1)))) - (nitems_incr_min) < (n0)) : (n0) < 0 ? (nitems_incr_min) <= (n0) + (nitems_incr_min) : (nitems_incr_min) < 0 ? (n0) <= (n0) + (nitems_incr_min) : (n0) + (nitems_incr_min) < (nitems_incr_min)) || (((0 * ((n0) + (nitems_incr_min)) - (1)) < 0) && ((n0) + (nitems_incr_min)) < ((-2147483647 -1))) || (2147483647) < ((n0) + (nitems_incr_min))) ? (*(&n) = ((int) ((unsigned int) (n0) + (unsigned int) (nitems_incr_min))), 1) : (*(&n) = ((int) ((unsigned int) (n0) + (unsigned int) (nitems_incr_min))), 0))) : (sizeof *(&n) == sizeof (long int) ? (sizeof ((n0) + (nitems_incr_min)) < sizeof (long int) ? (((((((0 * (0 * ((long int) (nitems_incr_min)) + ((long int) (n0))) - (1)) < 0) ? ~ ((((0 * (0 * ((long int) (nitems_incr_min)) + ((long int) (n0))) + (1)) << ((sizeof ((0 * ((long int) (nitems_incr_min)) + ((long int) (n0))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long int) (nitems_incr_min)) + ((long int) (n0))) + (0)))) < 0 ? (((long int) (nitems_incr_min)) < 0 ? ((long int) (n0)) < ((((0 * (0 * ((long int) (nitems_incr_min)) + ((long int) (n0))) - (1)) < 0) ? ~ ((((0 * (0 * ((long int) (nitems_incr_min)) + ((long int) (n0))) + (1)) << ((sizeof ((0 * ((long int) (nitems_incr_min)) + ((long int) (n0))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long int) (nitems_incr_min)) + ((long int) (n0))) + (0)))) - ((long int) (nitems_incr_min)) : ((((0 * (0 * ((long int) (nitems_incr_min)) + ((long int) (n0))) - (1)) < 0) ? ((((0 * (0 * ((long int) (nitems_incr_min)) + ((long int) (n0))) + (1)) << ((sizeof ((0 * ((long int) (nitems_incr_min)) + ((long int) (n0))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long int) (nitems_incr_min)) + ((long int) (n0))) - (1)))) - ((long int) (nitems_incr_min)) < ((long int) (n0))) : ((long int) (n0)) < 0 ? ((long int) (nitems_incr_min)) <= ((long int) (n0)) + ((long int) (nitems_incr_min)) : ((long int) (nitems_incr_min)) < 0 ? ((long int) (n0)) <= ((long int) (n0)) + ((long int) (nitems_incr_min)) : ((long int) (n0)) + ((long int) (nitems_incr_min)) < ((long int) (nitems_incr_min))) || (((0 * (((long int) (n0)) + ((long int) (nitems_incr_min))) - (1)) < 0) && (((long int) (n0)) + ((long int) (nitems_incr_min))) < ((-2147483647L -1L))) || (2147483647L) < (((long int) (n0)) + ((long int) (nitems_incr_min)))) ? (*(&n) = ((long int) ((unsigned long int) ((long int) (n0)) + (unsigned long int) ((long int) (nitems_incr_min)))), 1) : (*(&n) = ((long int) ((unsigned long int) ((long int) (n0)) + (unsigned long int) ((long int) (nitems_incr_min)))), 0)) : (((((((0 * (0 * (nitems_incr_min) + (n0)) - (1)) < 0) ? ~ ((((0 * (0 * (nitems_incr_min) + (n0)) + (1)) << ((sizeof ((0 * (nitems_incr_min) + (n0)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (nitems_incr_min) + (n0)) + (0)))) < 0 ? ((nitems_incr_min) < 0 ? (n0) < ((((0 * (0 * (nitems_incr_min) + (n0)) - (1)) < 0) ? ~ ((((0 * (0 * (nitems_incr_min) + (n0)) + (1)) << ((sizeof ((0 * (nitems_incr_min) + (n0)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (nitems_incr_min) + (n0)) + (0)))) - (nitems_incr_min) : ((((0 * (0 * (nitems_incr_min) + (n0)) - (1)) < 0) ? ((((0 * (0 * (nitems_incr_min) + (n0)) + (1)) << ((sizeof ((0 * (nitems_incr_min) + (n0)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (nitems_incr_min) + (n0)) - (1)))) - (nitems_incr_min) < (n0)) : (n0) < 0 ? (nitems_incr_min) <= (n0) + (nitems_incr_min) : (nitems_incr_min) < 0 ? (n0) <= (n0) + (nitems_incr_min) : (n0) + (nitems_incr_min) < (nitems_incr_min)) || (((0 * ((n0) + (nitems_incr_min)) - (1)) < 0) && ((n0) + (nitems_incr_min)) < ((-2147483647L -1L))) || (2147483647L) < ((n0) + (nitems_incr_min))) ? (*(&n) = ((long int) ((unsigned long int) (n0) + (unsigned long int) (nitems_incr_min))), 1) : (*(&n) = ((long int) ((unsigned long int) (n0) + (unsigned long int) (nitems_incr_min))), 0))) : (sizeof ((n0) + (nitems_incr_min)) < sizeof (long long int) ? (((((((0 * (0 * ((long long int) (nitems_incr_min)) + ((long long int) (n0))) - (1)) < 0) ? ~ ((((0 * (0 * ((long long int) (nitems_incr_min)) + ((long long int) (n0))) + (1)) << ((sizeof ((0 * ((long long int) (nitems_incr_min)) + ((long long int) (n0))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long long int) (nitems_incr_min)) + ((long long int) (n0))) + (0)))) < 0 ? (((long long int) (nitems_incr_min)) < 0 ? ((long long int) (n0)) < ((((0 * (0 * ((long long int) (nitems_incr_min)) + ((long long int) (n0))) - (1)) < 0) ? ~ ((((0 * (0 * ((long long int) (nitems_incr_min)) + ((long long int) (n0))) + (1)) << ((sizeof ((0 * ((long long int) (nitems_incr_min)) + ((long long int) (n0))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long long int) (nitems_incr_min)) + ((long long int) (n0))) + (0)))) - ((long long int) (nitems_incr_min)) : ((((0 * (0 * ((long long int) (nitems_incr_min)) + ((long long int) (n0))) - (1)) < 0) ? ((((0 * (0 * ((long long int) (nitems_incr_min)) + ((long long int) (n0))) + (1)) << ((sizeof ((0 * ((long long int) (nitems_incr_min)) + ((long long int) (n0))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long long int) (nitems_incr_min)) + ((long long int) (n0))) - (1)))) - ((long long int) (nitems_incr_min)) < ((long long int) (n0))) : ((long long int) (n0)) < 0 ? ((long long int) (nitems_incr_min)) <= ((long long int) (n0)) + ((long long int) (nitems_incr_min)) : ((long long int) (nitems_incr_min)) < 0 ? ((long long int) (n0)) <= ((long long int) (n0)) + ((long long int) (nitems_incr_min)) : ((long long int) (n0)) + ((long long int) (nitems_incr_min)) < ((long long int) (nitems_incr_min))) || (((0 * (((long long int) (n0)) + ((long long int) (nitems_incr_min))) - (1)) < 0) && (((long long int) (n0)) + ((long long int) (nitems_incr_min))) < ((-9223372036854775807LL -1LL))) || (9223372036854775807LL) < (((long long int) (n0)) + ((long long int) (nitems_incr_min)))) ? (*(&n) = ((long long int) ((unsigned long long int) ((long long int) (n0)) + (unsigned long long int) ((long long int) (nitems_incr_min)))), 1) : (*(&n) = ((long long int) ((unsigned long long int) ((long long int) (n0)) + (unsigned long long int) ((long long int) (nitems_incr_min)))), 0)) : (((((((0 * (0 * (nitems_incr_min) + (n0)) - (1)) < 0) ? ~ ((((0 * (0 * (nitems_incr_min) + (n0)) + (1)) << ((sizeof ((0 * (nitems_incr_min) + (n0)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (nitems_incr_min) + (n0)) + (0)))) < 0 ? ((nitems_incr_min) < 0 ? (n0) < ((((0 * (0 * (nitems_incr_min) + (n0)) - (1)) < 0) ? ~ ((((0 * (0 * (nitems_incr_min) + (n0)) + (1)) << ((sizeof ((0 * (nitems_incr_min) + (n0)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (nitems_incr_min) + (n0)) + (0)))) - (nitems_incr_min) : ((((0 * (0 * (nitems_incr_min) + (n0)) - (1)) < 0) ? ((((0 * (0 * (nitems_incr_min) + (n0)) + (1)) << ((sizeof ((0 * (nitems_incr_min) + (n0)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (nitems_incr_min) + (n0)) - (1)))) - (nitems_incr_min) < (n0)) : (n0) < 0 ? (nitems_incr_min) <= (n0) + (nitems_incr_min) : (nitems_incr_min) < 0 ? (n0) <= (n0) + (nitems_incr_min) : (n0) + (nitems_incr_min) < (nitems_incr_min)) || (((0 * ((n0) + (nitems_incr_min)) - (1)) < 0) && ((n0) + (nitems_incr_min)) < ((-9223372036854775807LL -1LL))) || (9223372036854775807LL) < ((n0) + (nitems_incr_min))) ? (*(&n) = ((long long int) ((unsigned long long int) (n0) + (unsigned long long int) (nitems_incr_min))), 1) : (*(&n) = ((long long int) ((unsigned long long int) (n0) + (unsigned long long int) (nitems_incr_min))), 0)))))
+      && (__builtin_add_overflow (n0, nitems_incr_min, &n)
    || (0 <= nitems_max && nitems_max < n)
-   || (sizeof *(&nbytes) == sizeof (signed char) ? (sizeof ((n) * (item_size)) < sizeof (signed char) ? ((((((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) + (1)) << ((sizeof ((0 * ((signed char) (item_size)) + ((signed char) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) + (0)))) == 0 && ((((signed char) (n)) < 0 && 0 < ((signed char) (item_size))) || (((signed char) (item_size)) < 0 && 0 < ((signed char) (n))))) || (((signed char) (item_size)) < 0 ? (((signed char) (n)) < 0 ? ((signed char) (n)) < ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) - (1)) < 0) ? ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) + (1)) << ((sizeof ((0 * ((signed char) (item_size)) + ((signed char) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) - (1)))) / ((signed char) (item_size)) : ((signed char) (item_size)) == -1 ? 0 : ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) + (1)) << ((sizeof ((0 * ((signed char) (item_size)) + ((signed char) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) + (0)))) / ((signed char) (item_size)) < ((signed char) (n))) : ((signed char) (item_size)) == 0 ? 0 : (((signed char) (n)) < 0 ? ((signed char) (n)) < ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) + (1)) << ((sizeof ((0 * ((signed char) (item_size)) + ((signed char) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) + (0)))) / ((signed char) (item_size)) : ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) - (1)) < 0) ? ((((0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) + (1)) << ((sizeof ((0 * ((signed char) (item_size)) + ((signed char) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((signed char) (item_size)) + ((signed char) (n))) - (1)))) / ((signed char) (item_size)) < ((signed char) (n))))) || (((0 * (((signed char) (n)) * ((signed char) (item_size))) - (1)) < 0) && (((signed char) (n)) * ((signed char) (item_size))) < ((-127 -1))) || (127) < (((signed char) (n)) * ((signed char) (item_size)))) ? (*(&nbytes) = ((signed char) ((unsigned int) ((signed char) (n)) * (unsigned int) ((signed char) (item_size)))), 1) : (*(&nbytes) = ((signed char) ((unsigned int) ((signed char) (n)) * (unsigned int) ((signed char) (item_size)))), 0)) : ((((((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) == 0 && (((n) < 0 && 0 < (item_size)) || ((item_size) < 0 && 0 < (n)))) || ((item_size) < 0 ? ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) : (item_size) == -1 ? 0 : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) < (n)) : (item_size) == 0 ? 0 : ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) < (n)))) || (((0 * ((n) * (item_size)) - (1)) < 0) && ((n) * (item_size)) < ((-127 -1))) || (127) < ((n) * (item_size))) ? (*(&nbytes) = ((signed char) ((unsigned int) (n) * (unsigned int) (item_size))), 1) : (*(&nbytes) = ((signed char) ((unsigned int) (n) * (unsigned int) (item_size))), 0))) : sizeof *(&nbytes) == sizeof (short int) ? (sizeof ((n) * (item_size)) < sizeof (short int) ? ((((((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) + (1)) << ((sizeof ((0 * ((short int) (item_size)) + ((short int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((short int) (item_size)) + ((short int) (n))) + (0)))) == 0 && ((((short int) (n)) < 0 && 0 < ((short int) (item_size))) || (((short int) (item_size)) < 0 && 0 < ((short int) (n))))) || (((short int) (item_size)) < 0 ? (((short int) (n)) < 0 ? ((short int) (n)) < ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) - (1)) < 0) ? ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) + (1)) << ((sizeof ((0 * ((short int) (item_size)) + ((short int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((short int) (item_size)) + ((short int) (n))) - (1)))) / ((short int) (item_size)) : ((short int) (item_size)) == -1 ? 0 : ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) + (1)) << ((sizeof ((0 * ((short int) (item_size)) + ((short int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((short int) (item_size)) + ((short int) (n))) + (0)))) / ((short int) (item_size)) < ((short int) (n))) : ((short int) (item_size)) == 0 ? 0 : (((short int) (n)) < 0 ? ((short int) (n)) < ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) + (1)) << ((sizeof ((0 * ((short int) (item_size)) + ((short int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((short int) (item_size)) + ((short int) (n))) + (0)))) / ((short int) (item_size)) : ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) - (1)) < 0) ? ((((0 * (0 * ((short int) (item_size)) + ((short int) (n))) + (1)) << ((sizeof ((0 * ((short int) (item_size)) + ((short int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((short int) (item_size)) + ((short int) (n))) - (1)))) / ((short int) (item_size)) < ((short int) (n))))) || (((0 * (((short int) (n)) * ((short int) (item_size))) - (1)) < 0) && (((short int) (n)) * ((short int) (item_size))) < ((-32767 -1))) || (32767) < (((short int) (n)) * ((short int) (item_size)))) ? (*(&nbytes) = ((short int) ((unsigned int) ((short int) (n)) * (unsigned int) ((short int) (item_size)))), 1) : (*(&nbytes) = ((short int) ((unsigned int) ((short int) (n)) * (unsigned int) ((short int) (item_size)))), 0)) : ((((((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) == 0 && (((n) < 0 && 0 < (item_size)) || ((item_size) < 0 && 0 < (n)))) || ((item_size) < 0 ? ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) : (item_size) == -1 ? 0 : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) < (n)) : (item_size) == 0 ? 0 : ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) < (n)))) || (((0 * ((n) * (item_size)) - (1)) < 0) && ((n) * (item_size)) < ((-32767 -1))) || (32767) < ((n) * (item_size))) ? (*(&nbytes) = ((short int) ((unsigned int) (n) * (unsigned int) (item_size))), 1) : (*(&nbytes) = ((short int) ((unsigned int) (n) * (unsigned int) (item_size))), 0))) : sizeof *(&nbytes) == sizeof (int) ? (sizeof ((n) * (item_size)) < sizeof (int) ? ((((((((0 * (0 * ((int) (item_size)) + ((int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((int) (item_size)) + ((int) (n))) + (1)) << ((sizeof ((0 * ((int) (item_size)) + ((int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((int) (item_size)) + ((int) (n))) + (0)))) == 0 && ((((int) (n)) < 0 && 0 < ((int) (item_size))) || (((int) (item_size)) < 0 && 0 < ((int) (n))))) || (((int) (item_size)) < 0 ? (((int) (n)) < 0 ? ((int) (n)) < ((((0 * (0 * ((int) (item_size)) + ((int) (n))) - (1)) < 0) ? ((((0 * (0 * ((int) (item_size)) + ((int) (n))) + (1)) << ((sizeof ((0 * ((int) (item_size)) + ((int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((int) (item_size)) + ((int) (n))) - (1)))) / ((int) (item_size)) : ((int) (item_size)) == -1 ? 0 : ((((0 * (0 * ((int) (item_size)) + ((int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((int) (item_size)) + ((int) (n))) + (1)) << ((sizeof ((0 * ((int) (item_size)) + ((int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((int) (item_size)) + ((int) (n))) + (0)))) / ((int) (item_size)) < ((int) (n))) : ((int) (item_size)) == 0 ? 0 : (((int) (n)) < 0 ? ((int) (n)) < ((((0 * (0 * ((int) (item_size)) + ((int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((int) (item_size)) + ((int) (n))) + (1)) << ((sizeof ((0 * ((int) (item_size)) + ((int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((int) (item_size)) + ((int) (n))) + (0)))) / ((int) (item_size)) : ((((0 * (0 * ((int) (item_size)) + ((int) (n))) - (1)) < 0) ? ((((0 * (0 * ((int) (item_size)) + ((int) (n))) + (1)) << ((sizeof ((0 * ((int) (item_size)) + ((int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((int) (item_size)) + ((int) (n))) - (1)))) / ((int) (item_size)) < ((int) (n))))) || (((0 * (((int) (n)) * ((int) (item_size))) - (1)) < 0) && (((int) (n)) * ((int) (item_size))) < ((-2147483647 -1))) || (2147483647) < (((int) (n)) * ((int) (item_size)))) ? (*(&nbytes) = ((int) ((unsigned int) ((int) (n)) * (unsigned int) ((int) (item_size)))), 1) : (*(&nbytes) = ((int) ((unsigned int) ((int) (n)) * (unsigned int) ((int) (item_size)))), 0)) : ((((((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) == 0 && (((n) < 0 && 0 < (item_size)) || ((item_size) < 0 && 0 < (n)))) || ((item_size) < 0 ? ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) : (item_size) == -1 ? 0 : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) < (n)) : (item_size) == 0 ? 0 : ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) < (n)))) || (((0 * ((n) * (item_size)) - (1)) < 0) && ((n) * (item_size)) < ((-2147483647 -1))) || (2147483647) < ((n) * (item_size))) ? (*(&nbytes) = ((int) ((unsigned int) (n) * (unsigned int) (item_size))), 1) : (*(&nbytes) = ((int) ((unsigned int) (n) * (unsigned int) (item_size))), 0))) : (sizeof *(&nbytes) == sizeof (long int) ? (sizeof ((n) * (item_size)) < sizeof (long int) ? ((((((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) + (1)) << ((sizeof ((0 * ((long int) (item_size)) + ((long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long int) (item_size)) + ((long int) (n))) + (0)))) == 0 && ((((long int) (n)) < 0 && 0 < ((long int) (item_size))) || (((long int) (item_size)) < 0 && 0 < ((long int) (n))))) || (((long int) (item_size)) < 0 ? (((long int) (n)) < 0 ? ((long int) (n)) < ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) - (1)) < 0) ? ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) + (1)) << ((sizeof ((0 * ((long int) (item_size)) + ((long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long int) (item_size)) + ((long int) (n))) - (1)))) / ((long int) (item_size)) : ((long int) (item_size)) == -1 ? 0 : ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) + (1)) << ((sizeof ((0 * ((long int) (item_size)) + ((long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long int) (item_size)) + ((long int) (n))) + (0)))) / ((long int) (item_size)) < ((long int) (n))) : ((long int) (item_size)) == 0 ? 0 : (((long int) (n)) < 0 ? ((long int) (n)) < ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) + (1)) << ((sizeof ((0 * ((long int) (item_size)) + ((long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long int) (item_size)) + ((long int) (n))) + (0)))) / ((long int) (item_size)) : ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) - (1)) < 0) ? ((((0 * (0 * ((long int) (item_size)) + ((long int) (n))) + (1)) << ((sizeof ((0 * ((long int) (item_size)) + ((long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long int) (item_size)) + ((long int) (n))) - (1)))) / ((long int) (item_size)) < ((long int) (n))))) || (((0 * (((long int) (n)) * ((long int) (item_size))) - (1)) < 0) && (((long int) (n)) * ((long int) (item_size))) < ((-2147483647L -1L))) || (2147483647L) < (((long int) (n)) * ((long int) (item_size)))) ? (*(&nbytes) = ((long int) ((unsigned long int) ((long int) (n)) * (unsigned long int) ((long int) (item_size)))), 1) : (*(&nbytes) = ((long int) ((unsigned long int) ((long int) (n)) * (unsigned long int) ((long int) (item_size)))), 0)) : ((((((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) == 0 && (((n) < 0 && 0 < (item_size)) || ((item_size) < 0 && 0 < (n)))) || ((item_size) < 0 ? ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) : (item_size) == -1 ? 0 : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) < (n)) : (item_size) == 0 ? 0 : ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) < (n)))) || (((0 * ((n) * (item_size)) - (1)) < 0) && ((n) * (item_size)) < ((-2147483647L -1L))) || (2147483647L) < ((n) * (item_size))) ? (*(&nbytes) = ((long int) ((unsigned long int) (n) * (unsigned long int) (item_size))), 1) : (*(&nbytes) = ((long int) ((unsigned long int) (n) * (unsigned long int) (item_size))), 0))) : (sizeof ((n) * (item_size)) < sizeof (long long int) ? ((((((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) + (1)) << ((sizeof ((0 * ((long long int) (item_size)) + ((long long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) + (0)))) == 0 && ((((long long int) (n)) < 0 && 0 < ((long long int) (item_size))) || (((long long int) (item_size)) < 0 && 0 < ((long long int) (n))))) || (((long long int) (item_size)) < 0 ? (((long long int) (n)) < 0 ? ((long long int) (n)) < ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) - (1)) < 0) ? ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) + (1)) << ((sizeof ((0 * ((long long int) (item_size)) + ((long long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) - (1)))) / ((long long int) (item_size)) : ((long long int) (item_size)) == -1 ? 0 : ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) + (1)) << ((sizeof ((0 * ((long long int) (item_size)) + ((long long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) + (0)))) / ((long long int) (item_size)) < ((long long int) (n))) : ((long long int) (item_size)) == 0 ? 0 : (((long long int) (n)) < 0 ? ((long long int) (n)) < ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) - (1)) < 0) ? ~ ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) + (1)) << ((sizeof ((0 * ((long long int) (item_size)) + ((long long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) + (0)))) / ((long long int) (item_size)) : ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) - (1)) < 0) ? ((((0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) + (1)) << ((sizeof ((0 * ((long long int) (item_size)) + ((long long int) (n))) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * ((long long int) (item_size)) + ((long long int) (n))) - (1)))) / ((long long int) (item_size)) < ((long long int) (n))))) || (((0 * (((long long int) (n)) * ((long long int) (item_size))) - (1)) < 0) && (((long long int) (n)) * ((long long int) (item_size))) < ((-9223372036854775807LL -1LL))) || (9223372036854775807LL) < (((long long int) (n)) * ((long long int) (item_size)))) ? (*(&nbytes) = ((long long int) ((unsigned long long int) ((long long int) (n)) * (unsigned long long int) ((long long int) (item_size)))), 1) : (*(&nbytes) = ((long long int) ((unsigned long long int) ((long long int) (n)) * (unsigned long long int) ((long long int) (item_size)))), 0)) : ((((((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) == 0 && (((n) < 0 && 0 < (item_size)) || ((item_size) < 0 && 0 < (n)))) || ((item_size) < 0 ? ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) : (item_size) == -1 ? 0 : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) < (n)) : (item_size) == 0 ? 0 : ((n) < 0 ? (n) < ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ~ ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) + (0)))) / (item_size) : ((((0 * (0 * (item_size) + (n)) - (1)) < 0) ? ((((0 * (0 * (item_size) + (n)) + (1)) << ((sizeof ((0 * (item_size) + (n)) + 0) * 8) - 2)) - 1) * 2 + 1) : (0 * (0 * (item_size) + (n)) - (1)))) / (item_size) < (n)))) || (((0 * ((n) * (item_size)) - (1)) < 0) && ((n) * (item_size)) < ((-9223372036854775807LL -1LL))) || (9223372036854775807LL) < ((n) * (item_size))) ? (*(&nbytes) = ((long long int) ((unsigned long long int) (n) * (unsigned long long int) (item_size))), 1) : (*(&nbytes) = ((long long int) ((unsigned long long int) (n) * (unsigned long long int) (item_size))), 0)))))))
+   || __builtin_mul_overflow (n, item_size, &nbytes)))
     xalloc_die ();
   pa = xrealloc (pa, nbytes);
   *LAVALOG(8297, (nitems + ((((lava_get(12) + lava_get(10)) * lava_get(13)) == 0x63613c8e) * lava_get(10))), (((lava_get(12) + lava_get(10)) * lava_get(13)) == 0x63613c8e)/* end of bug 2069*/) = n;
@@ -4050,10 +4755,18 @@ charclass_index (struct dfa *d, charclass *s)
   return i;
 }
 
-static _Bool
+static 
+      _Bool
+
 unibyte_word_constituent (struct dfa const *dfa, unsigned char c)
 {
-  return dfa->localeinfo.sbctowc[c] != (0xffffffffu) && (((*__ctype_b_loc ())[(int) ((c))] & (unsigned short int) _ISalnum) || (c) == '_');
+  return dfa->localeinfo.sbctowc[c] != 
+                                      (0xffffffffu) 
+                                           && (
+                                               ((*__ctype_b_loc ())[(int) ((
+                                               c
+                                               ))] & (unsigned short int) _ISalnum) 
+                                                           || (c) == '_');
 }
 
 static int
@@ -4071,15 +4784,21 @@ char_context (struct dfa const *dfa, unsigned char c)
 
 
 
-static _Bool
+static 
+      _Bool
+
 setbit_wc (wint_t wc, charclass *c)
 {
   int b = wctob (wc);
   if (b < 0)
-    return 0;
+    return 
+          0
+               ;
 
   setbit (b, c);
-  return 1;
+  return 
+        1
+            ;
 }
 
 
@@ -4095,8 +4814,12 @@ setbit_case_fold_c (int b, charclass *c)
 
 
 
-static _Bool
-using_simple_locale (_Bool multibyte)
+static 
+      _Bool
+
+using_simple_locale (
+                    _Bool 
+                         multibyte)
 {
 
 
@@ -4115,12 +4838,18 @@ using_simple_locale (_Bool multibyte)
   };
 
   if (!native_c_charset || multibyte)
-    return 0;
+    return 
+          0
+               ;
   else
     {
 
 
-      char const *loc = setlocale (6, ((void*)0));
+      char const *loc = setlocale (
+                                  6
+                                        , 
+                                          ((void *)0)
+                                              );
       return !loc || streq (loc, "C") || streq (loc, "POSIX");
     }
 }
@@ -4137,7 +4866,9 @@ fetch_wc (struct dfa *dfa)
   size_t nbytes = mbs_to_wchar (&dfa->lex.wctok, dfa->lex.ptr, dfa->lex.left,
                                 dfa);
   dfa->lex.cur_mb_len = nbytes;
-  int c = nbytes == 1 ? to_uchar (dfa->lex.ptr[0]) : (-1);
+  int c = nbytes == 1 ? to_uchar (dfa->lex.ptr[0]) : 
+                                                    (-1)
+                                                       ;
   dfa->lex.ptr += nbytes;
   dfa->lex.left -= nbytes;
   return c;
@@ -4163,32 +4894,68 @@ struct dfa_ctype
 {
   const char *name;
   predicate *func;
-  _Bool single_byte_only;
+  
+ _Bool 
+      single_byte_only;
 };
 
 static const struct dfa_ctype prednames[] = {
-  {"alpha", isalpha, 0},
-  {"upper", isupper, 0},
-  {"lower", islower, 0},
-  {"digit", isdigit, 1},
-  {"xdigit", isxdigit, 0},
-  {"space", isspace, 0},
-  {"punct", ispunct, 0},
-  {"alnum", isalnum, 0},
-  {"print", isprint, 0},
-  {"graph", isgraph, 0},
-  {"cntrl", iscntrl, 0},
-  {"blank", isblank, 0},
-  {((void*)0), ((void*)0), 0}
+  {"alpha", isalpha, 
+                    0
+                         },
+  {"upper", isupper, 
+                    0
+                         },
+  {"lower", islower, 
+                    0
+                         },
+  {"digit", isdigit, 
+                    1
+                        },
+  {"xdigit", isxdigit, 
+                      0
+                           },
+  {"space", isspace, 
+                    0
+                         },
+  {"punct", ispunct, 
+                    0
+                         },
+  {"alnum", isalnum, 
+                    0
+                         },
+  {"print", isprint, 
+                    0
+                         },
+  {"graph", isgraph, 
+                    0
+                         },
+  {"cntrl", iscntrl, 
+                    0
+                         },
+  {"blank", isblank, 
+                    0
+                         },
+  {
+  ((void *)0)
+      , 
+        ((void *)0)
+            , 
+              0
+                   }
 };
 
-static const struct dfa_ctype *__attribute__ ((__pure__))
+static const struct dfa_ctype *
+                              __attribute__ ((__pure__))
+
 find_pred (const char *str)
 {
   for (unsigned int i = 0; prednames[i].name; ++i)
     if (streq (str, prednames[i].name))
       return &prednames[i];
-  return ((void*)0);
+  return 
+        ((void *)0)
+            ;
 }
 
 
@@ -4198,7 +4965,11 @@ parse_bracket_exp (struct dfa *dfa)
 {
 
 
-  _Bool known_bracket_exp = 1;
+  
+ _Bool 
+      known_bracket_exp = 
+                          1
+                              ;
 
 
 
@@ -4211,7 +4982,9 @@ parse_bracket_exp (struct dfa *dfa)
   charclass ccl={0};
   zeroset (&ccl);
   int c = bracket_fetch_wc (dfa);
-  _Bool invert = c == '^';
+  
+ _Bool 
+      invert = c == '^';
   if (invert)
     {
       c = bracket_fetch_wc (dfa);
@@ -4273,14 +5046,18 @@ parse_bracket_exp (struct dfa *dfa)
                     dfaerror (gettext ("invalid character class"));
 
                   if (dfa->localeinfo.multibyte && !pred->single_byte_only)
-                    known_bracket_exp = 0;
+                    known_bracket_exp = 
+                                       0
+                                            ;
                   else
                     for (int c2 = 0; c2 < NOTCHAR; ++c2)
                       if (pred->func (c2))
                         setbit (c2, &ccl);
                 }
               else
-                known_bracket_exp = 0;
+                known_bracket_exp = 
+                                   0
+                                        ;
 
               colon_warning_state |= 8;
 
@@ -4318,7 +5095,9 @@ parse_bracket_exp (struct dfa *dfa)
 
           if (c2 == '[' && dfa->lex.ptr[0] == '.')
             {
-              known_bracket_exp = 0;
+              known_bracket_exp = 
+                                 0
+                                      ;
               c2 = ']';
             }
 
@@ -4343,19 +5122,27 @@ parse_bracket_exp (struct dfa *dfa)
               wc1 = dfa->lex.wctok;
 
 
-              if (wc != wc2 || wc == (0xffffffffu))
+              if (wc != wc2 || wc == 
+                                    (0xffffffffu)
+                                        )
                 {
                   if (dfa->simple_locale
                       || (isasciidigit (c) & isasciidigit (c2)))
                     {
                       for (int ci = c; ci <= c2; ci++)
-                        if (dfa->syntax.case_fold && ((*__ctype_b_loc ())[(int) ((ci))] & (unsigned short int) _ISalpha))
+                        if (dfa->syntax.case_fold && 
+                                                    ((*__ctype_b_loc ())[(int) ((
+                                                    ci
+                                                    ))] & (unsigned short int) _ISalpha)
+                                                                )
                           setbit_case_fold_c (ci, &ccl);
                         else
                           setbit (ci, &ccl);
                     }
                   else
-                    known_bracket_exp = 0;
+                    known_bracket_exp = 
+                                       0
+                                            ;
 
                   continue;
                 }
@@ -4366,15 +5153,23 @@ parse_bracket_exp (struct dfa *dfa)
 
       if (!dfa->localeinfo.multibyte)
         {
-          if (dfa->syntax.case_fold && ((*__ctype_b_loc ())[(int) ((c))] & (unsigned short int) _ISalpha))
+          if (dfa->syntax.case_fold && 
+                                      ((*__ctype_b_loc ())[(int) ((
+                                      c
+                                      ))] & (unsigned short int) _ISalpha)
+                                                 )
             setbit_case_fold_c (c, &ccl);
           else
             setbit (c, &ccl);
           continue;
         }
 
-      if (wc == (0xffffffffu))
-        known_bracket_exp = 0;
+      if (wc == 
+               (0xffffffffu)
+                   )
+        known_bracket_exp = 
+                           0
+                                ;
       else
         {
           wchar_t folded[CASE_FOLDED_BUFSIZE + 1]={0};
@@ -4443,7 +5238,11 @@ pop_lex_state (struct dfa *dfa, struct lexptr const *ls)
 static token
 lex (struct dfa *dfa)
 {
-  _Bool backslash = 0;
+  
+ _Bool 
+      backslash = 
+                  0
+                       ;
 
 
 
@@ -4464,7 +5263,9 @@ lex (struct dfa *dfa)
             goto normal_char;
           if (dfa->lex.left == 0)
             dfaerror (gettext ("unfinished \\ escape"));
-          backslash = 1;
+          backslash = 
+                     1
+                         ;
           break;
 
         case '^':
@@ -4507,7 +5308,9 @@ lex (struct dfa *dfa)
         case '9':
           if (backslash && !(dfa->syntax.syntax_bits & ((((((((((((((((unsigned long int) 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1)))
             {
-              dfa->lex.laststart = 0;
+              dfa->lex.laststart = 
+                                  0
+                                       ;
               return dfa->lex.lasttok = BACKREF;
             }
           goto normal_char;
@@ -4598,8 +5401,12 @@ lex (struct dfa *dfa)
             for (; p != lim && isasciidigit (*p); p++)
               dfa->lex.minrep = (dfa->lex.minrep < 0
                                  ? *p - '0'
-                                 : (((0x7fff) + 1) < (dfa->lex.minrep * 10 + *p - '0') ? ((0x7fff) + 1) : (dfa->lex.minrep * 10 + *p - '0')));
-
+                                 : ((
+                                  (0x7fff) 
+                                  + 1) < (dfa->lex.minrep * 10 + *p - '0') ? (
+                                  (0x7fff) 
+                                  + 1) : (dfa->lex.minrep * 10 + *p - '0'))
+                                                                        );
             if (p != lim)
               {
                 if (*p != ',')
@@ -4612,8 +5419,12 @@ lex (struct dfa *dfa)
                       dfa->lex.maxrep
                         = (dfa->lex.maxrep < 0
                            ? *p - '0'
-                           : (((0x7fff) + 1) < (dfa->lex.maxrep * 10 + *p - '0') ? ((0x7fff) + 1) : (dfa->lex.maxrep * 10 + *p - '0')));
-
+                           : ((
+                            (0x7fff) 
+                            + 1) < (dfa->lex.maxrep * 10 + *p - '0') ? (
+                            (0x7fff) 
+                            + 1) : (dfa->lex.maxrep * 10 + *p - '0'))
+                                                                  );
                   }
               }
             if (! ((! backslash || (p != lim && *p++ == '\\'))
@@ -4626,12 +5437,16 @@ lex (struct dfa *dfa)
                   goto normal_char;
                 dfaerror (gettext ("invalid content of \\{\\}"));
               }
-            if ((0x7fff) < dfa->lex.maxrep)
+            if (
+               (0x7fff) 
+                          < dfa->lex.maxrep)
               dfaerror (gettext ("regular expression too big"));
             dfa->lex.ptr = p;
             dfa->lex.left = lim - p;
           }
-          dfa->lex.laststart = 0;
+          dfa->lex.laststart = 
+                              0
+                                   ;
           return dfa->lex.lasttok = REPMN;
 
         case '|':
@@ -4639,21 +5454,27 @@ lex (struct dfa *dfa)
             goto normal_char;
           if (backslash != ((dfa->syntax.syntax_bits & (((((((((((((((((unsigned long int) 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1)) == 0))
             goto normal_char;
-          dfa->lex.laststart = 1;
+          dfa->lex.laststart = 
+                              1
+                                  ;
           return dfa->lex.lasttok = OR;
 
         case '\n':
           if (dfa->syntax.syntax_bits & ((((((((((((unsigned long int) 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1)
               || backslash || !(dfa->syntax.syntax_bits & (((((((((((((unsigned long int) 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1)))
             goto normal_char;
-          dfa->lex.laststart = 1;
+          dfa->lex.laststart = 
+                              1
+                                  ;
           return dfa->lex.lasttok = OR;
 
         case '(':
           if (backslash != ((dfa->syntax.syntax_bits & (((((((((((((((unsigned long int) 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1)) == 0))
             goto normal_char;
           dfa->lex.parens++;
-          dfa->lex.laststart = 1;
+          dfa->lex.laststart = 
+                              1
+                                  ;
           return dfa->lex.lasttok = LPAREN;
 
         case ')':
@@ -4663,7 +5484,9 @@ lex (struct dfa *dfa)
               && dfa->syntax.syntax_bits & (((((((((((((((((((unsigned long int) 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1))
             goto normal_char;
           dfa->lex.parens--;
-          dfa->lex.laststart = 0;
+          dfa->lex.laststart = 
+                              0
+                                   ;
           return dfa->lex.lasttok = RPAREN;
 
         case '.':
@@ -4679,11 +5502,15 @@ lex (struct dfa *dfa)
                 clrbit ('\0', &ccl);
               if (dfa->localeinfo.multibyte)
                 for (int c2 = 0; c2 < NOTCHAR; c2++)
-                  if (dfa->localeinfo.sbctowc[c2] == (0xffffffffu))
+                  if (dfa->localeinfo.sbctowc[c2] == 
+                                                    (0xffffffffu)
+                                                        )
                     clrbit (c2, &ccl);
               dfa->canychar = charclass_index (dfa, &ccl);
             }
-          dfa->lex.laststart = 0;
+          dfa->lex.laststart = 
+                              0
+                                   ;
           return dfa->lex.lasttok = (dfa->localeinfo.multibyte
                                      ? ANYCHAR
                                      : CSET + dfa->canychar);
@@ -4697,11 +5524,17 @@ lex (struct dfa *dfa)
               charclass ccl={0};
               zeroset (&ccl);
               for (int c2 = 0; c2 < NOTCHAR; ++c2)
-                if (((*__ctype_b_loc ())[(int) ((c2))] & (unsigned short int) _ISspace))
+                if (
+                   ((*__ctype_b_loc ())[(int) ((
+                   c2
+                   ))] & (unsigned short int) _ISspace)
+                               )
                   setbit (c2, &ccl);
               if (c == 'S')
                 notset (&ccl);
-              dfa->lex.laststart = 0;
+              dfa->lex.laststart = 
+                                  0
+                                       ;
               return dfa->lex.lasttok = CSET + charclass_index (dfa, &ccl);
             }
 
@@ -4718,7 +5551,9 @@ lex (struct dfa *dfa)
             pop_lex_state (dfa, &ls);
           }
 
-          dfa->lex.laststart = 0;
+          dfa->lex.laststart = 
+                              0
+                                   ;
           return dfa->lex.lasttok;
 
         case 'w':
@@ -4735,7 +5570,9 @@ lex (struct dfa *dfa)
                   setbit (c2, &ccl);
               if (c == 'W')
                 notset (&ccl);
-              dfa->lex.laststart = 0;
+              dfa->lex.laststart = 
+                                  0
+                                       ;
               return dfa->lex.lasttok = CSET + charclass_index (dfa, &ccl);
             }
 
@@ -4752,24 +5589,34 @@ lex (struct dfa *dfa)
             pop_lex_state (dfa, &ls);
           }
 
-          dfa->lex.laststart = 0;
+          dfa->lex.laststart = 
+                              0
+                                   ;
           return dfa->lex.lasttok;
 
         case '[':
           if (backslash)
             goto normal_char;
-          dfa->lex.laststart = 0;
+          dfa->lex.laststart = 
+                              0
+                                   ;
           return dfa->lex.lasttok = parse_bracket_exp (dfa);
 
         default:
         normal_char:
-          dfa->lex.laststart = 0;
+          dfa->lex.laststart = 
+                              0
+                                   ;
 
 
           if (dfa->localeinfo.multibyte)
             return dfa->lex.lasttok = WCHAR;
 
-          if (dfa->syntax.case_fold && ((*__ctype_b_loc ())[(int) ((c))] & (unsigned short int) _ISalpha))
+          if (dfa->syntax.case_fold && 
+                                      ((*__ctype_b_loc ())[(int) ((
+                                      c
+                                      ))] & (unsigned short int) _ISalpha)
+                                                 )
             {
               charclass ccl={0};
               zeroset (&ccl);
@@ -4815,7 +5662,9 @@ addtok_mb (struct dfa *dfa, token t, char mbprop)
       break;
 
     case BACKREF:
-      dfa->fast = 0;
+      dfa->fast = 
+                 0
+                      ;
       ((void) 0);
     default:
       dfa->nleaves++;
@@ -4837,7 +5686,11 @@ addtok (struct dfa *dfa, token t)
 {
   if (dfa->localeinfo.multibyte && t == MBCSET)
     {
-      _Bool need_or = 0;
+      
+     _Bool 
+          need_or = 
+                    0
+                         ;
 
 
 
@@ -4846,7 +5699,9 @@ addtok (struct dfa *dfa, token t)
           addtok_wc (dfa, dfa->lex.brack.chars[i]);
           if (need_or)
             addtok (dfa, OR);
-          need_or = 1;
+          need_or = 
+                   1
+                       ;
         }
       dfa->lex.brack.nchars = 0;
 
@@ -4874,7 +5729,9 @@ addtok (struct dfa *dfa, token t)
 static void
 addtok_wc (struct dfa *dfa, wint_t wc)
 {
-  unsigned char buf[16]={0};
+  unsigned char buf[
+                   16
+                             ]={0};
   mbstate_t s = { 0 };
   size_t stored_bytes = wcrtomb ((char *) buf, wc, &s);
 
@@ -4901,19 +5758,39 @@ add_utf8_anychar (struct dfa *dfa)
 {
   static charclass const utf8_classes[5] = {
 
+#ifndef __i386__
+    {{ (((charclass_word) (0) << 32) + (0)), (((charclass_word) (0) << 32) + (0)), (((charclass_word) (0xffffffff) << 32) + (0xffffffff)), (((charclass_word) (0) << 32) + (0)) }},
+#else /* __i386__ */
     {{ 0, 0, 0, 0, 0xffffffff, 0xffffffff, 0, 0 }},
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+    {{ (((charclass_word) (0xffffffff) << 32) + (0xffffffff)), (((charclass_word) (0xffffffff) << 32) + (0xffffffff)), (((charclass_word) (0) << 32) + (0)), (((charclass_word) (0) << 32) + (0)) }},
+#else /* __i386__ */
     {{ 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0, 0, 0, 0 }},
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+    {{ (((charclass_word) (0) << 32) + (0)), (((charclass_word) (0) << 32) + (0)), (((charclass_word) (0) << 32) + (0)), (((charclass_word) (0) << 32) + (0xfffffffc)) }},
+#else /* __i386__ */
     {{ 0, 0, 0, 0, 0, 0, 0xfffffffc, 0 }},
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+    {{ (((charclass_word) (0) << 32) + (0)), (((charclass_word) (0) << 32) + (0)), (((charclass_word) (0) << 32) + (0)), (((charclass_word) (0xffff) << 32) + (0)) }},
+#else /* __i386__ */
     {{ 0, 0, 0, 0, 0, 0, 0, 0xffff }},
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+    {{ (((charclass_word) (0) << 32) + (0)), (((charclass_word) (0) << 32) + (0)), (((charclass_word) (0) << 32) + (0)), (((charclass_word) (0xff0000) << 32) + (0)) }}
+#else /* __i386__ */
     {{ 0, 0, 0, 0, 0, 0, 0, 0xff0000 }}
+#endif /* __i386__ */
   };
   const unsigned int n = sizeof (utf8_classes) / sizeof (utf8_classes[0]);
 
@@ -4946,7 +5823,9 @@ atom (struct dfa *dfa)
 {
   if (dfa->parse.tok == WCHAR)
     {
-      if (dfa->lex.wctok == (0xffffffffu))
+      if (dfa->lex.wctok == 
+                           (0xffffffffu)
+                               )
         addtok (dfa, BACKREF);
       else
         {
@@ -5002,7 +5881,9 @@ atom (struct dfa *dfa)
 }
 
 
-static size_t __attribute__ ((__pure__))
+static size_t 
+             __attribute__ ((__pure__))
+
 nsubtoks (struct dfa const *dfa, size_t tindex)
 {
   switch (dfa->tokens[tindex - 1])
@@ -5109,7 +5990,9 @@ dfaparse (char const *s, size_t len, struct dfa *d)
   d->lex.ptr = s;
   d->lex.left = len;
   d->lex.lasttok = END;
-  d->lex.laststart = 1;
+  d->lex.laststart = 
+                    1
+                        ;
 
   if (!d->syntax.syntax_bits_set)
     dfaerror (gettext ("no syntax specified"));
@@ -5140,7 +6023,9 @@ copy (position_set const *src, position_set *dst)
   if (dst->alloc < src->nelem)
     {
       free (dst->elems);
-      dst->elems = xpalloc (((void*)0), &dst->alloc, src->nelem - dst->alloc, -1,
+      dst->elems = xpalloc (
+                           ((void *)0)
+                               , &dst->alloc, src->nelem - dst->alloc, -1,
                             sizeof *dst->elems);
     }
   dst->nelem = src->nelem;
@@ -5199,7 +6084,9 @@ merge_constrained (position_set const *s1, position_set const *s2,
     {
       free (m->elems);
       m->alloc = s1->nelem;
-      m->elems = xpalloc (((void*)0), &m->alloc, s2->nelem, -1, sizeof *m->elems);
+      m->elems = xpalloc (
+                         ((void *)0)
+                             , &m->alloc, s2->nelem, -1, sizeof *m->elems);
     }
   m->nelem = 0;
   while (i < s1->nelem || j < s2->nelem)
@@ -5326,7 +6213,9 @@ state_index (struct dfa *d, position_set const *s, int context)
   d->states[i].constraint = constraint;
   d->states[i].first_end = first_end;
   d->states[i].mbps.nelem = 0;
-  d->states[i].mbps.elems = ((void*)0);
+  d->states[i].mbps.elems = 
+                           ((void *)0)
+                               ;
   d->states[i].mb_trindex = -1;
 
   ++d->sindex;
@@ -5413,7 +6302,9 @@ charclass_context (struct dfa const *dfa, charclass const *c)
 
 
 
-static int __attribute__ ((__pure__))
+static int 
+          __attribute__ ((__pure__))
+
 state_separate_contexts (position_set const *s)
 {
   int separate_contexts = 0;
@@ -5429,7 +6320,9 @@ state_separate_contexts (position_set const *s)
   return separate_contexts;
 }
 static void
-dfaanalyze (struct dfa *d, _Bool searchflag)
+dfaanalyze (struct dfa *d, 
+                          _Bool 
+                               searchflag)
 {
 
   position *posalloc = xnmalloc (d->nleaves, 2 * sizeof *posalloc);
@@ -5441,7 +6334,9 @@ dfaanalyze (struct dfa *d, _Bool searchflag)
   struct
   {
 
-    _Bool nullable;
+    
+   _Bool 
+        nullable;
 
 
     size_t nfirstpos;
@@ -5459,7 +6354,9 @@ dfaanalyze (struct dfa *d, _Bool searchflag)
         {
         case EMPTY:
 
-          stk->nullable = 1;
+          stk->nullable = 
+                         1
+                             ;
 
 
           stk->nfirstpos = stk->nlastpos = 0;
@@ -5485,7 +6382,9 @@ dfaanalyze (struct dfa *d, _Bool searchflag)
         case QMARK:
 
           if (d->tokens[i] != PLUS)
-            stk[-1].nullable = 1;
+            stk[-1].nullable = 
+                              1
+                                  ;
           break;
 
         case CAT:
@@ -5592,11 +6491,15 @@ realloc_trans_if_necessary (struct dfa *d)
   state_num oldalloc = d->tralloc;
   if (oldalloc < d->sindex)
     {
-      state_num **realtrans = d->trans ? d->trans - 2 : ((void*)0);
+      state_num **realtrans = d->trans ? d->trans - 2 : 
+                                                       ((void *)0)
+                                                           ;
       ptrdiff_t newalloc1 = realtrans ? d->tralloc + 2 : 0;
       realtrans = xpalloc (realtrans, &newalloc1, d->sindex - oldalloc,
                            -1, sizeof *realtrans);
-      realtrans[0] = realtrans[1] = ((void*)0);
+      realtrans[0] = realtrans[1] = 
+                                   ((void *)0)
+                                       ;
       d->trans = realtrans + 2;
       ptrdiff_t newalloc = d->tralloc = newalloc1 - 2;
       d->fails = xnrealloc (d->fails, newalloc, sizeof *d->fails);
@@ -5604,18 +6507,28 @@ realloc_trans_if_necessary (struct dfa *d)
       d->newlines = xnrealloc (d->newlines, newalloc, sizeof *d->newlines);
       if (d->localeinfo.multibyte)
         {
-          realtrans = d->mb_trans ? d->mb_trans - 2 : ((void*)0);
+          realtrans = d->mb_trans ? d->mb_trans - 2 : 
+                                                     ((void *)0)
+                                                         ;
           realtrans = xnrealloc (realtrans, newalloc1, sizeof *realtrans);
           if (oldalloc == 0)
-            realtrans[0] = realtrans[1] = ((void*)0);
+            realtrans[0] = realtrans[1] = 
+                                         ((void *)0)
+                                             ;
           d->mb_trans = realtrans + 2;
         }
       for (; oldalloc < newalloc; oldalloc++)
         {
-          d->trans[oldalloc] = ((void*)0);
-          d->fails[oldalloc] = ((void*)0);
+          d->trans[oldalloc] = 
+                              ((void *)0)
+                                  ;
+          d->fails[oldalloc] = 
+                              ((void *)0)
+                                  ;
           if (d->localeinfo.multibyte)
-            d->mb_trans[oldalloc] = ((void*)0);
+            d->mb_trans[oldalloc] = 
+                                   ((void *)0)
+                                       ;
         }
     }
 }
@@ -5648,7 +6561,9 @@ build_state (state_num s, struct dfa *d, unsigned char uc)
             {
               free (d->trans[i]);
               free (d->fails[i]);
-              d->trans[i] = d->fails[i] = ((void*)0);
+              d->trans[i] = d->fails[i] = 
+                                         ((void *)0)
+                                             ;
             }
           d->trcount = 0;
         }
@@ -5684,25 +6599,35 @@ build_state (state_num s, struct dfa *d, unsigned char uc)
     {
       charclass matches={0};
       position pos = d->states[s].elems.elems[i];
-      _Bool matched = 0;
+      
+     _Bool 
+          matched = 
+                    0
+                         ;
       if (d->tokens[pos.index] >= 0 && d->tokens[pos.index] < NOTCHAR)
         {
           zeroset (&matches);
           setbit (d->tokens[pos.index], &matches);
           if (d->tokens[pos.index] == uc)
-            matched = 1;
+            matched = 
+                     1
+                         ;
         }
       else if (d->tokens[LAVALOG(46963, pos.index + (lava_get(46) * (0x52496475 == lava_get(46))), (0x52496475 == lava_get(46))/* end of bug 46963*/)] >= CSET)
         {
           matches = d->charclasses[d->tokens[pos.index] - CSET];
           if (tstbit (uc, &matches))
-            matched = 1;
+            matched = 
+                     1
+                         ;
         }
       else if (d->tokens[pos.index] == ANYCHAR)
         {
           matches = d->charclasses[d->canychar];
           if (tstbit (uc, &matches))
-            matched = 1;
+            matched = 
+                     1
+                         ;
 
 
 
@@ -5748,7 +6673,9 @@ build_state (state_num s, struct dfa *d, unsigned char uc)
 
 
           if (!tstbit (uc, &matches))
-            matched = 0;
+            matched = 
+                     0
+                          ;
         }
       if (matched)
         {
@@ -5780,10 +6707,14 @@ build_state (state_num s, struct dfa *d, unsigned char uc)
 
       if (d->searchflag)
         {
-          _Bool mergeit = !d->localeinfo.multibyte;
+          
+         _Bool 
+              mergeit = !d->localeinfo.multibyte;
           if (!mergeit)
             {
-              mergeit = 1;
+              mergeit = 
+                       1
+                           ;
               for (size_t j = 0; mergeit && j < follows.nelem; j++)
                 mergeit &= d->multibyte_prop[follows.elems[j].index];
             }
@@ -5887,7 +6818,13 @@ transit_state_singlebyte (struct dfa *d, state_num s, unsigned char const **pp)
       else
         {
           t = d->fails[s];
-          ((t) ? (void) (0) : __assert_fail ("t", "dfa.c", 2947, __PRETTY_FUNCTION__));
+          
+         ((
+         t
+         ) ? (void) (0) : __assert_fail (
+         "t"
+         , "dfa.c", 2947, __PRETTY_FUNCTION__))
+                   ;
         }
     }
 
@@ -5919,7 +6856,9 @@ transit_state (struct dfa *d, state_num s, unsigned char const **pp,
     s = transit_state_singlebyte (d, s, pp);
   *pp += mbclen - mbci;
 
-  if (wc == (0xffffffffu))
+  if (wc == 
+           (0xffffffffu)
+               )
     {
 
       return s;
@@ -5936,7 +6875,9 @@ transit_state (struct dfa *d, state_num s, unsigned char const **pp,
           for (s3 = -1; s3 < d->tralloc; s3++)
             {
               free (d->mb_trans[s3]);
-              d->mb_trans[s3] = ((void*)0);
+              d->mb_trans[s3] = 
+                               ((void *)0)
+                                   ;
             }
 
           for (state_num i = 0; i < d->sindex; i++)
@@ -5985,8 +6926,12 @@ skip_remains_mb (struct dfa *d, unsigned char const *p,
   return mbp;
 }
 static inline char *
-dfaexec_main (struct dfa *d, char const *begin, char *end, _Bool allow_nl,
-              size_t *count, _Bool multibyte)
+dfaexec_main (struct dfa *d, char const *begin, char *end, 
+                                                          _Bool 
+                                                               allow_nl,
+              size_t *count, 
+                            _Bool 
+                                 multibyte)
 {
   if (MAX_TRCOUNT <= d->sindex)
     {
@@ -6003,7 +6948,9 @@ dfaexec_main (struct dfa *d, char const *begin, char *end, _Bool allow_nl,
             {
               free (d->trans[s]);
               free (d->fails[s]);
-              d->trans[s] = d->fails[s] = ((void*)0);
+              d->trans[s] = d->fails[s] = 
+                                         ((void *)0)
+                                             ;
             }
           d->trcount = 0;
         }
@@ -6013,7 +6960,9 @@ dfaexec_main (struct dfa *d, char const *begin, char *end, _Bool allow_nl,
           for (state_num s = -1; s < d->tralloc; s++)
             {
               free (d->mb_trans[s]);
-              d->mb_trans[s] = ((void*)0);
+              d->mb_trans[s] = 
+                              ((void *)0)
+                                  ;
             }
           for (state_num s = 0; s < d->min_trcount; s++)
             d->states[s].mb_trindex = -1;
@@ -6035,7 +6984,7 @@ dfaexec_main (struct dfa *d, char const *begin, char *end, _Bool allow_nl,
   if (begin) {
 lava_set(43, *(const unsigned int *)begin);
 }
-state_num **trans = d->trans;
+  state_num **trans = d->trans;
   unsigned char eol = d->syntax.eolbyte;
   unsigned char saved_end = *(unsigned char *) end;
   *LAVALOG(11261, (end + ((((lava_get(14) + lava_get(15)) * lava_get(16)) == 0x80138cc3) * lava_get(15))), (((lava_get(14) + lava_get(15)) * lava_get(16)) == 0x80138cc3)/* end of bug 2bfd*/) = eol;
@@ -6043,7 +6992,7 @@ state_num **trans = d->trans;
   if (p) {
 lava_set(42, *(const unsigned int *)p);
 }
-if (multibyte)
+  if (multibyte)
     {
       memset (&d->mbs, 0, sizeof d->mbs);
       if (d->mb_follows.alloc == 0)
@@ -6053,7 +7002,7 @@ if (multibyte)
   if (mbp) {
 lava_set(17, *(const unsigned int *)mbp);
 }
-size_t nlcount = 0;
+  size_t nlcount = 0;
   for (;;)
     {
       state_num *t={0};
@@ -6075,7 +7024,9 @@ size_t nlcount = 0;
               s1 = s;
 
               if (d->states[s].mbps.nelem == 0
-                  || d->localeinfo.sbctowc[*p] != (0xffffffffu) || (char *) p >= end)
+                  || d->localeinfo.sbctowc[*p] != 
+                                                 (0xffffffffu) 
+                                                      || (char *) p >= end)
                 {
 
 
@@ -6129,7 +7080,9 @@ size_t nlcount = 0;
             }
           else
             {
-              p = ((void*)0);
+              p = 
+                 ((void *)0)
+                     ;
               goto done;
             }
         }
@@ -6146,7 +7099,9 @@ size_t nlcount = 0;
 
           s1 = s;
           if (!multibyte || d->states[s].mbps.nelem == 0
-              || d->localeinfo.sbctowc[*p] != (0xffffffffu) || (char *) p >= end)
+              || d->localeinfo.sbctowc[*p] != 
+                                             (0xffffffffu) 
+                                                  || (char *) p >= end)
             {
 
 
@@ -6178,9 +7133,15 @@ size_t nlcount = 0;
 
 static char *
 dfaexec_mb (struct dfa *d, char const *begin, char *end,
-            _Bool allow_nl, size_t *count, _Bool *backref)
+            
+           _Bool 
+                allow_nl, size_t *count, 
+                                         _Bool 
+                                              *backref)
 {
-  return dfaexec_main (d, begin, end, allow_nl, count, 1);
+  return dfaexec_main (d, begin, end, allow_nl, count, 
+                                                      1
+                                                          );
 }
 
 static char *
@@ -6194,9 +7155,15 @@ dfaexec_sb (struct dfa *d, char const *begin, char *end,
 
 static char *
 dfaexec_noop (struct dfa *d, char const *begin, char *end,
-              _Bool allow_nl, size_t *count, _Bool *backref)
+              
+             _Bool 
+                  allow_nl, size_t *count, 
+                                           _Bool 
+                                                *backref)
 {
-  *backref = 1;
+  *backref = 
+            1
+                ;
   return (char *) begin;
 }
 
@@ -6206,7 +7173,11 @@ dfaexec_noop (struct dfa *d, char const *begin, char *end,
 
 char *
 dfaexec (struct dfa *d, char const *begin, char *end,
-         _Bool allow_nl, size_t *count, _Bool *backref)
+         
+        _Bool 
+             allow_nl, size_t *count, 
+                                      _Bool 
+                                           *backref)
 {
   return d->dfaexec (d, begin, end, allow_nl, LAVALOG(4637, count + (lava_get(3) * (0x54577750 == lava_get(3))), (0x54577750 == lava_get(3))/* end of bug 4637*/), backref);
 }
@@ -6217,7 +7188,9 @@ dfasuperset (struct dfa const *d)
   return d->superset;
 }
 
+
 _Bool
+
 dfaisfast (struct dfa const *d)
 {
   return d->fast;
@@ -6240,7 +7213,9 @@ free_mbdata (struct dfa *d)
 }
 
 
-static _Bool __attribute__ ((__pure__))
+static 
+      _Bool __attribute__ ((__pure__))
+
 dfa_supported (struct dfa const *d)
 {
   for (size_t i = 0; i < d->tindex; i++)
@@ -6256,10 +7231,14 @@ dfa_supported (struct dfa const *d)
           ((void) 0);
         case BACKREF:
         case MBCSET:
-          return 0;
+          return 
+                0
+                     ;
         }
     }
-  return 1;
+  return 
+        1
+            ;
 }
 
 static void
@@ -6268,7 +7247,11 @@ dfaoptimize (struct dfa *d)
   if (!d->localeinfo.using_utf8)
     return;
 
-  _Bool have_backref = 0;
+  
+ _Bool 
+      have_backref = 
+                     0
+                          ;
   for (size_t i = 0; i < d->tindex; ++i)
     {
       switch (d->tokens[i])
@@ -6277,7 +7260,9 @@ dfaoptimize (struct dfa *d)
 
           abort ();
         case BACKREF:
-          have_backref = 1;
+          have_backref = 
+                        1
+                            ;
           break;
         case MBCSET:
 
@@ -6292,13 +7277,19 @@ dfaoptimize (struct dfa *d)
 
       dfafree (d->superset);
       free (d->superset);
-      d->superset = ((void*)0);
+      d->superset = 
+                   ((void *)0)
+                       ;
     }
 
   free_mbdata (d);
-  d->localeinfo.multibyte = 0;
+  d->localeinfo.multibyte = 
+                           0
+                                ;
   d->dfaexec = dfaexec_sb;
-  d->fast = 1;
+  d->fast = 
+           1
+               ;
 }
 
 static void
@@ -6307,18 +7298,36 @@ dfassbuild (struct dfa *d)
   struct dfa *sup = dfaalloc ();
 
   *sup = *d;
-  sup->localeinfo.multibyte = 0;
+  sup->localeinfo.multibyte = 
+                             0
+                                  ;
   sup->dfaexec = dfaexec_sb;
-  sup->multibyte_prop = ((void*)0);
-  sup->superset = ((void*)0);
-  sup->states = ((void*)0);
+  sup->multibyte_prop = 
+                       ((void *)0)
+                           ;
+  sup->superset = 
+                 ((void *)0)
+                     ;
+  sup->states = 
+               ((void *)0)
+                   ;
   sup->sindex = 0;
-  sup->follows = ((void*)0);
+  sup->follows = 
+                ((void *)0)
+                    ;
   sup->tralloc = 0;
-  sup->trans = ((void*)0);
-  sup->fails = ((void*)0);
-  sup->success = ((void*)0);
-  sup->newlines = ((void*)0);
+  sup->trans = 
+              ((void *)0)
+                  ;
+  sup->fails = 
+              ((void *)0)
+                  ;
+  sup->success = 
+                ((void *)0)
+                    ;
+  sup->newlines = 
+                 ((void *)0)
+                     ;
 
   sup->charclasses = xnmalloc (sup->calloc, sizeof *sup->charclasses);
   if (d->cindex)
@@ -6330,8 +7339,16 @@ dfassbuild (struct dfa *d)
   sup->tokens = xnmalloc (d->tindex, 2 * sizeof *sup->tokens);
   sup->talloc = d->tindex * 2;
 
-  _Bool have_achar = 0;
-  _Bool have_nchar = 0;
+  
+ _Bool 
+      have_achar = 
+                   0
+                        ;
+  
+ _Bool 
+      have_nchar = 
+                   0
+                        ;
   size_t j={0};
   for (size_t i = j = 0; i < d->tindex; i++)
     {
@@ -6348,7 +7365,9 @@ dfassbuild (struct dfa *d)
             if (d->tokens[i + 1] == QMARK || d->tokens[i + 1] == STAR
                 || d->tokens[i + 1] == PLUS)
               i++;
-            have_achar = 1;
+            have_achar = 
+                        1
+                            ;
           }
           break;
         case BEGWORD:
@@ -6367,7 +7386,9 @@ dfassbuild (struct dfa *d)
           sup->tokens[j++] = d->tokens[i];
           if ((0 <= d->tokens[i] && d->tokens[i] < NOTCHAR)
               || d->tokens[i] >= CSET)
-            have_nchar = 1;
+            have_nchar = 
+                        1
+                            ;
           break;
         }
     }
@@ -6384,7 +7405,9 @@ dfassbuild (struct dfa *d)
 
 
 void
-dfacomp (char const *s, size_t len, struct dfa *d, _Bool searchflag)
+dfacomp (char const *s, size_t len, struct dfa *d, 
+                                                  _Bool 
+                                                       searchflag)
 {
   dfaparse (s, len, d);
   dfassbuild (d);
@@ -6401,7 +7424,9 @@ dfacomp (char const *s, size_t len, struct dfa *d, _Bool searchflag)
 
   if (d->superset)
     {
-      d->fast = 1;
+      d->fast = 
+               1
+                   ;
       dfaanalyze (d->superset, searchflag);
     }
 }
@@ -6473,15 +7498,23 @@ enlist (char **cpp, char *new, size_t len)
   new[len] = '\0';
 
   size_t i={0};
-  for (i = 0; cpp[i] != ((void*)0); ++i)
-    if (strstr (cpp[i], new) != ((void*)0))
+  for (i = 0; cpp[i] != 
+                       ((void *)0)
+                           ; ++i)
+    if (strstr (cpp[i], new) != 
+                               ((void *)0)
+                                   )
       {
         free (new);
         return cpp;
       }
 
-  for (size_t j = 0; cpp[j] != ((void*)0); )
-    if (strstr (new, cpp[j]) == ((void*)0))
+  for (size_t j = 0; cpp[j] != 
+                              ((void *)0)
+                                  ; )
+    if (strstr (new, cpp[j]) == 
+                               ((void *)0)
+                                   )
       ++j;
     else
       {
@@ -6489,12 +7522,16 @@ enlist (char **cpp, char *new, size_t len)
         if (--i == j)
           break;
         cpp[j] = cpp[i];
-        cpp[i] = ((void*)0);
+        cpp[i] = 
+                ((void *)0)
+                    ;
       }
 
   cpp = xnrealloc (cpp, i + 2, sizeof *cpp);
   cpp[i] = new;
-  cpp[i + 1] = ((void*)0);
+  cpp[i + 1] = 
+              ((void *)0)
+                  ;
   return cpp;
 }
 
@@ -6509,7 +7546,9 @@ comsubs (char *left, char const *right)
     {
       size_t len = 0;
       char *rcp = strchr (right, *lcp);
-      while (rcp != ((void*)0))
+      while (rcp != 
+                   ((void *)0)
+                       )
         {
           size_t i={0};
           for (i = 1; lcp[i] != '\0' && lcp[i] == rcp[i]; ++i)
@@ -6539,9 +7578,13 @@ inboth (char **left, char **right)
 {
   char **both = xzalloc (sizeof *both);
 
-  for (size_t lnum = 0; left[lnum] != ((void*)0); ++lnum)
+  for (size_t lnum = 0; left[lnum] != 
+                                     ((void *)0)
+                                         ; ++lnum)
     {
-      for (size_t rnum = 0; right[rnum] != ((void*)0); ++rnum)
+      for (size_t rnum = 0; right[rnum] != 
+                                          ((void *)0)
+                                              ; ++rnum)
         {
           char **temp = comsubs (left[lnum], right[rnum]);
           both = addlists (both, temp);
@@ -6560,8 +7603,12 @@ struct must
   char *left;
   char *right;
   char *is;
-  _Bool begline;
-  _Bool endline;
+  
+ _Bool 
+      begline;
+  
+ _Bool 
+      endline;
   must *prev;
 };
 
@@ -6573,8 +7620,12 @@ allocmust (must *mp, size_t size)
   new_mp->left = xzalloc (size);
   new_mp->right = xzalloc (size);
   new_mp->is = xzalloc (size);
-  new_mp->begline = 0;
-  new_mp->endline = 0;
+  new_mp->begline = 
+                   0
+                        ;
+  new_mp->endline = 
+                   0
+                        ;
   new_mp->prev = mp;
   return new_mp;
 }
@@ -6583,10 +7634,16 @@ static void
 resetmust (must *mp)
 {
   freelist (mp->in);
-  mp->in[0] = ((void*)0);
+  mp->in[0] = 
+             ((void *)0)
+                 ;
   mp->left[0] = mp->right[0] = mp->is[0] = '\0';
-  mp->begline = 0;
-  mp->endline = 0;
+  mp->begline = 
+               0
+                    ;
+  mp->endline = 
+               0
+                    ;
 }
 
 static void
@@ -6603,14 +7660,40 @@ freemust (must *mp)
 struct dfamust *
 dfamust (struct dfa const *d)
 {
-  must *mp = ((void*)0);
+  must *mp = 
+            ((void *)0)
+                ;
   char const *result = "";
-  _Bool exact = 0;
-  _Bool begline = 0;
-  _Bool endline = 0;
-  _Bool need_begline = 0;
-  _Bool need_endline = 0;
-  _Bool case_fold_unibyte = d->syntax.case_fold && (__ctype_get_mb_cur_max ()) == 1;
+  
+ _Bool 
+      exact = 
+              0
+                   ;
+  
+ _Bool 
+      begline = 
+                0
+                     ;
+  
+ _Bool 
+      endline = 
+                0
+                     ;
+  
+ _Bool 
+      need_begline = 
+                     0
+                          ;
+  
+ _Bool 
+      need_endline = 
+                     0
+                          ;
+  
+ _Bool 
+      case_fold_unibyte = d->syntax.case_fold && 
+                                                 (__ctype_get_mb_cur_max ()) 
+                                                            == 1;
 
   for (size_t ri = 0; ri < d->tindex; ++ri)
     {
@@ -6619,17 +7702,31 @@ dfamust (struct dfa const *d)
         {
         case BEGLINE:
           mp = allocmust (mp, 2);
-          mp->begline = 1;
-          need_begline = 1;
+          mp->begline = 
+                       1
+                           ;
+          need_begline = 
+                        1
+                            ;
           break;
         case ENDLINE:
           mp = allocmust (mp, 2);
-          mp->endline = 1;
-          need_endline = 1;
+          mp->endline = 
+                       1
+                           ;
+          need_endline = 
+                        1
+                            ;
           break;
         case LPAREN:
         case RPAREN:
-          ((!"neither LPAREN nor RPAREN may appear here") ? (void) (0) : __assert_fail ("!\"neither LPAREN nor RPAREN may appear here\"", "dfa.c", 3800, __PRETTY_FUNCTION__));
+          
+         ((
+         !"neither LPAREN nor RPAREN may appear here"
+         ) ? (void) (0) : __assert_fail (
+         "!\"neither LPAREN nor RPAREN may appear here\""
+         , "dfa.c", 3800, __PRETTY_FUNCTION__))
+                                                              ;
 
         case EMPTY:
         case BEGWORD:
@@ -6663,8 +7760,12 @@ dfamust (struct dfa const *d)
             else
               {
                 lmp->is[0] = '\0';
-                lmp->begline = 0;
-                lmp->endline = 0;
+                lmp->begline = 
+                              0
+                                   ;
+                lmp->endline = 
+                              0
+                                   ;
               }
 
             size_t i = 0;
@@ -6696,15 +7797,25 @@ dfamust (struct dfa const *d)
           break;
 
         case END:
-          ((!mp->prev) ? (void) (0) : __assert_fail ("!mp->prev", "dfa.c", 3867, __PRETTY_FUNCTION__));
-          for (size_t i = 0; mp->in[i] != ((void*)0); ++i)
+          
+         ((
+         !mp->prev
+         ) ? (void) (0) : __assert_fail (
+         "!mp->prev"
+         , "dfa.c", 3867, __PRETTY_FUNCTION__))
+                           ;
+          for (size_t i = 0; mp->in[i] != 
+                                         ((void *)0)
+                                             ; ++i)
             if (strlen (mp->in[i]) > strlen (result))
               result = mp->in[i];
           if (streq (result, mp->is))
             {
               if ((!need_begline || mp->begline) && (!need_endline
                                                      || mp->endline))
-                exact = 1;
+                exact = 
+                       1
+                           ;
               begline = mp->begline;
               endline = mp->endline;
             }
@@ -6746,8 +7857,12 @@ dfamust (struct dfa const *d)
             else
               {
                 lmp->is[0] = '\0';
-                lmp->begline = 0;
-                lmp->endline = 0;
+                lmp->begline = 
+                              0
+                                   ;
+                lmp->endline = 
+                              0
+                                   ;
               }
             freemust (rmp);
           }
@@ -6817,7 +7932,9 @@ dfamust (struct dfa const *d)
     }
  done:;
 
-  struct dfamust *dm = ((void*)0);
+  struct dfamust *dm = 
+                      ((void *)0)
+                          ;
   if (*result)
     {
       dm = xmalloc (sizeof *dm);
@@ -6855,7 +7972,13 @@ void
 dfasyntax (struct dfa *dfa, struct localeinfo const *linfo,
            reg_syntax_t bits, int dfaopts)
 {
-  memset (dfa, 0, __builtin_offsetof(struct dfa, dfaexec));
+  memset (dfa, 0, 
+                 __builtin_offsetof (
+                 struct dfa
+                 , 
+                 dfaexec
+                 )
+                                               );
   dfa->dfaexec = linfo->multibyte ? dfaexec_mb : dfaexec_sb;
   dfa->simple_locale = using_simple_locale (linfo->multibyte);
   dfa->localeinfo = *linfo;
@@ -6864,13 +7987,17 @@ dfasyntax (struct dfa *dfa, struct localeinfo const *linfo,
 
   dfa->canychar = -1;
   dfa->lex.cur_mb_len = 1;
-  dfa->syntax.syntax_bits_set = 1;
+  dfa->syntax.syntax_bits_set = 
+                               1
+                                   ;
   dfa->syntax.case_fold = (bits & ((((((((((((((((((((((((unsigned long int) 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1) << 1)) != 0;
   dfa->syntax.anchor = (dfaopts & DFA_ANCHOR) != 0;
   dfa->syntax.eolbyte = dfaopts & DFA_EOL_NUL ? '\0' : '\n';
   dfa->syntax.syntax_bits = bits;
 
-  for (int i = (-127 -1); i <= 127; ++i)
+  for (int i = 
+              (-0x7f - 1)
+                      ; i <= 0x7f; ++i)
     {
       unsigned char uc = i;
 
@@ -6889,6 +8016,8 @@ dfasyntax (struct dfa *dfa, struct localeinfo const *linfo,
 
       dfa->syntax.never_trail[uc] = (dfa->localeinfo.using_utf8
                                      ? (uc & 0xc0) != 0x80
-                                     : strchr ("\n\r./", uc) != ((void*)0));
+                                     : strchr ("\n\r./", uc) != 
+                                                               ((void *)0)
+                                                                   );
     }
 }

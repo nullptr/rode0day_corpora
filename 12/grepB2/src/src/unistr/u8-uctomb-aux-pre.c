@@ -1213,7 +1213,7 @@ extern gl_uint32_t *
 int
 u8_uctomb_aux (gl_uint8_t *s, ucs4_t uc, int n)
 {
-  int count;
+  int count={0};
 
   if (uc < 0x80)
 

@@ -2447,8 +2447,8 @@ extern int glthread_once_singlethreaded (pthread_once_t *once_control);
 int
 glthread_rwlock_init_for_glibc (pthread_rwlock_t *lock)
 {
-  pthread_rwlockattr_t attributes;
-  int err;
+  pthread_rwlockattr_t attributes={0};
+  int err={0};
 
   err = pthread_rwlockattr_init (&attributes);
   if (err != 0)
@@ -2469,8 +2469,8 @@ glthread_rwlock_init_for_glibc (pthread_rwlock_t *lock)
 int
 glthread_recursive_lock_init_multithreaded (gl_recursive_lock_t *lock)
 {
-  pthread_mutexattr_t attributes;
-  int err;
+  pthread_mutexattr_t attributes={0};
+  int err={0};
 
   err = pthread_mutexattr_init (&attributes);
   if (err != 0)
