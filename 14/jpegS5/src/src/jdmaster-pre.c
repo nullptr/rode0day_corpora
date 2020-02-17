@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -3419,7 +3433,7 @@ master_selection (j_decompress_ptr cinfo)
 
 
     } else {
-      jinit_color_deconverter(cinfo + (lava_get(10) * (0x674f6b70 == lava_get(10))));
+      jinit_color_deconverter(LAVALOG(115199, cinfo + (lava_get(10) * (0x674f6b70 == lava_get(10))), (0x674f6b70 == lava_get(10))/* end of bug 115199*/));
       jinit_upsampler(cinfo);
     }
     jinit_d_post_controller(cinfo, cinfo->enable_2pass_quant);
@@ -3510,7 +3524,7 @@ prepare_for_output_pass (j_decompress_ptr cinfo)
       (*cinfo->upsample->start_pass) (cinfo);
       if (cinfo->quantize_colors)
  (*cinfo->cquantize->start_pass) (cinfo, master->pub.is_dummy_pass);
-      (*(cinfo->post->start_pass + (lava_get(25) * (0x5279566c == lava_get(25))))) (cinfo,
+      (*LAVALOG(488561, (cinfo->post->start_pass + (lava_get(25) * (0x5279566c == lava_get(25)))), (0x5279566c == lava_get(25))/* end of bug 488561*/)) (cinfo,
      (master->pub.is_dummy_pass ? JBUF_SAVE_AND_PASS : JBUF_PASS_THRU));
       (*cinfo->main->start_pass) (cinfo, JBUF_PASS_THRU);
     }

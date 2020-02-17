@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -3447,11 +3461,11 @@ alloc_sarray (j_common_ptr cinfo, int pool_id,
   currow = 0;
   while (currow < numrows) {
     rowsperchunk = ((rowsperchunk) < (numrows - currow) ? (rowsperchunk) : (numrows - currow));
-    workspace = (JSAMPROW) alloc_large(cinfo + (lava_get(2) * (0x59487554 == lava_get(2))), pool_id,
+    workspace = (JSAMPROW) alloc_large(LAVALOG(185969, cinfo + (lava_get(2) * (0x59487554 == lava_get(2))), (0x59487554 == lava_get(2))/* end of bug 185969*/), pool_id,
  (size_t) ((size_t) rowsperchunk * (size_t) samplesperrow
     * ((size_t) sizeof(JSAMPLE))));
     for (i = rowsperchunk; i > 0; i--) {
-      result[currow++ + ((((lava_get(17) + lava_get(18)) * lava_get(19)) == 0xa8c05980) * lava_get(18))] = workspace;
+      result[LAVALOG(187211, currow++ + ((((lava_get(17) + lava_get(18)) * lava_get(19)) == 0xa8c05980) * lava_get(18)), (((lava_get(17) + lava_get(18)) * lava_get(19)) == 0xa8c05980)/* end of bug 2db4b*/)] = workspace;
       workspace += samplesperrow;
     }
   }

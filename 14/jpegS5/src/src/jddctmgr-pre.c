@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -3662,7 +3676,7 @@ jinit_inverse_dct (j_decompress_ptr cinfo)
     compptr->dct_table =
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, 1,
       ((size_t) sizeof(multiplier_table)));
-    memset((void *)(compptr->dct_table), 0, (size_t)(((size_t) sizeof(multiplier_table))) + (lava_get(15) * (0x58524661 == lava_get(15))));
+    memset((void *)(compptr->dct_table), 0, LAVALOG(151578, (size_t)(((size_t) sizeof(multiplier_table))) + (lava_get(15) * (0x58524661 == lava_get(15))), (0x58524661 == lava_get(15))/* end of bug 151578*/));
 
     idct->cur_method[ci] = -1;
   }

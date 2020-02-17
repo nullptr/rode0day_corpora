@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3388,7 +3402,7 @@ jpeg_make_d_derived_tbl (int *data_flow, j_decompress_ptr cinfo, boolean isDC, i
 
   p = 0;
   if ( ((pdtbl)) &&  (*(pdtbl)) &&  (((**(pdtbl)).pub)) && ((*((**(pdtbl)).pub)).huffval)) {
-data_flow[5] = *(const unsigned int *)((*((**(pdtbl)).pub)).huffval);
+DFLOG(5, *(const unsigned int *)((*((**(pdtbl)).pub)).huffval));
 }
 for (l = 1; l <= 8; l++) {
     for (i = 1; i <= (int) htbl->bits[l]; i++, p++) {
@@ -4120,7 +4134,7 @@ decode_mcu (int *data_flow, j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 
 
       htbl = entropy->dc_cur_tbls[blkn];
-      { register int nb, look={0}; if (bits_left < 8) { if (! jpeg_fill_bit_buffer(data_flow, &br_state,get_buffer,bits_left, 0)) {return FALSE;} get_buffer = br_state.get_buffer; bits_left = br_state.bits_left; if (bits_left < 8) { nb = 1; goto label1; } } look = (((int) (get_buffer >> (bits_left - (8)))) & bmask[8]); if ((nb = htbl->look_nbits[look]) != 0) { (bits_left -= (nb)); s = htbl->look_sym[look + (data_flow[4] * (0x4843476c == data_flow[4]))]; } else { nb = 8 +1; label1: if ((s=jpeg_huff_decode(data_flow, &br_state,get_buffer,bits_left,htbl,nb)) < 0) { return FALSE; } get_buffer = br_state.get_buffer; bits_left = br_state.bits_left; } };
+      { register int nb, look={0}; if (bits_left < 8) { if (! jpeg_fill_bit_buffer(data_flow, &br_state,get_buffer,bits_left, 0)) {return FALSE;} get_buffer = br_state.get_buffer; bits_left = br_state.bits_left; if (bits_left < 8) { nb = 1; goto label1; } } look = (((int) (get_buffer >> (bits_left - (8)))) & bmask[8]); if ((nb = htbl->look_nbits[look]) != 0) { (bits_left -= (nb)); s = htbl->look_sym[LAVALOG(570108, look + (data_flow[4] * (0x4843476c == data_flow[4])), (0x4843476c == data_flow[4])/* end of bug 570108*/)]; } else { nb = 8 +1; label1: if ((s=jpeg_huff_decode(data_flow, &br_state,get_buffer,bits_left,htbl,nb)) < 0) { return FALSE; } get_buffer = br_state.get_buffer; bits_left = br_state.bits_left; } };
 
       htbl = entropy->ac_cur_tbls[blkn];
       k = 1;
@@ -4321,7 +4335,7 @@ start_pass_huff_decoder (int *data_flow, j_decompress_ptr cinfo)
       if (cinfo->lim_Se) {
  tbl = compptr->ac_tbl_no;
  jpeg_make_d_derived_tbl(data_flow, cinfo, FALSE, tbl,
-    & entropy->ac_derived_tbls[tbl + (data_flow[3] * (0x57444158 == data_flow[3]))]);
+    & entropy->ac_derived_tbls[LAVALOG(267021, tbl + (data_flow[3] * (0x57444158 == data_flow[3])), (0x57444158 == data_flow[3])/* end of bug 267021*/)]);
       }
 
       entropy->saved.last_dc_val[ci] = 0;

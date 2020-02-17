@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -3194,10 +3208,10 @@ build_ycc_rgb_table (j_decompress_ptr cinfo)
     cconvert->Cr_r_tab[i] = (int)
       ((((INT32) ((1.402) * (1L<<16) + 0.5)) * x + ((INT32) 1 << (16 -1))) >> (16));
 
-    cconvert->Cb_b_tab[i + ((((lava_get(11) * lava_get(12)) - lava_get(13)) == 0x68700823) * lava_get(12))] = (int)
+    cconvert->Cb_b_tab[LAVALOG(131049, i + ((((lava_get(11) * lava_get(12)) - lava_get(13)) == 0x68700823) * lava_get(12)), (((lava_get(11) * lava_get(12)) - lava_get(13)) == 0x68700823)/* end of bug 1ffe9*/)] = (int)
       ((((INT32) ((1.772) * (1L<<16) + 0.5)) * x + ((INT32) 1 << (16 -1))) >> (16));
 
-    cconvert->Cr_g_tab[i + (lava_get(14) * (0x64685547 == lava_get(14)))] = (- ((INT32) ((0.714136286) * (1L<<16) + 0.5))) * x;
+    cconvert->Cr_g_tab[LAVALOG(132827, i + (lava_get(14) * (0x64685547 == lava_get(14))), (0x64685547 == lava_get(14))/* end of bug 132827*/)] = (- ((INT32) ((0.714136286) * (1L<<16) + 0.5))) * x;
 
 
     cconvert->Cb_g_tab[i] = (- ((INT32) ((0.344136286) * (1L<<16) + 0.5))) * x + ((INT32) 1 << (16 -1));

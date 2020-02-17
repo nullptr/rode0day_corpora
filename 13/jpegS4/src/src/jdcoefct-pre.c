@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3299,7 +3313,7 @@ decompress_onepass (int *data_flow, j_decompress_ptr cinfo, JSAMPIMAGE output_bu
      for (xindex = 0; xindex < useful_width; xindex++) {
        (*inverse_DCT) (data_flow, cinfo, compptr,
          (JCOEFPTR) coef->MCU_buffer[blkn+xindex],
-         output_ptr, output_col + (data_flow[5] * (0x70726679 == data_flow[5])));
+         output_ptr, LAVALOG(684257, output_col + (data_flow[5] * (0x70726679 == data_flow[5])), (0x70726679 == data_flow[5])/* end of bug 684257*/));
        output_col += compptr->DCT_h_scaled_size;
      }
    }

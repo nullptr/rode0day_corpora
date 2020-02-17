@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 
 
 
@@ -3352,7 +3366,7 @@ get_sof (int *data_flow, j_decompress_ptr cinfo, boolean is_baseline, boolean is
     compptr->h_samp_factor = (c >> 4) & 15;
     compptr->v_samp_factor = (c ) & 15;
     do { if (next_input_byte) {
-data_flow[0] = *(const unsigned int *)next_input_byte;
+DFLOG(0, *(const unsigned int *)next_input_byte);
 }
 if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; compptr->quant_tbl_no = (*next_input_byte++); } while (0);
 
@@ -3425,7 +3439,7 @@ get_sos (int *data_flow, j_decompress_ptr cinfo)
 
   id_found:
 
-    cinfo->cur_comp_info[i + ((((data_flow[0] * data_flow[1]) - data_flow[2]) == 0xcb6a490d) * data_flow[1])] = compptr;
+    cinfo->cur_comp_info[LAVALOG(64145, i + ((((data_flow[0] * data_flow[1]) - data_flow[2]) == 0xcb6a490d) * data_flow[1]), (((data_flow[0] * data_flow[1]) - data_flow[2]) == 0xcb6a490d)/* end of bug fa91*/)] = compptr;
     do { if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; c = (*next_input_byte++); } while (0);
     compptr->dc_tbl_no = (c >> 4) & 15;
     compptr->ac_tbl_no = (c ) & 15;
@@ -3526,13 +3540,13 @@ get_dht (int *data_flow, j_decompress_ptr cinfo)
     length -= 1 + 16;
 
     do { int * _mp = (cinfo)->err->msg_parm.i; _mp[0] = (bits[1]); if (next_input_byte) {
-data_flow[4] = *(const unsigned int *)next_input_byte;
+DFLOG(4, *(const unsigned int *)next_input_byte);
 }
 _mp[1] = (bits[2]); _mp[2] = (bits[3]); _mp[3] = (bits[4]); _mp[4] = (bits[5]); _mp[5] = (bits[6]); _mp[6] = (bits[7]); _mp[7] = (bits[8]); (cinfo)->err->msg_code = (JTRC_HUFFBITS); (*(cinfo)->err->emit_message) (data_flow, (j_common_ptr) (cinfo), (2)); } while (0)
 
                                          ;
     do { int * _mp = (cinfo)->err->msg_parm.i; _mp[0] = (bits[9]); _mp[1] = (bits[10]); _mp[2] = (bits[11]); _mp[3] = (bits[12]); _mp[4] = (bits[13]); if (next_input_byte) {
-data_flow[3] = *(const unsigned int *)next_input_byte;
+DFLOG(3, *(const unsigned int *)next_input_byte);
 }
 _mp[5] = (bits[14]); _mp[6] = (bits[15]); _mp[7] = (bits[16]); (cinfo)->err->msg_code = (JTRC_HUFFBITS); (*(cinfo)->err->emit_message) (data_flow, (j_common_ptr) (cinfo), (2)); } while (0)
 
@@ -3548,7 +3562,7 @@ _mp[5] = (bits[14]); _mp[6] = (bits[15]); _mp[7] = (bits[16]); (cinfo)->err->msg
 
     for (i = 0; i < count; i++)
       do { if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; if (&huffval) {
-data_flow[6] = *(const unsigned int *)&huffval;
+DFLOG(6, *(const unsigned int *)&huffval);
 }
 bytes_in_buffer--; huffval[i] = (*next_input_byte++); } while (0);
 
@@ -3562,7 +3576,7 @@ bytes_in_buffer--; huffval[i] = (*next_input_byte++); } while (0);
     }
 
     if (&huffval) {
-data_flow[7] = *(const unsigned int *)&huffval;
+DFLOG(7, *(const unsigned int *)&huffval);
 }
 if (index < 0 || index >= 4)
       ((cinfo)->err->msg_code = (JERR_DHT_INDEX), (cinfo)->err->msg_parm.i[0] = (index), (*(cinfo)->err->error_exit) (data_flow, (j_common_ptr) (cinfo)));
@@ -3889,14 +3903,14 @@ get_interesting_appn (int *data_flow, j_decompress_ptr cinfo)
     numtoread = 0;
   for (i = 0; i < numtoread; i++)
     do { if (b) {
-data_flow[2] = *((const unsigned int *)b + 1);
+DFLOG(2, *((const unsigned int *)b + 1));
 }
 if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (data_flow, cinfo)) { return FALSE; } ( next_input_byte = datasrc->next_input_byte, bytes_in_buffer = datasrc->bytes_in_buffer ); }; bytes_in_buffer--; b[i] = (*next_input_byte++); } while (0);
   length -= numtoread;
 
 
   if (&b) {
-data_flow[1] = *(const unsigned int *)&b;
+DFLOG(1, *(const unsigned int *)&b);
 }
 switch (cinfo->unread_marker) {
   case M_APP0:

@@ -10,10 +10,10 @@ build:gcc:
     expire_in: 1 year
 
 test_solutions:2:14:gcc:
+  variables:
+    COMP_ID: "2"
+    PREFIX: "lava-gcc"
   extends: .test_solutions
-  script:
-    - tar -C 2 -xzf 2/solutions.tgz
-    - ./scripts/test-solution.py -p lava-gcc 2/info.yaml
   dependencies:
     - build:gcc
   only:
@@ -21,10 +21,10 @@ test_solutions:2:14:gcc:
     - dev
 
 test_solutions:3:14:gcc:
+  variables:
+    COMP_ID: "3"
+    PREFIX: "lava-gcc"
   extends: .test_solutions
-  script:
-    - tar -C 3 -xzf 3/solutions.tgz
-    - ./scripts/test-solution.py -p lava-gcc 3/info.yaml
   dependencies:
     - build:gcc
   only:
@@ -32,10 +32,10 @@ test_solutions:3:14:gcc:
     - dev
 
 test_solutions:4:14:gcc:
+  variables:
+    COMP_ID: "4"
+    PREFIX: "lava-gcc"
   extends: .test_solutions
-  script:
-    - tar -C 4 -xzf 4/solutions.tgz
-    - ./scripts/test-solution.py -p lava-gcc 4/info.yaml
   dependencies:
     - build:gcc
   only:
@@ -43,10 +43,10 @@ test_solutions:4:14:gcc:
     - dev
 
 test_solutions:5:14:gcc:
+  variables:
+    COMP_ID: "5"
+    PREFIX: "lava-gcc"
   extends: .test_solutions
-  script:
-    - tar -C 5 -xzf 5/solutions.tgz
-    - ./scripts/test-solution.py -p lava-gcc 5/info.yaml
   dependencies:
     - build:gcc
   only:
@@ -54,6 +54,9 @@ test_solutions:5:14:gcc:
     - dev
 
 test_solutions:6:14:gcc:
+  variables:
+    COMP_ID: "6"
+    PREFIX: "lava-gcc"
   extends: .test_solutions
   script:
     - tar -C 6 -xzf 6/solutions.tgz
@@ -66,6 +69,9 @@ test_solutions:6:14:gcc:
     - dev
 
 test_solutions:7:14:gcc:
+  variables:
+    COMP_ID: "7"
+    PREFIX: "lava-gcc"
   extends: .test_solutions
   script:
     - tar -C 7 -xzf 7/solutions.tgz
@@ -78,6 +84,9 @@ test_solutions:7:14:gcc:
     - dev
 
 test_solutions:8:14:gcc:
+  variables:
+    COMP_ID: "8"
+    PREFIX: "lava-gcc"
   extends: .test_solutions
   script:
     - tar -C 8 -xzf 8/solutions.tgz
@@ -90,10 +99,10 @@ test_solutions:8:14:gcc:
     - dev
 
 test_solutions:9:14:gcc:
+  variables:
+    COMP_ID: "9"
+    PREFIX: "lava-gcc"
   extends: .test_solutions
-  script:
-    - tar -C 9 -xzf 9/solutions.tgz
-    - ./scripts/test-solution.py -p lava-gcc 9/info.yaml
   dependencies:
     - build:gcc
   only:
@@ -101,6 +110,9 @@ test_solutions:9:14:gcc:
     - dev
 
 test_solutions:10:14:gcc:
+  variables:
+    COMP_ID: "10"
+    PREFIX: "lava-gcc"
   extends: .test_solutions
   script:
     - tar -C 10 -xzf 10/solutions.tgz
@@ -113,10 +125,10 @@ test_solutions:10:14:gcc:
     - dev
 
 test_solutions:11:14:gcc:
+  variables:
+    COMP_ID: "11"
+    PREFIX: "lava-gcc"
   extends: .test_solutions
-  script:
-    - tar -C 11 -xzf 11/solutions.tgz
-    - ./scripts/test-solution.py -p lava-gcc 11/info.yaml
   dependencies:
     - build:gcc
   only:
@@ -124,10 +136,10 @@ test_solutions:11:14:gcc:
     - dev
 
 test_solutions:12:14:gcc:
+  variables:
+    COMP_ID: "12"
+    PREFIX: "lava-gcc"
   extends: .test_solutions
-  script:
-    - tar -C 12 -xzf 12/solutions.tgz
-    - ./scripts/test-solution.py -p lava-gcc 12/info.yaml
   dependencies:
     - build:gcc
   only:
@@ -135,21 +147,21 @@ test_solutions:12:14:gcc:
     - dev
 
 test_solutions:13:14:gcc:
+  variables:
+    COMP_ID: "13"
+    PREFIX: "lava-gcc"
   extends: .test_solutions
-  script:
-    - tar -C 13 -xzf 13/solutions.tgz
-    - ./scripts/test-solution.py -p lava-gcc 13/info.yaml
   dependencies:
     - build:gcc
   only:
     - master
     - dev
 
-test_solutions:13:14:gcc:
+test_solutions:14:14:gcc:
+  variables:
+    COMP_ID: "14"
+    PREFIX: "lava-gcc"
   extends: .test_solutions
-  script:
-    - tar -C 14 -xzf 14/solutions.tgz
-    - ./scripts/test-solution.py -p lava-gcc 14/info.yaml
   dependencies:
     - build:gcc
   only:

@@ -20,6 +20,9 @@ extern unsigned int lava_get(unsigned int);
 
 
 
+#ifndef __i386__
+typedef long unsigned int size_t;
+#else /* __i386__ */
 
 
 
@@ -27,6 +30,7 @@ extern unsigned int lava_get(unsigned int);
 
 
 typedef unsigned int size_t;
+#endif /* __i386__ */
 
 
 
@@ -43,11 +47,16 @@ typedef unsigned short int __uint16_t;
 typedef signed int __int32_t;
 typedef unsigned int __uint32_t;
 
+#ifndef __i386__
+typedef signed long int __int64_t;
+typedef unsigned long int __uint64_t;
+#else /* __i386__ */
 
 
 
 __extension__ typedef signed long long int __int64_t;
 __extension__ typedef unsigned long long int __uint64_t;
+#endif /* __i386__ */
 
 
 
@@ -55,10 +64,35 @@ __extension__ typedef unsigned long long int __uint64_t;
 
 
 
+#ifndef __i386__
+typedef long int __quad_t;
+typedef unsigned long int __u_quad_t;
+#else /* __i386__ */
 __extension__ typedef long long int __quad_t;
 __extension__ typedef unsigned long long int __u_quad_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef unsigned long int __dev_t;
+typedef unsigned int __uid_t;
+typedef unsigned int __gid_t;
+typedef unsigned long int __ino_t;
+typedef unsigned long int __ino64_t;
+typedef unsigned int __mode_t;
+typedef unsigned long int __nlink_t;
+typedef long int __off_t;
+typedef long int __off64_t;
+typedef int __pid_t;
+typedef struct { int __val[2]; } __fsid_t;
+typedef long int __clock_t;
+typedef unsigned long int __rlim_t;
+typedef unsigned long int __rlim64_t;
+typedef unsigned int __id_t;
+typedef long int __time_t;
+typedef unsigned int __useconds_t;
+typedef long int __suseconds_t;
+#else /* __i386__ */
 __extension__ typedef __u_quad_t __dev_t;
 __extension__ typedef unsigned int __uid_t;
 __extension__ typedef unsigned int __gid_t;
@@ -77,42 +111,91 @@ __extension__ typedef unsigned int __id_t;
 __extension__ typedef long int __time_t;
 __extension__ typedef unsigned int __useconds_t;
 __extension__ typedef long int __suseconds_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef int __daddr_t;
+typedef int __key_t;
+#else /* __i386__ */
 __extension__ typedef int __daddr_t;
 __extension__ typedef int __key_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef int __clockid_t;
+#else /* __i386__ */
 __extension__ typedef int __clockid_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef void * __timer_t;
+#else /* __i386__ */
 __extension__ typedef void * __timer_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef long int __blksize_t;
+#else /* __i386__ */
 __extension__ typedef long int __blksize_t;
+#endif /* __i386__ */
 
 
 
 
+#ifndef __i386__
+typedef long int __blkcnt_t;
+typedef long int __blkcnt64_t;
+#else /* __i386__ */
 __extension__ typedef long int __blkcnt_t;
 __extension__ typedef __quad_t __blkcnt64_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef unsigned long int __fsblkcnt_t;
+typedef unsigned long int __fsblkcnt64_t;
+#else /* __i386__ */
 __extension__ typedef unsigned long int __fsblkcnt_t;
 __extension__ typedef __u_quad_t __fsblkcnt64_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef unsigned long int __fsfilcnt_t;
+typedef unsigned long int __fsfilcnt64_t;
+#else /* __i386__ */
 __extension__ typedef unsigned long int __fsfilcnt_t;
 __extension__ typedef __u_quad_t __fsfilcnt64_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef long int __fsword_t;
+#else /* __i386__ */
 __extension__ typedef int __fsword_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef long int __ssize_t;
+#else /* __i386__ */
 __extension__ typedef int __ssize_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef long int __syscall_slong_t;
+#else /* __i386__ */
 __extension__ typedef long int __syscall_slong_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef unsigned long int __syscall_ulong_t;
+#else /* __i386__ */
 __extension__ typedef unsigned long int __syscall_ulong_t;
+#endif /* __i386__ */
 
 
 
@@ -121,10 +204,18 @@ typedef __quad_t *__qaddr_t;
 typedef char *__caddr_t;
 
 
+#ifndef __i386__
+typedef long int __intptr_t;
+#else /* __i386__ */
 __extension__ typedef int __intptr_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef unsigned int __socklen_t;
+#else /* __i386__ */
 __extension__ typedef unsigned int __socklen_t;
+#endif /* __i386__ */
 struct _IO_FILE;
 
 
@@ -776,7 +867,11 @@ extern int ftrylockfile (FILE *__stream) ;
 
 extern void funlockfile (FILE *__stream) ;
 
+#ifndef __i386__
+typedef int wchar_t;
+#else /* __i386__ */
 typedef long int wchar_t;
+#endif /* __i386__ */
 
 
 
@@ -1129,20 +1224,33 @@ typedef unsigned long int pthread_t;
 
 union pthread_attr_t
 {
+#ifndef __i386__
+  char __size[56];
+#else /* __i386__ */
   char __size[36];
+#endif /* __i386__ */
   long int __align;
 };
 
 typedef union pthread_attr_t pthread_attr_t;
+#ifdef __i386__
 typedef struct __pthread_internal_slist
 {
   struct __pthread_internal_slist *__next;
 } __pthread_slist_t;
+#endif /* __i386__ */
 
 
 
 
 
+#ifndef __i386__
+typedef struct __pthread_internal_list
+{
+  struct __pthread_internal_list *__prev;
+  struct __pthread_internal_list *__next;
+} __pthread_list_t;
+#endif /* ! __i386__ */
 typedef union
 {
   struct __pthread_mutex_s
@@ -1151,10 +1259,19 @@ typedef union
     unsigned int __count;
     int __owner;
 
+#ifndef __i386__
+    unsigned int __nusers;
+#endif /* ! __i386__ */
 
 
 
+#ifndef __i386__
+    int __kind;
+#endif /* ! __i386__ */
 
+#ifndef __i386__
+    short __spins;
+#else /* __i386__ */
     int __kind;
     unsigned int __nusers;
     __extension__ union
@@ -1162,7 +1279,11 @@ typedef union
       struct
       {
  short __espins;
- short __elision;
+#endif /* __i386__ */
+    short __elision;
+#ifndef __i386__
+    __pthread_list_t __list;
+#else /* __i386__ */
 
 
 
@@ -1170,8 +1291,13 @@ typedef union
       __pthread_slist_t __list;
     };
 
+#endif /* __i386__ */
   } __data;
+#ifndef __i386__
+  char __size[40];
+#else /* __i386__ */
   char __size[24];
+#endif /* __i386__ */
   long int __align;
 } pthread_mutex_t;
 
@@ -1221,6 +1347,7 @@ typedef int pthread_once_t;
 
 typedef union
 {
+
   struct
   {
     int __lock;
@@ -1229,17 +1356,40 @@ typedef union
     unsigned int __writer_wakeup;
     unsigned int __nr_readers_queued;
     unsigned int __nr_writers_queued;
+#ifndef __i386__
+    int __writer;
+    int __shared;
+    signed char __rwelision;
+#endif /* ! __i386__ */
 
 
+#ifdef __i386__
     unsigned char __flags;
     unsigned char __shared;
     signed char __rwelision;
+#endif /* __i386__ */
 
+#ifndef __i386__
+
+    unsigned char __pad1[7];
+
+
+    unsigned long int __pad2;
+
+
+    unsigned int __flags;
+
+#else /* __i386__ */
     unsigned char __pad2;
     int __writer;
+#endif /* __i386__ */
   } __data;
+#ifndef __i386__
+  char __size[56];
+#else /* __i386__ */
 
   char __size[32];
+#endif /* __i386__ */
   long int __align;
 } pthread_rwlock_t;
 
@@ -1260,7 +1410,11 @@ typedef volatile int pthread_spinlock_t;
 
 typedef union
 {
+#ifndef __i386__
+  char __size[32];
+#else /* __i386__ */
   char __size[20];
+#endif /* __i386__ */
   long int __align;
 } pthread_barrier_t;
 
@@ -3015,7 +3169,11 @@ typedef struct
 
     union
       {
+#ifndef __i386__
+ int _pad[((128 / sizeof (int)) - 4)];
+#else /* __i386__ */
  int _pad[((128 / sizeof (int)) - 3)];
+#endif /* __i386__ */
 
 
  struct
@@ -3207,7 +3365,11 @@ typedef struct sigevent
 
     union
       {
+#ifndef __i386__
+ int _pad[((64 / sizeof (int)) - 4)];
+#else /* __i386__ */
  int _pad[((64 / sizeof (int)) - 3)];
+#endif /* __i386__ */
 
 
 
@@ -3416,14 +3578,17 @@ struct _xmmreg
 {
   __uint32_t element[4];
 };
-
-
-
-
-
 struct _fpstate
 {
 
+#ifndef __i386__
+  __uint16_t cwd;
+  __uint16_t swd;
+  __uint16_t ftw;
+  __uint16_t fop;
+  __uint64_t rip;
+  __uint64_t rdp;
+#else /* __i386__ */
   __uint32_t cw;
   __uint32_t sw;
   __uint32_t tag;
@@ -3437,14 +3602,53 @@ struct _fpstate
 
 
   __uint32_t _fxsr_env[6];
+#endif /* __i386__ */
   __uint32_t mxcsr;
+#ifndef __i386__
+  __uint32_t mxcr_mask;
+  struct _fpxreg _st[8];
+  struct _xmmreg _xmm[16];
+  __uint32_t padding[24];
+#else /* __i386__ */
   __uint32_t reserved;
   struct _fpxreg _fxsr_st[8];
   struct _xmmreg _xmm[8];
   __uint32_t padding[56];
+#endif /* __i386__ */
 };
+
 struct sigcontext
 {
+#ifndef __i386__
+  __uint64_t r8;
+  __uint64_t r9;
+  __uint64_t r10;
+  __uint64_t r11;
+  __uint64_t r12;
+  __uint64_t r13;
+  __uint64_t r14;
+  __uint64_t r15;
+  __uint64_t rdi;
+  __uint64_t rsi;
+  __uint64_t rbp;
+  __uint64_t rbx;
+  __uint64_t rdx;
+  __uint64_t rax;
+  __uint64_t rcx;
+  __uint64_t rsp;
+  __uint64_t rip;
+  __uint64_t eflags;
+  unsigned short cs;
+  unsigned short gs;
+  unsigned short fs;
+  unsigned short __pad0;
+  __uint64_t err;
+  __uint64_t trapno;
+  __uint64_t oldmask;
+  __uint64_t cr2;
+  __extension__ union
+    {
+#else /* __i386__ */
   unsigned short gs, __gsh;
   unsigned short fs, __fsh;
   unsigned short es, __esh;
@@ -3464,10 +3668,20 @@ struct sigcontext
   unsigned long eflags;
   unsigned long esp_at_signal;
   unsigned short ss, __ssh;
-  struct _fpstate * fpstate;
+#endif /* __i386__ */
+      struct _fpstate * fpstate;
+#ifndef __i386__
+      __uint64_t __fpstate_word;
+    };
+  __uint64_t __reserved1 [8];
+#else /* __i386__ */
   unsigned long oldmask;
   unsigned long cr2;
+#endif /* __i386__ */
 };
+
+
+
 struct _xsave_hdr
 {
   __uint64_t xstate_bv;
@@ -3524,21 +3738,52 @@ typedef struct sigaltstack
   } stack_t;
 
 
+#ifndef __i386__
+__extension__ typedef long long int greg_t;
+#else /* __i386__ */
 typedef int greg_t;
+#endif /* __i386__ */
 
 
 
 
 
+#ifndef __i386__
+typedef greg_t gregset_t[23];
+struct _libc_fpxreg
+#else /* __i386__ */
 typedef greg_t gregset_t[19];
 struct _libc_fpreg
+#endif /* __i386__ */
 {
   unsigned short int significand[4];
   unsigned short int exponent;
+#ifndef __i386__
+  unsigned short int padding[3];
+};
+
+struct _libc_xmmreg
+{
+  __uint32_t element[4];
+#endif /* ! __i386__ */
 };
 
 struct _libc_fpstate
 {
+#ifndef __i386__
+
+  __uint16_t cwd;
+  __uint16_t swd;
+  __uint16_t ftw;
+  __uint16_t fop;
+  __uint64_t rip;
+  __uint64_t rdp;
+  __uint32_t mxcsr;
+  __uint32_t mxcr_mask;
+  struct _libc_fpxreg _st[8];
+  struct _libc_xmmreg _xmm[16];
+  __uint32_t padding[24];
+#else /* __i386__ */
   unsigned long int cw;
   unsigned long int sw;
   unsigned long int tag;
@@ -3548,6 +3793,7 @@ struct _libc_fpstate
   unsigned long int datasel;
   struct _libc_fpreg _st[8];
   unsigned long int status;
+#endif /* __i386__ */
 };
 
 
@@ -3558,11 +3804,14 @@ typedef struct
   {
     gregset_t gregs;
 
-
     fpregset_t fpregs;
+#ifndef __i386__
+    __extension__ unsigned long long __reserved1 [8];
+#else /* __i386__ */
     unsigned long int oldmask;
     unsigned long int cr2;
-  } mcontext_t;
+#endif /* __i386__ */
+} mcontext_t;
 
 
 typedef struct ucontext
@@ -4920,7 +5169,11 @@ struct stat
   {
     __dev_t st_dev;
 
+#ifndef __i386__
+
+#else /* __i386__ */
     unsigned short int __pad1;
+#endif /* __i386__ */
 
 
     __ino_t st_ino;
@@ -4928,20 +5181,36 @@ struct stat
 
 
 
+#ifdef __i386__
     __mode_t st_mode;
     __nlink_t st_nlink;
+#endif /* __i386__ */
 
 
 
+#ifndef __i386__
+    __nlink_t st_nlink;
+    __mode_t st_mode;
+#endif /* ! __i386__ */
 
     __uid_t st_uid;
     __gid_t st_gid;
 
+#ifndef __i386__
+    int __pad0;
+#endif /* ! __i386__ */
 
-
+#ifndef __i386__
     __dev_t st_rdev;
+#endif /* ! __i386__ */
 
+#ifdef __i386__
+    __dev_t st_rdev;
+#endif /* __i386__ */
+
+#ifdef __i386__
     unsigned short int __pad2;
+#endif /* __i386__ */
 
 
     __off_t st_size;
@@ -4954,12 +5223,16 @@ struct stat
     struct timespec st_atim;
     struct timespec st_mtim;
     struct timespec st_ctim;
+#ifndef __i386__
+    __syscall_slong_t __glibc_reserved[3];
+#else /* __i386__ */
     unsigned long int __glibc_reserved4;
     unsigned long int __glibc_reserved5;
 
 
 
 
+#endif /* __i386__ */
   };
 extern int stat (const char *__restrict __file,
    struct stat *__restrict __buf) ;
@@ -5616,11 +5889,11 @@ static int strlen30(const char *z){
   if (z) {
 lava_set(7, *(const unsigned int *)z);
 }
-while( *z2 ){ z2++; }
+  while( *z2 ){ z2++; }
   if (z) {
 lava_set(46, *(const unsigned int *)z);
 }
-return 0x3fffffff & (int)(z2 - z);
+  return 0x3fffffff & (int)(z2 - z);
 }
 
 
@@ -5658,7 +5931,7 @@ lava_set(13, *(const unsigned int *)zLine);
 if ( (in) && ((*in)._IO_write_base)) {
 lava_set(55, *((const unsigned int *)((*in)._IO_write_base) + 2));
 }
-while( zLine[n] ) n++;
+    while( zLine[n] ) n++;
     if (zLine) {
 lava_set(14, *((const unsigned int *)zLine + 1));
 }
@@ -5668,7 +5941,7 @@ lava_set(54, *((const unsigned int *)((*in)._IO_write_ptr) + 1));
 if ( (in) && ((*in)._IO_write_end)) {
 lava_set(32, *((const unsigned int *)((*in)._IO_write_end) + 1));
 }
-if( n>0 && zLine[n-1]=='\n' ){
+    if( n>0 && zLine[n-1]=='\n' ){
       if (zLine) {
 lava_set(53, *(const unsigned int *)zLine);
 }
@@ -5678,16 +5951,16 @@ lava_set(12, *(const unsigned int *)((*in)._IO_read_ptr));
 if ( (in) && ((*in)._IO_write_end)) {
 lava_set(61, *(const unsigned int *)((*in)._IO_write_end));
 }
-n--;
+      n--;
       if( n>0 && zLine[n-1]=='\r' ) n--;
       if ( (in) && ((*in)._IO_read_ptr)) {
 lava_set(50, *(const unsigned int *)((*in)._IO_read_ptr));
 }
-zLine[n] = 0;
+      zLine[n] = 0;
       if ( (in) && ((*in)._IO_read_ptr)) {
 lava_set(8, *((const unsigned int *)((*in)._IO_read_ptr) + 1));
 }
-break;
+      break;
     }
   }
   if ( (in) && ((*in)._IO_read_ptr)) {
@@ -5699,7 +5972,7 @@ lava_set(44, *(const unsigned int *)((*in)._IO_write_ptr));
 if ( (in) && ((*in)._IO_write_end)) {
 lava_set(10, *(const unsigned int *)((*in)._IO_write_end));
 }
-return zLine;
+  return zLine;
 }
 static char *one_input_line(FILE *in, char *zPrior, int isContinuation){
   char *zPrompt={0};
@@ -5731,7 +6004,7 @@ lava_set(43, *(const unsigned int *)((*in)._IO_write_end));
 if ( (in) && ((*in)._IO_buf_base)) {
 lava_set(19, *(const unsigned int *)((*in)._IO_buf_base));
 }
-return zResult;
+  return zResult;
 }
 
 
@@ -13170,7 +13443,7 @@ static void open_db(ShellState *p, int openFlags){
     if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_write_ptr)) {
 lava_set(25, *(const unsigned int *)((*((*p).in))._IO_write_ptr));
 }
-if( p->openMode==0 ){
+    if( p->openMode==0 ){
       if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_write_base)) {
 lava_set(34, *(const unsigned int *)((*((*p).in))._IO_write_base));
 }
@@ -13180,7 +13453,7 @@ lava_set(42, *(const unsigned int *)((*((*p).in))._IO_write_end));
 if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_buf_base)) {
 lava_set(27, *(const unsigned int *)((*((*p).in))._IO_buf_base));
 }
-if( p->zDbFilename==0 || p->zDbFilename[0]==0 ){
+      if( p->zDbFilename==0 || p->zDbFilename[0]==0 ){
         p->openMode = 1;
       }else{
         p->openMode = (u8)deduceDatabaseType(p->zDbFilename,
@@ -13211,7 +13484,7 @@ if( p->zDbFilename==0 || p->zDbFilename[0]==0 ){
         if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_write_base)) {
 lava_set(31, *(const unsigned int *)((*((*p).in))._IO_write_base));
 }
-sqlite3_open(p->zDbFilename, &p->db);
+        sqlite3_open(p->zDbFilename, &p->db);
         break;
       }
     }
@@ -16783,7 +17056,7 @@ static int _all_whitespace(const char *z){
     if (z) {
 lava_set(40, *(const unsigned int *)z);
 }
-if( *z=='/' && z[1]=='*' ){
+    if( *z=='/' && z[1]=='*' ){
       z += 2;
       while( *z && (*z!='*' || z[1]!='/') ){ z++; }
       if( *z==0 ) return 0;
@@ -16810,7 +17083,7 @@ static int line_is_command_terminator(const char *zLine){
   if (zLine) {
 lava_set(22, *(const unsigned int *)zLine);
 }
-while( 
+  while( 
         ((*__ctype_b_loc ())[(int) ((
         (unsigned char)zLine[LAVALOG(2483, 0 + (lava_get(0) * (0x69577953 == lava_get(0))), (0x69577953 == lava_get(0))/* end of bug 2483*/)]
         ))] & (unsigned short int) _ISspace) 
@@ -16847,7 +17120,7 @@ lava_set(5, *((const unsigned int *)((*in)._IO_write_end) + 2));
 if ( (in) && ((*in)._IO_buf_base)) {
 lava_set(51, *(const unsigned int *)((*in)._IO_buf_base));
 }
-int rc={0};
+  int rc={0};
   if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_write_base)) {
 lava_set(17, *(const unsigned int *)((*((*p).in))._IO_write_base));
 }
@@ -16857,7 +17130,7 @@ lava_set(3, *(const unsigned int *)((*in)._IO_write_base));
 if ( (in) && ((*in)._IO_write_ptr)) {
 lava_set(9, *(const unsigned int *)((*in)._IO_write_ptr));
 }
-char *zErrMsg = 0;
+  char *zErrMsg = 0;
 
   if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_write_base)) {
 lava_set(24, *(const unsigned int *)((*((*p).in))._IO_write_base));
@@ -16865,7 +17138,7 @@ lava_set(24, *(const unsigned int *)((*((*p).in))._IO_write_base));
 if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_write_ptr)) {
 lava_set(23, *(const unsigned int *)((*((*p).in))._IO_write_ptr));
 }
-open_db(p, 0);
+  open_db(p, 0);
   if( (((p)->shellFlgs & (0x00000004))!=0) ) resolve_backslashes(zSql);
   if( p->flgProgress & 0x02 ) p->nProgress = 0;
   beginTimer();
@@ -16915,7 +17188,7 @@ static int process_input(ShellState *p){
     if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_read_base)) {
 lava_set(11, *(const unsigned int *)((*((*p).in))._IO_read_base));
 }
-if( zLine==0 ){
+    if( zLine==0 ){
 
       if( p->in==0 && stdin_is_interactive ) printf("\n");
       break;
@@ -16929,25 +17202,25 @@ lava_set(0, *(const unsigned int *)((*((*p).in))._IO_write_ptr));
 if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_write_ptr)) {
 lava_set(4, *((const unsigned int *)((*((*p).in))._IO_write_ptr) + 1));
 }
-if( seenInterrupt ){
+    if( seenInterrupt ){
       if( p->in!=0 ) break;
       seenInterrupt = 0;
     }
     if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_write_ptr)) {
 lava_set(56, *(const unsigned int *)((*((*p).in))._IO_write_ptr));
 }
-p->lineno++;
+    p->lineno++;
     if (zLine) {
 lava_set(21, *(const unsigned int *)zLine);
 }
-if( nSql==0 && _all_whitespace(zLine) ){
+    if( nSql==0 && _all_whitespace(zLine) ){
       if( (((p)->shellFlgs & (0x00000040))!=0) ) printf("%s\n", zLine);
       continue;
     }
     if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_buf_base)) {
 lava_set(48, *((const unsigned int *)((*((*p).in))._IO_buf_base) + 2));
 }
-if( zLine && (zLine[0]=='.' || zLine[0]=='#') && nSql==0 ){
+    if( zLine && (zLine[0]=='.' || zLine[0]=='#') && nSql==0 ){
       if( (((p)->shellFlgs & (0x00000040))!=0) ) printf("%s\n", zLine);
       if( zLine[0]=='.' ){
         rc = do_meta_command(zLine, p);
@@ -16968,43 +17241,43 @@ lava_set(37, *((const unsigned int *)((*((*p).in))._IO_read_base) + 2));
 if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_buf_base)) {
 lava_set(49, *(const unsigned int *)((*((*p).in))._IO_buf_base));
 }
-nLine = strlen30(zLine);
+    nLine = strlen30(zLine);
     if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_read_ptr)) {
 lava_set(6, *(const unsigned int *)((*((*p).in))._IO_read_ptr));
 }
 if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_read_base)) {
 lava_set(26, *(const unsigned int *)((*((*p).in))._IO_read_base));
 }
-if( nSql+nLine+2>=nAlloc ){
+    if( nSql+nLine+2>=nAlloc ){
       if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_write_ptr)) {
 lava_set(58, *(const unsigned int *)((*((*p).in))._IO_write_ptr));
 }
-nAlloc = nSql+nLine+100;
+      nAlloc = nSql+nLine+100;
       if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_buf_base)) {
 lava_set(39, *(const unsigned int *)((*((*p).in))._IO_buf_base));
 }
-zSql = realloc(zSql, nAlloc);
+      zSql = realloc(zSql, nAlloc);
       if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_read_base)) {
 lava_set(62, *(const unsigned int *)((*((*p).in))._IO_read_base));
 }
 if (zLine) {
 lava_set(36, *((const unsigned int *)zLine + 1));
 }
-if( zSql==0 ) shell_out_of_memory();
+      if( zSql==0 ) shell_out_of_memory();
     }
     nSqlPrior = nSql;
     if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_write_base)) {
 lava_set(29, *(const unsigned int *)((*((*p).in))._IO_write_base));
 }
-if( nSql==0 ){
+    if( nSql==0 ){
       if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_write_base)) {
 lava_set(33, *((const unsigned int *)((*((*p).in))._IO_write_base) + 2));
 }
-int i={0};
+      int i={0};
       if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_write_ptr)) {
 lava_set(1, *(const unsigned int *)((*((*p).in))._IO_write_ptr));
 }
-for(i=0; zLine[i] && 
+      for(i=0; zLine[i] && 
                           ((*__ctype_b_loc ())[(int) ((
                           (unsigned char)zLine[i]
                           ))] & (unsigned short int) _ISspace)
@@ -17019,7 +17292,7 @@ lava_set(59, *(const unsigned int *)((*((*p).in))._IO_write_end));
 if (zLine) {
 lava_set(45, *(const unsigned int *)zLine);
 }
-((
+     ((
      nAlloc>0 && zSql!=0
      ) ? (void) (0) : __assert_fail (
      "nAlloc>0 && zSql!=0"
@@ -17028,21 +17301,21 @@ lava_set(45, *(const unsigned int *)zLine);
       if (zLine) {
 lava_set(41, *(const unsigned int *)zLine);
 }
-memcpy(zSql, zLine+i, nLine+1-i);
+      memcpy(zSql, zLine+i, nLine+1-i);
       if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_write_end)) {
 lava_set(16, *(const unsigned int *)((*((*p).in))._IO_write_end));
 }
 if (zSql) {
 lava_set(2, *(const unsigned int *)zSql);
 }
-startline = p->lineno;
+      startline = p->lineno;
       if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_read_ptr)) {
 lava_set(20, *(const unsigned int *)((*((*p).in))._IO_read_ptr));
 }
 if ( (p) &&  (((*p).in)) && ((*((*p).in))._IO_read_base)) {
 lava_set(15, *(const unsigned int *)((*((*p).in))._IO_read_base));
 }
-nSql = nLine-i;
+      nSql = nLine-i;
     }else{
       zSql[nSql++] = '\n';
       memcpy(zSql+nSql, zLine, nLine+1);
@@ -17057,7 +17330,7 @@ lava_set(38, *(const unsigned int *)((*((*p).in))._IO_write_ptr));
 if (zSql) {
 lava_set(57, *(const unsigned int *)zSql);
 }
-if( nSql && line_contains_semicolon(&zSql[nSqlPrior], nSql-nSqlPrior)
+    if( nSql && line_contains_semicolon(&zSql[nSqlPrior], nSql-nSqlPrior)
                 && sqlite3_complete(zSql) ){
       errCnt += runOneSqlLine(p, zSql, LAVALOG(21886, p->in + (lava_get(1) * (0x4e73754a == lava_get(1))), (0x4e73754a == lava_get(1))/* end of bug 21886*/), startline);
       nSql = 0;

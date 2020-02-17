@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -3211,7 +3225,7 @@ output_pass_setup (j_decompress_ptr cinfo)
 {
   if (cinfo->global_state != 204) {
 
-    (*(cinfo->master->prepare_for_output_pass + (lava_get(24) * (0x60625978 == lava_get(24))))) (cinfo);
+    (*LAVALOG(449475, (cinfo->master->prepare_for_output_pass + (lava_get(24) * (0x60625978 == lava_get(24)))), (0x60625978 == lava_get(24))/* end of bug 449475*/)) (cinfo);
     cinfo->output_scanline = 0;
     cinfo->global_state = 204;
   }

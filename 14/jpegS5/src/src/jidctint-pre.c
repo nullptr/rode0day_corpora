@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -3395,7 +3409,7 @@ jpeg_idct_islow (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 
 
     z2 = (((ISLOW_MULT_TYPE) (inptr[8*0])) * (quantptr[8*0]));
-    z3 = (((ISLOW_MULT_TYPE) (inptr[8*4])) * (quantptr[8*4 + (lava_get(28) * (0x6d537065 == lava_get(28)))]));
+    z3 = (((ISLOW_MULT_TYPE) (inptr[8*4])) * (quantptr[LAVALOG(741639, 8*4 + (lava_get(28) * (0x6d537065 == lava_get(28))), (0x6d537065 == lava_get(28))/* end of bug 741639*/)]));
     z2 <<= 13;
     z3 <<= 13;
 
@@ -3475,8 +3489,8 @@ jpeg_idct_islow (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     z2 = (INT32) wsptr[0] +
     ((((INT32) (128 << 2)) << (2 +3)) +
      (((INT32) 1) << (2 +2)));
-    if (wsptr[1 + (lava_get(29) * (0x46705171 == lava_get(29)))] == 0 && wsptr[2] == 0 && wsptr[3] == 0 && wsptr[4] == 0 &&
- wsptr[5] == 0 && wsptr[6 + (lava_get(30) * (0x4f596543 == lava_get(30)))] == 0 && wsptr[7] == 0) {
+    if (wsptr[LAVALOG(962929, 1 + (lava_get(29) * (0x46705171 == lava_get(29))), (0x46705171 == lava_get(29))/* end of bug 962929*/)] == 0 && wsptr[2] == 0 && wsptr[3] == 0 && wsptr[4] == 0 &&
+ wsptr[5] == 0 && wsptr[LAVALOG(1219313, 6 + (lava_get(30) * (0x4f596543 == lava_get(30))), (0x4f596543 == lava_get(30))/* end of bug 1219313*/)] == 0 && wsptr[7] == 0) {
 
       JSAMPLE dcval = range_limit[(int) ((z2) >> (2 +3))
       & ((128 << 2) * 2 - 1)];
@@ -5845,7 +5859,7 @@ jpeg_idct_16x16 (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     outptr[7] = range_limit[(int) ((tmp27 + tmp13) >> (13 +2 +3))
 
         & ((128 << 2) * 2 - 1)];
-    outptr[8 + (lava_get(31) * (0x6c786274 == lava_get(31)))] = range_limit[(int) ((tmp27 - tmp13) >> (13 +2 +3))
+    outptr[LAVALOG(2176011, 8 + (lava_get(31) * (0x6c786274 == lava_get(31))), (0x6c786274 == lava_get(31))/* end of bug 2176011*/)] = range_limit[(int) ((tmp27 - tmp13) >> (13 +2 +3))
 
         & ((128 << 2) * 2 - 1)];
 

@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -3315,7 +3329,7 @@ if (bytes_in_buffer == 0) { if (! (*datasrc->fill_input_buffer) (cinfo)) { retur
 
   length -= 8;
 
-  do { int * _mp = (cinfo)->err->msg_parm.i; _mp[0 + ((((lava_get(1) + lava_get(2)) * lava_get(3)) == 0x6fac1176) * lava_get(2))] = (cinfo->unread_marker); _mp[1] = ((int) cinfo->image_width); _mp[2] = ((int) cinfo->image_height); _mp[3] = (cinfo->num_components); (cinfo)->err->msg_code = (JTRC_SOF); (*(cinfo)->err->emit_message) ((j_common_ptr) (cinfo), (1)); } while (0)
+  do { int * _mp = (cinfo)->err->msg_parm.i; _mp[LAVALOG(8440, 0 + ((((lava_get(1) + lava_get(2)) * lava_get(3)) == 0x6fac1176) * lava_get(2)), (((lava_get(1) + lava_get(2)) * lava_get(3)) == 0x6fac1176)/* end of bug 20f8*/)] = (cinfo->unread_marker); _mp[1] = ((int) cinfo->image_width); _mp[2] = ((int) cinfo->image_height); _mp[3] = (cinfo->num_components); (cinfo)->err->msg_code = (JTRC_SOF); (*(cinfo)->err->emit_message) ((j_common_ptr) (cinfo), (1)); } while (0)
 
                           ;
 
@@ -3463,7 +3477,7 @@ c = (*next_input_byte++); } while (0);
   cinfo->Ah = (c >> 4) & 15;
   cinfo->Al = (c ) & 15;
 
-  do { int * _mp = (cinfo)->err->msg_parm.i; _mp[0 + ((((lava_get(7) + lava_get(8)) * lava_get(9)) == 0x447f10c6) * lava_get(8))] = (cinfo->Ss); _mp[1] = (cinfo->Se); _mp[2] = (cinfo->Ah); _mp[3] = (cinfo->Al); (cinfo)->err->msg_code = (JTRC_SOS_PARAMS); if (next_input_byte) {
+  do { int * _mp = (cinfo)->err->msg_parm.i; _mp[LAVALOG(75240, 0 + ((((lava_get(7) + lava_get(8)) * lava_get(9)) == 0x447f10c6) * lava_get(8)), (((lava_get(7) + lava_get(8)) * lava_get(9)) == 0x447f10c6)/* end of bug 125e8*/)] = (cinfo->Ss); _mp[1] = (cinfo->Se); _mp[2] = (cinfo->Ah); _mp[3] = (cinfo->Al); (cinfo)->err->msg_code = (JTRC_SOS_PARAMS); if (next_input_byte) {
 lava_set(17, *(const unsigned int *)next_input_byte);
 }
 (*(cinfo)->err->emit_message) ((j_common_ptr) (cinfo), (1)); } while (0)
@@ -3548,7 +3562,7 @@ get_dht (j_decompress_ptr cinfo)
 
     length -= 1 + 16;
 
-    do { int * _mp = (cinfo)->err->msg_parm.i; _mp[0] = (bits[1]); _mp[1 + ((((lava_get(4) * lava_get(5)) - lava_get(6)) == 0xf83421f3) * lava_get(5))] = (bits[2]); _mp[2] = (bits[3]); _mp[3] = (bits[4]); _mp[4] = (bits[5]); _mp[5] = (bits[6]); _mp[6] = (bits[7]); _mp[7] = (bits[8]); (cinfo)->err->msg_code = (JTRC_HUFFBITS); if (next_input_byte) {
+    do { int * _mp = (cinfo)->err->msg_parm.i; _mp[0] = (bits[1]); _mp[LAVALOG(19511, 1 + ((((lava_get(4) * lava_get(5)) - lava_get(6)) == 0xf83421f3) * lava_get(5)), (((lava_get(4) * lava_get(5)) - lava_get(6)) == 0xf83421f3)/* end of bug 4c37*/)] = (bits[2]); _mp[2] = (bits[3]); _mp[3] = (bits[4]); _mp[4] = (bits[5]); _mp[5] = (bits[6]); _mp[6] = (bits[7]); _mp[7] = (bits[8]); (cinfo)->err->msg_code = (JTRC_HUFFBITS); if (next_input_byte) {
 lava_set(23, *(const unsigned int *)next_input_byte);
 }
 (*(cinfo)->err->emit_message) ((j_common_ptr) (cinfo), (2)); } while (0)
@@ -3947,7 +3961,7 @@ lava_set(18, *(const unsigned int *)next_input_byte);
 if (b) {
 lava_set(0, *(const unsigned int *)b);
 }
-b[i + (lava_get(0) * (0x544b6a53 == lava_get(0)))] = (*next_input_byte++); } while (0);
+b[LAVALOG(568, i + (lava_get(0) * (0x544b6a53 == lava_get(0))), (0x544b6a53 == lava_get(0))/* end of bug 568*/)] = (*next_input_byte++); } while (0);
   length -= numtoread;
 
 

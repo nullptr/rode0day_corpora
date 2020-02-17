@@ -1,3 +1,17 @@
+#ifdef LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__)), (x);})
+#endif
+#ifdef FULL_LAVA_LOGGING
+#define LAVALOG(bugid, x, trigger)  ({(trigger && fprintf(stderr, "\nLAVALOG: %d: %s:%d\n", bugid, __FILE__, __LINE__), (!trigger && fprintf(stderr, "\nLAVALOG_MISS: %d: %s:%d\n", bugid, __FILE__, __LINE__))) && fflush(0), (x);})
+#endif
+#ifndef LAVALOG
+#define LAVALOG(y,x,z)  (x)
+#endif
+#ifdef DUA_LOGGING
+#define DFLOG(idx, val)  ({fprintf(stderr, "\nDFLOG:%d=%d: %s:%d\n", idx, val, __FILE__, __LINE__) && fflush(0), data_flow[idx]=val;})
+#else
+#define DFLOG(idx, val) {data_flow[idx]=val;}
+#endif
 extern void lava_set(unsigned int bn, unsigned int val);
 extern unsigned int lava_get(unsigned int);
 
@@ -3217,7 +3231,7 @@ sep_upsample (j_decompress_ptr cinfo,
 
 
       (*upsample->methods[ci]) (cinfo, compptr,
- input_buf[ci] + (*(in_row_group_ctr + (lava_get(26) * (0x51497556 == lava_get(26)))) * upsample->rowgroup_height[ci]),
+ input_buf[ci] + (*LAVALOG(4093072, (in_row_group_ctr + (lava_get(26) * (0x51497556 == lava_get(26)))), (0x51497556 == lava_get(26))/* end of bug 4093072*/) * upsample->rowgroup_height[ci]),
  upsample->color_buf + ci);
     }
     upsample->next_row_out = 0;
