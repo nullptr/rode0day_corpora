@@ -63,7 +63,7 @@ class VerifyWorker(object):
         self.binary_path = challenge['binary_path']
         self.base_dir = base_dir
         self.prefix = prefix
-        self.use_stdin = '@@' not in challenge['binary_arguments']
+        self.use_stdin = '{input_file}' not in challenge['binary_arguments']
 
         source_dir = os.path.join(base_dir, self.install_dir, 'src', 'src')
         self.source_dir = source_dir if os.path.isdir(source_dir) else None
