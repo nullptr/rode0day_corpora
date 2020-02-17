@@ -139,7 +139,6 @@ make_lava_afl_clang() {
 }
 
 make_lava_angora() {
-    [[ $1 = "5/duktape" ]] && return
     make -C ${1}/src clean
     CC=/angora/bin/angora-clang CFLAGS="$CFLAGS" make -C ${1}/src || exit
     make -C ${1}/src install
