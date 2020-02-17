@@ -1,38 +1,41 @@
 ---
 
 test_solutions:2:13:afl-clang-fast:
+  variables:
+    COMP_ID: "2"
+    PREFIX: "lava-afl-cf"
   extends: .test_solutions
-  script:
-    - tar -C 2 -xzf 2/solutions.tgz
-    - ./scripts/test-solution.py -p lava-afl-cf 2/info.yaml
   dependencies:
     - build:afl-clang-fast
 
 test_solutions:3:13:afl-clang-fast:
+  variables:
+    COMP_ID: "3"
+    PREFIX: "lava-afl-cf"
   extends: .test_solutions
-  script:
-    - tar -C 3 -xzf 3/solutions.tgz
-    - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml
   dependencies:
     - build:afl-clang-fast
 
 test_solutions:4:13:afl-clang-fast:
+  variables:
+    COMP_ID: "4"
+    PREFIX: "lava-afl-cf"
   extends: .test_solutions
-  script:
-    - tar -C 4 -xzf 4/solutions.tgz
-    - ./scripts/test-solution.py -p lava-afl-cf 4/info.yaml
   dependencies:
     - build:afl-clang-fast
 
 test_solutions:5:13:afl-clang-fast:
+  variables:
+    COMP_ID: "5"
+    PREFIX: "lava-afl-cf"
   extends: .test_solutions
-  script:
-    - tar -C 5 -xzf 5/solutions.tgz
-    - ./scripts/test-solution.py -p lava-afl-cf 5/info.yaml
   dependencies:
     - build:afl-clang-fast
 
 test_solutions:6:13:afl-clang-fast:
+  variables:
+    COMP_ID: "6"
+    PREFIX: "lava-afl-cf"
   extends: .test_solutions
   script:
     - tar -C 6 -xzf 6/solutions.tgz
@@ -42,6 +45,9 @@ test_solutions:6:13:afl-clang-fast:
     - build:afl-clang-fast
 
 test_solutions:7:13:afl-clang-fast:
+  variables:
+    COMP_ID: "7"
+    PREFIX: "lava-afl-cf"
   extends: .test_solutions
   script:
     - tar -C 7 -xzf 7/solutions.tgz
@@ -51,6 +57,9 @@ test_solutions:7:13:afl-clang-fast:
     - build:afl-clang-fast
 
 test_solutions:8:13:afl-clang-fast:
+  variables:
+    COMP_ID: "8"
+    PREFIX: "lava-afl-cf"
   extends: .test_solutions
   script:
     - tar -C 8 -xzf 8/solutions.tgz
@@ -60,14 +69,17 @@ test_solutions:8:13:afl-clang-fast:
     - build:afl-clang-fast
 
 test_solutions:9:13:afl-clang-fast:
+  variables:
+    COMP_ID: "9"
+    PREFIX: "lava-afl-cf"
   extends: .test_solutions
-  script:
-    - tar -C 9 -xzf 9/solutions.tgz
-    - ./scripts/test-solution.py -p lava-afl-cf 9/info.yaml
   dependencies:
     - build:afl-clang-fast
 
 test_solutions:10:13:afl-clang-fast:
+  variables:
+    COMP_ID: "10"
+    PREFIX: "lava-afl-cf"
   extends: .test_solutions
   script:
     - tar -C 10 -xzf 10/solutions.tgz
@@ -77,25 +89,25 @@ test_solutions:10:13:afl-clang-fast:
     - build:afl-clang-fast
 
 test_solutions:11:13:afl-clang-fast:
+  variables:
+    COMP_ID: "11"
+    PREFIX: "lava-afl-cf"
   extends: .test_solutions
-  script:
-    - tar -C 11 -xzf 11/solutions.tgz
-    - ./scripts/test-solution.py -p lava-afl-cf 11/info.yaml
   dependencies:
     - build:afl-clang-fast
 
 test_solutions:12:13:afl-clang-fast:
+  variables:
+    COMP_ID: "12"
+    PREFIX: "lava-afl-cf"
   extends: .test_solutions
-  script:
-    - tar -C 12 -xzf 12/solutions.tgz
-    - ./scripts/test-solution.py -p lava-afl-cf 12/info.yaml
   dependencies:
     - build:afl-clang-fast
 
 test_solutions:13:13:afl-clang-fast:
+  variables:
+    COMP_ID: "13"
+    PREFIX: "lava-afl-cf"
   extends: .test_solutions
-  script:
-    - tar -C 13 -xzf 13/solutions.tgz
-    - ./scripts/test-solution.py -p lava-afl-cf 13/info.yaml
   dependencies:
     - build:afl-clang-fast
