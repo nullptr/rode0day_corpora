@@ -30,6 +30,9 @@ unsigned int lava_get(unsigned int slot) { return lava_val[slot]; }
 
 
 
+#ifndef __i386__
+typedef long unsigned int size_t;
+#else /* __i386__ */
 
 
 
@@ -37,6 +40,7 @@ unsigned int lava_get(unsigned int slot) { return lava_val[slot]; }
 
 
 typedef unsigned int size_t;
+#endif /* __i386__ */
 
 
 
@@ -53,22 +57,58 @@ typedef unsigned short int __uint16_t;
 typedef signed int __int32_t;
 typedef unsigned int __uint32_t;
 
+#ifndef __i386__
+typedef signed long int __int64_t;
+typedef unsigned long int __uint64_t;
+#endif /* ! __i386__ */
 
 
 
+#ifdef __i386__
 __extension__ typedef signed long long int __int64_t;
 __extension__ typedef unsigned long long int __uint64_t;
 
+#endif /* __i386__ */
 
 
 
 
+#ifndef __i386__
+typedef long int __quad_t;
+typedef unsigned long int __u_quad_t;
+#endif /* ! __i386__ */
 
 
+#ifndef __i386__
+typedef unsigned long int __dev_t;
+typedef unsigned int __uid_t;
+typedef unsigned int __gid_t;
+typedef unsigned long int __ino_t;
+typedef unsigned long int __ino64_t;
+typedef unsigned int __mode_t;
+typedef unsigned long int __nlink_t;
+typedef long int __off_t;
+typedef long int __off64_t;
+typedef int __pid_t;
+typedef struct { int __val[2]; } __fsid_t;
+typedef long int __clock_t;
+typedef unsigned long int __rlim_t;
+typedef unsigned long int __rlim64_t;
+typedef unsigned int __id_t;
+typedef long int __time_t;
+typedef unsigned int __useconds_t;
+typedef long int __suseconds_t;
+#else /* __i386__ */
 __extension__ typedef long long int __quad_t;
 __extension__ typedef unsigned long long int __u_quad_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef int __daddr_t;
+typedef int __key_t;
+#endif /* ! __i386__ */
 
+#ifdef __i386__
 __extension__ typedef __u_quad_t __dev_t;
 __extension__ typedef unsigned int __uid_t;
 __extension__ typedef unsigned int __gid_t;
@@ -87,42 +127,88 @@ __extension__ typedef unsigned int __id_t;
 __extension__ typedef long int __time_t;
 __extension__ typedef unsigned int __useconds_t;
 __extension__ typedef long int __suseconds_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef int __clockid_t;
+#else /* __i386__ */
 __extension__ typedef int __daddr_t;
 __extension__ typedef int __key_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef void * __timer_t;
+#else /* __i386__ */
 __extension__ typedef int __clockid_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef long int __blksize_t;
+#else /* __i386__ */
 __extension__ typedef void * __timer_t;
+#endif /* __i386__ */
 
 
+#ifdef __i386__
 __extension__ typedef long int __blksize_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef long int __blkcnt_t;
+typedef long int __blkcnt64_t;
+#endif /* ! __i386__ */
 
 
+#ifndef __i386__
+typedef unsigned long int __fsblkcnt_t;
+typedef unsigned long int __fsblkcnt64_t;
+#else /* __i386__ */
 __extension__ typedef long int __blkcnt_t;
 __extension__ typedef __quad_t __blkcnt64_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef unsigned long int __fsfilcnt_t;
+typedef unsigned long int __fsfilcnt64_t;
+#else /* __i386__ */
 __extension__ typedef unsigned long int __fsblkcnt_t;
 __extension__ typedef __u_quad_t __fsblkcnt64_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef long int __fsword_t;
+#else /* __i386__ */
 __extension__ typedef unsigned long int __fsfilcnt_t;
 __extension__ typedef __u_quad_t __fsfilcnt64_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef long int __ssize_t;
+#endif /* ! __i386__ */
 
+#ifdef __i386__
 __extension__ typedef int __fsword_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef long int __syscall_slong_t;
+#else /* __i386__ */
 __extension__ typedef int __ssize_t;
+#endif /* __i386__ */
 
+#ifndef __i386__
+typedef unsigned long int __syscall_ulong_t;
+#else /* __i386__ */
 
 __extension__ typedef long int __syscall_slong_t;
 
 __extension__ typedef unsigned long int __syscall_ulong_t;
+#endif /* __i386__ */
 
 
 
@@ -131,10 +217,18 @@ typedef __quad_t *__qaddr_t;
 typedef char *__caddr_t;
 
 
+#ifndef __i386__
+typedef long int __intptr_t;
+#else /* __i386__ */
 __extension__ typedef int __intptr_t;
+#endif /* __i386__ */
 
 
+#ifndef __i386__
+typedef unsigned int __socklen_t;
+#else /* __i386__ */
 __extension__ typedef unsigned int __socklen_t;
+#endif /* __i386__ */
 struct _IO_FILE;
 
 
@@ -1747,7 +1841,11 @@ static void *sqlite3HashInsert(Hash*, const char *pKey, void *pData);
 static void *sqlite3HashFind(const Hash*, const char *pKey);
 static void sqlite3HashClear(Hash*);
 
+#ifndef __i386__
+typedef int wchar_t;
+#else /* __i386__ */
 typedef long int wchar_t;
+#endif /* __i386__ */
 
 
 
@@ -2100,20 +2198,33 @@ typedef unsigned long int pthread_t;
 
 union pthread_attr_t
 {
+#ifndef __i386__
+  char __size[56];
+#else /* __i386__ */
   char __size[36];
+#endif /* __i386__ */
   long int __align;
 };
 
 typedef union pthread_attr_t pthread_attr_t;
+#ifdef __i386__
 typedef struct __pthread_internal_slist
 {
   struct __pthread_internal_slist *__next;
 } __pthread_slist_t;
+#endif /* __i386__ */
 
 
 
 
 
+#ifndef __i386__
+typedef struct __pthread_internal_list
+{
+  struct __pthread_internal_list *__prev;
+  struct __pthread_internal_list *__next;
+} __pthread_list_t;
+#endif /* ! __i386__ */
 typedef union
 {
   struct __pthread_mutex_s
@@ -2122,10 +2233,19 @@ typedef union
     unsigned int __count;
     int __owner;
 
+#ifndef __i386__
+    unsigned int __nusers;
+#endif /* ! __i386__ */
 
 
 
+#ifndef __i386__
+    int __kind;
+#endif /* ! __i386__ */
 
+#ifndef __i386__
+    short __spins;
+#else /* __i386__ */
     int __kind;
     unsigned int __nusers;
     __extension__ union
@@ -2133,7 +2253,11 @@ typedef union
       struct
       {
  short __espins;
- short __elision;
+#endif /* __i386__ */
+    short __elision;
+#ifndef __i386__
+    __pthread_list_t __list;
+#else /* __i386__ */
 
 
 
@@ -2141,8 +2265,13 @@ typedef union
       __pthread_slist_t __list;
     };
 
+#endif /* __i386__ */
   } __data;
+#ifndef __i386__
+  char __size[40];
+#else /* __i386__ */
   char __size[24];
+#endif /* __i386__ */
   long int __align;
 } pthread_mutex_t;
 
@@ -2192,6 +2321,7 @@ typedef int pthread_once_t;
 
 typedef union
 {
+
   struct
   {
     int __lock;
@@ -2200,17 +2330,40 @@ typedef union
     unsigned int __writer_wakeup;
     unsigned int __nr_readers_queued;
     unsigned int __nr_writers_queued;
+#ifndef __i386__
+    int __writer;
+    int __shared;
+    signed char __rwelision;
+
+#endif /* ! __i386__ */
 
 
+#ifdef __i386__
     unsigned char __flags;
     unsigned char __shared;
     signed char __rwelision;
+#endif /* __i386__ */
 
+#ifndef __i386__
+    unsigned char __pad1[7];
+
+
+    unsigned long int __pad2;
+
+
+    unsigned int __flags;
+
+#else /* __i386__ */
     unsigned char __pad2;
     int __writer;
+#endif /* __i386__ */
   } __data;
+#ifndef __i386__
+  char __size[56];
+#else /* __i386__ */
 
   char __size[32];
+#endif /* __i386__ */
   long int __align;
 } pthread_rwlock_t;
 
@@ -2231,7 +2384,11 @@ typedef volatile int pthread_spinlock_t;
 
 typedef union
 {
+#ifndef __i386__
+  char __size[32];
+#else /* __i386__ */
   char __size[20];
+#endif /* __i386__ */
   long int __align;
 } pthread_barrier_t;
 
@@ -2903,7 +3060,11 @@ extern char *stpncpy (char *__restrict __dest,
         const char *__restrict __src, size_t __n)
      ;
 
+#ifndef __i386__
+typedef long int ptrdiff_t;
+#else /* __i386__ */
 typedef int ptrdiff_t;
+#endif /* __i386__ */
 typedef struct {
   long long __max_align_ll ;
   long double __max_align_ld ;
@@ -2918,7 +3079,11 @@ typedef unsigned char u8;
 typedef signed char i8;
  typedef u32 tRowcnt;
 typedef short int LogEst;
+#ifndef __i386__
+  typedef u64 uptr;
+#else /* __i386__ */
   typedef u32 uptr;
+#endif /* __i386__ */
 typedef struct BusyHandler BusyHandler;
 struct BusyHandler {
   int (*xBusyHandler)(void *,int);
@@ -5484,7 +5649,13 @@ static int sqlite3VdbeMemHandleBom(Mem *pMem);
 
 
 static int sqlite3VdbeMemExpandBlob(Mem *);
+#ifndef __i386__
+typedef sqlite3_int64 sqlite3StatValueType;
+
+
+#else /* __i386__ */
 typedef u32 sqlite3StatValueType;
+#endif /* __i386__ */
 
 typedef struct sqlite3StatType sqlite3StatType;
 static struct sqlite3StatType {
@@ -7673,7 +7844,15 @@ extern int sched_rr_get_interval (__pid_t __pid, struct timespec *__t) ;
 
 
 
+#ifndef __i386__
+
+
+
+
+typedef long int __jmp_buf[8];
+#else /* __i386__ */
 typedef int __jmp_buf[6];
+#endif /* __i386__ */
 
 
 
@@ -8330,6 +8509,10 @@ extern int pthread_atfork (void (*__prepare) (void),
       void (*__parent) (void),
       void (*__child) (void)) ;
 
+
+struct sqlite3_mutex {
+  pthread_mutex_t mutex;
+};
 static void sqlite3MemoryBarrier(void){
 
 
@@ -8340,49 +8523,94 @@ static void sqlite3MemoryBarrier(void){
 
 
 
-struct sqlite3_mutex {
-  pthread_mutex_t mutex;
-};
 
 static int pthreadMutexInit(void){ return 0; }
 static int pthreadMutexEnd(void){ return 0; }
 static sqlite3_mutex *pthreadMutexAlloc(int iType){
   static sqlite3_mutex staticMutexes[] = {
     { 
+#ifndef __i386__
+   { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } } 
+#else /* __i386__ */
    { { 0, 0, 0, 0, 0, { { 0, 0 } } } } 
+#endif /* __i386__ */
    },
     { 
+#ifndef __i386__
+   { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } } 
+#else /* __i386__ */
    { { 0, 0, 0, 0, 0, { { 0, 0 } } } } 
+#endif /* __i386__ */
    },
     { 
+#ifndef __i386__
+   { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } } 
+#else /* __i386__ */
    { { 0, 0, 0, 0, 0, { { 0, 0 } } } } 
+#endif /* __i386__ */
    },
     { 
+#ifndef __i386__
+   { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } } 
+#else /* __i386__ */
    { { 0, 0, 0, 0, 0, { { 0, 0 } } } } 
+#endif /* __i386__ */
    },
     { 
+#ifndef __i386__
+   { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } } 
+#else /* __i386__ */
    { { 0, 0, 0, 0, 0, { { 0, 0 } } } } 
+#endif /* __i386__ */
    },
     { 
+#ifndef __i386__
+   { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } } 
+#else /* __i386__ */
    { { 0, 0, 0, 0, 0, { { 0, 0 } } } } 
+#endif /* __i386__ */
    },
     { 
+#ifndef __i386__
+   { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } } 
+#else /* __i386__ */
    { { 0, 0, 0, 0, 0, { { 0, 0 } } } } 
+#endif /* __i386__ */
    },
     { 
+#ifndef __i386__
+   { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } } 
+#else /* __i386__ */
    { { 0, 0, 0, 0, 0, { { 0, 0 } } } } 
+#endif /* __i386__ */
    },
     { 
+#ifndef __i386__
+   { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } } 
+#else /* __i386__ */
    { { 0, 0, 0, 0, 0, { { 0, 0 } } } } 
+#endif /* __i386__ */
    },
     { 
+#ifndef __i386__
+   { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } } 
+#else /* __i386__ */
    { { 0, 0, 0, 0, 0, { { 0, 0 } } } } 
+#endif /* __i386__ */
    },
     { 
+#ifndef __i386__
+   { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } } 
+#else /* __i386__ */
    { { 0, 0, 0, 0, 0, { { 0, 0 } } } } 
+#endif /* __i386__ */
    },
     { 
+#ifndef __i386__
+   { { 0, 0, 0, 0, 0, 0, 0, { 0, 0 } } } 
+#else /* __i386__ */
    { { 0, 0, 0, 0, 0, { { 0, 0 } } } } 
+#endif /* __i386__ */
    }
   };
   sqlite3_mutex *p={0};
@@ -12437,7 +12665,11 @@ struct stat
   {
     __dev_t st_dev;
 
+#ifndef __i386__
+
+#else /* __i386__ */
     unsigned short int __pad1;
+#endif /* __i386__ */
 
 
     __ino_t st_ino;
@@ -12445,20 +12677,36 @@ struct stat
 
 
 
+#ifdef __i386__
     __mode_t st_mode;
     __nlink_t st_nlink;
+#endif /* __i386__ */
 
 
 
+#ifndef __i386__
+    __nlink_t st_nlink;
+    __mode_t st_mode;
+#endif /* ! __i386__ */
 
     __uid_t st_uid;
     __gid_t st_gid;
 
+#ifndef __i386__
+    int __pad0;
+#endif /* ! __i386__ */
 
-
+#ifndef __i386__
     __dev_t st_rdev;
+#endif /* ! __i386__ */
 
+#ifdef __i386__
+    __dev_t st_rdev;
+#endif /* __i386__ */
+
+#ifdef __i386__
     unsigned short int __pad2;
+#endif /* __i386__ */
 
 
     __off_t st_size;
@@ -12471,12 +12719,16 @@ struct stat
     struct timespec st_atim;
     struct timespec st_mtim;
     struct timespec st_ctim;
+#ifndef __i386__
+    __syscall_slong_t __glibc_reserved[3];
+#else /* __i386__ */
     unsigned long int __glibc_reserved4;
     unsigned long int __glibc_reserved5;
 
 
 
 
+#endif /* __i386__ */
   };
 extern int stat (const char *__restrict __file,
    struct stat *__restrict __buf) ;
@@ -25971,7 +26223,7 @@ static int walIndexTryHdr(Wal *pWal, int *pChanged){
 static int walIndexReadHdr(Wal *pWal, int *pChanged){
   int rc={0};
   int badHdr={0};
-  volatile u32 *page0={0};
+  volatile u32 *page0;
 
 
 
@@ -33649,7 +33901,11 @@ static int balance_nonroot(
       if( pBt->btsFlags & 0x000c ){
         int iOff={0};
 
+#ifndef __i386__
+        iOff = ((int)(long int)(apDiv[i])) - ((int)(long int)(pParent->aData));
+#else /* __i386__ */
         iOff = ((int)(int)(apDiv[i])) - ((int)(int)(pParent->aData));
+#endif /* __i386__ */
         if( (iOff+szNew[i])>(int)pBt->usableSize ){
           rc = sqlite3CorruptError(70786);
           memset(apOld, 0, (i+1)*sizeof(MemPage*));
@@ -37768,7 +38024,11 @@ static const void *valueToText(sqlite3_value* pVal, u8 enc){
     if( pVal->enc != (enc & ~8) ){
       sqlite3VdbeChangeEncoding(pVal, enc & ~8);
     }
+#ifndef __i386__
+    if( (enc & 8)!=0 && 1==(1&((int)(long int)(pVal->z))) ){
+#else /* __i386__ */
     if( (enc & 8)!=0 && 1==(1&((int)(int)(pVal->z))) ){
+#endif /* __i386__ */
       
      ((void) (0))
                                                         ;
@@ -38863,7 +39123,11 @@ static void sqlite3VdbeChangeP4(Vdbe *p, int addr, const char *zP4, int n){
   if( n==(-3) ){
 
 
+#ifndef __i386__
+    pOp->p4.i = ((int)(long int)(zP4));
+#else /* __i386__ */
     pOp->p4.i = ((int)(int)(zP4));
+#endif /* __i386__ */
     pOp->p4type = (-3);
   }else if( zP4!=0 ){
     
@@ -45031,7 +45295,7 @@ case 92: {
   i64 nZero={0};
   int nVarint={0};
   u32 serial_type={0};
-  Mem *pData0={0};
+  Mem *pData0;
   Mem *pLast={0};
   int nField={0};
   char *zAffinity={0};
@@ -49837,11 +50101,19 @@ static int vdbeSorterJoinThread(SortSubtask *pTask){
 
 
 
+#ifndef __i386__
+    void *pRet = ((void*)(long int)(1));
+#else /* __i386__ */
     void *pRet = ((void*)(int)(1));
+#endif /* __i386__ */
     ;
     (void)sqlite3ThreadJoin(pTask->pThread, &pRet);
     ;
+#ifndef __i386__
+    rc = ((int)(long int)(pRet));
+#else /* __i386__ */
     rc = ((int)(int)(pRet));
+#endif /* __i386__ */
     
    ((void) (0))
                             ;
@@ -50355,7 +50627,11 @@ static void *vdbeSorterFlushThread(void *pCtx){
                           ;
   rc = vdbeSorterListToPMA(pTask, &pTask->list);
   pTask->bDone = 1;
+#ifndef __i386__
+  return ((void*)(long int)(rc));
+#else /* __i386__ */
   return ((void*)(int)(rc));
+#endif /* __i386__ */
 }
 
 
@@ -50576,7 +50852,11 @@ static int vdbeIncrPopulate(IncrMerger *pIncr){
 
 static void *vdbeIncrPopulateThread(void *pCtx){
   IncrMerger *pIncr = (IncrMerger*)pCtx;
+#ifndef __i386__
+  void *pRet = ((void*)(long int)(vdbeIncrPopulate(pIncr)));
+#else /* __i386__ */
   void *pRet = ((void*)(int)(vdbeIncrPopulate(pIncr)));
+#endif /* __i386__ */
   pIncr->pTask->bDone = 1;
   return pRet;
 }
@@ -50820,7 +51100,11 @@ static int vdbePmaReaderIncrMergeInit(PmaReader *pReadr, int eMode){
 
 static void *vdbePmaReaderBgIncrInit(void *pCtx){
   PmaReader *pReader = (PmaReader*)pCtx;
+#ifndef __i386__
+  void *pRet = ((void*)(long int)(vdbePmaReaderIncrMergeInit(pReader,1)))
+#else /* __i386__ */
   void *pRet = ((void*)(int)(vdbePmaReaderIncrMergeInit(pReader,1)))
+#endif /* __i386__ */
 
                 ;
   pReader->pIncr->pTask->bDone = 1;
@@ -66068,7 +66352,7 @@ static void lengthFunc(
     }
     case 3: {
       const unsigned char *z = sqlite3_value_text(argv[0]);
-      const unsigned char *z0={0};
+      const unsigned char *z0;
       unsigned char c={0};
       if( z==0 ) return;
       z0 = z;
@@ -67149,7 +67433,11 @@ static void trimFunc(
     }
   }
   if( nChar>0 ){
+#ifndef __i386__
+    flags = ((int)(long int)(sqlite3_user_data(context)));
+#else /* __i386__ */
     flags = ((int)(int)(sqlite3_user_data(context)));
+#endif /* __i386__ */
     if( flags & 1 ){
       while( nIn>0 ){
         int len = 0;
@@ -67601,8 +67889,13 @@ static void sqlite3RegisterBuiltinFunctions(void){
 
 
 
+#ifndef __i386__
+    {1, 1|(0*0x0020), ((void*)(long int)(0)), 0, loadExt, 0, 0, 0, "load_extension", {0} },
+    {2, 1|(0*0x0020), ((void*)(long int)(0)), 0, loadExt, 0, 0, 0, "load_extension", {0} },
+#else /* __i386__ */
     {1, 1|(0*0x0020), ((void*)(int)(0)), 0, loadExt, 0, 0, 0, "load_extension", {0} },
     {2, 1|(0*0x0020), ((void*)(int)(0)), 0, loadExt, 0, 0, 0, "load_extension", {0} },
+#endif /* __i386__ */
 
 
 
@@ -67611,9 +67904,15 @@ static void sqlite3RegisterBuiltinFunctions(void){
     {1, 0x2000|1, 0, 0, compileoptionusedFunc, 0, 0, 0, "sqlite_compileoption_used", {0} },
     {1, 0x2000|1, 0, 0, compileoptiongetFunc, 0, 0, 0, "sqlite_compileoption_get", {0} },
 
+#ifndef __i386__
+    {1,0x0800|1|(0*0x0020)|0x0400, ((void*)(long int)(0)), 0, versionFunc, 0, 0, 0, "unlikely", {0} },
+    {2,0x0800|1|(0*0x0020)|0x0400, ((void*)(long int)(0)), 0, versionFunc, 0, 0, 0, "likelihood", {0} },
+    {1,0x0800|1|(0*0x0020)|0x0400, ((void*)(long int)(0)), 0, versionFunc, 0, 0, 0, "likely", {0} },
+#else /* __i386__ */
     {1,0x0800|1|(0*0x0020)|0x0400, ((void*)(int)(0)), 0, versionFunc, 0, 0, 0, "unlikely", {0} },
     {2,0x0800|1|(0*0x0020)|0x0400, ((void*)(int)(0)), 0, versionFunc, 0, 0, 0, "likelihood", {0} },
     {1,0x0800|1|(0*0x0020)|0x0400, ((void*)(int)(0)), 0, versionFunc, 0, 0, 0, "likely", {0} },
+#endif /* __i386__ */
 
 
 
@@ -67621,6 +67920,17 @@ static void sqlite3RegisterBuiltinFunctions(void){
 
 
 
+#ifndef __i386__
+    {1, 0x0800|1|(0*0x0020), ((void*)(long int)(1)), 0, trimFunc, 0, 0, 0, "ltrim", {0} },
+    {2, 0x0800|1|(0*0x0020), ((void*)(long int)(1)), 0, trimFunc, 0, 0, 0, "ltrim", {0} },
+    {1, 0x0800|1|(0*0x0020), ((void*)(long int)(2)), 0, trimFunc, 0, 0, 0, "rtrim", {0} },
+    {2, 0x0800|1|(0*0x0020), ((void*)(long int)(2)), 0, trimFunc, 0, 0, 0, "rtrim", {0} },
+    {1, 0x0800|1|(0*0x0020), ((void*)(long int)(3)), 0, trimFunc, 0, 0, 0, "trim", {0} },
+    {2, 0x0800|1|(0*0x0020), ((void*)(long int)(3)), 0, trimFunc, 0, 0, 0, "trim", {0} },
+    {-1, 0x0800|1|(1*0x0020), ((void*)(long int)(0)), 0, minmaxFunc, 0, 0, 0, "min", {0} },
+    {0, 0x0800|1|(1*0x0020), ((void*)(long int)(0)), 0, 0, 0, 0, 0, "min", {0} },
+    {1, 1|(1*0x0020)|0x1000, ((void*)(long int)(0)), 0, minmaxStep,minMaxFinalize,minMaxValue,0,"min", {0}}
+#else /* __i386__ */
     {1, 0x0800|1|(0*0x0020), ((void*)(int)(1)), 0, trimFunc, 0, 0, 0, "ltrim", {0} },
     {2, 0x0800|1|(0*0x0020), ((void*)(int)(1)), 0, trimFunc, 0, 0, 0, "ltrim", {0} },
     {1, 0x0800|1|(0*0x0020), ((void*)(int)(2)), 0, trimFunc, 0, 0, 0, "rtrim", {0} },
@@ -67630,11 +67940,38 @@ static void sqlite3RegisterBuiltinFunctions(void){
     {-1, 0x0800|1|(1*0x0020), ((void*)(int)(0)), 0, minmaxFunc, 0, 0, 0, "min", {0} },
     {0, 0x0800|1|(1*0x0020), ((void*)(int)(0)), 0, 0, 0, 0, 0, "min", {0} },
     {1, 1|(1*0x0020)|0x1000, ((void*)(int)(0)), 0, minmaxStep,minMaxFinalize,minMaxValue,0,"min", {0}}
+#endif /* __i386__ */
                                                               ,
+#ifndef __i386__
+    {-1, 0x0800|1|(1*0x0020), ((void*)(long int)(1)), 0, minmaxFunc, 0, 0, 0, "max", {0} },
+    {0, 0x0800|1|(1*0x0020), ((void*)(long int)(1)), 0, 0, 0, 0, 0, "max", {0} },
+    {1, 1|(1*0x0020)|0x1000, ((void*)(long int)(1)), 0, minmaxStep,minMaxFinalize,minMaxValue,0,"max", {0}}
+#else /* __i386__ */
     {-1, 0x0800|1|(1*0x0020), ((void*)(int)(1)), 0, minmaxFunc, 0, 0, 0, "max", {0} },
     {0, 0x0800|1|(1*0x0020), ((void*)(int)(1)), 0, 0, 0, 0, 0, "max", {0} },
     {1, 1|(1*0x0020)|0x1000, ((void*)(int)(1)), 0, minmaxStep,minMaxFinalize,minMaxValue,0,"max", {0}}
+#endif /* __i386__ */
                                                               ,
+#ifndef __i386__
+    {1,0x0800|1|(0*0x0020)|0x0080, ((void*)(long int)(0)), 0, typeofFunc, 0, 0, 0, "typeof", {0} },
+    {1,0x0800|1|(0*0x0020)|0x0040, ((void*)(long int)(0)), 0, lengthFunc, 0, 0, 0, "length", {0} },
+    {2, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, instrFunc, 0, 0, 0, "instr", {0} },
+    {-1, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, printfFunc, 0, 0, 0, "printf", {0} },
+    {1, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, unicodeFunc, 0, 0, 0, "unicode", {0} },
+    {-1, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, charFunc, 0, 0, 0, "char", {0} },
+    {1, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, absFunc, 0, 0, 0, "abs", {0} },
+
+    {1, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, roundFunc, 0, 0, 0, "round", {0} },
+    {2, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, roundFunc, 0, 0, 0, "round", {0} },
+
+    {1, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, upperFunc, 0, 0, 0, "upper", {0} },
+    {1, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, lowerFunc, 0, 0, 0, "lower", {0} },
+    {1, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, hexFunc, 0, 0, 0, "hex", {0} },
+    {2,0x0800|1|(0*0x0020)|0x0200, ((void*)(long int)(0)), 0, versionFunc, 0, 0, 0, "ifnull", {0} },
+    {0, 1|(0*0x0020), ((void*)(long int)(0)), 0, randomFunc, 0, 0, 0, "random", {0} },
+    {1, 1|(0*0x0020), ((void*)(long int)(0)), 0, randomBlob, 0, 0, 0, "randomblob", {0} },
+    {2, 0x0800|1|(1*0x0020), ((void*)(long int)(0)), 0, nullifFunc, 0, 0, 0, "nullif", {0} },
+#else /* __i386__ */
     {1,0x0800|1|(0*0x0020)|0x0080, ((void*)(int)(0)), 0, typeofFunc, 0, 0, 0, "typeof", {0} },
     {1,0x0800|1|(0*0x0020)|0x0040, ((void*)(int)(0)), 0, lengthFunc, 0, 0, 0, "length", {0} },
     {2, 0x0800|1|(0*0x0020), ((void*)(int)(0)), 0, instrFunc, 0, 0, 0, "instr", {0} },
@@ -67653,8 +67990,24 @@ static void sqlite3RegisterBuiltinFunctions(void){
     {0, 1|(0*0x0020), ((void*)(int)(0)), 0, randomFunc, 0, 0, 0, "random", {0} },
     {1, 1|(0*0x0020), ((void*)(int)(0)), 0, randomBlob, 0, 0, 0, "randomblob", {0} },
     {2, 0x0800|1|(1*0x0020), ((void*)(int)(0)), 0, nullifFunc, 0, 0, 0, "nullif", {0} },
+#endif /* __i386__ */
     {0, 0x2000|1, 0, 0, versionFunc, 0, 0, 0, "sqlite_version", {0} },
     {0, 0x2000|1, 0, 0, sourceidFunc, 0, 0, 0, "sqlite_source_id", {0} },
+#ifndef __i386__
+    {2, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, errlogFunc, 0, 0, 0, "sqlite_log", {0} },
+    {1, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, quoteFunc, 0, 0, 0, "quote", {0} },
+    {0, 1|(0*0x0020), ((void*)(long int)(0)), 0, last_insert_rowid, 0, 0, 0, "last_insert_rowid", {0} },
+    {0, 1|(0*0x0020), ((void*)(long int)(0)), 0, changes, 0, 0, 0, "changes", {0} },
+    {0, 1|(0*0x0020), ((void*)(long int)(0)), 0, total_changes, 0, 0, 0, "total_changes", {0} },
+    {3, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, replaceFunc, 0, 0, 0, "replace", {0} },
+    {1, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, zeroblobFunc, 0, 0, 0, "zeroblob", {0} },
+    {2, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, substrFunc, 0, 0, 0, "substr", {0} },
+    {3, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, substrFunc, 0, 0, 0, "substr", {0} },
+    {1, 1|(0*0x0020)|0, ((void*)(long int)(0)), 0, sumStep,sumFinalize,sumFinalize,sumInverse,"sum", {0}},
+    {1, 1|(0*0x0020)|0, ((void*)(long int)(0)), 0, sumStep,totalFinalize,totalFinalize,sumInverse,"total", {0}},
+    {1, 1|(0*0x0020)|0, ((void*)(long int)(0)), 0, sumStep,avgFinalize,avgFinalize,sumInverse,"avg", {0}},
+    {0, 1|(0*0x0020)|0x0100, ((void*)(long int)(0)), 0, countStep,countFinalize,countFinalize,countInverse,"count", {0}}
+#else /* __i386__ */
     {2, 0x0800|1|(0*0x0020), ((void*)(int)(0)), 0, errlogFunc, 0, 0, 0, "sqlite_log", {0} },
     {1, 0x0800|1|(0*0x0020), ((void*)(int)(0)), 0, quoteFunc, 0, 0, 0, "quote", {0} },
     {0, 1|(0*0x0020), ((void*)(int)(0)), 0, last_insert_rowid, 0, 0, 0, "last_insert_rowid", {0} },
@@ -67668,12 +68021,25 @@ static void sqlite3RegisterBuiltinFunctions(void){
     {1, 1|(0*0x0020)|0, ((void*)(int)(0)), 0, sumStep,totalFinalize,totalFinalize,sumInverse,"total", {0}},
     {1, 1|(0*0x0020)|0, ((void*)(int)(0)), 0, sumStep,avgFinalize,avgFinalize,sumInverse,"avg", {0}},
     {0, 1|(0*0x0020)|0x0100, ((void*)(int)(0)), 0, countStep,countFinalize,countFinalize,countInverse,"count", {0}}
+#endif /* __i386__ */
                                                                         ,
+#ifndef __i386__
+    {1, 1|(0*0x0020)|0, ((void*)(long int)(0)), 0, countStep,countFinalize,countFinalize,countInverse,"count", {0}}
+#else /* __i386__ */
     {1, 1|(0*0x0020)|0, ((void*)(int)(0)), 0, countStep,countFinalize,countFinalize,countInverse,"count", {0}}
+#endif /* __i386__ */
                                                         ,
+#ifndef __i386__
+    {1, 1|(0*0x0020)|0, ((void*)(long int)(0)), 0, groupConcatStep,groupConcatFinalize,groupConcatValue,groupConcatInverse,"group_concat", {0}}
+#else /* __i386__ */
     {1, 1|(0*0x0020)|0, ((void*)(int)(0)), 0, groupConcatStep,groupConcatFinalize,groupConcatValue,groupConcatInverse,"group_concat", {0}}
+#endif /* __i386__ */
                                                                      ,
+#ifndef __i386__
+    {2, 1|(0*0x0020)|0, ((void*)(long int)(0)), 0, groupConcatStep,groupConcatFinalize,groupConcatValue,groupConcatInverse,"group_concat", {0}}
+#else /* __i386__ */
     {2, 1|(0*0x0020)|0, ((void*)(int)(0)), 0, groupConcatStep,groupConcatFinalize,groupConcatValue,groupConcatInverse,"group_concat", {0}}
+#endif /* __i386__ */
                                                                      ,
 
     {2, 0x0800|1|0x0004|0x0008, (void *)&globInfo, 0, likeFunc, 0, 0, 0, "glob", {0} },
@@ -67687,9 +68053,15 @@ static void sqlite3RegisterBuiltinFunctions(void){
 
 
 
+#ifndef __i386__
+    {1, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, 0, 0, 0, 0, "coalesce", {0} },
+    {0, 0x0800|1|(0*0x0020), ((void*)(long int)(0)), 0, 0, 0, 0, 0, "coalesce", {0} },
+    {-1,0x0800|1|(0*0x0020)|0x0200, ((void*)(long int)(0)), 0, versionFunc, 0, 0, 0, "coalesce", {0} },
+#else /* __i386__ */
     {1, 0x0800|1|(0*0x0020), ((void*)(int)(0)), 0, 0, 0, 0, 0, "coalesce", {0} },
     {0, 0x0800|1|(0*0x0020), ((void*)(int)(0)), 0, 0, 0, 0, 0, "coalesce", {0} },
     {-1,0x0800|1|(0*0x0020)|0x0200, ((void*)(int)(0)), 0, versionFunc, 0, 0, 0, "coalesce", {0} },
+#endif /* __i386__ */
   };
 
   sqlite3AlterFunctions();
@@ -73452,7 +73824,11 @@ static void sqlite3Pragma(
     }
     returnSingleInt(v,
        db->xWalCallback==sqlite3WalDefaultHook ?
+#ifndef __i386__
+           ((int)(long int)(db->pWalArg)) : 0);
+#else /* __i386__ */
            ((int)(int)(db->pWalArg)) : 0);
+#endif /* __i386__ */
   }
   break;
   case 31: {
@@ -80020,7 +80396,11 @@ malloc_failed:
   
  ((void) (0))
                                                       ;
+#ifndef __i386__
+  res.azResult[0] = ((void*)(long int)(res.nData));
+#else /* __i386__ */
   res.azResult[0] = ((void*)(int)(res.nData));
+#endif /* __i386__ */
   if( (rc&0xff)==4 ){
     sqlite3_free_table(&res.azResult[1]);
     if( res.zErrMsg ){
@@ -80066,7 +80446,11 @@ malloc_failed:
     
    ((void) (0))
                         ;
+#ifndef __i386__
+    n = ((int)(long int)(azResult[0]));
+#else /* __i386__ */
     n = ((int)(int)(azResult[0]));
+#endif /* __i386__ */
     for(i=1; i<n; i++){ if( azResult[i] ) sqlite3_free(azResult[i]); }
     sqlite3_free(azResult);
   }
@@ -90316,7 +90700,11 @@ static WhereInfo *sqlite3WhereBegin(
         Bitmask b = pTabItem->colUsed;
         int n = 0;
         for(; b; b=b>>1, n++){}
+#ifndef __i386__
+        sqlite3VdbeChangeP4(v, -1, ((void*)(long int)(n)), (-3));
+#else /* __i386__ */
         sqlite3VdbeChangeP4(v, -1, ((void*)(int)(n)), (-3));
+#endif /* __i386__ */
         
        ((void) (0))
                               ;
@@ -97208,7 +97596,7 @@ static int sqlite3RunParser(Parse *pParse, const char *zSql, char **pzErrMsg){
               if (zSql) {
 lava_set(52, *(const unsigned int *)zSql);
 }
-break;
+              break;
             }
           }
 
@@ -98956,7 +99344,11 @@ static int sqlite3WalDefaultHook(
   const char *zDb,
   int nFrame
 ){
+#ifndef __i386__
+  if( nFrame>=((int)(long int)(pClientData)) ){
+#else /* __i386__ */
   if( nFrame>=((int)(int)(pClientData)) ){
+#endif /* __i386__ */
     sqlite3BeginBenignMalloc();
     sqlite3_wal_checkpoint(db, zDb);
     sqlite3EndBenignMalloc();
@@ -98972,7 +99364,11 @@ static int sqlite3WalDefaultHook(
 
 
   if( nFrame>0 ){
+#ifndef __i386__
+    sqlite3_wal_hook(db, sqlite3WalDefaultHook, ((void*)(long int)(nFrame)));
+#else /* __i386__ */
     sqlite3_wal_hook(db, sqlite3WalDefaultHook, ((void*)(int)(nFrame)));
+#endif /* __i386__ */
   }else{
     sqlite3_wal_hook(db, 0, 0);
   }
