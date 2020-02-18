@@ -41,6 +41,8 @@ download_prebuilt() {
     JOBURLS[gcc-dev]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/dev/download?job=build:gcc"
     JOBURLS[afl-gcc-dev]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/dev/download?job=build:afl-gcc"
     JOBURLS[afl-clang-fast-dev]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/dev/download?job=build:afl-clang-fast"
+    JOBURLS[gcc-64]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:gcc-64"
+    JOBURLS[afl-clang-fast-64]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:afl-clang-fast-64"
 
     wget -qO /tmp/lava.zip ${JOBURLS[$1]} 2>/dev/null
     python3 -m zipfile -e /tmp/lava.zip .

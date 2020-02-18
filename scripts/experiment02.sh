@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# experiment 02 - "source based"
+# instrumented 32-bit binaries, except for Angora (64-bit), and Eclipser (uninstrumented)
+
 [ -e scripts/build.sh ] || exit 1
 
 
@@ -23,13 +26,11 @@ create_job_files() {
     fi
 
     for i in {2..15}; do
-        ./scripts/create-configs.py -e 3/jpegb/afl_job.json -c afl_job.json -p lava-afl-cf -j AFL -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
-#       ./scripts/create-configs.py -e 3/jpegb/afl_job.json -c afl_job.json -p lava-gcc -Q -j AFL -y ${i}/info.yaml $MERGE >/dev/null
-        ./scripts/create-configs.py -e 3/jpegb/qsym_job.json -c qsym_job.json -p lava-gcc -Q -j QSYM -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
-#       ./scripts/create-configs.py -e 3/jpegb/honggfuzz_job.json -c honggfuzz_job.json -p lava-gcc -Q -j HF -y ${i}/info.yaml $MERGE >/dev/null
+        ./scripts/create-configs.py -e 3/jpegb/qsym_job.json -c qsym_job.json -p lava-afl-gcc -j QSYM -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/honggfuzz_job.json -c honggfuzz_job.json -p lava-hf -j HF -y ${i}/info.yaml -F $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/eclipser_job.json -c eclipser_job.json -p lava-gcc -Q -j EC -y ${i}/info.yaml -F $MERGE >/dev/null
-        ./scripts/create-configs.py -e 3/jpegb/angora_job.json -c angora_job.json -p lava-ang -j Ang -y ${i}/info.yaml -F $MERGE >/dev/null
+        ./scripts/create-configs.py -e 3/jpegb/angora_job.json -c angora_job.json -p lava-ang -j Ang -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
+        ./scripts/create-configs.py -e 3/jpegb/afl_job.json -c afl_job.json -p lava-afl-cf -j AFL -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/aflpp_job.json -c aflpp_job.json -p lava-afl-cf -j AFL++ -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/aflrb_job.json -c aflrb_job.json -p lava-afl-cf -j AFLrb -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
     done
@@ -38,5 +39,3 @@ create_job_files() {
 
 create_job_files
 
-# lava-gcc needs all 32-bit afl-qemu-trace (/usr/local/i386/afl-*)
-sed -i 's/usr\/local\/bin/usr\/local\/i386/' */*/qsym_job.json
