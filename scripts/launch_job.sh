@@ -81,12 +81,16 @@ TGT_ROOT=$(find  -mindepth 2 -maxdepth 2 -type d -name "$TGT" -printf "%p")
 echo "[*] Using target: $TGT, fuzzer: $FZ ($FUZZ), n CPUs: $NF"
 
 if $USE_SBATCH; then
-#      --partition="general,infiniband,gpu" \
 #      --partition="general" \
+#      --partition="express" \
+#      --time=1:00:00 \
+#      --partition="short" \
+#      --time=1-00:00:00 \
 sbatch --job-name="${FUZZ}.${TGT}.run"  \
        --output="${FUZZ}.${TGT}.%j.log" \
        --export=TGT=$TGT,FZ=$FZ,NF=$NF,USE_DICT=$USE_DICT,T23H=$T23H,T24H=$T24H,ALL \
-       --partition="general,infiniband,gpu" \
+       --partition="general" \
+       --time=1-00:00:00 \
        --nodes=1 \
        --tasks-per-node=1 \
        --cpus-per-task="$(( $NF + 2 ))" \

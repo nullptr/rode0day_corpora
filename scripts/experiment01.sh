@@ -6,19 +6,23 @@
 [ -e scripts/build.sh ] || exit 1
 
 
-./scripts/build.sh --download
-./scripts/build.sh --copy-files
-./10/new_seeds_tcpdump.sh
+if [[ $# -eq 0 ]]; then
+    ./scripts/build.sh --download
+    ./scripts/build.sh --copy-files
+    ./10/new_seeds_tcpdump.sh
 
-./scripts/build.sh --prebuilt gcc
-./scripts/build.sh --prebuilt afl-gcc
-./scripts/build.sh --prebuilt afl-clang-fast
-./scripts/build.sh --prebuilt hfuzz-clang
-./scripts/build.sh --prebuilt angora-clang
+    ./scripts/build.sh --prebuilt gcc
+    ./scripts/build.sh --prebuilt afl-gcc
+    ./scripts/build.sh --prebuilt afl-clang-fast
+    ./scripts/build.sh --prebuilt hfuzz-clang
+    ./scripts/build.sh --prebuilt angora-clang
 
-# jq[*] patches to remove command-line args
-echo "[*] patching jq job files..."
-git apply patches/jq_no_cmdline.patch
+    # jq[*] patches to remove command-line args
+    echo "[*] patching jq job files..."
+    git apply --check patches/jq_no_cmdline.patch && \
+        git apply patches/jq_no_cmdline.patch
+fi
+
 
 create_job_files() {
     if [ -e db_config.json ]; then
