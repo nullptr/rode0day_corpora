@@ -28,6 +28,7 @@ jqB
 jqB2
 jqS3
 jqS4
+newgrepS
 pcreB
 sqliteB
 tcpdumpB
@@ -37,7 +38,7 @@ EOM
 
 SECONDS=0
 if [ "$RUNC" = "singularity" ]; then
-    echo "$TARGETS" | xargs -I{} -P 7 sh -c "nohup ./scripts/launch_job.sh ${fuzzer} '{}' 2 --test ${no_sbatch}" > testing-singularity-${fuzzer}-{}.log"
+    echo "$TARGETS" | xargs -I{} -P 7 sh -c "nohup ./scripts/launch_job.sh ${fuzzer} '{}' 2 --test ${no_sbatch} > testing-singularity-${fuzzer}-{}.log"
 else
     echo "$TARGETS" | xargs -I{} -P 7 sh -c "nohup ./scripts/launch.sh --test --fuzzer ${fuzzer} -N 2 '{}' > testing-docker-${fuzzer}-{}.log"
 fi

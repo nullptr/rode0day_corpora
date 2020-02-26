@@ -2,10 +2,12 @@
 *.a
 *.swp
 *.deps
+*.log
 magic.h
 bin
 built
 solutions
+patches
 __pycache__
 test*
 build_script
