@@ -49,11 +49,15 @@ if [ -e ${HOME}/Source/NU_${FZ}.luckyfuzz ]; then
     ls -la $FDIR/.luckyfuzz
 fi
 
+# Disable core dumps
+ulimit -c 0
+
 SECONDS=0
 CNAME="${FZ}_${TGT}_$(date +%s)"
 if [ "$RUNC" = "singularity" ]; then
-    TDIR="$(mkdir -d /tmp/${CNAME}_XXXX)"
+    TDIR="$(mktemp -d /tmp/${CNAME}_XXXX)"
     AFL_NO_AFFINITY=1 \
+#   AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1 \
     singularity run -B "${TDIR}":/tmp $SIMG -n $NF -t $FDIR -M $CNAME &
     # singularity instance start -B "${TDIR}":/tmp $SIMG $CNAME -n $NF -t $FDIR -M $CNAME
     S_PID="$!"
@@ -80,7 +84,7 @@ get_coverage() {
     echo "[*] Coverage finished.  Elapsed = $SECONDS  $(date)"
 }
 
-stop_signularity() {
+stop_singularity() {
     singularity exec -B "${TDIR}":/tmp $SIMG /start_fuzzing --stop $TGT
     sleep 5s
     kill -SIGTERM $S_PID
@@ -128,6 +132,7 @@ if [ "$RUNC" = "singularity" ]; then
     singularity exec -B "${TDIR}":/tmp $SIMG /start_fuzzing --stop $TGT
     sleep 15s
     wait $S_PID
+    rm -rf $TDIR
     exit 0
 fi
 

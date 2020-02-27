@@ -41,11 +41,14 @@ download_prebuilt() {
     JOBURLS[gcc-dev]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/dev/download?job=build:gcc"
     JOBURLS[afl-gcc-dev]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/dev/download?job=build:afl-gcc"
     JOBURLS[afl-clang-fast-dev]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/dev/download?job=build:afl-clang-fast"
+    JOBURLS[gcc-64]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:gcc-64"
+    JOBURLS[afl-clang-fast-64]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:afl-clang-fast-64"
 
     wget -qO /tmp/lava.zip ${JOBURLS[$1]} 2>/dev/null
     python3 -m zipfile -e /tmp/lava.zip .
     rm -f /tmp/lava.zip
     chmod +x */*/lava-*/bin/*
+    echo "[*] binaries compiled with $1 downloaded!"
 }
 
 download_challenges() {
@@ -67,6 +70,9 @@ download_challenges() {
     rm -Rf 13/jpegS4/built && mv 13/jpegS4/build 13/jpegS4/built
     wget -qO- ${PREFIX}/19.11_AEXUadf28ERWHUISDFHIUSDChiuaefa2.tar.gz | tar $FILTER -C 14 -xzf - 2>/dev/null
     wget -qO- ${PREFIX}/20.02_IyzkwjapUOISwenapsuwey923981bfa2.tar.gz | tar $FILTER -C 15 -xzf - 2>/dev/null
+    # remove conflicting directory names
+    rm -rf 2/fileS2
+    rm -rf 2/fileB2
     echo "[*] all challenges downloaded!"
 }
 
@@ -115,6 +121,7 @@ do_prep() {
     download_lava_gcc
     create_job_files
     copy_required_files
+    ./10/new_seeds_tcpdump.sh
     echo "[*] setup complete! Ready to fuzz uninstrumented binaries or compile instrumented ones."
 }
 
