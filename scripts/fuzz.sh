@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# set LL if we're on the LL grid
-[ -e /home/gridsan/AN24929 ] && LL=true
-
 bail() {
   echo "[-] aboring: $1"
   exit 1
@@ -55,7 +52,9 @@ fi
 # Disable core dumps
 ulimit -c 0
 
-if [ $LL ]; then # Just set an environment variable
+# check for core pattern
+read -n 1 CORE_PATTERN < /proc/sys/kernel/core_pattern
+if [[ $CORE_PATTERN = "|" ]]; then  # Just set an environment variable
 	export AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
 fi
 
