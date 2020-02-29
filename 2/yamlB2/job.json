@@ -4,6 +4,7 @@
     "input":"inputs",
     "output":"outputs",
     "target":"./lava-gcc/bin/deconstruct",
+    "gcov_target":"./gcov/src/libyaml",
     "cmdline": "@@",
     "qemu": true,
     "mem_limit":"4096",

@@ -52,12 +52,17 @@ fi
 # Disable core dumps
 ulimit -c 0
 
+# check for core pattern
+read -n 1 CORE_PATTERN < /proc/sys/kernel/core_pattern
+if [[ $CORE_PATTERN = "|" ]]; then  # Just set an environment variable
+	export AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
+fi
+
 SECONDS=0
 CNAME="${FZ}_${TGT}_$(date +%s)"
 if [ "$RUNC" = "singularity" ]; then
     TDIR="$(mktemp -d /tmp/${CNAME}_XXXX)"
     AFL_NO_AFFINITY=1 \
-#   AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1 \
     singularity run -B "${TDIR}":/tmp $SIMG -n $NF -t $FDIR -M $CNAME &
     # singularity instance start -B "${TDIR}":/tmp $SIMG $CNAME -n $NF -t $FDIR -M $CNAME
     S_PID="$!"
@@ -70,16 +75,18 @@ else
         --pid=host --ulimit "core=0" $DIMG -n $NF -t $FDIR -M $CNAME
 fi
 
+unset AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES
+
 get_coverage() {
     echo "[*] Getting coverage.  Elapsed = $SECONDS  $(date)"
     cd $FDIR
     if [ "$RUNC" = "singularity" ]; then
         singularity exec $SIMG make-gcov-src.sh
-        # singularity exec instance://${CNAME} afl-stats -c ${FZ}_job.json -s -g --afl-drcov -j 4
-        singularity exec -B "${TDIR}":/tmp $SIMG afl-stats -c ${FZ}_job.json -s -g --afl-drcov -j 4
+        # singularity exec instance://${CNAME} afl-stats -c ${FZ}_job.json -s -g --fast-cov -j 4
+        singularity exec -B "${TDIR}":/tmp $SIMG afl-stats -c ${FZ}_job.json -s -g --fast-cov -j 4
     else
         docker exec $CNAME make-gcov-src.sh
-        docker exec $CNAME afl-stats -c ${FZ}_job.json -s -g --afl-drcov -j 4
+        docker exec $CNAME afl-stats -c ${FZ}_job.json -s -g --fast-cov -j 4
     fi
     echo "[*] Coverage finished.  Elapsed = $SECONDS  $(date)"
 }

@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 usage() {
    echo "Usage: $0 <fuzzer> <target_name> <n cpus> [--dict] [--test] [--limit <# seconds>]"
    exit 1
@@ -78,18 +77,27 @@ TGT_ROOT=$(find  -mindepth 2 -maxdepth 2 -type d -name "$TGT" -printf "%p")
 
 [ -e "$SIMG" ] || bail "failed to find singularity image: $SIMG"
 
-echo "[*] Using target: $TGT, fuzzer: $FZ ($FUZZ), n CPUs: $NF"
+# Default args, partition=normal. On LL we need manycore and constraints
+partition="--partition=normal"
+if [ -e /home/gridsan/AN24929 ]; then
+    partition="--partition=manycore --constraint=xeon64c"
+elif [ -e /scratch ]; then
+    partition="--partition=short"
+fi
+
+echo "[*] Using target: $TGT, fuzzer: $FZ ($FUZZ), n CPUs: $NF on partition: $partition"
 
 if $USE_SBATCH; then
-#      --partition="general" \
+#      --partition="normal" \
 #      --partition="express" \
 #      --time=1:00:00 \
 #      --partition="short" \
 #      --time=1-00:00:00 \
+set -ux
 sbatch --job-name="${FUZZ}.${TGT}.run"  \
        --output="${FUZZ}.${TGT}.%j.log" \
        --export=TGT=$TGT,FZ=$FZ,NF=$NF,USE_DICT=$USE_DICT,T23H=$T23H,T24H=$T24H,ALL \
-       --partition="general" \
+       $partition \
        --time=1-00:00:00 \
        --nodes=1 \
        --tasks-per-node=1 \
