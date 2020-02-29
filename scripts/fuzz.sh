@@ -75,11 +75,11 @@ get_coverage() {
     cd $FDIR
     if [ "$RUNC" = "singularity" ]; then
         singularity exec $SIMG make-gcov-src.sh
-        # singularity exec instance://${CNAME} afl-stats -c ${FZ}_job.json -s -g --afl-drcov -j 4
-        singularity exec -B "${TDIR}":/tmp $SIMG afl-stats -c ${FZ}_job.json -s -g --afl-drcov -j 4
+        # singularity exec instance://${CNAME} afl-stats -c ${FZ}_job.json -s -g --fast-cov -j 4
+        singularity exec -B "${TDIR}":/tmp $SIMG afl-stats -c ${FZ}_job.json -s -g --fast-cov -j 4
     else
         docker exec $CNAME make-gcov-src.sh
-        docker exec $CNAME afl-stats -c ${FZ}_job.json -s -g --afl-drcov -j 4
+        docker exec $CNAME afl-stats -c ${FZ}_job.json -s -g --fast-cov -j 4
     fi
     echo "[*] Coverage finished.  Elapsed = $SECONDS  $(date)"
 }
