@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# set LL if we're on the LL grid
+uname -r | grep -q 'llgrid' && LL=true
 
 usage() {
    echo "Usage: $0 <fuzzer> <target_name> <n cpus> [--dict] [--test] [--limit <# seconds>]"
@@ -86,10 +88,19 @@ if $USE_SBATCH; then
 #      --time=1:00:00 \
 #      --partition="short" \
 #      --time=1-00:00:00 \
+
+# Default args, partition=general. On LL we need manycore and constraints
+args="--partition=general"
+if [ $LL ]; then
+    args="--partition=manycore --constraint=xeon64c"
+fi
+
+
+set -x
 sbatch --job-name="${FUZZ}.${TGT}.run"  \
        --output="${FUZZ}.${TGT}.%j.log" \
        --export=TGT=$TGT,FZ=$FZ,NF=$NF,USE_DICT=$USE_DICT,T23H=$T23H,T24H=$T24H,ALL \
-       --partition="general" \
+       $args \
        --time=1-00:00:00 \
        --nodes=1 \
        --tasks-per-node=1 \

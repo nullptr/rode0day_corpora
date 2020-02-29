@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# set LL if we're on the LL grid
+uname -r | grep -q 'llgrid' && LL=true
+
 bail() {
   echo "[-] aboring: $1"
   exit 1
@@ -52,12 +55,15 @@ fi
 # Disable core dumps
 ulimit -c 0
 
+if [ $LL ]; then # Just set an environment variable
+	export AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
+fi
+
 SECONDS=0
 CNAME="${FZ}_${TGT}_$(date +%s)"
 if [ "$RUNC" = "singularity" ]; then
     TDIR="$(mktemp -d /tmp/${CNAME}_XXXX)"
     AFL_NO_AFFINITY=1 \
-#   AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1 \
     singularity run -B "${TDIR}":/tmp $SIMG -n $NF -t $FDIR -M $CNAME &
     # singularity instance start -B "${TDIR}":/tmp $SIMG $CNAME -n $NF -t $FDIR -M $CNAME
     S_PID="$!"
@@ -69,6 +75,8 @@ else
         -e "QEMU_RESERVED_VA=0xf700000" --hostname "$(hostname)-docker-${TGT}" \
         --pid=host --ulimit "core=0" $DIMG -n $NF -t $FDIR -M $CNAME
 fi
+
+unset AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES
 
 get_coverage() {
     echo "[*] Getting coverage.  Elapsed = $SECONDS  $(date)"
