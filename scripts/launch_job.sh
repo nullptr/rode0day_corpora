@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # set LL if we're on the LL grid
-uname -r | grep -q 'llgrid' && LL=true
+[ -e /home/gridsan/AN24929 ] && LL=true
 
 usage() {
    echo "Usage: $0 <fuzzer> <target_name> <n cpus> [--dict] [--test] [--limit <# seconds>]"

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # set LL if we're on the LL grid
-uname -r | grep -q 'llgrid' && LL=true
+[ -e /home/gridsan/AN24929 ] && LL=true
 
 bail() {
   echo "[-] aboring: $1"
