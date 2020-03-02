@@ -9,7 +9,9 @@ if [ "$RUNC" = "singularity" ]; then
     simg=${HOME}/s_images/${fuzzer}.sif
     rm -f $simg
     singularity pull --force --name $simg shub://shub-fuzz/${fuzzer}
-    #no_sbatch="--no-sbatch" # Comment out if you want to run jobs via slurm - if uncommented we run tests wherever the script is run
+    # Uncomment the next line to run singularity images without SLURM/sbatch
+    #   --no-sbatch is a command-line argument to launch_job.sh to NOT use sbatch
+#   no_sbatch="--no-sbatch"
     logfile="testing-singularity-${fuzzer}.log"
 else
     docker pull registry.gitlab.com/rode0day/fuzzer-testing/${fuzzer}_runner:16.04 || exit 1
