@@ -63,6 +63,7 @@ CNAME="${FZ}_${TGT}_$(date +%s)"
 if [ "$RUNC" = "singularity" ]; then
     TDIR="$(mktemp -d /tmp/${CNAME}_XXXX)"
     AFL_NO_AFFINITY=1 \
+    TMPDIR=/tmp \
     singularity run -B "${TDIR}":/tmp $SIMG -n $NF -t $FDIR -M $CNAME &
     # singularity instance start -B "${TDIR}":/tmp $SIMG $CNAME -n $NF -t $FDIR -M $CNAME
     S_PID="$!"
