@@ -7,7 +7,7 @@ TGT="$1"
 NF="2"
 DIMG="${REGISTRY}/afl_runner:16.04"
 T23H="$(( 60 * 60 * 23 + 60 * 30 ))"
-T24H="$(( 60 * 60 * 24 ))"
+TLIM="$(( 60 * 60 * 24 ))"
 
 
 usage() {
@@ -27,13 +27,13 @@ while (( "$#" )); do
             shift 2
             ;;
         --limit)
-            T24H="$2"
+            TLIM="$2"
             T23H="$(( $2 - 60 * 30 ))"
             shift 2
             ;;
         --test)
             T23H="$(( 60 * 10 ))"
-            T24H="$(( 60 * 15 ))"
+            TLIM="$(( 60 * 15 ))"
             USE_DICT="dict"
             shift
             ;;

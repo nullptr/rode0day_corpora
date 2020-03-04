@@ -18,7 +18,7 @@ NF="${3:-4}"
 USE_DICT="$4"
 RUNC=singularity
 T23H="$(( 60 * 60 * 23 + 60 * 30 ))"
-T24H="$(( 60 * 60 * 24 - 120 ))"
+TLIM="$(( 60 * 60 * 24 - 120 ))"
 
 declare -A ABV
 ABV[afl]=afl
@@ -35,13 +35,13 @@ USE_SBATCH=true
 while (( "$#" )); do
     case "$1" in
         --limit)
-            T24H="$2"
+            TLIM="$2"
             T23H="$(( $2 - 60 * 30 ))"
             shift 2
             ;;
         --test)
             T23H="$(( 60 * 10 ))"
-            T24H="$(( 60 * 15 ))"
+            TLIM="$(( 60 * 15 ))"
             USE_DICT="dict"
             NF="2"
             shift
@@ -96,7 +96,7 @@ if $USE_SBATCH; then
 set -ux
 sbatch --job-name="${FUZZ}.${TGT}.run"  \
        --output="${FUZZ}.${TGT}.%j.log" \
-       --export=TGT=$TGT,FZ=$FZ,NF=$NF,USE_DICT=$USE_DICT,T23H=$T23H,T24H=$T24H,ALL \
+       --export=TGT=$TGT,FZ=$FZ,NF=$NF,USE_DICT=$USE_DICT,T23H=$T23H,TLIM=$TLIM,ALL \
        $partition \
        --time=1-00:00:00 \
        --nodes=1 \

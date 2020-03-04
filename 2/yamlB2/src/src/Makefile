@@ -1,4 +1,4 @@
-all: libyaml
+all: deconstruct
 
 CFLAGS += -O0 -DHAVE_CONFIG_H -I. -I.. -I../include -g -gdwarf-2
 
@@ -21,15 +21,15 @@ LIBOBJ = \
 %.o : %.c
 	$(CC) $(CFLAGS) -c -o $@ $< 
 
-libyaml : $(LIBOBJ)
-	$(CC) $(CFLAGS) -o libyaml $^
+deconstruct : $(LIBOBJ)
+	$(CC) $(CFLAGS) -o deconstruct $^
 
 preclean : 
 	rm -f *-pre.c
 	rm -f *-pre.h
 
 clean : 
-	rm -f libyaml \
+	rm -f deconstruct \
 	rm -f *.o \
 	rm -f *.so \
 	rm -f grep \
