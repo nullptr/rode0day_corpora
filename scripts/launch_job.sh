@@ -16,6 +16,7 @@ FZ="${1:-honggfuzz}"
 TGT="$2"
 NF="${3:-4}"
 USE_DICT="$4"
+LOGDIR="${LOGDIR:-$HOME}"
 RUNC=singularity
 T23H="$(( 60 * 60 * 23 + 60 * 30 ))"
 TLIM="$(( 60 * 60 * 24 - 120 ))"
@@ -95,7 +96,7 @@ if $USE_SBATCH; then
 #      --time=1-00:00:00 \
 set -ux
 sbatch --job-name="${FUZZ}.${TGT}.run"  \
-       --output="${FUZZ}.${TGT}.%j.log" \
+       --output="${LOGDIR}/${FUZZ}.${TGT}.%j.log" \
        --export=TGT=$TGT,FZ=$FZ,NF=$NF,USE_DICT=$USE_DICT,T23H=$T23H,TLIM=$TLIM,ALL \
        $partition \
        --time=1-00:00:00 \

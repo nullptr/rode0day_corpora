@@ -43,6 +43,8 @@ if [ "$RUNC" = "singularity" ]; then
     if [[ "$no_sbatch" ]]; then
         echo "$TARGETS" | xargs -I{} -P 7 sh -c "nohup ./scripts/launch_job.sh ${fuzzer} '{}' 2 --test ${no_sbatch} > testing-singularity-${fuzzer}-{}.log"
     else
+        export LOGDIR=$HOME/archive/logs
+        mkdir -p "$LOGDIR"
         echo "$TARGETS" | xargs -I{} -P 2 sh -c "./scripts/launch_job.sh ${fuzzer} '{}' 2 --test "
     fi
 else

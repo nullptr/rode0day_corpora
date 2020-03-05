@@ -3,11 +3,14 @@
 *.swp
 *.deps
 *.log
+db_config.json
 magic.h
+magic.mgc
 bin
 built
 solutions
 patches
+share
 __pycache__
 test*
 build_script
@@ -24,6 +27,9 @@ lava-afl-cf
 lava-hf
 lava-ang
 lava-install
+
+14/fileS5
+14/sqliteB4
 
 3/greps/src/src/grep
 3/jpegs/src/src/memdjpeg

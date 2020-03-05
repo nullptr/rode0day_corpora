@@ -24,6 +24,9 @@ fi
 
 FBASE=/dev/shm/fuzz
 FDIR=/dev/shm/fuzz/${FZ}/${TGT}
+if [[ $SLURM_JOB_ID ]]; then
+    FDIR=${FDIR}_${SLURM_JOB_ID}
+fi
 SIMG=${HOME}/s_images/${FZ}.sif
 
 rm -Rf $FDIR || bail "failed to remove $FDIR"
@@ -141,6 +144,8 @@ if [ "$RUNC" = "singularity" ]; then
     singularity exec -B "${TDIR}":/tmp $SIMG /start_fuzzing --stop $TGT
     sleep 15s
     wait $S_PID
+    declare -f save_final_results >/dev/null && save_final_results
+    echo "[*] Removing the fuzzing directory in /dev/shm"
     rm -rf $TDIR
     exit 0
 fi
@@ -149,5 +154,6 @@ if [ "$RUNC" = "docker" ]; then
     docker exec $CNAME /start_fuzzing --stop $TGT
     sleep 15s
     docker wait $CNAME
+    declare -f save_final_results >/dev/null && save_final_results
     echo docker stop -t 30 $CNAME
 fi
