@@ -25,7 +25,7 @@ fi
 FBASE=/dev/shm/fuzz
 FDIR=/dev/shm/fuzz/${FZ}/${TGT}
 if [[ $SLURM_JOB_ID ]]; then
-    FDIR=${FDIR}_${SLURM_JOB_ID}
+    FDIR=/dev/shm/fuzz/${FZ}/${SLURM_JOB_ID}/${TGT}
 fi
 SIMG=${HOME}/s_images/${FZ}.sif
 
