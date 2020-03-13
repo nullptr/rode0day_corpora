@@ -24,6 +24,7 @@ TLIM="$(( 60 * 60 * 24 - 120 ))"
 declare -A ABV
 ABV[afl]=afl
 ABV[aflpp]=pp
+ABV[aflrb]=rb
 ABV[qsym]=qsym
 ABV[honggfuzz]=hf
 ABV[eclipser]=ec

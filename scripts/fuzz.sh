@@ -65,9 +65,10 @@ SECONDS=0
 CNAME="${FZ}_${TGT}_${JOB_ID}"
 MON_JOB="${CNAME}_${TLIM}_N${NF}_${SLURM_JOB_PARTITION:-$(hostname)}"
 if [ "$RUNC" = "singularity" ]; then
-    TDIR="$(mktemp -d /tmp/${CNAME}_XXXX)"
-    AFL_NO_AFFINITY=1 \
+    TDIR="$(mktemp -d ${TMPDIR:-/tmp}/${CNAME}_XXXX)"
     TMPDIR=/tmp \
+    AFL_NO_AFFINITY=1 \
+    ANGORA_DISABLE_CPU_BINDING=1 \
     singularity run -B "${TDIR}":/tmp $SIMG -n $NF -t $FDIR -M $MON_JOB &
     # singularity instance start -B "${TDIR}":/tmp $SIMG $CNAME -n $NF -t $FDIR -M $MON_JOB
     S_PID="$!"
@@ -142,11 +143,12 @@ printf "[*] Finished fuzzing %-14s: Elapsed=${SECONDS}s  $(date +'%F %T') $MESSA
 
 if [ "$RUNC" = "singularity" ]; then
     singularity exec -B "${TDIR}":/tmp $SIMG /start_fuzzing --stop $TGT
-    sleep 15s
+    sleep 120s
     wait $S_PID
     declare -f save_final_results >/dev/null && save_final_results
     echo "[*] Removing the fuzzing directory in /dev/shm"
     rm -rf $TDIR
+    rm -rf $FDIR
     exit 0
 fi
 

@@ -13,7 +13,7 @@ build:hfuzz:
       - ./*/*/lava-hf
     expire_in: 6 mos
   only:
-    - master
+    - tags
 
 test_seeds:hfuzz:
   extends: .test_seeds
@@ -26,4 +26,4 @@ test_seeds:hfuzz:
   dependencies:
     - build:hfuzz
   only:
-    - master
+    - tags

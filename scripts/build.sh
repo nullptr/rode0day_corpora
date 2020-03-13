@@ -25,7 +25,7 @@ IMAGES[angora]="${REGISTRY}/angora_runner:16.04"
 
 
 download_lava_gcc() {
-    wget -qO /tmp/lava_gcc.zip https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:gcc 2>/dev/null
+    wget -qO /tmp/lava_gcc.zip https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/ccdc4975/download?job=build:gcc 2>/dev/null
     python3 -m zipfile -e /tmp/lava_gcc.zip .
     rm -f /tmp/lava_gcc.zip
     chmod +x */*/lava-gcc/bin/*
@@ -33,16 +33,17 @@ download_lava_gcc() {
 
 download_prebuilt() {
     declare -A JOBURLS
-    JOBURLS[gcc]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:gcc"
-    JOBURLS[afl-gcc]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:afl-gcc"
-    JOBURLS[afl-clang-fast]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:afl-clang-fast"
-    JOBURLS[hfuzz-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:hfuzz"
-    JOBURLS[angora-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:angora"
+    JOBURLS[gcc]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/ccdc4975/download?job=build:gcc"
+    JOBURLS[afl-gcc]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/ccdc4975/download?job=build:afl-gcc"
+    JOBURLS[afl-clang-fast]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/ccdc4975/download?job=build:afl-clang-fast"
+    JOBURLS[hfuzz-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/ccdc4975/download?job=build:hfuzz"
+    JOBURLS[angora-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/ccdc4975/download?job=build:angora"
+    JOBURLS[gcc-64]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/ccdc4975/download?job=build:gcc-64"
+    JOBURLS[afl-clang-fast-64]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/ccdc4975/download?job=build:afl-clang-fast-64"
+
     JOBURLS[gcc-dev]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/dev/download?job=build:gcc"
     JOBURLS[afl-gcc-dev]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/dev/download?job=build:afl-gcc"
     JOBURLS[afl-clang-fast-dev]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/dev/download?job=build:afl-clang-fast"
-    JOBURLS[gcc-64]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:gcc-64"
-    JOBURLS[afl-clang-fast-64]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/master/download?job=build:afl-clang-fast-64"
 
     wget -qO /tmp/lava.zip ${JOBURLS[$1]} 2>/dev/null
     python3 -m zipfile -e /tmp/lava.zip .

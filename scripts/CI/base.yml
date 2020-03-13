@@ -6,6 +6,9 @@
     entrypoint: [""]
   artifacts:
     expire_in: 1 week
+  only:
+    - dev
+    - tags
 
 .test_seeds:
   stage: test_seeds
@@ -27,4 +30,4 @@
       - results*.html 
     expire_in: 1 week
   only:
-    - master
+    - tags
