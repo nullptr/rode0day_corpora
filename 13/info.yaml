@@ -11,6 +11,7 @@ challenges:
         sample_inputs: ["inputs/fixed.json"]
         source_provided: false
         timeout: 9000
+        known_bugs: 8
 
     sqliteB3:
         challenge_id: 55
@@ -20,6 +21,7 @@ challenges:
         binary_arguments: ""
         sample_inputs: ["inputs/help.sql", "inputs/rnd.sql"]
         source_provided: false
+        known_bugs: 54
 
     fileS4:
         challenge_id: 56
@@ -30,6 +32,7 @@ challenges:
         sample_inputs: ["inputs/hello.txt"]
         source_provided: true
         source_path: "src"
+        known_bugs: 103
 
     jpegS4:
         challenge_id: 57
@@ -40,3 +43,4 @@ challenges:
         sample_inputs: ["inputs/logo.jpg", "inputs/rodeo.jpg"]
         source_provided: true
         source_path: "src"
+        known_bugs: 6

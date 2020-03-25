@@ -9,6 +9,7 @@ challenges:
         binary_arguments: "{input_file}"
         sample_inputs: ["inputs/sum"]
         source_provided: false
+        known_bugs: 4
 
     fileB5:
         challenge_id: 46
@@ -18,6 +19,7 @@ challenges:
         binary_arguments: "-Lm {install_dir}/share/misc/magic.mgc {input_file}"
         sample_inputs: ["inputs/hello.txt"]
         source_provided: false
+        known_bugs: 186
 
     sqliteB2:
         challenge_id: 47
@@ -27,6 +29,7 @@ challenges:
         binary_arguments: ""
         sample_inputs: ["inputs/help.sql", "inputs/rnd.sql"]
         source_provided: false
+        known_bugs: 1303
 
     jpegS3:
         challenge_id: 48
@@ -37,6 +40,7 @@ challenges:
         sample_inputs: ["inputs/logo.jpg", "inputs/rodeo.jpg"]
         source_provided: true
         source_path: "src"
+        known_bugs: 97
 
     jqS3:
         challenge_id: 49
@@ -51,4 +55,5 @@ challenges:
         source_provided: true
         source_path: "src"
         timeout: 9000
+        known_bugs: 29
 

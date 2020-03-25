@@ -8,6 +8,10 @@ build:gcc:
     paths:
       - ./*/*/lava-gcc
     expire_in: 1 year
+  only:
+    - dev
+    - tags
+
 
 test_solutions:2:14:gcc:
   variables:
@@ -17,8 +21,8 @@ test_solutions:2:14:gcc:
   dependencies:
     - build:gcc
   only:
-    - master
     - dev
+    - tags
 
 test_solutions:3:14:gcc:
   variables:
@@ -28,8 +32,8 @@ test_solutions:3:14:gcc:
   dependencies:
     - build:gcc
   only:
-    - master
     - dev
+    - tags
 
 test_solutions:4:14:gcc:
   variables:
@@ -39,8 +43,8 @@ test_solutions:4:14:gcc:
   dependencies:
     - build:gcc
   only:
-    - master
     - dev
+    - tags
 
 test_solutions:5:14:gcc:
   variables:
@@ -50,8 +54,8 @@ test_solutions:5:14:gcc:
   dependencies:
     - build:gcc
   only:
-    - master
     - dev
+    - tags
 
 test_solutions:6:14:gcc:
   variables:
@@ -65,8 +69,8 @@ test_solutions:6:14:gcc:
   dependencies:
     - build:gcc
   only:
-    - master
     - dev
+    - tags
 
 test_solutions:7:14:gcc:
   variables:
@@ -80,8 +84,8 @@ test_solutions:7:14:gcc:
   dependencies:
     - build:gcc
   only:
-    - master
     - dev
+    - tags
 
 test_solutions:8:14:gcc:
   variables:
@@ -95,8 +99,8 @@ test_solutions:8:14:gcc:
   dependencies:
     - build:gcc
   only:
-    - master
     - dev
+    - tags
 
 test_solutions:9:14:gcc:
   variables:
@@ -106,8 +110,8 @@ test_solutions:9:14:gcc:
   dependencies:
     - build:gcc
   only:
-    - master
     - dev
+    - tags
 
 test_solutions:10:14:gcc:
   variables:
@@ -121,8 +125,8 @@ test_solutions:10:14:gcc:
   dependencies:
     - build:gcc
   only:
-    - master
     - dev
+    - tags
 
 test_solutions:11:14:gcc:
   variables:
@@ -132,8 +136,8 @@ test_solutions:11:14:gcc:
   dependencies:
     - build:gcc
   only:
-    - master
     - dev
+    - tags
 
 test_solutions:12:14:gcc:
   variables:
@@ -143,8 +147,8 @@ test_solutions:12:14:gcc:
   dependencies:
     - build:gcc
   only:
-    - master
     - dev
+    - tags
 
 test_solutions:13:14:gcc:
   variables:
@@ -154,8 +158,8 @@ test_solutions:13:14:gcc:
   dependencies:
     - build:gcc
   only:
-    - master
     - dev
+    - tags
 
 test_solutions:14:14:gcc:
   variables:
@@ -165,5 +169,5 @@ test_solutions:14:14:gcc:
   dependencies:
     - build:gcc
   only:
-    - master
     - dev
+    - tags

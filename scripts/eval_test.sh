@@ -9,7 +9,9 @@ if [ "$RUNC" = "singularity" ]; then
     simg=${HOME}/s_images/${fuzzer}.sif
     rm -f $simg
     singularity pull --force --name $simg shub://shub-fuzz/${fuzzer}
-    no_sbatch="--no-sbatch"
+    # Uncomment the next line to run singularity images without SLURM/sbatch
+    #   --no-sbatch is a command-line argument to launch_job.sh to NOT use sbatch
+#   no_sbatch="--no-sbatch"
     logfile="testing-singularity-${fuzzer}.log"
 else
     docker pull registry.gitlab.com/rode0day/fuzzer-testing/${fuzzer}_runner:16.04 || exit 1
@@ -39,9 +41,11 @@ EOM
 SECONDS=0
 if [ "$RUNC" = "singularity" ]; then
     if [[ "$no_sbatch" ]]; then
-        echo "$targets" | xargs -i{} -p 7 sh -c "nohup ./scripts/launch_job.sh ${fuzzer} '{}' 2 --test ${no_sbatch} > testing-singularity-${fuzzer}-{}.log"
+        echo "$TARGETS" | xargs -I{} -P 7 sh -c "nohup ./scripts/launch_job.sh ${fuzzer} '{}' 2 --test ${no_sbatch} > testing-singularity-${fuzzer}-{}.log"
     else
-        echo "$targets" | xargs -i{} -p 2 sh -c "./scripts/launch_job.sh ${fuzzer} '{}' 2 --test "
+        export LOGDIR=$HOME/archive/logs
+        mkdir -p "$LOGDIR"
+        echo "$TARGETS" | xargs -I{} -P 2 sh -c "./scripts/launch_job.sh ${fuzzer} '{}' 2 --test "
     fi
 else
     echo "$TARGETS" | xargs -I{} -P 7 sh -c "nohup ./scripts/launch.sh --test --fuzzer ${fuzzer} -N 2 '{}' > testing-docker-${fuzzer}-{}.log"

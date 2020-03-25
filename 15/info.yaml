@@ -9,6 +9,7 @@ challenges:
         binary_arguments: ""
         sample_inputs: ["inputs/rnd.sql"]
         source_provided: false
+        known_bugs: 12
 
     grepS2:
         challenge_id: 63 
@@ -19,3 +20,4 @@ challenges:
         sample_inputs: ["inputs/hi.txt"]
         source_provided: true
         source_path: "src"
+        known_bugs: 20

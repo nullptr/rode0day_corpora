@@ -37,6 +37,7 @@ create_job_files() {
         ./scripts/create-configs.py -e 3/jpegb/afl_job.json -c afl_job.json -p lava-afl-gcc -j AFL -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/aflpp_job.json -c aflpp_job.json -p lava-afl-cf -j AFL++ -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/aflrb_job.json -c aflrb_job.json -p lava-afl-cf -j AFLrb -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
+        ./scripts/create-configs.py -e 3/jpegb/ankou_job.json -c ankou_job.json -p lava-afl-cf -j AK -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
     done
     echo "[*] all job config files created!"
 }

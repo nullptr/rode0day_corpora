@@ -9,6 +9,7 @@ challenges:
         binary_arguments: "-f {input_file} {install_dir}/share/passwd"
         sample_inputs: ["inputs/patterns1", "inputs/patterns2"]
         source_provided: false
+        known_bugs: 18
 
     jpegS5:
         challenge_id: 60
@@ -19,3 +20,4 @@ challenges:
         sample_inputs: ["inputs/logo.jpg", "inputs/rodeo.jpg"]
         source_provided: true
         source_path: "src"
+        known_bugs: 31
