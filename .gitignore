@@ -21,6 +21,7 @@ qsym_job.json
 honggfuzz_job.json
 eclipser_job.json
 angora_job.json
+ankou_job.json
 lava-gcc
 lava-afl-gcc
 lava-afl-cf

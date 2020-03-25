@@ -29,6 +29,7 @@ ABV[qsym]=qsym
 ABV[honggfuzz]=hf
 ABV[eclipser]=ec
 ABV[angora]=ang
+ABV[ankou]=ak
 
 FUZZ=${ABV[$FZ]}
 SIMG=${HOME}/s_images/${FZ}.sif

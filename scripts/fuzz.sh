@@ -1,7 +1,7 @@
 #!/bin/bash
 
 bail() {
-  echo "[-] aboring: $1"
+  echo "[-] aborting: $1"
   exit 1
 }
 
@@ -125,8 +125,8 @@ sleep $(( $T23H - $SECONDS ))
 
 sleep $(( $TLIM - $SECONDS ))
 
-N_QUEUE=$(ls ${FDIR}/outputs/*/queue/* | wc -l)
-N_CRASHES=$(ls ${FDIR}/outputs/*/crashes/* | wc -l)
+N_QUEUE=$(find ${FDIR}/outputs -type f -path "*/queue/*" | wc -l)
+N_CRASHES=$(find ${FDIR}/outputs -type f -path "*/crashes/*" | wc -l)
 MESSAGE="Queue=$N_QUEUE Crashes=$N_CRASHES"
 
 if [ "$FZ" = "angora" ]; then

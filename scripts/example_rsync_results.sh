@@ -17,6 +17,7 @@ save_results() {
 
 save_final_results() {
     # kill any remaining background jobs
+    set -u
     jobs -p | xargs kill
     set -u
     local SRC="$FDIR"
