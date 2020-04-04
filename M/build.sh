@@ -54,7 +54,7 @@ build_lava() {
 }
 
 ls -l lava_corpus/LAVA-M/base64/validate.sh
-sed 's/&> \/dev\/null//' lava_corpus/LAVA-M/base64/validate.sh
+sed -i 's/&> \/dev\/null//' lava_corpus/LAVA-M/base64/validate.sh
 
 for target in base64 md5sum uniq who; do
     build_lava $target
