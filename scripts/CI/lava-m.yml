@@ -5,6 +5,7 @@ lava-m:1:5:
   variables:
     CC: gcc
   script:
+    - echo "[*] building with CC=$CC"
     - ./M/build.sh
   artifacts:
     paths:
