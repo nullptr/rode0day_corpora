@@ -7,7 +7,7 @@
     - sudo apt-get -qq install -y libacl1-dev
   script:
     - echo "[*] building with CC=$CC"
-    - ./M/build.sh
+    - ./00/build.sh
   only:
     - dev
     - tags

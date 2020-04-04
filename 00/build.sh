@@ -11,7 +11,7 @@ CC_ABV[angora-clang]="ang"
 LAVA_M="lava_corpus/LAVA-M"
 BN=${CC##*/}
 
-[ -d M ] && cd M
+[ -d 00 ] && cd 00
 
 if [ ! -e lava_corpus.patch ]; then
     echo "[-] Error: could not find patch file 'lava_corpus.patch'."
