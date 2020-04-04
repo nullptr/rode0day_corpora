@@ -19,6 +19,7 @@ include:
   - scripts/CI/honggfuzz.yml
   - scripts/CI/test_solutions_honggfuzz.yml
   - scripts/CI/angora.yml
+  - scripts/CI/lava-m.yml
 
 build:afl-gcc:
   extends: .build
