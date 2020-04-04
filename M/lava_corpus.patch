@@ -11,7 +11,7 @@ index 2ff2956..f173595 100644
      else {
          //printf("Not successful for bug %d; val = %08x not %08x or %08x\n", bug_num, lava_val[bug_num], 0x6c617661 + bug_num, 0x6176616c + bug_num);                                                                                                                                                                         
 diff --git a/LAVA-M/base64/validate.sh b/LAVA-M/base64/validate.sh
-index 29c8f0a..ffefe4c 100755
+index 29c8f0a..d94fae8 100755
 --- a/LAVA-M/base64/validate.sh
 +++ b/LAVA-M/base64/validate.sh
 @@ -9,13 +9,13 @@ echo "Building buggy ${PROG}..."
@@ -30,6 +30,20 @@ index 29c8f0a..ffefe4c 100755
  rv=$?
  if [ $rv -lt 128 ]; then
      echo "Success: ${PROG} ${PROGOPT} ${INPUT_CLEAN} returned $rv"
+@@ -23,13 +23,3 @@ else
+     echo "ERROR: ${PROG} ${PROGOPT} ${INPUT_CLEAN} returned $rv"
+ fi
+ 
+-echo "Validating bugs..."
+-cat validated_bugs | while read line ; do
+-    INPUT_FUZZ=$(printf "$INPUT_PATTERN" $line)
+-    { ./coreutils-8.24-lava-safe/lava-install/bin/${PROG} ${PROGOPT} ${INPUT_FUZZ} ; } &> /dev/null
+-    echo $line $?
+-done > validated.txt
+-
+-awk 'BEGIN {valid = 0} $2 > 128 { valid += 1 } END { print "Validated", valid, "/", NR, "bugs" }' validated.txt
+-
+-echo "You can see validated.txt for the exit code of each buggy version."
 diff --git a/LAVA-M/md5sum/coreutils-8.24-lava-safe/src/md5sum.c b/LAVA-M/md5sum/coreutils-8.24-lava-safe/src/md5sum.c
 index f220f24..072faeb 100644
 --- a/LAVA-M/md5sum/coreutils-8.24-lava-safe/src/md5sum.c
@@ -43,7 +57,7 @@ index f220f24..072faeb 100644
      else {
          //printf("Not successful for bug %d; val = %08x not %08x or %08x\n", bug_num, lava_val[bug_num], 0x6c617661 + bug_num, 0x6176616c + bug_num);
 diff --git a/LAVA-M/md5sum/validate.sh b/LAVA-M/md5sum/validate.sh
-index cbb0223..dd66fd2 100755
+index cbb0223..7c21faa 100755
 --- a/LAVA-M/md5sum/validate.sh
 +++ b/LAVA-M/md5sum/validate.sh
 @@ -9,13 +9,13 @@ echo "Building buggy ${PROG}..."
@@ -62,6 +76,20 @@ index cbb0223..dd66fd2 100755
  rv=$?
  if [ $rv -lt 128 ]; then
      echo "Success: ${PROG} ${PROGOPT} ${INPUT_CLEAN} returned $rv"
+@@ -23,13 +23,3 @@ else
+     echo "ERROR: ${PROG} ${PROGOPT} ${INPUT_CLEAN} returned $rv"
+ fi
+ 
+-echo "Validating bugs..."
+-cat validated_bugs | while read line ; do
+-    INPUT_FUZZ=$(printf "$INPUT_PATTERN" $line)
+-    { ./coreutils-8.24-lava-safe/lava-install/bin/${PROG} ${PROGOPT} ${INPUT_FUZZ} ; } &> /dev/null
+-    echo $line $?
+-done > validated.txt
+-
+-awk 'BEGIN {valid = 0} $2 > 128 { valid += 1 } END { print "Validated", valid, "/", NR, "bugs" }' validated.txt
+-
+-echo "You can see validated.txt for the exit code of each buggy version."
 diff --git a/LAVA-M/uniq/coreutils-8.24-lava-safe/src/uniq.c b/LAVA-M/uniq/coreutils-8.24-lava-safe/src/uniq.c
 index 8edb5a5..ab68251 100644
 --- a/LAVA-M/uniq/coreutils-8.24-lava-safe/src/uniq.c
@@ -75,7 +103,7 @@ index 8edb5a5..ab68251 100644
      else {
          //printf("Not successful for bug %d; val = %08x not %08x or %08x\n", bug_num, lava_val[bug_num], 0x6c617661 + bug_num, 0x6176616c + bug_num);
 diff --git a/LAVA-M/uniq/validate.sh b/LAVA-M/uniq/validate.sh
-index 2ba37c8..aeccc96 100755
+index 2ba37c8..f8577fb 100755
 --- a/LAVA-M/uniq/validate.sh
 +++ b/LAVA-M/uniq/validate.sh
 @@ -9,13 +9,13 @@ echo "Building buggy ${PROG}..."
@@ -94,6 +122,20 @@ index 2ba37c8..aeccc96 100755
  rv=$?
  if [ $rv -lt 128 ]; then
      echo "Success: ${PROG} ${PROGOPT} ${INPUT_CLEAN} returned $rv"
+@@ -23,13 +23,3 @@ else
+     echo "ERROR: ${PROG} ${PROGOPT} ${INPUT_CLEAN} returned $rv"
+ fi
+ 
+-echo "Validating bugs..."
+-cat validated_bugs | while read line ; do
+-    INPUT_FUZZ=$(printf "$INPUT_PATTERN" $line)
+-    { ./coreutils-8.24-lava-safe/lava-install/bin/${PROG} ${PROGOPT} ${INPUT_FUZZ} ; } &> /dev/null
+-    echo $line $?
+-done > validated.txt
+-
+-awk 'BEGIN {valid = 0} $2 > 128 { valid += 1 } END { print "Validated", valid, "/", NR, "bugs" }' validated.txt
+-
+-echo "You can see validated.txt for the exit code of each buggy version."
 diff --git a/LAVA-M/who/coreutils-8.24-lava-safe/src/who.c b/LAVA-M/who/coreutils-8.24-lava-safe/src/who.c
 index b5d6fd3..2d20d8f 100644
 --- a/LAVA-M/who/coreutils-8.24-lava-safe/src/who.c
@@ -139,7 +181,7 @@ index b5d6fd3..2d20d8f 100644
  #define PROGRAM_NAME "who"
  
 diff --git a/LAVA-M/who/validate.sh b/LAVA-M/who/validate.sh
-index e2ae83e..ceacd5e 100755
+index e2ae83e..8f95d66 100755
 --- a/LAVA-M/who/validate.sh
 +++ b/LAVA-M/who/validate.sh
 @@ -9,13 +9,13 @@ echo "Building buggy ${PROG}..."
@@ -158,3 +200,17 @@ index e2ae83e..ceacd5e 100755
  rv=$?
  if [ $rv -lt 128 ]; then
      echo "Success: ${PROG} ${PROGOPT} ${INPUT_CLEAN} returned $rv"
+@@ -23,13 +23,3 @@ else
+     echo "ERROR: ${PROG} ${PROGOPT} ${INPUT_CLEAN} returned $rv"
+ fi
+ 
+-echo "Validating bugs..."
+-cat validated_bugs | while read line ; do
+-    INPUT_FUZZ=$(printf "$INPUT_PATTERN" $line)
+-    { ./coreutils-8.24-lava-safe/lava-install/bin/${PROG} ${PROGOPT} ${INPUT_FUZZ} ; } &> /dev/null
+-    echo $line $?
+-done > validated.txt
+-
+-awk 'BEGIN {valid = 0} $2 > 128 { valid += 1 } END { print "Validated", valid, "/", NR, "bugs" }' validated.txt
+-
+-echo "You can see validated.txt for the exit code of each buggy version."

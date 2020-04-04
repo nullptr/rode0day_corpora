@@ -76,3 +76,14 @@ build:lava-m:
     - dev
     - tags
 
+test_solutions:1:4:lava-m:
+  variables:
+    COMP_ID: "M"
+    PREFIX: "lava-gcc"
+  extends: .test_solutions
+  dependencies:
+    - build:lava-m
+  only:
+    - dev
+    - tags
+

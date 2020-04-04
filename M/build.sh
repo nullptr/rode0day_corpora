@@ -37,6 +37,7 @@ build_lava_angora_track() {
         ${target}/lava-${CC_ABV[$BN]:-$BN}/bin/${target}.tt
 }
 
+
 build_lava() {
     local target=${1:-base64}
     ( cd ${LAVA_M}/${target}/ &&  ./validate.sh )
@@ -53,8 +54,6 @@ build_lava() {
     fi
 }
 
-ls -l lava_corpus/LAVA-M/base64/validate.sh
-sed -i 's/&> \/dev\/null//' lava_corpus/LAVA-M/base64/validate.sh
 
 for target in base64 md5sum uniq who; do
     build_lava $target
