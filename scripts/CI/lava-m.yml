@@ -7,7 +7,7 @@
     - sudo apt-get -qq install -y libacl1-dev
   script:
     - echo "[*] building with CC=$CC"
-    - ./00/build.sh
+    - ./0/build.sh
   only:
     - dev
     - tags
@@ -78,7 +78,7 @@ build:lava-m:
 
 test_solutions:1:4:lava-m:
   variables:
-    COMP_ID: "00"
+    COMP_ID: "0"
     PREFIX: "lava-gcc"
   extends: .test_solutions
   dependencies:
