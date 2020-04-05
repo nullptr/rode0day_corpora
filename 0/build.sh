@@ -18,6 +18,7 @@ if [ ! -e lava_corpus.patch ]; then
     exit 1
 fi
 
+echo "[*] Downloading lava_corpus.tar.xz"
 wget -qO- http://panda.moyix.net/~moyix/lava_corpus.tar.xz | tar -xJf -
 
 if [ ! -d lava_corpus ]; then
@@ -25,6 +26,7 @@ if [ ! -d lava_corpus ]; then
     exit 1
 fi
 
+echo "[*] Applying patch file"
 ( cd lava_corpus && git apply ../lava_corpus.patch )
 
 
