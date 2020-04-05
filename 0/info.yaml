@@ -7,7 +7,7 @@ challenges:
         install_dir: "base64"
         binary_path: "bin/base64"
         binary_arguments: "-d @@"
-        sample_inputs: ["inputs/utmp.b64"]
+        sample_inputs: ["inputs/rand.b64"]
         source_provided: true
         known_bugs: 44
 
@@ -17,7 +17,7 @@ challenges:
         install_dir: "md5sum"
         binary_path: "bin/md5sum"
         binary_arguments: "-c @@"
-        sample_inputs: ["inputs/bin-ls-md5s"]
+        sample_inputs: ["inputs/seed"]
         source_provided: true
         known_bugs: 57
 
@@ -27,7 +27,7 @@ challenges:
         install_dir: "uniq"
         binary_path: "bin/uniq"
         binary_arguments: "@@"
-        sample_inputs: ["inputs/man-clang3-sorted"]
+        sample_inputs: ["TODO"]
         source_provided: true
         known_bugs: 28
 

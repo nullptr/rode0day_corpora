@@ -27,7 +27,7 @@ if [ ! -d lava_corpus ]; then
 fi
 
 echo "[*] Applying patch file"
-( cd lava_corpus && git apply ../lava_corpus.patch )
+git -C lava_corpus apply lava_corpus.patch
 
 
 build_lava_angora_track() {
@@ -42,7 +42,9 @@ build_lava_angora_track() {
 
 build_lava() {
     local target=${1:-base64}
-    ( cd ${LAVA_M}/${target}/ &&  ./validate.sh )
+    pushd ${LAVA_M}/${target} >/dev/null
+    ./validate.sh
+    popd >/dev/null
 
     mkdir -p ${target}/lava-${CC_ABV[$BN]:-$BN}/bin
     mkdir -p ${target}/inputs
