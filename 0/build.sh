@@ -27,7 +27,7 @@ if [ ! -d lava_corpus ]; then
 fi
 
 echo "[*] Applying patch file"
-git -C lava_corpus apply lava_corpus.patch
+git -C lava_corpus apply ../lava_corpus.patch
 
 
 build_lava_angora_track() {
