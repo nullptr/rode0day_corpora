@@ -78,7 +78,7 @@ build:lava-m:
 
 test_solutions:1:4:lava-m:
   variables:
-    COMP_ID: "M"
+    COMP_ID: "00"
     PREFIX: "lava-gcc"
   extends: .test_solutions
   dependencies:
