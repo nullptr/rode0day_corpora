@@ -1,0 +1,42 @@
+rode0day_id: 0
+
+challenges:
+    base64:
+        challenge_id: 901
+        architecture: "x86"
+        install_dir: "base64"
+        binary_path: "bin/base64"
+        binary_arguments: "-d {input_file}"
+        sample_inputs: ["inputs/rand.b64"]
+        source_provided: true
+        known_bugs: 44
+
+    md5sum:
+        challenge_id: 902
+        architecture: "x86"
+        install_dir: "md5sum"
+        binary_path: "bin/md5sum"
+        binary_arguments: "-c {input_file}"
+        sample_inputs: ["inputs/seed"]
+        source_provided: true
+        known_bugs: 57
+
+    uniq:
+        challenge_id: 903
+        architecture: "x86"
+        install_dir: "uniq"
+        binary_path: "bin/uniq"
+        binary_arguments: "{input_file}"
+        sample_inputs: ["inputs/TODO"]
+        source_provided: true
+        known_bugs: 28
+
+    who:
+        challenge_id: 904
+        architecture: "x86"
+        install_dir: "who"
+        binary_path: "bin/who"
+        binary_arguments: "{input_file}"
+        sample_inputs: ["inputs/utmp"]
+        source_provided: true
+        known_bugs: 2136
