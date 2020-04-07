@@ -76,7 +76,7 @@ build:lava-m:
     - dev
     - tags
 
-test_solutions:1:4:lava-m:
+test_solutions:1:5:lava-m:
   variables:
     COMP_ID: "0"
     PREFIX: "lava-gcc"
@@ -87,3 +87,37 @@ test_solutions:1:4:lava-m:
     - dev
     - tags
 
+test_solutions:2:5:lava-m:
+  variables:
+    COMP_ID: "0"
+    PREFIX: "lava-afl-gcc"
+  extends: .test_solutions
+  dependencies:
+    - build:lava-m
+
+test_solutions:3:5:lava-m:
+  variables:
+    COMP_ID: "0"
+    PREFIX: "lava-afl-cf"
+  extends: .test_solutions
+  dependencies:
+    - build:lava-m
+  only:
+    - dev
+    - tags
+
+test_solutions:4:5:lava-m:
+  variables:
+    COMP_ID: "0"
+    PREFIX: "lava-hf"
+  extends: .test_solutions
+  dependencies:
+    - build:lava-m
+
+test_solutions:5:5:lava-m:
+  variables:
+    COMP_ID: "0"
+    PREFIX: "lava-ang"
+  extends: .test_solutions
+  dependencies:
+    - build:lava-m

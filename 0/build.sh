@@ -28,7 +28,7 @@ fi
 
 echo "[*] Applying patch file"
 # git -C lava_corpus apply ../lava_corpus.patch
-patch --verbose -d lava_corpus -p1 -i ../lava_corpus.patch
+patch -d lava_corpus -p1 -i ../lava_corpus.patch
 
 
 build_lava_angora_track() {
