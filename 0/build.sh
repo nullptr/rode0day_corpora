@@ -31,12 +31,19 @@ echo "[*] Applying patch file"
 patch -d lava_corpus -p1 -i ../lava_corpus.patch
 
 
+bail() {
+  echo "[-] aborting: $1"
+  exit 0
+}
+
+
 build_lava_angora_track() {
-    pushd ${LAVA_M}/${target} >/dev/null
-    make clean
-    USE_TRACK=1 CC=/angora/bin/angora-clang CFLAGS="$CFLAGS" make -j || exit 1
+    echo "[*] Building angora taint tracking binary ${target}.tt"
+    pushd ${LAVA_M}/${target}/coreutils-8.24-lava-safe >/dev/null
+    make clean &>/dev/null
+    USE_TRACK=1 CC=/angora/bin/angora-clang CFLAGS="$CFLAGS" make -j || bail "failed to build tt $LINENO"
     popd >/dev/null
-    cp ${LAVA_M}/${target}/coreutils-8.24-lava-safe/lava-install/bin/${target} \
+    cp ${LAVA_M}/${target}/coreutils-8.24-lava-safe/src/${target} \
         ${target}/lava-${CC_ABV[$BN]:-$BN}/bin/${target}.tt
 }
 
