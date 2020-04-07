@@ -1,12 +1,13 @@
 diff --git a/LAVA-M/base64/coreutils-8.24-lava-safe/src/base64.c b/LAVA-M/base64/coreutils-8.24-lava-safe/src/base64.c
-index 2ff2956..f173595 100644
+index 2ff2956..b4fbf2e 100644
 --- a/LAVA-M/base64/coreutils-8.24-lava-safe/src/base64.c
 +++ b/LAVA-M/base64/coreutils-8.24-lava-safe/src/base64.c
-@@ -12,6 +12,7 @@ unsigned int lava_get(unsigned int bug_num) {
+@@ -12,6 +12,8 @@ unsigned int lava_get(unsigned int bug_num) {
      if (0x6c617661 - bug_num == lava_val[bug_num] ||
          SWAP_UINT32(0x6c617661 - bug_num) == lava_val[bug_num]) {
          dprintf(1, "Successfully triggered bug %d, crashing now!\n", bug_num);
 +        fprintf(stderr, "\nLAVALOG: %d, %s: %d\n", bug_num, __FILE__, __LINE__);
++        fflush(stderr);
      }
      else {
          //printf("Not successful for bug %d; val = %08x not %08x or %08x\n", bug_num, lava_val[bug_num], 0x6c617661 + bug_num, 0x6176616c + bug_num);                                                                                                                                                                         
@@ -45,14 +46,15 @@ index 29c8f0a..d94fae8 100755
 -
 -echo "You can see validated.txt for the exit code of each buggy version."
 diff --git a/LAVA-M/md5sum/coreutils-8.24-lava-safe/src/md5sum.c b/LAVA-M/md5sum/coreutils-8.24-lava-safe/src/md5sum.c
-index f220f24..072faeb 100644
+index f220f24..a830132 100644
 --- a/LAVA-M/md5sum/coreutils-8.24-lava-safe/src/md5sum.c
 +++ b/LAVA-M/md5sum/coreutils-8.24-lava-safe/src/md5sum.c
-@@ -10,6 +10,7 @@ unsigned int lava_get(unsigned int bug_num) {
+@@ -10,6 +10,8 @@ unsigned int lava_get(unsigned int bug_num) {
      if (0x6c617661 - bug_num == lava_val[bug_num] ||
          SWAP_UINT32(0x6c617661 - bug_num) == lava_val[bug_num]) {
          dprintf(1,"Successfully triggered bug %d, crashing now!\n", bug_num);
 +        fprintf(stderr, "\nLAVALOG: %d, %s: %d\n", bug_num, __FILE__, __LINE__);
++        fflush(stderr);
      }
      else {
          //printf("Not successful for bug %d; val = %08x not %08x or %08x\n", bug_num, lava_val[bug_num], 0x6c617661 + bug_num, 0x6176616c + bug_num);
@@ -91,14 +93,15 @@ index cbb0223..7c21faa 100755
 -
 -echo "You can see validated.txt for the exit code of each buggy version."
 diff --git a/LAVA-M/uniq/coreutils-8.24-lava-safe/src/uniq.c b/LAVA-M/uniq/coreutils-8.24-lava-safe/src/uniq.c
-index 8edb5a5..ab68251 100644
+index 8edb5a5..4078760 100644
 --- a/LAVA-M/uniq/coreutils-8.24-lava-safe/src/uniq.c
 +++ b/LAVA-M/uniq/coreutils-8.24-lava-safe/src/uniq.c
-@@ -10,6 +10,7 @@ unsigned int lava_get(unsigned int bug_num) {
+@@ -10,6 +10,8 @@ unsigned int lava_get(unsigned int bug_num) {
      if (0x6c617661 - bug_num == lava_val[bug_num] ||
          SWAP_UINT32(0x6c617661 - bug_num) == lava_val[bug_num]) {
          dprintf(1, "Successfully triggered bug %d, crashing now!\n", bug_num);
 +        fprintf(stderr, "\nLAVALOG: %d, %s: %d\n", bug_num, __FILE__, __LINE__);
++        fflush(stderr);
      }
      else {
          //printf("Not successful for bug %d; val = %08x not %08x or %08x\n", bug_num, lava_val[bug_num], 0x6c617661 + bug_num, 0x6176616c + bug_num);
@@ -137,7 +140,7 @@ index 2ba37c8..f8577fb 100755
 -
 -echo "You can see validated.txt for the exit code of each buggy version."
 diff --git a/LAVA-M/who/coreutils-8.24-lava-safe/src/who.c b/LAVA-M/who/coreutils-8.24-lava-safe/src/who.c
-index b5d6fd3..2d20d8f 100644
+index b5d6fd3..806829e 100644
 --- a/LAVA-M/who/coreutils-8.24-lava-safe/src/who.c
 +++ b/LAVA-M/who/coreutils-8.24-lava-safe/src/who.c
 @@ -4,20 +4,7 @@ static unsigned int lava_val[1000000];
@@ -161,7 +164,7 @@ index b5d6fd3..2d20d8f 100644
  /* GNU's who.
     Copyright (C) 1992-2015 Free Software Foundation, Inc.
  
-@@ -61,6 +48,18 @@ unsigned int lava_get(unsigned int bug_num) {
+@@ -61,6 +48,19 @@ unsigned int lava_get(unsigned int bug_num) {
  # include <grp.h>
  #endif
  
@@ -170,6 +173,7 @@ index b5d6fd3..2d20d8f 100644
 +        SWAP_UINT32(0x6c617661 - bug_num) == lava_val[bug_num]) {
 +        printf("Successfully triggered bug %d, crashing now!\n", bug_num);
 +        fprintf(stderr, "\nLAVALOG: %d, %s: %d\n", bug_num, __FILE__, __LINE__);
++        fflush(stderr);
 +    }
 +    else {
 +        //printf("Not successful for bug %d; val = %08x not %08x or %08x\n", bug_num, lava_val[bug_num], 0x6c617661 + bug_num, 0x6176616c + bug_num);

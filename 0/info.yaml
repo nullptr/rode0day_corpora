@@ -6,7 +6,7 @@ challenges:
         architecture: "x86"
         install_dir: "base64"
         binary_path: "bin/base64"
-        binary_arguments: "-d @@"
+        binary_arguments: "-d {input_file}"
         sample_inputs: ["inputs/rand.b64"]
         source_provided: true
         known_bugs: 44
@@ -16,7 +16,7 @@ challenges:
         architecture: "x86"
         install_dir: "md5sum"
         binary_path: "bin/md5sum"
-        binary_arguments: "-c @@"
+        binary_arguments: "-c {input_file}"
         sample_inputs: ["inputs/seed"]
         source_provided: true
         known_bugs: 57
@@ -26,8 +26,8 @@ challenges:
         architecture: "x86"
         install_dir: "uniq"
         binary_path: "bin/uniq"
-        binary_arguments: "@@"
-        sample_inputs: ["TODO"]
+        binary_arguments: "{input_file}"
+        sample_inputs: ["inputs/TODO"]
         source_provided: true
         known_bugs: 28
 
@@ -36,7 +36,7 @@ challenges:
         architecture: "x86"
         install_dir: "who"
         binary_path: "bin/who"
-        binary_arguments: "@@"
+        binary_arguments: "{input_file}"
         sample_inputs: ["inputs/utmp"]
         source_provided: true
         known_bugs: 2136
