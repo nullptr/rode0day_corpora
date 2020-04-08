@@ -32,14 +32,15 @@ patch -d lava_corpus -p1 -i ../lava_corpus.patch
 
 
 build_lava_angora_track() {
+    local RET=0
     echo "[*] Building angora taint tracking binary ${target}.tt"
     pushd ${LAVA_M}/${target}/coreutils-8.24-lava-safe >/dev/null
     make clean &>/dev/null
-    USE_TRACK=1 CC=/angora/bin/angora-clang CFLAGS="$CFLAGS" make -j || return 1
+    USE_TRACK=1 CC=/angora/bin/angora-clang CFLAGS="$CFLAGS" make -j || RET=1
     popd >/dev/null
     cp ${LAVA_M}/${target}/coreutils-8.24-lava-safe/src/${target} \
         ${target}/lava-${CC_ABV[$BN]:-$BN}/bin/${target}.tt
-    return 0
+    return $RET
 }
 
 
