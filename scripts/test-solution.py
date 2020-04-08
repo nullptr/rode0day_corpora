@@ -8,21 +8,6 @@ import yaml
 from utils import VerifyWorker
 
 
-COMPS = {2: '18.07',
-         3: '18.09',
-         4: '18.10',
-         5: '18.11',
-         6: '19.01',
-         7: '19.02',
-         8: '19.03',
-         9: '19.05',
-         10: '19.06',
-         11: '19.07',
-         12: '19.09',
-         13: '19.10',
-         14: '19.11',
-         15: '20.02'}
-
 logging.basicConfig(format='%(levelname)s:\t%(message)s')
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

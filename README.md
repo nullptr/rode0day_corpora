@@ -33,7 +33,7 @@ docker container, use the `build.sh` and `launch.sh` scripts.
 - *Optional*
     - copy `example_db_config.json` to `db_config.json`
     - modify for your postgresql instance for the [monitor](/Rode0day/Monitoring) docker 
-      service or use `"type"": "sqlite"` to use a local sqlite database
+      service or define `"type": "sqlite"` to use a local sqlite database
 - `./scripts/build.sh --prep` will download the binaries, copy a few required 
   files, and create default job config files.
 - `./scripts/launch.sh --fuzzer afl --pull -N 3 --test jpegb` will pull the 

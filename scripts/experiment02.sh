@@ -29,7 +29,9 @@ create_job_files() {
         local MERGE="--merge db_config.json"
     fi
 
-    for i in {2..15}; do
+    ./scripts/create-configs.py -e 3/jpegb/job.json -c job.json -p lava-gcc -y 0/info.yaml -F -M 0 $MERGE >/dev/null
+
+    for i in 0 {2..15}; do
         ./scripts/create-configs.py -e 3/jpegb/qsym_job.json -c qsym_job.json -p lava-afl-cf -j QSYM -y ${i}/info.yaml -F -M 0 $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/honggfuzz_job.json -c honggfuzz_job.json -p lava-hf -j HF -y ${i}/info.yaml -F $MERGE >/dev/null
         ./scripts/create-configs.py -e 3/jpegb/eclipser_job.json -c eclipser_job.json -p lava-gcc -Q -j EC -y ${i}/info.yaml -F $MERGE >/dev/null
