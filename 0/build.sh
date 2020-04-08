@@ -32,12 +32,15 @@ patch -d lava_corpus -p1 -i ../lava_corpus.patch
 
 
 build_lava_angora_track() {
-    pushd ${LAVA_M}/${target} >/dev/null
-    make clean
-    USE_TRACK=1 CC=/angora/bin/angora-clang CFLAGS="$CFLAGS" make -j || exit 1
+    local RET=0
+    echo "[*] Building angora taint tracking binary ${target}.tt"
+    pushd ${LAVA_M}/${target}/coreutils-8.24-lava-safe >/dev/null
+    make clean &>/dev/null
+    USE_TRACK=1 CC=/angora/bin/angora-clang CFLAGS="$CFLAGS" make -j || RET=1
     popd >/dev/null
-    cp ${LAVA_M}/${target}/coreutils-8.24-lava-safe/lava-install/bin/${target} \
+    cp ${LAVA_M}/${target}/coreutils-8.24-lava-safe/src/${target} \
         ${target}/lava-${CC_ABV[$BN]:-$BN}/bin/${target}.tt
+    return $RET
 }
 
 
@@ -55,7 +58,7 @@ build_lava() {
     cp ${LAVA_M}/${target}/fuzzer_input/* ${target}/inputs/
 
     if [ -e /angora/bin/angora-clang ]; then
-        build_lava_angora_track
+        build_lava_angora_track || echo  "[-] Error: Failed to build ${target}.tt"
     fi
 }
 

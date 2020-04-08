@@ -12,7 +12,7 @@ index 2ff2956..b4fbf2e 100644
      else {
          //printf("Not successful for bug %d; val = %08x not %08x or %08x\n", bug_num, lava_val[bug_num], 0x6c617661 + bug_num, 0x6176616c + bug_num);                                                                                                                                                                         
 diff --git a/LAVA-M/base64/validate.sh b/LAVA-M/base64/validate.sh
-index 29c8f0a..d94fae8 100755
+index 29c8f0a..2559da8 100755
 --- a/LAVA-M/base64/validate.sh
 +++ b/LAVA-M/base64/validate.sh
 @@ -9,13 +9,13 @@ echo "Building buggy ${PROG}..."
@@ -20,7 +20,7 @@ index 29c8f0a..d94fae8 100755
  cd coreutils-8.24-lava-safe
  make clean &> /dev/null
 -./configure --prefix=`pwd`/lava-install LIBS="-lacl" &> /dev/null
-+./configure --prefix=`pwd`/lava-install &> /dev/null
++./configure --prefix=`pwd`/lava-install --disable-acl --disable-xattr --without-selinux &> /dev/null
  make -j $(nproc) &> /dev/null
  make install &> /dev/null
  cd ..
@@ -59,7 +59,7 @@ index f220f24..a830132 100644
      else {
          //printf("Not successful for bug %d; val = %08x not %08x or %08x\n", bug_num, lava_val[bug_num], 0x6c617661 + bug_num, 0x6176616c + bug_num);
 diff --git a/LAVA-M/md5sum/validate.sh b/LAVA-M/md5sum/validate.sh
-index cbb0223..7c21faa 100755
+index cbb0223..f8d0835 100755
 --- a/LAVA-M/md5sum/validate.sh
 +++ b/LAVA-M/md5sum/validate.sh
 @@ -9,13 +9,13 @@ echo "Building buggy ${PROG}..."
@@ -67,7 +67,7 @@ index cbb0223..7c21faa 100755
  cd coreutils-8.24-lava-safe
  make clean &> /dev/null
 -./configure --prefix=`pwd`/lava-install LIBS="-lacl" &> /dev/null
-+./configure --prefix=`pwd`/lava-install &> /dev/null
++./configure --prefix=`pwd`/lava-install --disable-acl --disable-xattr --without-selinux &> /dev/null
  make -j $(nproc) &> /dev/null
  make install &> /dev/null
  cd ..
@@ -106,7 +106,7 @@ index 8edb5a5..4078760 100644
      else {
          //printf("Not successful for bug %d; val = %08x not %08x or %08x\n", bug_num, lava_val[bug_num], 0x6c617661 + bug_num, 0x6176616c + bug_num);
 diff --git a/LAVA-M/uniq/validate.sh b/LAVA-M/uniq/validate.sh
-index 2ba37c8..f8577fb 100755
+index 2ba37c8..a25ec5d 100755
 --- a/LAVA-M/uniq/validate.sh
 +++ b/LAVA-M/uniq/validate.sh
 @@ -9,13 +9,13 @@ echo "Building buggy ${PROG}..."
@@ -114,7 +114,7 @@ index 2ba37c8..f8577fb 100755
  cd coreutils-8.24-lava-safe
  make clean &> /dev/null
 -./configure --prefix=`pwd`/lava-install LIBS="-lacl" &> /dev/null
-+./configure --prefix=`pwd`/lava-install &> /dev/null
++./configure --prefix=`pwd`/lava-install --disable-acl --disable-xattr --without-selinux &> /dev/null
  make -j $(nproc) &> /dev/null
  make install &> /dev/null
  cd ..
@@ -185,7 +185,7 @@ index b5d6fd3..806829e 100644
  #define PROGRAM_NAME "who"
  
 diff --git a/LAVA-M/who/validate.sh b/LAVA-M/who/validate.sh
-index e2ae83e..8f95d66 100755
+index e2ae83e..e99d51f 100755
 --- a/LAVA-M/who/validate.sh
 +++ b/LAVA-M/who/validate.sh
 @@ -9,13 +9,13 @@ echo "Building buggy ${PROG}..."
@@ -193,7 +193,7 @@ index e2ae83e..8f95d66 100755
  cd coreutils-8.24-lava-safe
  make clean &> /dev/null
 -./configure --prefix=`pwd`/lava-install LIBS="-lacl" &> /dev/null
-+./configure --prefix=`pwd`/lava-install &> /dev/null
++./configure --prefix=`pwd`/lava-install --disable-acl --disable-xattr --without-selinux &> /dev/null
  make -j $(nproc) &> /dev/null
  make install &> /dev/null
  cd ..
