@@ -4,9 +4,10 @@ import json
 import sys
 import os
 import logging
+import resource
 import shlex
 import tempfile
-from subprocess import run, Popen, PIPE, DEVNULL, TimeoutExpired
+from subprocess import run, Popen, PIPE, DEVNULL, STDOUT, TimeoutExpired
 
 import drcov
 try:
@@ -55,6 +56,23 @@ def is64bit(binary_filepath):
     raise Exception("[!] Unexpected value in 64-bit check: %s (e_machine: 0x%x)" % (binary_filepath, e_machine))
 
 
+def parse_lava_log(log, match_id=None):
+    r = {'bug_id': None, 'src_line': ""}
+    lava = log.find(b'LAVALOG:')
+    msg = log[lava:].split(maxsplit=3)
+    r['bug_id'] = msg[1].strip()[:-1].decode('utf-8')
+    r['src_line'] = msg[2].split('\n')[0].strip().decode('utf-8')
+    if match_id:
+        r['match'] = (r['bug_id'] == match_id)
+    return r
+
+
+def set_mem_limit(limit=1):
+    soft, hard = resource.getrlimit(resource.RLIMIT_AS)
+    memlimit = 2**30 * limit  # 1 GB
+    resource.setrlimit(resource.RLIMIT_AS, (memlimit, memlimit))
+
+
 class VerifyWorker(object):
 
     def __init__(self, challenge, base_dir, prefix='lava-install'):
@@ -91,9 +109,8 @@ class VerifyWorker(object):
     def get_coverage_stats(self, cov, module_name):
         trace, edge_trace = cov.get_traces(module_name)
         return {'bb_all': cov.bb_table_count,
-                'tr_len': len(trace),
-                'cov_bb': len(set(trace)),
-                'cov_bbe': len(set(edge_trace))}
+                'bb_ma': len(trace),
+                'bb_mu': len(set(trace))}
 
     def run_with_dynamorio(self, input_file):
         """
@@ -156,13 +173,15 @@ class VerifyWorker(object):
         gdb_cmd = ["gdb", "-q", "--batch", "-x", ".gdb_script"]
         data = None
         try:
-            p = run(gdb_cmd, stdout=PIPE, stderr=DEVNULL, timeout=30)
+            p = run(gdb_cmd, stdout=PIPE, stderr=STDOUT, timeout=10)
         except TimeoutExpired:
             logger.error("Timeout running exploitable!")
             return None
         for line in p.stdout.splitlines():
             if b"classification" in line:
                 data = line.decode(encoding="utf-8", errors="ingore")
+            if b'LAVALOG:' in line:
+                d = parse_lava_log(line)
         if data is None:
             return None
 
@@ -205,10 +224,8 @@ class VerifyWorker(object):
 
         lava = serr.find(b'LAVALOG:')
         if lava > 0:
-            msg = serr[lava:].split(maxsplit=3)
-            r['bug_id'] = msg[1].strip()[:-1].decode('utf-8')
-            r['src_line'] = msg[2].split(b'\n')[0].strip().decode('utf-8')
-            r['match'] = (r['bug_id'] == os.path.basename(input_file).split('.')[0])
+            match_id = os.path.basename(input_file).split('.')[0]
+            r.update(parse_lava_log(serr, match_id)
             if not r['match']:
                 logger.info("BUG: %s\t SRC: %s", r['bug_id'], r['src_line'])
         elif verbose and not (using_seed and p.returncode == 0):

@@ -74,30 +74,6 @@ class DrcovData(object):
         # return the filtered coverage blocks
         return coverage_blocks
 
-    def get_traces(self, module_name):
-        """
-        Return set of covered blocks, edges for the named module"
-        """
-        try:
-            module = self.modules[module_name]
-        except KeyError:
-            return [], []
-
-        # extract module id for speed
-        mod_id = module.id
-
-        coverage_blocks = []
-        coverage_edges = []
-        for i in range(1, self.bb_table_count):
-            bb_src = self.bbs[i-1]
-            bb_dst = self.bbs[i]
-            if bb_src.mod_id == mod_id:
-                coverage_blocks.append((bb_src.start, bb_src.size))
-                if bb_dst.mod_id == mod_id:
-                    coverage_edges.append((bb_src.start, bb_dst.start))
-
-        return coverage_blocks, coverage_edges
-
 
     #--------------------------------------------------------------------------
     # Parsing Routines - Top Level
