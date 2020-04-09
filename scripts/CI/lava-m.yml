@@ -9,7 +9,6 @@
     - echo "[*] building with CC=$CC"
     - ./0/build.sh
   only:
-    - dev
     - tags
 
 lava-m:1:5:
@@ -33,8 +32,6 @@ lava-m:4:5:
     PREFIX: "lava-hf"
   image: 
     name: registry.gitlab.com/rode0day/fuzzer-testing/i386/honggfuzz_runner:16.04
-  only:
-    - tags
 
 lava-m:5:5:
   extends: .build_lava_m
@@ -42,8 +39,6 @@ lava-m:5:5:
     PREFIX: "lava-ang"
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/angora_runner:16.04
-  only:
-    - tags
 
 build:lava-m:
   extends: .test_seeds
@@ -64,7 +59,6 @@ build:lava-m:
       - ./*/*/lava-ang
     expire_in: 6 mos
   only:
-    - dev
     - tags
 
 test_solutions:1:5:lava-m:
@@ -74,9 +68,6 @@ test_solutions:1:5:lava-m:
   extends: .test_solutions
   dependencies:
     - build:lava-m
-  only:
-    - dev
-    - tags
 
 test_solutions:2:5:lava-m:
   variables:
@@ -93,9 +84,6 @@ test_solutions:3:5:lava-m:
   extends: .test_solutions
   dependencies:
     - build:lava-m
-  only:
-    - dev
-    - tags
 
 test_solutions:4:5:lava-m:
   variables:
