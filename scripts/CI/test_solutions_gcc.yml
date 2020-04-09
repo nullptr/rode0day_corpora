@@ -12,6 +12,16 @@ build:gcc:
     - dev
     - tags
 
+test_seeds:gcc:
+  extends: .test_seeds
+  variables:
+    PREFIX: "lava-gcc"
+  dependencies:
+    - build:gcc
+  only:
+    - dev
+    - tags
+
 
 test_solutions:2:14:gcc:
   variables:

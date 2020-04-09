@@ -29,15 +29,11 @@ build:afl-gcc:
     - ./scripts/build.sh --cc afl-gcc
   artifacts:
     expire_in: 6 mos
-  only:
-    - tags
 
 build:afl-clang-fast:
   extends: .build
   artifacts:
     expire_in: 6 mos
-  only:
-    - tags
 
 build:afl-clang-fast-dev:
   extends: .build
@@ -56,8 +52,6 @@ build:gcc-64:
     name: registry.gitlab.com/rode0day/fuzzer-testing/afl_runner:16.04
   script:
     - ./scripts/build.sh --cc gcc -X
-  only:
-    - tags
 
 build:afl-clang-fast-64:
   extends: .build
@@ -65,8 +59,6 @@ build:afl-clang-fast-64:
     name: registry.gitlab.com/rode0day/fuzzer-testing/afl_runner:16.04
   script:
     - ./scripts/build.sh -X
-  only:
-    - tags
 
 test_seeds:afl-gcc:
   extends: .test_seeds
@@ -80,6 +72,9 @@ test_seeds:afl-clang-fast:
   dependencies:
     - build:afl-clang-fast
     - build:afl-clang-fast-dev
+  only:
+    - dev
+    - tags
 
 test_seeds:gcc-64:
   extends: .test_seeds
@@ -87,15 +82,11 @@ test_seeds:gcc-64:
     PREFIX: "lava-gcc"
   dependencies:
     - build:gcc-64
-  only:
-    - tags
 
 test_seeds:afl-clang-fast-64:
   extends: .test_seeds
   dependencies:
     - build:afl-clang-fast-64
-  only:
-    - tags
 
 pages:
   stage: report

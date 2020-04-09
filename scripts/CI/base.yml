@@ -13,7 +13,6 @@
       - ./*/*/$PREFIX
     expire_in: 1 week
   only:
-    - dev
     - tags
 
 .test_seeds:
@@ -28,7 +27,6 @@
       5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
       10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml 14/info.yaml
   only:
-    - dev
     - tags
 
 .test_solutions:
