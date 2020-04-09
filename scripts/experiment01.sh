@@ -5,7 +5,9 @@
 
 [ -e scripts/build.sh ] || exit 1
 
-MAXTIME=$(( 60 * 60 * 24 * 1 ))
+# time limit for fuzzing campaign, default 24hr
+#   only directly affects eclipser and ankou
+MAXTIME=${MAXTIME:-$(( 60 * 60 * 24 * 1 ))}
 
 
 if [[ $# -eq 0 ]]; then
