@@ -8,7 +8,7 @@
     "cmdline": "@@",
     "qemu": false,
     "mem_limit":"4096",
-    "_time_limit": "24h",
+    "time_limit": "86400",
     "interactive": true,
     "timeout": 2000,
     "_afl_margs": "",
