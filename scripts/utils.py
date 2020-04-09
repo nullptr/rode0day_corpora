@@ -1,11 +1,12 @@
 import glob
 import hashlib
 import json
-import sys
-import os
 import logging
+import os
+import requests
 import resource
 import shlex
+import sys
 import tempfile
 from subprocess import run, Popen, PIPE, DEVNULL, STDOUT, TimeoutExpired
 
@@ -75,7 +76,7 @@ def set_mem_limit(limit=1):
 
 class VerifyWorker(object):
 
-    def __init__(self, challenge, base_dir, prefix='lava-install'):
+    def __init__(self, challenge, base_dir, prefix='lava-install', base_url=None, online=False):
         self.challenge = challenge
         self.install_dir = challenge['install_dir']
         self.binary_path = challenge['binary_path']
@@ -85,6 +86,11 @@ class VerifyWorker(object):
 
         source_dir = os.path.join(base_dir, self.install_dir, 'src', 'src')
         self.source_dir = source_dir if os.path.isdir(source_dir) else None
+
+        if online:
+            self.base_url = base_url
+            from creds import HDR
+            self.auth_header = HDR
 
     def get_target_command(self, input_file, lavalog=False):
         lava_dir = os.path.join(self.base_dir, self.install_dir, self.prefix)
@@ -181,7 +187,7 @@ class VerifyWorker(object):
             if b"classification" in line:
                 data = line.decode(encoding="utf-8", errors="ingore")
             if b'LAVALOG:' in line:
-                d = parse_lava_log(line)
+                crash.update(parse_lava_log(line))
         if data is None:
             return None
 
@@ -225,7 +231,7 @@ class VerifyWorker(object):
         lava = serr.find(b'LAVALOG:')
         if lava > 0:
             match_id = os.path.basename(input_file).split('.')[0]
-            r.update(parse_lava_log(serr, match_id)
+            r.update(parse_lava_log(serr, match_id))
             if not r['match']:
                 logger.info("BUG: %s\t SRC: %s", r['bug_id'], r['src_line'])
         elif verbose and not (using_seed and p.returncode == 0):
@@ -234,3 +240,79 @@ class VerifyWorker(object):
                          sout.decode('utf-8', 'backslashreplace'),
                          serr.decode('utf-8', 'backslashreplace'))
         return r
+
+    def update_crash_info(self):
+        data = list()
+        url = self.base_url + '/api/crash/update'
+        for crash in self.crashes:
+            new_additional = "{}\n".format(crash['additional'].strip())
+            new_additional += "{}\n".format(crash['cov_stats'])
+            form = {'stat_id': crash['stat_id'],
+                    'crash_hash': crash['crash_hash'],
+                    'bb_count': crash['cov_stats']['bb_mu'],
+                    'bb_counts': crash['cov_stats'],
+                    'additional': new_additional}
+            if 'short_description' not in crash:
+                data.append(form)
+                continue
+            elif 'GracefulExit' in crash['short_description']:
+                form['verified'] = -1
+            elif crash['classification'] == 'EXPLOITABLE':
+                form['verified'] = 9
+            else:
+                form['verified'] = 2
+            if 'bug_id' in crash:
+                form['bug_id'] = crash['bug_id']
+            form['exploitability'] = crash['classification']
+            form['stack_hash'] = crash['hash']
+            form['additional'] += "\n\t{}\n".format(crash['short_description'])
+            form['additional'] += "{}\n".format(crash['instruction'])
+            form['additional'] += "{}\n".format("\n".join(crash['stack_frame']))
+            data.append(form)
+        r = requests.post(url, headers=self.auth_header, json=data)
+        j = safe_json(r.text)
+        logger.info(j['message'])
+
+    def get_crashes(self, limit=10):
+        """
+        Download a list of crash info records to be verified from LuckyFuzz server.
+          (the actual crash samle is downloaded in process_crashes).
+        """
+
+        local_dir = os.path.join(self.base_dir, 'download', self.install_dir)
+        target = os.path.join(local_dir, self.binary_path)
+        if not os.path.isfile(target):
+            print("ERROR: target file not found: {}".format(target))
+            return []
+        target_hash = sha1sum(target)
+        url = self.base_url + '/api/crash/verify'
+        form = {'target_hash': target_hash, 'limit': limit}
+        r = requests.post(url, headers=self.auth_header, data=form)
+        j = safe_json(r.text)
+        if not j['success']:
+            logger.error(j['message'], form)
+            return []
+        crashes = j['data']
+        return crashes
+
+    def process_crashes(self, limit=10, execute_native=False):
+        """
+        Process the list of crashes:
+          - download the sample input
+          - run the GDB exploitable plugin
+          - run the program with Dynamorio drrun/drcov
+          - run the program to capture LAVALOG bug id
+        """
+
+        self.crashes = self.get_crashes(limit)
+        for crash in self.crashes:
+            url = self.base_url + '/api/crash/download/{}'.format(crash['crash_id'])
+            r = requests.get(url, headers=self.auth_header)
+            with open('.current_input', 'wb') as f:
+                f.write(r.content)
+            logger.info("\n\tcrash_id: %s", crash['crash_id'])
+            self.run_exploitable(crash)
+            crash['cov_stats'] = self.run_with_dynamorio(crash)
+            if self.source_dir and execute_native:
+                crash.update(self.run_binary('.current_input', verbose=False))
+        self.update_crash_info()
