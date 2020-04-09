@@ -25,25 +25,28 @@ IMAGES[angora]="${REGISTRY}/angora_runner:16.04"
 
 
 download_lava_gcc() {
-    wget -qO /tmp/lava_gcc.zip https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/ccdc4975/download?job=build:gcc 2>/dev/null
+    local gitref="${GITREF:-v20200407}"
+    wget -qO /tmp/lava_gcc.zip https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/${gitref}/download?job=build:gcc 2>/dev/null
     python3 -m zipfile -e /tmp/lava_gcc.zip .
     rm -f /tmp/lava_gcc.zip
     chmod +x */*/lava-gcc/bin/*
 }
 
 download_prebuilt() {
+    local gitref="${GITREF:-v20200407}"
     declare -A JOBURLS
-    JOBURLS[gcc]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/ccdc4975/download?job=build:gcc"
-    JOBURLS[afl-gcc]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/ccdc4975/download?job=build:afl-gcc"
-    JOBURLS[afl-clang-fast]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/ccdc4975/download?job=build:afl-clang-fast"
-    JOBURLS[hfuzz-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/ccdc4975/download?job=build:hfuzz"
-    JOBURLS[angora-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/ccdc4975/download?job=build:angora"
-    JOBURLS[gcc-64]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/ccdc4975/download?job=build:gcc-64"
-    JOBURLS[afl-clang-fast-64]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/ccdc4975/download?job=build:afl-clang-fast-64"
+    JOBURLS[gcc]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/${gitref}/download?job=build:gcc"
+    JOBURLS[afl-gcc]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/${gitref}/download?job=build:afl-gcc"
+    JOBURLS[afl-clang-fast]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/${gitref}/download?job=build:afl-clang-fast"
+    JOBURLS[hfuzz-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/${gitref}/download?job=build:hfuzz"
+    JOBURLS[angora-clang]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/${gitref}/download?job=build:angora"
+    JOBURLS[gcc-64]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/${gitref}/download?job=build:gcc-64"
+    JOBURLS[afl-clang-fast-64]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/${gitref}/download?job=build:afl-clang-fast-64"
 
     JOBURLS[gcc-dev]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/dev/download?job=build:gcc"
     JOBURLS[afl-gcc-dev]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/dev/download?job=build:afl-gcc"
-    JOBURLS[afl-clang-fast-dev]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/dev/download?job=build:afl-clang-fast"
+    JOBURLS[afl-clang-fast-dev]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/dev/download?job=build:afl-clang-fast-dev"
+    JOBURLS[lava-m]="https://gitlab.com/Rode0day/corpora/-/jobs/artifacts/${gitref}/download?job=build:lava-m"
 
     wget -qO /tmp/lava.zip ${JOBURLS[$1]} 2>/dev/null
     python3 -m zipfile -e /tmp/lava.zip .
@@ -55,7 +58,7 @@ download_prebuilt() {
 download_challenges() {
     local PREFIX="https://rode0day.mit.edu/static/corpora"
     local FILTER="--exclude=*/src --exclude=info.yaml --exclude=*.swp --keep-old-files"
-    for i in {2..15}; do mkdir -p "$i"; done
+    for i in {2..16}; do mkdir -p "$i"; done
     wget -qO- ${PREFIX}/18.07_MmV2YcQMBQ2majkcNyYjs4Eqx6fsx8eQ.tar.gz | tar $FILTER -C 2 -xzf - 2>/dev/null
     wget -qO- ${PREFIX}/18.09_uioiary7291jsqeYOe6GLtdCIdtG9rFk.tar.gz | tar $FILTER -C 3 -xzf - 2>/dev/null
     wget -qO- ${PREFIX}/18.10_dRgl8DaTW6CVbmzCRBeS8cWCWzEKKpd5.tar.gz | tar $FILTER -C 4 -xzf - 2>/dev/null
@@ -71,6 +74,7 @@ download_challenges() {
     rm -Rf 13/jpegS4/built && mv 13/jpegS4/build 13/jpegS4/built
     wget -qO- ${PREFIX}/19.11_AEXUadf28ERWHUISDFHIUSDChiuaefa2.tar.gz | tar $FILTER -C 14 -xzf - 2>/dev/null
     wget -qO- ${PREFIX}/20.02_IyzkwjapUOISwenapsuwey923981bfa2.tar.gz | tar $FILTER -C 15 -xzf - 2>/dev/null
+    wget -qO- ${PREFIX}/20.04_vGBLGzVUHlUFNd5Ji2UcvtGHFlleGsrR.tar.gz | tar $FILTER -C 16 -xzf - 2>/dev/null
     # remove conflicting directory names
     rm -rf 2/fileS2
     rm -rf 2/fileB2

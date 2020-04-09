@@ -1,10 +1,16 @@
 
 .build:
   stage: build
+  variables:
+    PREFIX: "lava-afl-cf"
   image: 
     name: registry.gitlab.com/rode0day/fuzzer-testing/i386/afl_runner:16.04
     entrypoint: [""]
+  script:
+    - ./scripts/build.sh
   artifacts:
+    paths:
+      - ./*/*/$PREFIX
     expire_in: 1 week
   only:
     - dev
@@ -12,9 +18,15 @@
 
 .test_seeds:
   stage: test_seeds
+  variables:
+    PREFIX: "lava-afl-cf"
   image: 
     name: registry.gitlab.com/rode0day/fuzzer-testing/afl_runner:16.04 
     entrypoint: [""]
+  script:
+    - ./scripts/test-solution.py -p $PREFIX 2/info.yaml 3/info.yaml 4/info.yaml
+      5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
+      10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml 14/info.yaml
   only:
     - dev
     - tags

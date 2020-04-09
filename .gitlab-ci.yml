@@ -23,31 +23,37 @@ include:
 
 build:afl-gcc:
   extends: .build
+  variables:
+    PREFIX: "lava-afl-gcc"
   script:
     - ./scripts/build.sh --cc afl-gcc
   artifacts:
-    paths:
-      - ./*/*/lava-afl-gcc
     expire_in: 6 mos
 
 build:afl-clang-fast:
   extends: .build
-  script:
-    - ./scripts/build.sh
   artifacts:
-    paths:
-      - ./*/*/lava-afl-cf
     expire_in: 6 mos
+  only:
+    - tags
+
+build:afl-clang-fast-dev:
+  extends: .build
+  image:
+    name: registry.gitlab.com/rode0day/fuzzer-testing/i386/aflpp_runner:16.04
+  artifacts:
+    expire_in: 6 mos
+  only:
+    - dev
 
 build:gcc-64:
   extends: .build
+  variables:
+    PREFIX: "lava-gcc"
   image:
     name: registry.gitlab.com/rode0day/fuzzer-testing/afl_runner:16.04
   script:
     - ./scripts/build.sh --cc gcc -X
-  artifacts:
-    paths:
-      - ./*/*/lava-gcc
 
 build:afl-clang-fast-64:
   extends: .build
@@ -55,44 +61,29 @@ build:afl-clang-fast-64:
     name: registry.gitlab.com/rode0day/fuzzer-testing/afl_runner:16.04
   script:
     - ./scripts/build.sh -X
-  artifacts:
-    paths:
-      - ./*/*/lava-afl-cf
 
 test_seeds:afl-gcc:
   extends: .test_seeds
-  script:
-    - ./scripts/test-solution.py -p lava-afl-gcc 2/info.yaml 3/info.yaml 4/info.yaml
-      5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
-      10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml 14/info.yaml
+  variables:
+    PREFIX: "lava-afl-gcc"
   dependencies:
     - build:afl-gcc
 
 test_seeds:afl-clang-fast:
   extends: .test_seeds
-  stage: test_seeds
-  script:
-    - ./scripts/test-solution.py -p lava-afl-cf 2/info.yaml 3/info.yaml 4/info.yaml
-      5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
-      10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml
   dependencies:
     - build:afl-clang-fast
+    - build:afl-clang-fast-dev
 
 test_seeds:gcc-64:
   extends: .test_seeds
-  script:
-    - ./scripts/test-solution.py -p lava-gcc 3/info.yaml 4/info.yaml
-      5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
-      10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml
+  variables:
+    PREFIX: "lava-gcc"
   dependencies:
     - build:gcc-64
 
 test_seeds:afl-clang-fast-64:
   extends: .test_seeds
-  script:
-    - ./scripts/test-solution.py -p lava-afl-cf 3/info.yaml 4/info.yaml
-      5/info.yaml 6/info.yaml 7/info.yaml 8/info.yaml 9/info.yaml
-      10/info.yaml 11/info.yaml 12/info.yaml 13/info.yaml 14/info.yaml
   dependencies:
     - build:afl-clang-fast-64
 
