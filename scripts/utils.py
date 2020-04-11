@@ -61,7 +61,7 @@ def parse_lava_log(log, match_id=None):
     lava = log.find(b'LAVALOG:')
     msg = log[lava:].split(maxsplit=3)
     r['bug_id'] = msg[1].strip()[:-1].decode('utf-8')
-    r['src_line'] = msg[2].split('\n')[0].strip().decode('utf-8')
+    r['src_line'] = msg[2].split(b'\n')[0].strip().decode('utf-8')
     if match_id:
         r['match'] = (r['bug_id'] == match_id)
     return r
