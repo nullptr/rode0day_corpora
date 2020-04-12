@@ -57,7 +57,7 @@ def run_tests(info, challenge_name=None):
         if rtemp is None:
             continue
         results.extend(rtemp)
-        validated = len([1 for r in rtemp if r['match']])
+        validated = len([1 for r in rtemp if r['match'] and abs(r['returncode']) > 2])
         total = len(rtemp)
         ratio = float(validated / total * 100.0) if validated > 0 else 0.0
         log.write("\t<tr><td>{}</td><td>{} - {}</td><td>{}</td><td>{}</td><td>{:0.1f}%</td></tr>\n".format(

@@ -232,8 +232,8 @@ class VerifyWorker(object):
         if lava > 0:
             match_id = os.path.basename(input_file).split('.')[0]
             r.update(parse_lava_log(serr, match_id))
-            if not r['match']:
-                logger.info("BUG: %s\t SRC: %s", r['bug_id'], r['src_line'])
+            if not r['match'] or abs(p.returncode) < 3:
+                logger.info("BUG: %s\t SRC: %s, RET: %d", r['bug_id'], r['src_line'], p.returncode)
         elif verbose and not (using_seed and p.returncode == 0):
             logger.error("RETURN CODE: %d\n\tSTDOUT: %s\n\tSTDERR: %s\n",
                          p.returncode,
