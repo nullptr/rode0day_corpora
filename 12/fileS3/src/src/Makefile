@@ -1,4 +1,4 @@
-all: file
+all: file file.pt
 top_srcdir = ..
 HDR = $(top_srcdir)/src/magic.h.in
 
@@ -41,6 +41,7 @@ LIBOBJ = \
     teststrchr-pre.o \
     vasprintf-pre.o
 
+LIBBC = $(patsubst %.o,%.bc,$(LIBOBJ))
 
 .SECONDARY:
 %-pre.c :
@@ -50,11 +51,18 @@ LIBOBJ = \
 %.o : %.c
 	$(CC) $(CFLAGS) -c $<  -fPIC -DPIC -o $@
 
+%.bc : %.c
+	$(CC) $(CFLAGS) -c $< -fPIC -DPIC -o - -emit-llvm \
+		| opt -load-pass-plugin ${PREDICATE_TRACE_PLUGIN_PATH} -passes predicate-trace -o $@
+
 magic.h : ${HDR}
 	sed -e "s/X.YY/$$(echo 5.35 | tr -d .)/" < ${HDR} > $@
 
 file : magic.h $(LIBOBJ)
-	 $(CC) -g $(CFLAGS) -o $@ $(LIBOBJ) -lz
+	$(CC) -g $(CFLAGS) -o $@ $(LIBOBJ) -lz
+
+file.pt : magic.h $(LIBBC)
+	$(CC) -g $(CFLAGS) -o $@ $(LIBBC) -lz -L${PREDICATE_TRACE_SUPPORT_PATH} -lpredicate_trace_support
 
 preclean : 
 	rm -f *-pre.c
@@ -62,6 +70,7 @@ preclean :
 
 clean : 
 	rm -f *.o \
+	rm -f *.bc \
 	rm -f *.so \
 	rm -f *.Tpo \
-	rm -f file
+	rm -f file file.pt

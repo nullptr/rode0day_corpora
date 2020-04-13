@@ -12,5 +12,5 @@ install:
 	mkdir -p lava-install/share/misc
 	mkdir -p lava-install/bin
 	cp magic.mgc lava-install/share/misc/
-	cp src/file lava-install/bin
+	cp src/file src/file.pt lava-install/bin
 
