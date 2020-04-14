@@ -52,8 +52,8 @@ LIBBC = $(patsubst %.o,%.bc,$(LIBOBJ))
 	$(CC) $(CFLAGS) -c $<  -fPIC -DPIC -o $@
 
 %.bc : %.c
-	$(CC) $(CFLAGS) -c $< -fPIC -DPIC -o - -emit-llvm \
-		| opt -load-pass-plugin ${PREDICATE_TRACE_PLUGIN_PATH} -passes predicate-trace -o $@
+	$(CC) $(CFLAGS) -c $< -fPIC -DPIC -o $@.opt -emit-llvm
+	opt -load-pass-plugin ${PREDICATE_TRACE_PLUGIN_PATH} -passes predicate-trace -o $@ $@.opt
 
 magic.h : ${HDR}
 	sed -e "s/X.YY/$$(echo 5.35 | tr -d .)/" < ${HDR} > $@
